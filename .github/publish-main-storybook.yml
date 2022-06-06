@@ -1,0 +1,57 @@
+name: Publish main branch Storybook
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/stories/**
+      - src/components/**
+      - src/styles/**
+
+jobs:
+  storybook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: main
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: npm install and lerna bootstrap
+        run: |
+          cd $GITHUB_WORKSPACE/main
+          npm install -g npm@latest
+          npm install silent
+          npm run bootstrap
+
+      - name: Build Storybook
+        run: |
+          cd $GITHUB_WORKSPACE/main
+          cd packages/holeshot-components
+          npm run deploy-storybook -- --out=storybook --dry-run
+
+      - name: Checkout storybook
+        uses: actions/checkout@v2
+        with:
+          ref: storybook
+          path: storybook
+
+      - name: Commit Storybook to storybook branch #storybook branch must exist
+        run: |
+          cd $GITHUB_WORKSPACE/storybook
+          cp $GITHUB_WORKSPACE/main/packages/holeshot-componenents/storybook/* $GITHUB_WORKSPACE/storybook
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add .
+
+          if git diff-index --quiet HEAD --; then
+              echo 'No changes to commit';
+          else
+              git commit -m "Deploying main branch Storybook to GitHub Pages 🚀";
+              git push;
+          fi

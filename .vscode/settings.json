@@ -1,0 +1,4 @@
+{
+  "storyExplorer.storiesGlobs": "packages/*/src/stories/*.stories.ts",
+  "storyExplorer.server.internal.enabled": false
+}
