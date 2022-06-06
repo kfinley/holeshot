@@ -3,25 +3,27 @@
     @draggedComplete="dragged"
     @outOfSight="out"
     :items="events"
-    maxWidth="60%"
+    maxWidth="100%"
   >
     <template v-slot:card="{ entity }">
-      <card
-        class="date"
-        :showClose="false"
-        :headerText="monthName(entity.date)"
-      >
-        <div class="day">{{ entity.date.getDay() }}</div>
-        <div>{{ weekdayName(entity.date) }}</div>
-      </card>
-      <div class="event">
-        <div>{{ entity.name }}</div>
-        <div>{{ entity.track.name }}</div>
-        <div>
-          {{ entity.track.address.city }}, {{ entity.track.address.state }}
-        </div>
-        <div v-for="(detail, index) in entity.details" :key="index">
-          {{ printIfDetailIncludes(detail, ["start", "end"]) }}
+      <div class="event-card">
+        <card
+          class="date"
+          :showClose="false"
+          :headerText="monthName(entity.date)"
+        >
+          <div class="day">{{ entity.date.getDay() }}</div>
+          <div>{{ weekdayName(entity.date) }}</div>
+        </card>
+        <div class="event">
+          <div>{{ entity.name }}</div>
+          <div>{{ entity.track.name }}</div>
+          <div>
+            {{ entity.track.address.city }}, {{ entity.track.address.state }}
+          </div>
+          <div v-for="(detail, index) in entity.details" :key="index">
+            {{ printIfDetailIncludes(detail, ["start", "end"]) }}
+          </div>
         </div>
       </div>
     </template>
@@ -51,8 +53,8 @@ export default class EventList extends Vue {
   @Prop()
   skip!: Function;
 
-  monthName = new Intl.DateTimeFormat("en-US", { month: "long" }).format;
-  weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "long" }).format;
+  monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
+  weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
 
   printIfDetailIncludes(detail: Array<string>, includes: Array<string>) {
     let val = "";
@@ -108,18 +110,48 @@ export default class EventList extends Vue {
 .card-header {
   background: $color--dark-red;
   color: $color--grey80;
-  font-size: 20%;
-  font-weight: bolder;
+  font-weight: bold;
+  padding: 5px;
 }
+.col {
+  padding: 2px;
+}
+
 </style>
 
 <style lang="scss" scoped>
+
+.container {
+  padding: 0;
+}
+
+.event-card > div:nth-child(1) {
+  width: 20%;
+  float: left;
+  display: block;
+}
+
+.event-card > div:nth-child(2) {
+  width: 80%;
+  float: right;
+  display: block;
+}
+
+@media screen and (max-width: $bp--sm-min) {
+.event-card > div:nth-child(1) {
+  width: 30%;
+}
+
+.event-card > div:nth-child(2) {
+  width: 70%;
+}
+
+}
+
 .date {
   position: relative;
-  float: left;
-  min-width: 150px;
-  max-width: 150px;
-  padding-right: 18px;
+  max-width: 138px;
+  padding-right: 15px;
   text-align: center;
 }
 
@@ -130,6 +162,7 @@ export default class EventList extends Vue {
 
 .event {
   padding-top: 2%;
+  width: 100%;
 }
 
 .event > div:nth-child(1) {
