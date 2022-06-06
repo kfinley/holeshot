@@ -45,7 +45,7 @@ jobs:
       - name: Commit Storybook to storybook branch #storybook branch must exist
         run: |
           cd $GITHUB_WORKSPACE/storybook
-          cp $GITHUB_WORKSPACE/main/packages/holeshot-componenents/storybook/* $GITHUB_WORKSPACE/storybook
+          cp $GITHUB_WORKSPACE/main/packages/holeshot-components/storybook/* $GITHUB_WORKSPACE/storybook
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .
