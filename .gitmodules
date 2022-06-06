@@ -1,0 +1,3 @@
+[submodule "packages/vue2-components"]
+	path = packages/vue2-components
+	url = git@github.com:kfinley/Vue2-Components.git
