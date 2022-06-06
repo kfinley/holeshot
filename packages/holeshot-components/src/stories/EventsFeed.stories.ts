@@ -87,9 +87,6 @@ let events = [
   }
 ] as Array<SwipeableEvent>;
 
-// add a visible property to all the events..
-// events = events.map(o => ({ ...o, visible: true }));
-
 const DefaultTemplate: Story = (args, { updateArgs }) => ({
   components: { EventsFeed },
   props: Object.keys(args),

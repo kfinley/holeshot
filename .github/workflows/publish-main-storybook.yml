@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - src/stories/**
-      - src/components/**
-      - src/styles/**
+      - packages/holeshot-components/src/stories/**
+      - packages/holeshot-components/src/components/**
+      - packages/holeshot-components/src/styles/**
 
 jobs:
   storybook:
