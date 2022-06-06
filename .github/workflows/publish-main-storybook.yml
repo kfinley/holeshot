@@ -3,10 +3,10 @@ name: Publish main branch Storybook
 on:
   push:
     branches: [main]
-    paths:
-      - packages/holeshot-components/src/stories/**
-      - packages/holeshot-components/src/components/**
-      - packages/holeshot-components/src/styles/**
+    # paths:
+    #   - packages/holeshot-components/src/stories/**
+    #   - packages/holeshot-components/src/components/**
+    #   - packages/holeshot-components/src/styles/**
 
 jobs:
   storybook:
