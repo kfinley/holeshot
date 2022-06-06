@@ -27,7 +27,7 @@ let events = [
         line1: '1307 Riverwalk Parkway',
         line2: '',
         city: 'Rock Hill',
-        state: 'SC'
+        state: 'SC',
         zipcode: 29730
       },
     },
@@ -53,7 +53,7 @@ let events = [
         line1: '1307 Riverwalk Parkway',
         line2: '',
         city: 'Rock Hill',
-        state: 'SC'
+        state: 'SC',
         zipcode: 29730
       },
     },
@@ -79,7 +79,7 @@ let events = [
         line1: '1307 Riverwalk Parkway',
         line2: '',
         city: 'Rock Hill',
-        state: 'SC'
+        state: 'SC',
         zipcode: 29730
       },
     },

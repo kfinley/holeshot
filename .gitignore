@@ -48,5 +48,5 @@ obj
 
 mono_crash.*
 
-packages/*/storybooks
-storybooks/*
+packages/*/storybook
+storybook/*
