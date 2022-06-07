@@ -1,52 +1,63 @@
 <template>
-  <swipeable-list
-    @draggedComplete="dragged"
-    @outOfSight="out"
-    :items="events"
-    maxWidth="100%"
-    :doubleClick="doubleClick"
-    @click="click"
-  >
-    <template v-slot:card="{ entity }">
-      <div class="event-card">
-        <div>
-          <card
-            class="date"
-            :showClose="false"
-            :headerText="monthName(entity.date)"
-          >
-            <div class="day">{{ entity.date.getDay() }}</div>
-            <div>{{ weekdayName(entity.date) }}</div>
-          </card>
-        </div>
-        <div class="event">
-          <div>{{ entity.name }}</div>
-          <div>{{ entity.track.name }}</div>
+  <div>
+    <swipeable-list
+      @draggedComplete="dragged"
+      @outOfSight="out"
+      :items="events"
+      maxWidth="100%"
+      @doubleClicked="doubleClicked"
+    >
+      <template v-slot:card="{ entity }">
+        <div class="event-card">
           <div>
-            {{ entity.track.address.city }}, {{ entity.track.address.state }}
+            <card
+              class="date"
+              :showClose="false"
+              :headerText="monthName(entity.date)"
+            >
+              <div class="day">{{ entity.date.getDay() }}</div>
+              <div>{{ weekdayName(entity.date) }}</div>
+            </card>
           </div>
-          <div v-for="(detail, index) in entity.details" :key="index">
-            {{ printIfDetailIncludes(detail, ["start", "end"]) }}
+          <div class="event">
+            <div>{{ entity.name }}</div>
+            <div>{{ entity.track.name }}</div>
+            <div>
+              {{ entity.track.address.city }}, {{ entity.track.address.state }}
+            </div>
+            <div v-for="(detail, index) in entity.details" :key="index">
+              {{ printIfDetailIncludes(detail, ["start", "end"]) }}
+            </div>
           </div>
         </div>
-      </div>
-    </template>
-  </swipeable-list>
+      </template>
+    </swipeable-list>
+
+    <event-details-modal
+      v-if="showEventDetails"
+      :event="currentEvent"
+      @close="eventDetailsClosed"
+    />
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { SwipeableEvent } from "@holeshot/types/src";
+import { SwipeableEvent, Event } from "@holeshot/types/src";
 import Entity from "vue2-components/src/components/entity.vue";
 import SwipeableList from "vue2-components/src/components/swipeable-list.vue";
 import Card from "vue2-components/src/components/card.vue";
 import SwipeableEntity from "vue2-components/src/components/swipeable.vue";
+import Modal from "vue2-components/src/components/modal.vue";
+import EventDetailsModal from "./event-details-modal.vue";
 
 @Component({
   components: {
     Card,
     Entity,
+    EventDetailsModal,
     SwipeableList,
+    Modal,
   },
 })
 export default class EventList extends Vue {
@@ -56,6 +67,9 @@ export default class EventList extends Vue {
   save!: Function;
   @Prop()
   skip!: Function;
+
+  currentEvent!: Event;
+  showEventDetails: boolean = false;
 
   monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
   weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
@@ -72,14 +86,15 @@ export default class EventList extends Vue {
     return val;
   }
 
-  click() {
-    alert('click');
+  doubleClicked(event: Event) {
+    console.log(`doubleClicked event ${event.name}`);
+    this.currentEvent = event;
+    this.showEventDetails = true;
   }
-  
-  doubleClick(entity: any) {
-    alert('details');
-    console.log("dblClick");
-    console.log(entity);
+
+  eventDetailsClosed() {
+    this.currentEvent = null;
+    this.showEventDetails = false;
   }
 
   dragged(args: {
@@ -145,7 +160,7 @@ export default class EventList extends Vue {
   float: left;
   padding: 10px;
   display: table-cell;
-   vertical-align: middle;
+  vertical-align: middle;
 }
 
 .event-card > div:nth-child(2) {
