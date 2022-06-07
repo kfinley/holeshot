@@ -176,6 +176,7 @@ export default class EventList extends Vue {
 
 @media screen and (max-width: $bp--sm-min) {
   .event-card > div:nth-child(1) {
+    padding: 5px;
     width: 30%;
   }
 
