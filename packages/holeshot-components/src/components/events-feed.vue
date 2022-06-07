@@ -6,15 +6,17 @@
     maxWidth="100%"
   >
     <template v-slot:card="{ entity }">
-      <div class="event-card">
-        <card
-          class="date"
-          :showClose="false"
-          :headerText="monthName(entity.date)"
-        >
-          <div class="day">{{ entity.date.getDay() }}</div>
-          <div>{{ weekdayName(entity.date) }}</div>
-        </card>
+      <div class="event-card" @dblclick="dblClick(entity)">
+        <div>
+          <card
+            class="date"
+            :showClose="false"
+            :headerText="monthName(entity.date)"
+          >
+            <div class="day">{{ entity.date.getDay() }}</div>
+            <div>{{ weekdayName(entity.date) }}</div>
+          </card>
+        </div>
         <div class="event">
           <div>{{ entity.name }}</div>
           <div>{{ entity.track.name }}</div>
@@ -68,6 +70,11 @@ export default class EventList extends Vue {
     return val;
   }
 
+  dblClick(entity: any) {
+    console.log("dblClick");
+    console.log(entity);
+  }
+
   dragged(args: {
     handleDragged: any;
     dragged: { direction: string; id: any };
@@ -113,14 +120,15 @@ export default class EventList extends Vue {
   font-weight: bold;
   padding: 5px;
 }
-.col {
-  padding: 2px;
-}
 
+@media screen and (max-width: $bp--sm-min) {
+  .col {
+    padding: 2px;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
-
 .container {
   padding: 0;
 }
@@ -128,7 +136,9 @@ export default class EventList extends Vue {
 .event-card > div:nth-child(1) {
   width: 20%;
   float: left;
-  display: block;
+  padding: 10px;
+  display: table-cell;
+   vertical-align: middle;
 }
 
 .event-card > div:nth-child(2) {
@@ -137,21 +147,9 @@ export default class EventList extends Vue {
   display: block;
 }
 
-@media screen and (max-width: $bp--sm-min) {
-.event-card > div:nth-child(1) {
-  width: 30%;
-}
-
-.event-card > div:nth-child(2) {
-  width: 70%;
-}
-
-}
-
 .date {
-  position: relative;
+  margin: auto;
   max-width: 138px;
-  padding-right: 15px;
   text-align: center;
 }
 
@@ -172,5 +170,18 @@ export default class EventList extends Vue {
 .event > div:nth-child(2),
 .event > div:nth-child(3) {
   font-style: italic;
+}
+
+@media screen and (max-width: $bp--sm-min) {
+  .event-card > div:nth-child(1) {
+    width: 30%;
+  }
+
+  .event-card > div:nth-child(2) {
+    width: 70%;
+  }
+  .date {
+    padding-right: 12px;
+  }
 }
 </style>
