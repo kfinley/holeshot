@@ -4,9 +4,10 @@
     @outOfSight="out"
     :items="events"
     maxWidth="100%"
+    :doubleClick="doubleClick"
   >
     <template v-slot:card="{ entity }">
-      <div class="event-card" @dblclick="dblClick(entity)">
+      <div class="event-card">
         <div>
           <card
             class="date"
@@ -70,7 +71,8 @@ export default class EventList extends Vue {
     return val;
   }
 
-  dblClick(entity: any) {
+  doubleClick(entity: any) {
+    alert('details');
     console.log("dblClick");
     console.log(entity);
   }
