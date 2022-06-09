@@ -42,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import { SwipeableEvent, Event } from "@holeshot/types/src";
 import Entity from "vue2-components/src/components/entity.vue";
 import SwipeableList from "vue2-components/src/components/swipeable-list.vue";
@@ -97,23 +97,29 @@ export default class EventList extends Vue {
     this.showEventDetails = false;
   }
 
+  @Emit('draggedComplete')
   dragged(args: {
     handleDragged: any;
     dragged: { direction: string; id: any };
-  }) {}
+  }) {
+    return args;
+  }
 
   getDate(item: any) {
     console.log(item.date);
     return new Date(item.date);
   }
 
+  @Emit('outOfSight')
   out(args: {
     outOfSightHandle: (
       items: Array<SwipeableEntity>,
       item: SwipeableEntity
     ) => Array<SwipeableEntity>;
     item: SwipeableEntity;
-  }) {}
+  }) {
+
+  }
 
   draggedComplete(dragged: { direction: string; id?: string }) {
     const { direction, id } = dragged;

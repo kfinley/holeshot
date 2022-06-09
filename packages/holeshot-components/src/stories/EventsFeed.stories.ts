@@ -91,8 +91,11 @@ const DefaultTemplate: Story = (args, { updateArgs }) => ({
   components: { EventsFeed },
   props: Object.keys(args),
   template:
-    `<events-feed v-bind="$props">
-
+    `<events-feed
+      v-bind="$props"
+      @draggedComplete="dragged"
+      @outOfSight="out"
+      >
     </events-feed>`,
   methods: {
     dragged(args: { handleDragged: any, dragged: { direction: string, id: any } }) {
