@@ -9,7 +9,6 @@
       :message="notificationMessage"
       :delay="3"
       />
-    >
     <swipeable-list
       @draggedComplete="dragged"
       @outOfSight="out"
