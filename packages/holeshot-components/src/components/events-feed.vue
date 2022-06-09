@@ -13,7 +13,8 @@
       @draggedComplete="dragged"
       @outOfSight="out"
       :items="events"
-      maxWidth="100%"
+      max-width="100%"
+      x-threshold="150"
       @doubleClicked="doubleClicked"
     >
       <template v-slot:card="{ entity }">
