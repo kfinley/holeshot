@@ -1,5 +1,15 @@
 <template>
   <div>
+    <notification
+      ref="notification"
+      type="success"
+      timed="true"
+      v-if="showNotification"
+      @notification-closed="notificationClosed"
+      :message="notificationMessage"
+      :delay="3"
+      />
+    >
     <swipeable-list
       @draggedComplete="dragged"
       @outOfSight="out"
@@ -50,6 +60,7 @@ import Card from "vue2-components/src/components/card.vue";
 import SwipeableEntity from "vue2-components/src/components/swipeable.vue";
 import Modal from "vue2-components/src/components/modal.vue";
 import EventDetailsModal from "./event-details-modal.vue";
+import Notification from "vue2-components/src/components/notification.vue";
 
 @Component({
   components: {
@@ -58,18 +69,17 @@ import EventDetailsModal from "./event-details-modal.vue";
     EventDetailsModal,
     SwipeableList,
     Modal,
+    Notification,
   },
 })
 export default class EventList extends Vue {
   @Prop()
   events!: Array<SwipeableEvent>;
-  @Prop()
-  save!: Function;
-  @Prop()
-  skip!: Function;
 
   currentEvent!: Event;
-  showEventDetails: boolean = false;
+  showEventDetails = false;
+  showNotification = false;
+  notificationMessage = "";
 
   monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
   weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
@@ -97,11 +107,30 @@ export default class EventList extends Vue {
     this.showEventDetails = false;
   }
 
-  @Emit('draggedComplete')
+  notificationClosed() {
+    this.notificationMessage = '';
+    this.showNotification = false;
+  }
+
+  @Emit("draggedComplete")
   dragged(args: {
     handleDragged: any;
     dragged: { direction: string; id: any };
   }) {
+    const { direction, id } = args.dragged;
+
+    console.log(args.dragged);
+
+    if (direction == "right") {
+      this.$emit("save", id);
+      this.showNotification = true;
+      this.notificationMessage = "Event has been added to your schedule";
+      console.log("save");
+    } else if (direction == "left") {
+      this.$emit("skip", id);
+      console.log("skip");
+    }
+
     return args;
   }
 
@@ -110,7 +139,7 @@ export default class EventList extends Vue {
     return new Date(item.date);
   }
 
-  @Emit('outOfSight')
+  @Emit("outOfSight")
   out(args: {
     outOfSightHandle: (
       items: Array<SwipeableEntity>,
@@ -118,23 +147,9 @@ export default class EventList extends Vue {
     ) => Array<SwipeableEntity>;
     item: SwipeableEntity;
   }) {
-
+    return args;
   }
 
-  draggedComplete(dragged: { direction: string; id?: string }) {
-    const { direction, id } = dragged;
-
-    switch (direction) {
-      case "right": {
-        this.$emit("save", id);
-        this.save(id);
-      }
-      case "left": {
-        this.$emit("skip", id);
-        this.skip(id);
-      }
-    }
-  }
 }
 </script>
 
