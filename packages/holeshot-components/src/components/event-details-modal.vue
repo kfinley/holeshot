@@ -1,5 +1,5 @@
 <template>
-  <modal @close="$emit('close')" width="80%">
+  <modal @close="$emit('close')" width="85%">
     <div slot="header">
       <h3>{{ event.name }} <br />@ {{ event.track.name }}</h3>
     </div>
