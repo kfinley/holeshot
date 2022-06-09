@@ -17,7 +17,7 @@ let events = [
       ['Registration End', '8:00 PM'],
       ['Race Time', '4:00 PM'],
       ['Type', 'Practice'],
-      ['Description', '$5 USA BMX Practice 4 - 8PM'],
+      ['Description', '$5 USA BMX Practice 4-8PM'],
       ['Fee', '$5.00 USD']
     ],
     track: {
@@ -43,7 +43,7 @@ let events = [
       ['Registration End', '7:30  PM'],
       ['Race Time', '8:00 PM'],
       ['Type', ' Local Race'],
-      ['Description', '$10 Friday Night Single Points Race.Practice &amp; on - site Registration open at 6PM. Online Pre - reg opens on Monday and closes at 5PM Race Day'],
+      ['Description', '$10 Friday Night Single Points Race.Practice &amp; on-site Registration open at 6PM. Online Pre-reg opens on Monday and closes at 5PM Race Day'],
       ['Fee', '$10.00 USD']
     ],
     track: {
@@ -69,7 +69,7 @@ let events = [
       ['Registration End', '2:00 PM'],
       ['Race Time', '11 00 AM'],
       ['Type', 'Practice'],
-      ['Description', '$5 USA BMX Practice 4 - 8PM'],
+      ['Description', '$5 USA BMX Practice 4-8PM'],
       ['Fee', '$5.00 USD']
     ],
     track: {
