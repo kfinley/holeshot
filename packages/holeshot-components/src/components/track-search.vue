@@ -5,6 +5,8 @@
       :items="items"
       :onSelect="onSelect"
       v-model="query"
+      v-on:focus="searchFocused"
+      @reset="searchReset"
     >
     </type-ahead>
     <track-list id="results" :tracks="searchResults">
@@ -33,6 +35,7 @@ export default class TrackSearch extends Vue {
 
   searchResults: Array<Track> = [];
   query = "";
+  previousQuery = "";
 
   mounted() {
     this.setMaxWidth();
@@ -43,6 +46,18 @@ export default class TrackSearch extends Vue {
     console.log(track);
     this.query = track.name;
     this.searchResults = this.items.filter((t) => t.name.includes(track.name));
+  }
+
+  searchFocused() {
+    console.log('focus');
+    this.previousQuery = this.query;
+    this.query = "";
+  }
+
+  searchReset(typeAheadInstance) {
+    if (typeAheadInstance.query === "") {
+      this.query = this.previousQuery;
+    }
   }
 
   //TODO: refactor this.. We'll have more than on item type on a page that may need this set.
