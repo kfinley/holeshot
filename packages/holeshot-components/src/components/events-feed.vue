@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- TODO: float this... -->
     <notification
       ref="notification"
       type="success"
@@ -81,6 +82,7 @@ export default class EventList extends Vue {
   showNotification = false;
   notificationMessage = "";
 
+  //TODO: localize....
   monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
   weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
 
@@ -153,7 +155,9 @@ export default class EventList extends Vue {
 }
 </script>
 
+
 <style lang="scss">
+// TODO: deal with this...
 .card-body {
   padding: 10px;
 }

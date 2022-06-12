@@ -3,7 +3,7 @@ import EventsFeed from '@/components/events-feed.vue';
 import { SwipeableEvent } from '@holeshot/types/src/index';
 
 export default {
-  title: 'Components/Holeshot/EventsFeed'
+  title: 'Components/Holeshot/Events Feed'
 };
 
 let events = [

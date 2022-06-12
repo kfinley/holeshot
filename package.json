@@ -8,8 +8,8 @@
     "lerna": "lerna",
     "test": "echo \"Error: no test specified\" && exit 1",
     "update-init-submodules": "git submodule update --init --recursive",
-    "sb-vue2-components": "cd packages/vue2-components && npm run storybook",
-    "sb-holeshot-components": "cd packages/holeshot-components && npm run storybook"
+    "sb-vc": "cd packages/vue2-components && npm run storybook",
+    "sb-hc": "cd packages/holeshot-components && npm run storybook"
   },
   "devDependencies": {
     "lerna": "^5.0.0",
