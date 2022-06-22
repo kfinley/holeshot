@@ -1,4 +1,8 @@
 {
   "storyExplorer.storiesGlobs": "packages/*/src/stories/*.stories.ts",
-  "storyExplorer.server.internal.enabled": false
+  "storyExplorer.server.internal.enabled": false,
+  "jestrunner.debugOptions": {
+    "skipFiles": ["<node_internals>/**"],
+    "smartStep": true
+  }
 }

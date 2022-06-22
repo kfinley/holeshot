@@ -5,12 +5,13 @@
       :items="items"
       :onSelect="onSelect"
       v-model="query"
-      v-on:focus="searchFocused"
+      v-on:focusin="searchFocusIn"
+      v-on:focusout="searchFocusOut"
       @reset="searchReset"
+      @update="searchUpdate"
     >
     </type-ahead>
-    <track-list id="results" :tracks="searchResults">
-    </track-list>
+    <track-list id="results" :tracks="searchResults"> </track-list>
   </div>
 </template>
 
@@ -43,21 +44,40 @@ export default class TrackSearch extends Vue {
   }
 
   onSelect(track: Track) {
+    console.log("onSelect");
     console.log(track);
     this.query = track.name;
+    this.previousQuery = "";
     this.searchResults = this.items.filter((t) => t.name.includes(track.name));
   }
 
-  searchFocused() {
-    console.log('focus');
-    this.previousQuery = this.query;
-    this.query = "";
+  searchFocusIn() {
+    console.log("focusIn");
+    console.log(this.previousQuery);
+    console.log(this.query);
+  }
+
+  searchFocusOut() {
+    console.log("focusOut");
+    console.log(this.previousQuery);
+    console.log(this.query);
+  }
+
+  searchUpdate(input) {
+    if (input == "") {
+      this.query = "";
+    }
   }
 
   searchReset(typeAheadInstance) {
+    console.log("searchReset");
     if (typeAheadInstance.query === "") {
       this.query = this.previousQuery;
+    } else {
+      // this.previousQuery = typeAheadInstance.query;
     }
+    console.log(this.query);
+    console.log(this.previousQuery);
   }
 
   //TODO: refactor this.. We'll have more than on item type on a page that may need this set.

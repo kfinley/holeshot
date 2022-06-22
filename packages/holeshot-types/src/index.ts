@@ -9,7 +9,7 @@ export interface Address extends Entity {
   line2?: string;
   city: string;
   state: string;
-  zipCode: string;
+  zip: string;
 }
 
 export interface Track extends Entity {

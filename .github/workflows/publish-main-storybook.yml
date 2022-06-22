@@ -30,6 +30,11 @@ jobs:
           npm install silent
           npm run bootstrap
 
+      - name: Run unit tests
+        run: |
+          cd $GITHUB_WORKSPACE/main
+          npm run test
+
       - name: Build Storybook
         run: |
           cd $GITHUB_WORKSPACE/main
