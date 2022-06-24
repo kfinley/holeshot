@@ -1,7 +1,7 @@
 <template>
   <div class="track-search">
     <type-ahead
-      placeholder="Search by track name..."
+      placeholder="Search for a track..."
       :items="items"
       :onSelect="onSelect"
       v-model="query"
@@ -28,6 +28,7 @@ import { Track } from "@holeshot/types/src";
   },
 })
 export default class TrackSearch extends Vue {
+  
   @Prop()
   items!: Array<Track>;
 
@@ -48,6 +49,8 @@ export default class TrackSearch extends Vue {
     console.log(track);
     this.query = track.name;
     this.previousQuery = "";
+    //TODO: refactor to use store module
+
     this.searchResults = this.items.filter((t) => t.name.includes(track.name));
   }
 
