@@ -1,0 +1,17 @@
+{
+  "name": "@holeshot/commands",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "author": {
+    "name": "Kyle Finley",
+    "email": "kyle@kylefinley.net"
+  },
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "tslib": "^2.4.0"
+  }
+}

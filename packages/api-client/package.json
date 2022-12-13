@@ -1,0 +1,19 @@
+{
+  "name": "@holeshot/api-client",
+  "version": "1.0.0",
+  "description": "API Client Module",
+  "private": true,
+  "author": {
+    "name": "Kyle Finley",
+    "email": "kyle@kylefinley.net"
+  },
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build"
+  },
+  "dependencies": {
+    "@types/node": "^14.14.31",
+    "axios": "1.2.1",
+    "inversify-props": "^2.2.6",
+    "tslib": "^2.4.0"
+  }
+}

@@ -7,8 +7,10 @@ dotnet-install.sh
 
 # Serverless directories
 .build
+.lambda-build
 .serverless
 .webpack
+dist
 
 # AWS Local Services
 .devcontainer/.cognito/db/*_local.json
@@ -48,5 +50,6 @@ obj
 
 mono_crash.*
 
+# Storybooks
 packages/*/storybook
 storybook/*

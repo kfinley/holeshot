@@ -1,0 +1,25 @@
+Holeshot-${self:service}-SendMessage:
+  definition:
+    Comment: Send SNS message to client via APIGateway hosted WebSocket
+    StartAt: GetConnectionInvocation
+    States:
+      GetConnectionInvocation:
+        Type: Task
+        Resource:
+          Fn::GetAtt: [GetConnectionInvocation, Arn]
+        Next: HasConnectionId
+      HasConnectionId:
+        Type: Choice
+        Choices:
+          - Variable: $.connectionId
+            StringEquals: ""
+            Next: Fail
+        Default: SendMessageInvocation
+      SendMessageInvocation:
+        Type: Task
+        Resource:
+          Fn::GetAtt: [SendMessageInvocation, Arn]
+        End: true
+      Fail:
+        Type: Fail
+        Error: No ConnectionId Found
