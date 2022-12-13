@@ -10,20 +10,7 @@ const renameFunctions = (serviceName, basePath, funcs) => {
     if (func.handler.indexOf("::") === -1) {
       func.handler = `${basePath}src/functions/${func.handler}`;
     }
-    // TODO: Fix the authorizer bits...
-    // if (func.events) {
-    //   func.events = func.events.map((e) => {
-    //     if (e.http && e.http.authorizer) {
-    //       e.http.authorizer = `${serviceName}-${e.http.authorizer}`;
-    //     }
-    //     if (e.websocket && e.websocket.authorizer) {
-    //       e.websocket.authorizer = `${serviceName}-${e.websocket.authorizer}`;
-    //     }
-    //     return e;
-    //   });
-    // }
     functions[`${serviceName}-${k}`] = funcs[k];
-    // functions[k] = funcs[k];
   });
   return functions;
 };
