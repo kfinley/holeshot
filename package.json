@@ -35,9 +35,9 @@
     "smoke": "npm run build && npm run cdk synth"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "lerna": "^5.0.0",
     "sb": "^6.5.6",
-    "jest": "^28.1.1",
     "dotenv": "^16.0.3",
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",

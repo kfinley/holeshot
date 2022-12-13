@@ -1,0 +1,7 @@
+
+register:
+    handler: register.handler
+    events:
+      - httpApi:
+          method: POST
+          path: /user/register
