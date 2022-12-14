@@ -90,10 +90,7 @@ export class WebSocketsApi extends Construct {
 
     // Lambda Functions....
 
-    const authorizerHandler = createLambda('AuthorizerHandler', 'functions/auth.handler', {
-      WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID: props!.gitHubClientId,
-      WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET: props!.gitHubClientSecret
-    });
+    const authorizerHandler = createLambda('AuthorizerHandler', 'functions/auth.handler');
 
     const onConnectHandler = createLambda('OnConnectHandler', 'functions/connect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName

@@ -53,3 +53,5 @@ mono_crash.*
 # Storybooks
 packages/*/storybook
 storybook/*
+
+.env
