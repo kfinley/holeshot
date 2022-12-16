@@ -1,0 +1,39 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /register",
+  "rawPath": "/register",
+  "rawQueryString": "",
+  "cookies": [],
+  "headers": {
+    "host": "holeshot.sls:3000",
+    "user-agent": "curl/7.74.0",
+    "accept": "*/*",
+    "content-length": "46",
+    "content-type": "application/x-www-form-urlencoded"
+  },
+  "queryStringParameters": null,
+  "requestContext": {
+    "accountId": "offlineContext_accountId",
+    "apiId": "offlineContext_apiId",
+    "authorizer": { "jwt": { "claims": null, "scopes": null } },
+    "domainName": "offlineContext_domainName",
+    "domainPrefix": "offlineContext_domainPrefix",
+    "http": {
+      "method": "POST",
+      "path": "/register",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "172.18.0.6",
+      "userAgent": "curl/7.74.0"
+    },
+    "operationName": null,
+    "requestId": "offlineContext_resourceId",
+    "routeKey": "POST /register",
+    "stage": "$default",
+    "time": "13/Dec/2022:20:11:19 +0000",
+    "timeEpoch": 1670962279986
+  },
+  "body": "firstname=Joe&lastname=Blow&email=joe@blow.com",
+  "pathParameters": null,
+  "isBase64Encoded": false,
+  "stageVariables": null
+}

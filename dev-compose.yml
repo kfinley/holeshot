@@ -80,15 +80,15 @@ services:
     volumes:
       - .:/sls-offline
 
-  # holeshot.web:
-  #   container_name: holeshot.web
-  #   image: node:14
-  #   ports:
-  #     - "8080:8080"
-  #   working_dir: /vite-client
-  #   command: sh -c "npm run dev:client:docker"
-  #   volumes:
-  #     - .:/vite-client
+  holeshot.web:
+    container_name: holeshot.web
+    image: node:14
+    ports:
+      - "8080:8080"
+    working_dir: /vite-client
+    command: sh -c "npm run dev:client:docker"
+    volumes:
+      - .:/vite-client
 
   # holeshot.storybooks:
   #   container_name: .storybooks

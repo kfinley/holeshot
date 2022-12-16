@@ -1,0 +1,56 @@
+Comment: Register new user
+StartAt: UserExists
+States:
+  GetUserStep:
+    Type: Task
+    Resource:
+      Fn::GetAtt: [GetUserStep, Arn]
+    Next: UserExists
+  UserExists:
+    Type: Choice
+    Choices:
+      - Variable: $.userId
+        StringEquals: ""
+        Next: CreateUserStep
+    Default: UserAlreadyExists
+  CreateUserStep:
+    Type: Task
+    Resource:
+      Fn::GetAtt: [CreateUserStep, Arn]
+    Next: UserCreated
+  UserAlreadyExists:
+    Type: Pass
+    Result: {"result": "User already exists"}
+    Next: FinalState
+  UserCreated:
+    Type: Choice
+    Choices:
+      - Variable: $.success
+        BooleanEquals: true
+        Next: SaveUserStep
+    Default: CreateUserFailed
+  SaveUserStep:
+    Type: Task
+    Resource:
+      Fn::GetAtt: [SaveUserStep, Arn]
+    Next: UserSaved
+  CreateUserFailed:
+    Type: Fail
+    Error: "Failed to create user"
+  UserSaved:
+    Type: Choice
+    Choices:
+      - Variable: $.success
+        BooleanEquals: true
+        Next: SendConfirmationStep
+    Default: SaveUserFailed
+  SaveUserFailed:
+    Type: Fail
+    Error: "Failed to save user"
+  SendConfirmationStep:
+    Type: Task
+    Resource:
+      Fn::GetAtt: [SendConfirmationStep, Arn]
+    Next: FinalState
+  FinalState:
+    Type: Succeed

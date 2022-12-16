@@ -1,5 +1,5 @@
 import { SNSEvent, Context } from 'aws-lambda';
-import { StartStepFunctionCommand } from '@holeshot/aws-commands/src';
+import { PublishMessageCommand, StartStepFunctionCommand } from '@holeshot/aws-commands/src';
 import bootstrapper from './../bootstrapper';
 
 const container = bootstrapper();
@@ -24,6 +24,16 @@ export const handler = async (event: SNSEvent, context: Context) => {
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
       container
     });
+
+    // We could also publish an SNS to start the step function like this...
+    // const response = await container
+    //   .get<PublishMessageCommand>("PublishMessageCommand")
+    //   .runAsync({
+    //     topic: 'Holeshot-StartStepFunctionTopic',
+    //     subject: event.Records[0].Sns.Subject,
+    //     message: event.Records[0].Sns.Message,
+    //     container
+    //   });
 
     // console.log('response', response);
 

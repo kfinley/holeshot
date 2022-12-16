@@ -1,7 +1,19 @@
 
 register:
-    handler: register.handler
-    events:
-      - httpApi:
-          method: POST
-          path: /user/register
+  handler: register.handler
+  events:
+    - httpApi:
+        method: POST
+        path: /user/register
+
+GetUser:
+  handler: getUser.handler
+
+CreateUser:
+  handler: createUser.handler
+
+SaveUser:
+  handler: saveUser.handler
+
+SendConfirmation:
+  handler: sendConfirmation.handler

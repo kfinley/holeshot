@@ -4,7 +4,6 @@ import { ApiGatewayManagementApiClient } from '@aws-sdk/client-apigatewaymanagem
 import { bootstrapper as awsCommandsBootstrapper } from '@holeshot/aws-commands/src';
 import { AuthorizeConnectionCommand, DeleteConnectionByUserIdCommand, DeleteConnectionCommand, GetConnectionByUserIdCommand, SaveConnectionCommand, SendMessageCommand } from './commands';
 import { IMessageCommand } from './commands/messageCommand';
-// import { bootstrapper as ghCommandsBootstrapper } from "@holeshot/github-commands/src";
 import { PingMessageCommand } from './commands/pingMessage';
 
 const { APIGW_ENDPOINT } = process.env; //TODO ???
@@ -15,7 +14,6 @@ export default function bootstrapper() {
 
   awsCommandsBootstrapper(container);
 
-  // ghCommandsBootstrapper(container);
 
   if (!container.isBound("DynamoDBClient")) {
     container.bind<DynamoDBClient>("DynamoDBClient")

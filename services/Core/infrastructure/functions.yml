@@ -1,0 +1,5 @@
+StartStepFunction:
+  handler: startStepFunction.handler
+    events:
+    - sns:
+        arn: arn:aws:sns:us-east-1:146665891952:Holeshot-StartStepFunctionTopic #TODO: Deal with arn

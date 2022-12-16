@@ -1,0 +1,39 @@
+{
+  "title": "Holeshot BMX - Articles",
+  "allowAnonymous": true,
+  "metaTags": [
+    {
+      "name": "description",
+      "content": "Holeshot BMX articles"
+    },
+    {
+      "itemprop": "name",
+      "content": "Holeshot BMX - Articles"
+    },
+    {
+      "itemprop": "description",
+      "content": "Holeshot BMX articles"
+    },
+
+    {
+      "property": "og:title",
+      "content": "Holeshot BMX - Articles"
+    },
+    {
+      "property": "og:type",
+      "content": "Website"
+    },
+    {
+      "property": "og:url",
+      "content": "https://holeshot-bmx.com/articles"
+    },
+    {
+      "property": "og:description",
+      "content": "Holeshot BMX articles"
+    },
+    {
+      "property": "og:site_name",
+      "content": "holeshot-bmx.com"
+    }
+  ]
+}

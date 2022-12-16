@@ -51,9 +51,15 @@ custom:
     host: holeshot.sfn
     port: 8083
     region: us-east-1
-    functions:
+    functions: #TODO: Externalize this to a script is possible
+      # WebSockets
       GetConnectionInvocation: WebSockets-GetConnection
       SendMessageInvocation: WebSockets-SendMessage
+      # User
+      GetUserStep: WebSockets-GetUser
+      CreateUserStep: WebSockets-CreateUser
+      SaveUserStep: WebSockets-SaveUser
+      SendConfirmationStep: WebSockets-SendConfirmation
       # StateMachineStateName: Lambda function name (service-function)
 
 provider:

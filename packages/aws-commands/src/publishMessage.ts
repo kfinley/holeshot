@@ -34,5 +34,9 @@ export class PublishMessageCommand implements Command<PublishMessageRequest, Pub
     var result = await this.snsClient.send(command);
 
     console.log(`Published TopicArn/MessageId: ${sendParams.TopicArn}/${result.MessageId}`);
+
+    return {
+      statusCode: 200 // kinda bs.. fix this
+    }
   }
 }
