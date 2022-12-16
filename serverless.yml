@@ -84,4 +84,4 @@ resources:
 functions: ${file(.devcontainer/scripts/serverless-offline/loadFunctions.js)}
 
 stepFunctions:
-  stateMachines: ${file(.devcontainer/scripts/serverless-offline/loadStateMachines.js)}
+  stateMachines: ${file(.devcontainer/scripts/serverless-offline/loadStateMachines-v2.js)}
