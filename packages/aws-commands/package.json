@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@types/node": "^14.14.31",
+    "@types/node": "^18.11.17",
     "@aws-sdk/client-cognito-identity": "^3.226.0",
     "@aws-sdk/client-cognito-identity-provider": "^3.226.0",
     "@aws-sdk/client-dynamodb": "3.226.0",

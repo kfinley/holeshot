@@ -16,14 +16,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
-    "@storybook/addon-actions": "^6.5.14",
-    "@storybook/addon-docs": "^6.5.14",
-    "@storybook/addon-essentials": "^6.5.14",
-    "@storybook/addon-links": "^6.5.14",
-    "@storybook/builder-webpack5": "^6.5.14",
-    "@storybook/manager-webpack5": "^6.5.14",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-docs": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/builder-webpack5": "^6.4.19",
+    "@storybook/manager-webpack5": "^6.4.19",
     "@storybook/storybook-deployer": "^2.8.11",
-    "@storybook/vue": "^6.5.14",
+    "@storybook/vue": "^6.4.19",
     "@types/jest": "^28.1.1",
     "@typescript-eslint/eslint-plugin": "^4.18.0",
     "@typescript-eslint/parser": "^4.18.0",
@@ -51,7 +51,7 @@
     "vue-loader": "^15.9.8",
     "vue-property-decorator": "^9.1.2",
     "vue-template-compiler": "^2.6.14",
-    "webpack": "^5.75.0"
+    "webpack": "^5.20.2"
   },
   "eslintConfig": {
     "root": true,
