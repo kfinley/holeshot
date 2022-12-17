@@ -1,7 +1,7 @@
 
 import Components from "@/components";
 import { Wrapper } from "@vue/test-utils";
-import { Factory } from "vue2-components/tests/utils";
+import { Factory } from "@finley/vue2-components/tests/utils";
 import { events } from '../../tests/data'
 
 describe('event-details-modal.vue', () => {

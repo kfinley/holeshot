@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "interactjs": "^1.10.11",
-    "vue2-components": "1.0.0",
+    "@finley/vue2-components": "1.0.0",
     "@holeshot/types": "1.0.0"
   },
   "devDependencies": {

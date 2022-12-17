@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import TypeAhead from "vue2-components/src/components/type-ahead.vue";
+import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
 import TrackList from "./track-list.vue";
 import { Track } from "@holeshot/types/src";
 
@@ -28,7 +28,7 @@ import { Track } from "@holeshot/types/src";
   },
 })
 export default class TrackSearch extends Vue {
-  
+
   @Prop()
   items!: Array<Track>;
 

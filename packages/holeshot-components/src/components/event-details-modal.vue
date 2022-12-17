@@ -21,7 +21,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { Event } from "@holeshot/types/src";
-import Modal from "vue2-components/src/components/modal.vue";
+import Modal from "@finley/vue2-components/src/components/modal.vue";
 @Component({
   components: {
     Modal,

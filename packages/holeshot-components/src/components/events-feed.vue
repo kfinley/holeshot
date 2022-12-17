@@ -55,13 +55,13 @@
 <script lang="ts">
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import { SwipeableEvent, Event } from "@holeshot/types/src";
-import Entity from "vue2-components/src/components/entity.vue";
-import SwipeableList from "vue2-components/src/components/swipeable-list.vue";
-import Card from "vue2-components/src/components/card.vue";
-import SwipeableEntity from "vue2-components/src/components/swipeable.vue";
-import Modal from "vue2-components/src/components/modal.vue";
+import Entity from "@finley/vue2-components/src/components/entity.vue";
+import SwipeableList from "@finley/vue2-components/src/components/swipeable-list.vue";
+import Card from "@finley/vue2-components/src/components/card.vue";
+import SwipeableEntity from "@finley/vue2-components/src/components/swipeable.vue";
+import Modal from "@finley/vue2-components/src/components/modal.vue";
 import EventDetailsModal from "./event-details-modal.vue";
-import Notification from "vue2-components/src/components/notification.vue";
+import Notification from "@finley/vue2-components/src/components/notification.vue";
 
 @Component({
   components: {

@@ -13,8 +13,8 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { Track } from "@holeshot/types/src";
-import Entity from "vue2-components/src/components/entity.vue";
-import Card from "vue2-components/src/components/card.vue";
+import Entity from "@finley/vue2-components/src/components/entity.vue";
+import Card from "@finley/vue2-components/src/components/card.vue";
 
 @Component({
   components: {

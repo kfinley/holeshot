@@ -1,6 +1,6 @@
 import Components from "@/components";
 import { Wrapper } from "@vue/test-utils";
-import { Factory } from "vue2-components/tests/utils";
+import { Factory } from "@finley/vue2-components/tests/utils";
 
 describe('track-search.vue', () => {
 
