@@ -16,7 +16,7 @@
     "super-clean": "rm -rf node_modules && rm -rf package-lock.json && npm run clean && lerna exec -- rm package-lock.json || true && rm -rf .webpack && rm -rf services/WebSockets/dist && rm -rf infrastructure/cdk.out && npm run clean:js-files",
     "dev:init": "./.devcontainer/scripts/dev-init.sh",
     "lerna": "lerna",
-    "test": "npm run lerna -- run test:unit --scope=@holeshot/components --scope=vue2-components --stream",
+    "test": "npm run lerna -- run test:unit --scope=@holeshot/components --scope=@finley/vue2-components --stream",
     "update-init-submodules": "git submodule update --init --recursive",
     "sb-vc": "cd packages/vue2-components && npm run storybook",
     "sb-hc": "cd packages/holeshot-components && npm run storybook",
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "lerna": "^5.0.0",
-    "sb": "^6.5.6",
+    "sb": "^6.5.14",
     "dotenv": "^16.0.3",
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",
