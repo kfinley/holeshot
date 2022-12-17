@@ -21,7 +21,7 @@ export default function bootstrapper(container: Container) {
         new CognitoIdentityClient({}) // Prod
         :
         new CognitoIdentityClient({ // Local Dev
-          endpoint: "http://platform8.cognito:9229"
+          endpoint: "http://holeshot.cognito:9229"
         }));
   }
 

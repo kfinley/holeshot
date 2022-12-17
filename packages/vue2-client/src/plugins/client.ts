@@ -3,6 +3,7 @@ import Vue, { PluginFunction, PluginObject } from "vue";
 import { Store } from "vuex";
 import router from "vue-router";
 import { ArticlesModule } from '../store/articles-module'
+import { setupValidation } from '@vue2-components/';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "../styles/styles.scss";
@@ -27,7 +28,7 @@ const plugin = {
     if (options !== undefined && options.router && options.store) {
       const appName = options.appName ?? "Holeshot-BMX.com";
 
-      // setupValidation(extend);
+      setupValidation(extend);
       setupModules(options.store);
 
       // router provided to add any plugin routes.

@@ -28,3 +28,15 @@ export interface Event extends Entity {
 export interface SwipeableEvent extends Event {
   visible: boolean;
 }
+
+export interface Configuration {
+  ClientId: string;
+  PoolId: string;
+  ServiceWorkerPath: string;
+  Host: string;
+  Agent: string;
+  Api: string;
+  ApiPorts?: string;
+  WebSocket: string,
+  WebSocketPort: string
+}
