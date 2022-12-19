@@ -28,7 +28,7 @@ jobs:
           cd $GITHUB_WORKSPACE/main
           npm install -g npm@latest
           npm install silent
-          npm run bootstrap
+          npm run bootstrap:2
 
       - name: Run unit tests
         run: |
