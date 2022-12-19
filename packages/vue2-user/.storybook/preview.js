@@ -6,7 +6,7 @@ import { extend } from 'vee-validate';
 import { action } from '@storybook/addon-actions';
 
 import '!style-loader!css-loader!sass-loader!../node_modules/bootstrap/dist/css/bootstrap.css';
-import '!style-loader!css-loader!sass-loader!@holeshot/vue2-components/src/styles/styles.scss';
+import '!style-loader!css-loader!sass-loader!@holeshot/components/src/styles/styles.scss';
 
 Vue.use(Vuex);
 setupValidation(extend);
