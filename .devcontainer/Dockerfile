@@ -15,7 +15,7 @@ FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-${VARIANT}
 
 RUN su node -c "source /usr/local/share/nvm/nvm.sh && \
   npm install -g \
-  npm@7.24.1 \
+  npm@latest \
   aws-cdk \
   lerna \
   @vue/cli \
