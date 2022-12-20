@@ -51,9 +51,9 @@ obj
 mono_crash.*
 
 # Storybooks
-packages/*/storybook
-storybook/*
-
+packages/**/storybooks
+packages/**/storybook
+storybooks/*
 .env
 
 # lerna files

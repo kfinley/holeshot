@@ -1,11 +1,15 @@
 {
   "name": "@holeshot/components",
   "version": "1.0.0",
-   "scripts": {
-    "build": "vue-cli-service build",
+  "author": {
+    "name": "Kyle Finley",
+    "email": "kyle@kylefinley.net"
+  },
+  "scripts": {
+    "build": "vite build",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6007",
     "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages"
   },

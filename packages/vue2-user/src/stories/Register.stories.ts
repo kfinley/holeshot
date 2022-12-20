@@ -5,9 +5,9 @@ import { container } from 'inversify-props';
 import { RegisterRequest, RegisterResponse } from '@/types';
 import { RegistrationStatus } from '@/store';
 import { setupModules } from '@/plugin';
-import { setupModules as setupNotificationModule } from "@holeshot/vue2-notify/src/plugin";
-import { Notify } from "@holeshot/vue2-notify/src/components";
-import { AlertType } from '@holeshot/vue2-notify/src/types';
+import { setupModules as setupNotificationModule } from "@finley/vue2-components/src/plugin";
+import Notification from "@finley/vue2-components/src/components";
+import { AlertType } from '@finley/vue2-components/src/types';
 import { Command } from '@holeshot/commands/src';
 import { messages } from '@/resources/messages';
 import { RegisterCommand } from "@/commands";
@@ -37,9 +37,9 @@ export default {
 };
 
 const DefaultTemplate: Story = (args, { argTypes }) => ({
-  components: { Register, Notify },
+  components: { Register, Notification },
   store,
-  template: '<div><notify /><register /></div>'
+  template: '<div><notification /><register /></div>'
 });
 
 export const Default = DefaultTemplate.bind({});
@@ -61,7 +61,7 @@ const RegisteringTemplate: Story = (args, { argTypes }) => ({
 export const Registering = RegisteringTemplate.bind({});
 
 const ThankYouTemplate: Story = (args, { argTypes }) => ({
-  components: { Register, Notify },
+  components: { Register, Notification },
   store: new Vuex.Store({
     modules: {
       Registration: {
@@ -82,7 +82,7 @@ const ThankYouTemplate: Story = (args, { argTypes }) => ({
       }
     }
   }),
-  template: '<div><notify /><register /></div>'
+  template: '<div><notification /><register /></div>'
 });
 
 export const ThankYou = ThankYouTemplate.bind({});

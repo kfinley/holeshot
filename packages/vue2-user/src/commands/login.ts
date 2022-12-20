@@ -3,7 +3,7 @@ import { AuthStatus } from '../store';
 import { Command } from '@holeshot/commands/src';
 import { Inject } from 'inversify-props';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { config } from "@holeshot/config/src";
+import { config } from "@holeshot/web-core/src/config";
 
 export class LoginCommand implements Command<LoginRequest, LoginResponse> {
 
@@ -42,7 +42,7 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
           session: result.Session
         }
       }
-    } catch (e) {
+    } catch (e: any) {
       const message = `Login failed. Error: ${e.message}`;
       if (e.message === 'Resource not found') {
         console.log('Confirm Cognito UserPool ClientID is correct.', e);

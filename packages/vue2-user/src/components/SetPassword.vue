@@ -68,7 +68,7 @@
 import { Component, Vue, Ref, Prop } from "vue-property-decorator";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { userModule, UserState, AuthStatus } from "../store";
-import { Card } from "@holeshot/vue2-common/src/components";
+import { Card } from "@finley/vue2-components/src/components";
 import { State } from "vuex-class";
 import { messages } from "../resources/messages";
 

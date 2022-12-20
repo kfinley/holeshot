@@ -10,4 +10,4 @@ fi
 
 docker $OPERATION holeshot.sls
 docker $OPERATION holeshot.web
-# docker $OPERATION holeshot.storybooks
+docker $OPERATION holeshot.storybooks

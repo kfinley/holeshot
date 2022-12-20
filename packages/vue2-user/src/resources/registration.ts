@@ -1,4 +1,4 @@
-import { config } from '@holeshot/config/src';
+import { config } from '@holeshot/web-core/src/config';
 
 let registrationServiceUri = config.Api;
 
@@ -10,7 +10,7 @@ if (config.ApiPorts && config.ApiPorts.includes('user')) {
 
 export default {
   get serviceBasePath() {
-    return `${registrationServiceUri}/user/v1`
+    return `${registrationServiceUri}/user`
   },
 
   get register() {

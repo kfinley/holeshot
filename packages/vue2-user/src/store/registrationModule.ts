@@ -1,11 +1,12 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import { container } from 'inversify-props';
 import { RegistrationState, RegistrationStatus } from './state';
 import { RegisterRequest } from './../types';
 import { RegisterCommand } from '../commands';
-import { notificationModule } from '@holeshot/vue2-notify/src/store';
-import { AlertType } from "@holeshot/vue2-notify/src/types";
+import NotificationModule from '@finley/vue2-components/src/store/notification-module';
+import { AlertType } from "@finley/vue2-components/src/types";
 import { messages } from "../resources/messages";
+import { Store } from 'vuex';
 
 @Module({ namespaced: true, name: 'Registration' })
 export class RegistrationModule extends VuexModule implements RegistrationState {
@@ -13,9 +14,11 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
   email: string | undefined;
   error: string | undefined;
 
+  notificationModule: any; //= container.get<NotificationModule>("NotificationModule")
+
   @Action
   async register(params: RegisterRequest) {
-    notificationModule.dismissAll();
+    this.notificationModule.dismissAll();
 
     this.context.commit('request', { email: params.email });
 
@@ -28,7 +31,7 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
       }
 
       this.context.commit('registered');
-      notificationModule.add({
+      this.notificationModule.add({
         header: messages.Registration.Registered.header,
         message: messages.Registration.Registered.message,
         type: AlertType.success
@@ -36,7 +39,7 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
 
     } catch (error) {
       this.context.commit('fail', error);
-      notificationModule.handleError({ error, rethrow: false });
+      this.notificationModule.handleError({ error, rethrow: false });
     }
   }
 
@@ -52,7 +55,7 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
     this.error = undefined;
     this.email = undefined;
     this.status = RegistrationStatus.Unknown;
-    notificationModule.dismissAll();
+    this.notificationModule.dismissAll();
   }
 
   @Mutation
@@ -79,4 +82,8 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
   mutate(mutation: (state: RegistrationState) => void) {
     mutation(this);
   }
+
 }
+
+// export const getRegistrationModule = (store: Store<any>) => getModule(RegistrationModule, store);
+

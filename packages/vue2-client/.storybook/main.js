@@ -10,24 +10,33 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-links"
   ],
+  staticDirs: ['../public'],
   core: {
-    builder: 'webpack4',
+    builder: 'webpack5',
   },
   webpackFinal: (config) => {
     // add SCSS support for CSS Modules
     config.module.rules.push({
       test: /\.s[a|c]ss$/,
-        exclude: /node_modules/,
-        use: [
-          'vue-style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              esModule: false,
-            }
-          },
-          'sass-loader'
-        ]
+      exclude: /node_modules/,
+      use: [
+        'vue-style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            esModule: false,
+          }
+        },
+        {
+          // https://github.com/storybookjs/storybook/issues/6743
+          loader: 'sass-loader',
+          options: {
+            additionalData: `
+                        @import "./src/styles/styles.scss";
+                    `
+          }
+        },
+      ]
     });
 
     config.resolve.plugins = config.resolve.plugins || [];

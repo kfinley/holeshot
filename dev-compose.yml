@@ -90,12 +90,12 @@ services:
     volumes:
       - .:/vite-client
 
-  # holeshot.storybooks:
-  #   container_name: .storybooks
-  #   image: node:14
-  #   ports:
-  #     - "6006:6006"
-  #   working_dir: /workspace
-  #   command: sh -c "npm run deploy-storybook:local && npx http-server -p 6006 storybooks"
-  #   volumes:
-  #     - .:/workspace
+  holeshot.storybooks:
+    container_name: holeshot.storybooks
+    image: node:14
+    ports:
+      - "6006:6006"
+    working_dir: /workspace
+    command: sh -c "npm run deploy-storybook:local && npx http-server -p 6006 storybooks"
+    volumes:
+      - .:/workspace

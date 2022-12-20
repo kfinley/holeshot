@@ -1,15 +1,16 @@
 import Vue, { PluginFunction, PluginObject } from "vue";
 import { Store } from "vuex";
-import { initializeModules, UserState, AuthStatus } from "./store";
+import { initializeModules, UserState, AuthStatus, registrationModule } from "./store";
 import { RegistrationModule, UserModule } from "./store/store-modules";
 import { userModule } from "./store";
-import NotificationModule from "@holeshot/vue2-notify/src/store/notificationModule";
-import { NotificationPlugin } from "@holeshot/vue2-notify/src/";
+import NotificationModule from "@finley/vue2-components/src/store/notification-module";
+import ComponentLibraryPlugin from "@finley/vue2-components/src/plugin";
 import { routes, RouteNames } from "./router";
 import router from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import { authHelper } from "@holeshot/api-client/src/helpers";
 import bootstrapper from "./bootstrapper";
+import { container } from '@/inversify.config';
 
 export interface UserPlugin
   extends PluginObject<UserPluginOptions> {
@@ -31,22 +32,28 @@ export const setupModules = (store: Store<any>): void => {
   store.registerModule("User", UserModule);
 
   initializeModules(store);
+
+  container.bind<UserModule>("UserModule").toDynamicValue(() => userModule);
+  container.bind<RegistrationModule>("RegistrationModule").toDynamicValue(() => registrationModule);
+
 };
 
 const UserPlugin = {
   install(vue: typeof Vue, options?: UserPluginOptions) {
     if (options !== undefined && options.store && options.router) {
 
-      bootstrapper();
-
-      setupModules(options.store);
-
+      // conveniently using the NotificationModule as a check to see if we've registered the ComponentsPlugin
       if (getModule(NotificationModule, options.store) === undefined) {
-        vue.use(NotificationPlugin, {
+        vue.use(ComponentLibraryPlugin, {
           router: options.router,
           store: options.store,
         });
       }
+
+      setupModules(options.store);
+
+      bootstrapper();
+
       userModule.mutate((state: UserState) => state.postAuthFunction = options.postAuthFunction);
 
       options.router.addRoutes(routes);

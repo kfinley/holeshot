@@ -4,8 +4,8 @@ import SetPassword from "@/components/SetPassword.vue";
 import { LoginRequest, LoginResponse } from '@/types';
 import { AuthStatus } from '@/store';
 import { setupModules } from '@/plugin';
-import { setupModules as setupNotificationModule } from "@holeshot/vue2-notify/src/plugin";
-import { Notify } from "@holeshot/vue2-notify/src/components";
+import { setupModules as setupNotificationModule } from "@finley/vue2-components/src/plugin";
+import Notification from "@finley/vue2-components/src/components";
 import { Command } from '@holeshot/commands/src';
 import { container } from 'inversify-props';
 import { LoginCommand } from "../commands";
@@ -33,7 +33,7 @@ export default {
 };
 
 const DefaultTemplate: Story = (args, { argTypes }) => ({
-  components: { SetPassword, Notify },
+  components: { SetPassword, Notification },
   props: Object.keys(args),
   store: new Vuex.Store({
     modules: {
@@ -49,7 +49,7 @@ const DefaultTemplate: Story = (args, { argTypes }) => ({
       }
     }
   }),
-  template: '<div><notify /><set-password v-bind="$props"/></div>'
+  template: '<div><notification /><set-password v-bind="$props"/></div>'
 });
 
 export const Default = DefaultTemplate.bind({})
@@ -58,7 +58,7 @@ Default.args = {
 };
 
 const SettingPasswordTemplate: Story = (args, { argTypes }) => ({
-  components: { SetPassword, Notify },
+  components: { SetPassword, Notification },
   props: Object.keys(args),
   store: new Vuex.Store({
     modules: {
@@ -74,7 +74,7 @@ const SettingPasswordTemplate: Story = (args, { argTypes }) => ({
       },
     }
   }),
-  template: '<div><notify /><set-password v-bind="$props"/></div>'
+  template: '<div><notification /><set-password v-bind="$props"/></div>'
 });
 
 export const SettingPassword = SettingPasswordTemplate.bind({});

@@ -1,0 +1,16 @@
+{
+  "name": "@holeshot/web-core",
+  "version": "1.0.0",
+  "description": "Core module. Shared front end code. Keep it slim!",
+  "private": true,
+  "author": {
+    "name": "Kyle Finley",
+    "email": "kyle@kylefinley.net"
+  },
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.17"
+  }
+}

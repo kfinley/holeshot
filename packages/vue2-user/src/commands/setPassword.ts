@@ -2,7 +2,7 @@ import { SetPasswordRequest, SetPasswordResponse } from '../types';
 import { Command } from '@holeshot/commands/src';
 import { Inject } from 'inversify-props';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { config } from "@holeshot/config/src";
+import { config } from "@holeshot/web-core/src/config";
 
 export class SetPasswordCommand implements Command<SetPasswordRequest, SetPasswordResponse> {
 
@@ -37,7 +37,7 @@ export class SetPasswordCommand implements Command<SetPasswordRequest, SetPasswo
             },
           }
         }
-      } catch (e) {
+      } catch (e: any) {
         throw new Error(`Failed to set password. Error: ${e.message}`);
       }
     }

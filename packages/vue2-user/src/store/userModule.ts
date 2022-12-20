@@ -1,11 +1,13 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
 import { UserState, AuthStatus } from './state';
 import { User, SetPasswordRequest, LoginRequest, AuthenticationResult } from './../types';
-import { notificationModule } from '@holeshot/vue2-notify/src/store';
+import NotificationModule from '@finley/vue2-components/src/store/notification-module';
+import { notificationModule } from '@finley/vue2-components/src/store/'
 import { LoginCommand, SetPasswordCommand } from "../commands";
 import { container } from 'inversify-props';
 import { authHelper } from '@holeshot/api-client/src/helpers'
 import { GetUserDetailsCommand } from '@/commands/getUserDetails';
+import { Store } from 'vuex';
 
 @Module({ namespaced: true, name: 'User' })
 export class UserModule extends VuexModule implements UserState {
@@ -16,9 +18,11 @@ export class UserModule extends VuexModule implements UserState {
   authTokens!: AuthenticationResult;
   postAuthFunction!: string;
 
+  notificationModule: any; // = container.get<NotificationModule>("Notification")
+
   @Action
   async login(params: LoginRequest) {
-    notificationModule.dismissAll();
+    this.notificationModule.dismissAll();
 
     this.context.commit('mutate',
       (state: UserState) => state.authStatus = AuthStatus.LoggingIn);
@@ -67,13 +71,13 @@ export class UserModule extends VuexModule implements UserState {
       this.context.commit('mutate',
         (state: UserState) => state.authStatus = AuthStatus.LoginFailed);
 
-      notificationModule.handleError({ error, rethrow: false });
+      this.notificationModule.handleError({ error, rethrow: false });
     }
   }
 
   @Action
   async changePassword(params: SetPasswordRequest) {
-    notificationModule.dismissAll();
+    this.notificationModule.dismissAll();
 
     this.context.commit('mutate',
       (state: UserState) => state.authStatus = AuthStatus.SettingPassword);
@@ -112,7 +116,7 @@ export class UserModule extends VuexModule implements UserState {
       this.context.commit('mutate',
         (state: UserState) => state.authStatus = AuthStatus.NewPasswordRequired);
 
-      notificationModule.handleError({ error, rethrow: false });
+      this.notificationModule.handleError({ error, rethrow: false });
     }
   }
 
@@ -121,3 +125,5 @@ export class UserModule extends VuexModule implements UserState {
     mutation(this);
   }
 }
+
+// export const getUserModule = (store: Store<any>) => getModule(UserModule, store);

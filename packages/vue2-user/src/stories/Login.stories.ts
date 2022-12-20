@@ -6,8 +6,8 @@ import { ApiClient, ApiResponse } from '@holeshot/api-client/src';
 import { container } from 'inversify-props';
 import { AuthStatus } from '@/store';
 import { setupModules } from '@/plugin';
-import { setupModules as setupNotificationModule } from "@holeshot/vue2-notify/src/plugin";
-import { Notify } from "@holeshot/vue2-notify/src/components";
+import { setupModules as setupComponentsModule } from "@finley/vue2-components/src/plugin";
+import Notification from "@finley/vue2-components/src/components";
 
 class mockApiClient implements ApiClient {
   getWithAsync<T>(url: string, params: any): Promise<ApiResponse<T>> {
@@ -47,7 +47,7 @@ class mockApiClient implements ApiClient {
 container.bind<ApiClient>('ApiClient').to(mockApiClient);
 
 let store = new Vuex.Store({});
-setupNotificationModule(store);
+setupComponentsModule(store);
 setupModules(store);
 
 export default {
@@ -56,7 +56,7 @@ export default {
 };
 
 const DefaultTemplate: Story = (args, { argTypes }) => ({
-  components: { Login, Notify },
+  components: { Login, Notification },
   store: new Vuex.Store({
     modules: {
       User: {
@@ -75,13 +75,13 @@ const DefaultTemplate: Story = (args, { argTypes }) => ({
       }
     }
   }),
-  template: '<div><notify /><login /></div>'
+  template: '<div><notification /><login /></div>'
 });
 
 export const Default = DefaultTemplate.bind({});
 
 const LoggingInTemplate: Story = (args, { argTypes }) => ({
-  components: { Login, Notify },
+  components: { Login, Notification },
   store: new Vuex.Store({
     modules: {
       User: {
@@ -100,7 +100,7 @@ const LoggingInTemplate: Story = (args, { argTypes }) => ({
       }
     }
   }),
-  template: '<div><notify /><login /></div>'
+  template: '<div><notification /><login /></div>'
 });
 
 export const LoggingIn = LoggingInTemplate.bind({});

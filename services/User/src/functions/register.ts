@@ -17,7 +17,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   const sp = new URLSearchParams(event.body)
   console.log(sp);
-  
+
   try {
     const response = await container
       .get<StartStepFunctionCommand>("StartStepFunctionCommand")
@@ -26,12 +26,12 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         stateMachineName: 'Holeshot-WebSockets-Register',
         container
       });
-    await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
-      topic: 'Holeshot-StartStepFunctionTopic',  // SNS Topic
-      subject: 'Register',
-      message: JSON.stringify({}),
-      container
-    });
+    // await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
+    //   topic: 'Holeshot-StartStepFunctionTopic',  // SNS Topic
+    //   subject: 'Register',
+    //   message: JSON.stringify({}),
+    //   container
+    // });
     return createResponse(event, 200, 'success');
   } catch (error) {
     console.log(error);
