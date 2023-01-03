@@ -1,0 +1,5 @@
+HOLESHOT_CORE_TABLE: Holeshot-Core-Table
+USER_POOL_ID: us-east-1_local
+HOLESHOT_SITE_URL: http://localhost:8080
+HOLESHOT_SENDER_EMAIL: no-reply@holeshot-bmx.com
+HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE: ConfirmRegistration

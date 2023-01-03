@@ -29,7 +29,7 @@ export default class Articles extends Vue {
   @State('Articles') articlesState!: ArticlesState
 
   async created() {
-    await getArticlesModule(this).loadArticles()
+    await getArticlesModule(this.$store).loadArticles()
   }
 
   loading() {

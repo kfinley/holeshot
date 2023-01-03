@@ -1,3 +1,9 @@
 [submodule "packages/vue2-components"]
 	path = packages/vue2-components
 	url = git@github.com:kfinley/Vue2-Components.git
+[submodule "packages/aws-ses-v2-local"]
+	path = packages/aws-ses-v2-local
+	url = git@github.com:kfinley/aws-ses-v2-local.git
+[submodule "packages/serverless-offline-ses-v2"]
+	path = packages/serverless-offline-ses-v2
+	url = git@github.com:kfinley/serverless-offline-ses-v2.git

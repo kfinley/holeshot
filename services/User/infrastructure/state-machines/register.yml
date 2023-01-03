@@ -1,5 +1,5 @@
 Comment: Register new user
-StartAt: UserExists
+StartAt: GetUserStep
 States:
   GetUserStep:
     Type: Task
@@ -10,13 +10,13 @@ States:
     Type: Choice
     Choices:
       - Variable: $.userId
-        StringEquals: ""
-        Next: CreateUserStep
+        IsPresent: false
+        Next: CreateCognitoUserStep
     Default: UserAlreadyExists
-  CreateUserStep:
+  CreateCognitoUserStep:
     Type: Task
     Resource:
-      Fn::GetAtt: [CreateUserStep, Arn]
+      Fn::GetAtt: [CreateCognitoUserStep, Arn]
     Next: UserCreated
   UserAlreadyExists:
     Type: Pass

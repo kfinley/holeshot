@@ -4,13 +4,13 @@ import { User, SetPasswordRequest, LoginRequest, AuthenticationResult } from './
 import NotificationModule from '@finley/vue2-components/src/store/notification-module';
 import { notificationModule } from '@finley/vue2-components/src/store/'
 import { LoginCommand, SetPasswordCommand } from "../commands";
-import { container } from 'inversify-props';
+// import { container } from 'inversify-props';
 import { authHelper } from '@holeshot/api-client/src/helpers'
 import { GetUserDetailsCommand } from '@/commands/getUserDetails';
-import { Store } from 'vuex';
+import { Inject } from 'inversify-props';
 
 @Module({ namespaced: true, name: 'User' })
-export class UserModule extends VuexModule implements UserState {
+export default class UserModule extends VuexModule implements UserState {
 
   authStatus = AuthStatus.LoggedOut;
   authSession = "";
@@ -18,25 +18,32 @@ export class UserModule extends VuexModule implements UserState {
   authTokens!: AuthenticationResult;
   postAuthFunction!: string;
 
-  notificationModule: any; // = container.get<NotificationModule>("Notification")
+  @Inject("LoginCommand")
+  private loginCommand!: LoginCommand;
+
+  @Inject("GetUserDetailsCommand")
+  private getUserDetailsCommand!: GetUserDetailsCommand;
+
+  @Inject("SetPasswordCommand")
+  private setPasswordCommand!: SetPasswordCommand;
 
   @Action
   async login(params: LoginRequest) {
-    this.notificationModule.dismissAll();
+    notificationModule.dismissAll();
 
     this.context.commit('mutate',
       (state: UserState) => state.authStatus = AuthStatus.LoggingIn);
 
     try {
-      const login = await container.get<LoginCommand>("LoginCommand").runAsync(params);
+      const login = await this.loginCommand.runAsync(params);
 
-      if (login) {
+      if (this.loginCommand) {
 
         authHelper.setTokens(login.authenticationResult as AuthenticationResult);
 
         if (login.status == AuthStatus.LoggedIn) {
 
-          const userDetails = await container.get<GetUserDetailsCommand>("GetUserDetailsCommand").runAsync({
+          const userDetails = await this.getUserDetailsCommand.runAsync({
             accessToken: login.authenticationResult?.accessToken as string
           });
           authHelper.username = () => userDetails.username;
@@ -71,24 +78,29 @@ export class UserModule extends VuexModule implements UserState {
       this.context.commit('mutate',
         (state: UserState) => state.authStatus = AuthStatus.LoginFailed);
 
-      this.notificationModule.handleError({ error, rethrow: false });
+      notificationModule.handleError({ error, rethrow: false });
     }
   }
 
   @Action
   async changePassword(params: SetPasswordRequest) {
-    this.notificationModule.dismissAll();
+    notificationModule.dismissAll();
 
     this.context.commit('mutate',
       (state: UserState) => state.authStatus = AuthStatus.SettingPassword);
 
     try {
-      const response = await container.get<SetPasswordCommand>("SetPasswordCommand")
+
+      const session = params.session ?? this.authSession;
+
+      // console.log('user-module: session', session);
+
+      const response = await this.setPasswordCommand
         .runAsync({
           previousPassword: params.previousPassword,
           proposedPassword: params.proposedPassword,
           username: params.username,
-          session: params.session ?? this.authSession,
+          session,
         });
 
       if (response) {
@@ -116,7 +128,7 @@ export class UserModule extends VuexModule implements UserState {
       this.context.commit('mutate',
         (state: UserState) => state.authStatus = AuthStatus.NewPasswordRequired);
 
-      this.notificationModule.handleError({ error, rethrow: false });
+      notificationModule.handleError({ error, rethrow: false });
     }
   }
 

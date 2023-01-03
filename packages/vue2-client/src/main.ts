@@ -7,6 +7,7 @@ import App from "./App.vue";
 import ClientPlugin from "./plugins/client";
 import { createRouter} from "./router";
 import store from "./store";
+import { container } from './inversify.config';
 
 Vue.config.productionTip = false;
 
@@ -14,6 +15,7 @@ createRouter().then(router => {
   Vue.use(ClientPlugin, {
     router,
     store,
+    container
   });
 
   new Vue({

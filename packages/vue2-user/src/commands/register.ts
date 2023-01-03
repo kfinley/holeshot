@@ -1,9 +1,10 @@
-import { Inject } from 'inversify-props';
+import { Inject, injectable } from 'inversify-props';
 import { RegisterRequest, RegisterResponse } from '../types';
 import { Command } from '@holeshot/commands/src';
 import { ApiClient } from '@holeshot/api-client/src';
 import registrationResources from '../resources/registration';
 
+@injectable()
 export class RegisterCommand implements Command<RegisterRequest, RegisterResponse> {
 
   @Inject('ApiClient')

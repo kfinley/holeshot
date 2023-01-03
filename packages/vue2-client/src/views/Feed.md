@@ -1,11 +1,11 @@
 <div style="text-align: center; padding-bottom: .5em;">
 
-## Holeshot BMX Latest Updates
+## Holeshot-BMX (Alpha)
 
 </div>
 
-### Dec 15, 2022
+### January, 2023
 
 ---
 
-Creating site... :beer:<br> 8-)
+Building systems... :bike: :beer: 8-)

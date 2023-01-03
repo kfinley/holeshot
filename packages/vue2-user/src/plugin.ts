@@ -1,33 +1,24 @@
-import Vue, { PluginFunction, PluginObject } from "vue";
+import Vue from "vue";
 import { Store } from "vuex";
-import { initializeModules, UserState, AuthStatus, registrationModule } from "./store";
+import { initializeModules, UserState, AuthStatus, registrationModule, userModule } from "./store";
 import { RegistrationModule, UserModule } from "./store/store-modules";
-import { userModule } from "./store";
 import NotificationModule from "@finley/vue2-components/src/store/notification-module";
 import ComponentLibraryPlugin from "@finley/vue2-components/src/plugin";
 import { routes, RouteNames } from "./router";
-import router from "vue-router";
 import { getModule } from "vuex-module-decorators";
 import { authHelper } from "@holeshot/api-client/src/helpers";
 import bootstrapper from "./bootstrapper";
-import { container } from '@/inversify.config';
+import { ClientPlugin, ClientPluginOptions } from "@finley/vue2-components/src/types";
+import { Container } from "inversify-props";
 
-export interface UserPlugin
-  extends PluginObject<UserPluginOptions> {
-  install: PluginFunction<UserPluginOptions>;
-}
-
-export interface UserPluginOptions {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  store: Store<any>;
-  router: router;
+export interface UserPluginOptions extends ClientPluginOptions {
   DefaultRoute: string;
   LoginRedirectRouteName: string;
   postAuthFunction: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const setupModules = (store: Store<any>): void => {
+export const setupModules = (store: Store<any>, container: Container): void => {
   store.registerModule("Registration", RegistrationModule);
   store.registerModule("User", UserModule);
 
@@ -38,25 +29,28 @@ export const setupModules = (store: Store<any>): void => {
 
 };
 
-const UserPlugin = {
-  install(vue: typeof Vue, options?: UserPluginOptions) {
+const userPlugin: ClientPlugin = {
+  install(vue: typeof Vue, options?: UserPluginOptions | ClientPluginOptions) { //TODO: seems lame....
     if (options !== undefined && options.store && options.router) {
+
+      const userOptions = options as UserPluginOptions; //lame...
 
       // conveniently using the NotificationModule as a check to see if we've registered the ComponentsPlugin
       if (getModule(NotificationModule, options.store) === undefined) {
         vue.use(ComponentLibraryPlugin, {
           router: options.router,
           store: options.store,
+          container: options.container
         });
       }
 
-      setupModules(options.store);
+      setupModules(options.store, options.container);
 
-      bootstrapper();
+      bootstrapper(options.container);
 
-      userModule.mutate((state: UserState) => state.postAuthFunction = options.postAuthFunction);
+      userModule.mutate((state: UserState) => state.postAuthFunction = userOptions.postAuthFunction);
 
-      options.router.addRoutes(routes);
+      routes.forEach(route => options.router.addRoute(route));
 
       options.router.beforeEach(async (to, from, next) => {
 
@@ -103,7 +97,7 @@ const UserPlugin = {
             return;
           case AuthStatus.LoggedIn:
             if (to.name === RouteNames.Login) {
-              next({ name: options.LoginRedirectRouteName });
+              next({ name: userOptions.LoginRedirectRouteName });
               return;
             }
             next();
@@ -113,10 +107,10 @@ const UserPlugin = {
               next();
               return;
             }
-            next({ name: options.DefaultRoute });
+            next({ name: userOptions.DefaultRoute });
             return;
           default:
-            next({ name: options.DefaultRoute });
+            next({ name: userOptions.DefaultRoute });
         }
       });
 
@@ -129,8 +123,8 @@ const UserPlugin = {
 
           switch (newValue) {
             case AuthStatus.LoggedIn:
-              if (options.router.currentRoute.name !== options.LoginRedirectRouteName) {
-                options.router.push({ name: options.LoginRedirectRouteName });
+              if (options.router.currentRoute.name !== userOptions.LoginRedirectRouteName) {
+                options.router.push({ name: userOptions.LoginRedirectRouteName });
               }
               break;
             case AuthStatus.LoggingIn:
@@ -164,4 +158,4 @@ const UserPlugin = {
   },
 };
 
-export default UserPlugin as UserPlugin;
+export default userPlugin;

@@ -1,0 +1,1 @@
+serverless: ^2.72.3 until we confirm all plugins can move to 3.x

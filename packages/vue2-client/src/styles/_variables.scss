@@ -1,3 +1,5 @@
+@import "@finley/vue2-components/src/styles/variables";
+
 $body-color: #555c69;
 $body-background: #fff;
 
@@ -10,7 +12,7 @@ $dark: #000;
 $stripe-color: #eff0fa;
 $header-border: #dee2e6;
 
-$primary-gradient-start: #6b76bd;
-$primary-gradient-end: #112282;
+$primary-gradient-start: #DB2A3A;
+$primary-gradient-end: #9B1D35;
 
 $primary-button-background: linear-gradient(170deg, $primary-gradient-start 0%, $primary-gradient-end 100%);

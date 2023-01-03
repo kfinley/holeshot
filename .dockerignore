@@ -1,0 +1,9 @@
+.git
+.env
+.vscode
+infrastructure
+cdk.out
+tests
+.build
+.lambda-build
+.DS_Store

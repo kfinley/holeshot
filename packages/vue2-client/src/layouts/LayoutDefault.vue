@@ -1,6 +1,7 @@
 <template>
   <div class="LayoutDefault">
     <Header class="LayoutDefault__header" />
+    <Notification />
     <main class="LayoutDefault__main">
       <router-view />
     </main>
@@ -11,11 +12,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { Header, Footer } from '../components/'
+import Notification from '@finley/vue2-components/src/components/notification.vue'
 
 @Component({
   components: {
     Header,
     Footer,
+    Notification
   },
 })
 export default class LayoutDefault extends Vue {}

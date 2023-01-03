@@ -9,6 +9,8 @@ import {
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { SES, SESClient } from '@aws-sdk/client-ses';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 export default function bootstrapper(container: Container) {
 
@@ -32,8 +34,25 @@ export default function bootstrapper(container: Container) {
         new CognitoIdentityProvider({})
         :
         new CognitoIdentityProvider({
-          endpoint: "http://Holeshot.cognito:9229"
+          endpoint: "http://holeshot.cognito:9229",
+          credentials: {
+            accessKeyId: "local",
+            secretAccessKey: "local",
+          },
+          region: "us-east-1",
         }));
+  }
+
+  if (!container.isBound("DynamoDBClient")) {
+    container.bind<DynamoDBClient>("DynamoDBClient")
+      .toDynamicValue(() =>
+        process.env.NODE_ENV === 'production'
+          ?
+          new DynamoDBClient({}) // Prod
+          :
+          new DynamoDBClient({ // Local Dev
+            endpoint: "http://holeshot.dynamodb:8000"
+          }));
   }
 
   if (!container.isBound("SNSClient")) {
@@ -55,7 +74,7 @@ export default function bootstrapper(container: Container) {
         new SFNClient({}) // Prod
         :
         new SFNClient({ // Local Dev
-          endpoint: "http://Holeshot.sfn:8083"
+          endpoint: "http://holeshot.sfn:8083"
         }));
   }
 
@@ -75,6 +94,21 @@ export default function bootstrapper(container: Container) {
           }
         }));
   }
+
+  if (!container.isBound("SES")) {
+
+    container.bind<SES>("SES")
+      .toDynamicValue(() => process.env.NODE_ENV === 'production'
+        ?
+        new SES({ region: "us-east-1" }) // Prod
+        :
+        new SES({ // Local Dev
+          endpoint: 'http://localhost:8005',
+          region: 'aws-ses-v2-local',
+          credentials: { accessKeyId: 'ANY_STRING', secretAccessKey: 'ANY_STRING' },
+        }));
+  }
+
 
   container.bind<GetStoredObjectCommand>("GetStoredObjectCommand").to(GetStoredObjectCommand);
   container.bind<PublishMessageCommand>("PublishMessageCommand").to(PublishMessageCommand);

@@ -20,7 +20,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     console.log(`Authorizer: ${JSON.stringify(authorizer)}`);
 
     console.log('event', event),
-      console.log('context', context);
+    console.log('context', context);
 
     if (authorizer === null || authorizer === undefined) { // || authorizer.policyDocument === undefined
       return createResponse(event, 401, 'Unauthorized');

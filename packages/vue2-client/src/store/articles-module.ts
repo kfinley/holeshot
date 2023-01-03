@@ -1,3 +1,4 @@
+import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import { Module, Action } from 'vuex-module-decorators';
 import BaseModule from './base-module'
@@ -47,4 +48,4 @@ export class ArticlesModule extends BaseModule implements ArticlesState {
   }
 }
 
-export const getArticlesModule = (vue: Vue) => getModule(ArticlesModule, vue.$store);
+export const getArticlesModule = (store: Store<any>) => getModule(ArticlesModule, store);

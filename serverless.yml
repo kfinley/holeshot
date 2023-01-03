@@ -12,6 +12,7 @@ plugins:
   - serverless-step-functions
   - serverless-offline-stepfunctions-plugin
   - serverless-offline
+  - serverless-offline-ses-v2
 
 custom:
   webpack:
@@ -24,11 +25,15 @@ custom:
       - ${self:provider.stage}
     start:
       noStart: true
+      host: holeshot.dynamodb
       port: 8000
       migrate: true
-      host: holeshot.dynamodb
       seed: true
       convertEmptyValues: true
+
+  serverless-offline-ses-v2:
+    port: 8005
+    templatesPath: email-templates
 
   serverless-offline-sns:
     host: 0.0.0.0
@@ -56,10 +61,10 @@ custom:
       GetConnectionInvocation: WebSockets-GetConnection
       SendMessageInvocation: WebSockets-SendMessage
       # User
-      GetUserStep: WebSockets-GetUser
-      CreateUserStep: WebSockets-CreateUser
-      SaveUserStep: WebSockets-SaveUser
-      SendConfirmationStep: WebSockets-SendConfirmation
+      GetUserStep: User-GetUser
+      CreateCognitoUserStep: User-CreateUser
+      SaveUserStep: User-SaveUser
+      SendConfirmationStep: User-SendConfirmation
       # StateMachineStateName: Lambda function name (service-function)
 
 provider:
@@ -72,6 +77,7 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
   environment: ${file(.devcontainer/scripts/serverless-offline/loadEnvironment.js)}
+  lambdaHashingVersion: 20201221
   tracing:
     lambda: true
     apiGateway: true

@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     # paths:
-    #   - packages/holeshot-components/src/stories/**
-    #   - packages/holeshot-components/src/components/**
-    #   - packages/holeshot-components/src/styles/**
+    #   - packages/holeshot-plugin/src/stories/**
+    #   - packages/holeshot-plugin/src/components/**
+    #   - packages/holeshot-plugin/src/styles/**
 
 jobs:
   storybook:
@@ -21,7 +21,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 14
+          node-version: 19
 
       - name: npm install and lerna bootstrap
         run: |
@@ -38,7 +38,7 @@ jobs:
       - name: Build Storybook
         run: |
           cd $GITHUB_WORKSPACE/main
-          cd packages/holeshot-components
+          cd packages/holeshot-plugin
           npm run deploy-storybook -- --out=storybook --dry-run
 
       - name: Checkout storybook
@@ -50,7 +50,7 @@ jobs:
       - name: Commit Storybook to storybook branch #storybook branch must exist
         run: |
           cd $GITHUB_WORKSPACE/storybook
-          cp $GITHUB_WORKSPACE/main/packages/holeshot-components/storybook/* $GITHUB_WORKSPACE/storybook
+          cp $GITHUB_WORKSPACE/main/packages/holeshot-plugin/storybook/* $GITHUB_WORKSPACE/storybook
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .

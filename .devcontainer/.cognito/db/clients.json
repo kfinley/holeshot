@@ -1,0 +1,20 @@
+{
+  "Clients": {
+    "vla4cwe66kb2k1u0kj37albj": {
+      "ClientId": "vla4cwe66kb2k1u0kj37albj",
+      "ClientName": "Holeshot-Client",
+      "CreationDate": "2023-01-03T16:23:56.696Z",
+      "ExplicitAuthFlows": [
+        "USER_PASSWORD_AUTH",
+        "ADMIN_NO_SRP_AUTH"
+      ],
+      "LastModifiedDate": "2023-01-03T16:23:56.696Z",
+      "TokenValidityUnits": {
+        "AccessToken": "hours",
+        "IdToken": "minutes",
+        "RefreshToken": "days"
+      },
+      "UserPoolId": "us-east-1_local"
+    }
+  }
+}

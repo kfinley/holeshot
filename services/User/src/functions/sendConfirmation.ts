@@ -1,17 +1,32 @@
+import { SendConfirmationCommand, SendConfirmationRequest } from '@/commands/sendRegistrationConfirmation';
 import {
-    APIGatewayProxyHandler,
-    APIGatewayProxyEvent,
+    Handler,
+    Context,
 } from 'aws-lambda';
 import { createResponse } from '../create-response';
+import bootstrapper from './../bootstrapper';
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context, callback) => {
+const container = bootstrapper();
 
-    console.log('event', event);
-    console.log('context', context);
-    console.log('authorizer', event.requestContext.authorizer);
+export const handler: Handler = async (event: any, context: Context) => {
+
+    // console.log('sendConfirmation event', event);
+    // console.log('context', context);
 
     try {
-        return createResponse(event, 200, 'success');
+      
+      const request = event as SendConfirmationRequest;
+      console.log('sendConfirmation', request);
+
+      const saveUserCmd = container.get<SendConfirmationCommand>("SendConfirmationCommand");
+
+      const response = await saveUserCmd.runAsync(request);
+
+      return {
+        ...event,
+        ...response
+      };
+
     } catch (error) {
         console.log(error);
         return createResponse(event, 500, error as string);

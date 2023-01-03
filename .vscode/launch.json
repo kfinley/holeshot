@@ -10,14 +10,25 @@
       "name": "Jest run current file",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest",
       "cwd": "${workspaceRoot}/packages/vue2-components",
-      "args": [
-        "${fileBasename}",
-        "--verbose",
-        "-i",
-        "--no-cache"
-      ],
+      "args": ["${fileBasename}", "--verbose", "-i", "--no-cache"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
-    }
+    },
+    // https://bleepcoder.com/serverless-webpack/311727362/vscode-debugging
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug Serverless in Docker",
+      "address": "holeshot.sls",
+      "port": 9228,
+      "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/.webpack/**/*.js"],
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "${workspaceFolder}",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**"
+      ]
+    },
   ]
 }

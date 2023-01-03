@@ -1,8 +1,9 @@
 import { GetUserDetailsRequest, GetUserDetailsResponse } from "@/types";
 import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
 import { Command } from "@holeshot/commands/src";
-import { Inject } from "inversify-props";
+import { Inject, injectable } from "inversify-props";
 
+@injectable()
 export class GetUserDetailsCommand implements Command<GetUserDetailsRequest, GetUserDetailsResponse> {
 
   @Inject('CognitoIdentityProvider')

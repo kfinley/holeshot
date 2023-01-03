@@ -68,7 +68,7 @@
 import { Component, Vue, Ref, Prop } from "vue-property-decorator";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { userModule, UserState, AuthStatus } from "../store";
-import { Card } from "@finley/vue2-components/src/components";
+import Card from "@finley/vue2-components/src/components/card.vue";
 import { State } from "vuex-class";
 import { messages } from "../resources/messages";
 
@@ -100,6 +100,8 @@ export default class SetPassword extends Vue {
     this.username = userId;
     this.previousPassword = password;
 
+    console.log(`${userId} : ${password}` )
+    
     userModule.login({
       email: this.username,
       password: this.previousPassword,

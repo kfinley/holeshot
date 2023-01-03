@@ -3,14 +3,16 @@ import { Container } from 'inversify-props';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { LoginCommand, SetPasswordCommand, RegisterCommand } from "./commands";
 import { GetUserDetailsCommand } from './commands/getUserDetails';
-import { container } from '@/inversify.config';
 
-export default function bootstrapper() {
+export default function bootstrapper(container: Container) {
+
+  // console.log('vue2-user bootstrapper');
 
   if (!container.isBound("CognitoIdentityProvider")) {
     container.bind<CognitoIdentityProvider>("CognitoIdentityProvider")
       .toDynamicValue(() => new CognitoIdentityProvider({
-        endpoint: "http://localhost:9229"
+        endpoint: "http://localhost:9229",
+        region: 'us-east-1'
       }));
   }
 
@@ -25,6 +27,7 @@ export default function bootstrapper() {
   addTransientIfNeeded<SetPasswordCommand>(SetPasswordCommand, "SetPasswordCommand", container);
   addTransientIfNeeded<GetUserDetailsCommand>(GetUserDetailsCommand, "GetUserDetailsCommand", container);
 
+  // console.log(container);
 }
 
 function addTransientIfNeeded<T>(constructor: any, id: string, container: Container) {

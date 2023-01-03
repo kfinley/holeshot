@@ -7,7 +7,7 @@ import { setupModules } from '@/plugin';
 import { setupModules as setupNotificationModule } from "@finley/vue2-components/src/plugin";
 import Notification from "@finley/vue2-components/src/components";
 import { Command } from '@holeshot/commands/src';
-import { container } from 'inversify-props';
+import { container } from '../inversify.config';
 import { LoginCommand } from "../commands";
 
 class mockLoginCommand implements Command<LoginRequest, LoginResponse> {
@@ -24,8 +24,8 @@ class mockLoginCommand implements Command<LoginRequest, LoginResponse> {
 container.addTransient<LoginCommand>(mockLoginCommand, "LoginCommand");
 
 let store = new Vuex.Store({});
-setupNotificationModule(store);
-setupModules(store);
+setupNotificationModule(store, container);
+setupModules(store, container);
 
 export default {
   title: 'Components/User/SetPassword',

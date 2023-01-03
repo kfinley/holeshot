@@ -31,7 +31,7 @@ export default class Header extends Vue {
   headerOffsetTop: number = 0
   header: element
   routes = RouteNames
-  site = 'Holeshot BMX'
+  site = 'Holeshot-BMX'
 
   mounted() {
     window.addEventListener('scroll', this.handleScroll)

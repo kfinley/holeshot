@@ -25,6 +25,6 @@ module.exports = () => {
     }
   }
 
-  console.log(environment);
+  // console.log(environment);
   return environment;
 };

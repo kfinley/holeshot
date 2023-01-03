@@ -1,19 +1,37 @@
 import {
-    APIGatewayProxyHandler,
-    APIGatewayProxyEvent,
+  Handler,
 } from 'aws-lambda';
+import bootstrapper from './../bootstrapper';
 import { createResponse } from '../create-response';
+import { CreateCognitoUserCommand, CreateCognitoUserCommandRequest } from '@/commands/create-cognito-user';
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent, context, callback) => {
+const container = bootstrapper();
 
-    console.log('event', event);
-    console.log('context', context);
-    console.log('authorizer', event.requestContext.authorizer);
+export const handler: Handler = async (event: any, context, callback) => {
 
-    try {
-        return createResponse(event, 200, 'success');
-    } catch (error) {
-        console.log(error);
-        return createResponse(event, 500, error as string);
-    }
+  try {
+    // console.log('event', event);
+    // console.log('context', context);
+
+    const request = event as CreateCognitoUserCommandRequest;
+
+    request.userId = request.email;
+
+    // console.log('request', request);
+
+    const createUser = container.get<CreateCognitoUserCommand>("CreateCognitoUserCommand");
+
+    const response = await createUser.runAsync(request);
+
+    // console.log('response', response.success);
+
+    return {
+      ...event,
+      ...response
+    };
+
+  } catch (error) {
+    console.log('CreateUser error', error);
+    return createResponse(event, 500, error as string);
+  }
 }

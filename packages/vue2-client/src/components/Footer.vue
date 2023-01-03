@@ -1,5 +1,5 @@
 <template>
-  <div>© 2022 Holeshot-BMX.com</div>
+  <div>© 2023 Holeshot-BMX.com</div>
 </template>
 
 <script lang="ts">

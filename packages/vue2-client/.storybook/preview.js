@@ -1,5 +1,8 @@
+import 'reflect-metadata';
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { setupValidation } from '@finley/vue2-components/src/validation';
+import { extend } from 'vee-validate';
 import { action } from '@storybook/addon-actions';
 
 import '!style-loader!css-loader!sass-loader!../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -7,6 +10,7 @@ import '!style-loader!css-loader!sass-loader!../src/styles/styles.scss';
 import '!style-loader!css-loader!sass-loader!../src/styles/main.scss';
 
 Vue.use(Vuex);
+setupValidation(extend);
 
 Vue.component('RouterLink', {
   props:   ['to'],

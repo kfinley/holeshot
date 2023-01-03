@@ -3,7 +3,7 @@ import { Story } from '@storybook/vue/types-6-0';
 import { action } from '@storybook/addon-actions';
 import Login from "@/components/Login.vue";
 import { ApiClient, ApiResponse } from '@holeshot/api-client/src';
-import { container } from 'inversify-props';
+import { container } from '../inversify.config';
 import { AuthStatus } from '@/store';
 import { setupModules } from '@/plugin';
 import { setupModules as setupComponentsModule } from "@finley/vue2-components/src/plugin";
@@ -47,8 +47,8 @@ class mockApiClient implements ApiClient {
 container.bind<ApiClient>('ApiClient').to(mockApiClient);
 
 let store = new Vuex.Store({});
-setupComponentsModule(store);
-setupModules(store);
+setupComponentsModule(store, container);
+setupModules(store, container);
 
 export default {
   title: 'Components/User/Login',

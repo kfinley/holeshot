@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import VueRouter, { Route, RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
 import Articles from "../articles";
 import { createRouterLayout } from 'vue-router-layout'
@@ -19,7 +19,6 @@ Vue.use(VueRouter);
 
 const viewsMeta = import.meta.glob('../views/*.json')
 
-
 export const createRouter = async () => {
 
   const routes: Array<RouteConfig> = [
@@ -37,7 +36,7 @@ export const createRouter = async () => {
       ],
     },
     {
-      path: "/articles ",
+      path: "/articles",
       component: RouterLayout,
       children: [
         {
@@ -48,6 +47,20 @@ export const createRouter = async () => {
         }
       ],
     },
+    {
+      path: "/dashboard",
+      component: RouterLayout,
+      children: [
+        {
+          path: '',
+          name: RouteNames.Dashboard,
+          component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+          meta: {
+            allowAnonymous: false
+          }
+        }
+      ]
+    }
   ];
 
   for (const article of Object.keys(Articles)) {
@@ -151,67 +164,77 @@ export const createRouter = async () => {
 
   });
 
-  const getMetaData = async (file: string) => {
-    // console.log(file)
+  const getMetaData = async (route: Route) => {
+    //console.log('route', route);
     // This is a shitty hack to make nested paths for dynamic imports work b/c of an issue in Vite
     // https://github.com/vitejs/vite/issues/4945
-    const pathParts = file.split('/')
-    switch (file) {
+    const pathParts = route.name?.split('/') as string[];
+    switch (route.name) {
       case "Home":
       case "Posts":
         return (await import(`../views/${pathParts[0]}.json`)).default
       default: {
-        if (pathParts.length === 1) {
-          return (await import(`../articles/${pathParts[0]}.json`)).default
-        }
-        if (pathParts.length === 2) {
-          return (await import(`../articles/${pathParts[0]}/${pathParts[1]}.json`)).default
+        if (route.path.includes('/articles/')) {
+          if (pathParts.length === 1) {
+            return (await import(`../articles/${pathParts[0]}.json`)).default
+          }
+          if (pathParts.length === 2) {
+            return (await import(`../articles/${pathParts[0]}/${pathParts[1]}.json`)).default
+          }
         }
       }
-
     }
-
   }
 
   router.afterEach((to, from) => {
     setTimeout(() => {
 
-      getMetaData(to.name as string).then((meta) => {
-        document.title = meta.title
+      getMetaData(to).then((meta) => {
+        if (meta) {
 
-        for (const tag of meta.metaTags) {
-          // console.log(tag)
-          const tagEl = document.createElement('meta')
-          tagEl.setAttribute(Object.values(tag as string)[0], Object.values(tag as string)[1])
+          document.title = meta.title
 
-          // We use this to track which meta tags we create so we don't interfere with other ones.
-          tagEl.setAttribute('data-vue-router-controlled', '')
-          document.head.appendChild(tagEl)
+          for (const tag of meta.metaTags) {
+            // console.log(tag)
+            const tagEl = document.createElement('meta')
+            tagEl.setAttribute(Object.values(tag as string)[0], Object.values(tag as string)[1])
+
+            // We use this to track which meta tags we create so we don't interfere with other ones.
+            tagEl.setAttribute('data-vue-router-controlled', '')
+            document.head.appendChild(tagEl)
+          }
+
         }
       })
-      document.querySelectorAll('img').forEach((i) => {
-        // console.log(i)
-        i.src = i.src.replace('media', 'img/media')
-      })
-      Array.from(Array.from(document.getElementsByTagName('main'))[0].querySelectorAll('main a:not(a[href*="http"])')).map((link) => {
-        // console.log(link)
-        link.addEventListener(
-          'click',
-          function (e) {
 
-            e.preventDefault()
-            e.stopPropagation()
-            router.push({ path: (link as any).href.split(window.location.host)[1] })
-          },
-          false
-        )
-      })
-      Array.from(document.querySelectorAll('div > p')).map((p) => {
-        // Remove indent for any paragraphs that are 2 lines or less.
-        if (p.clientHeight <= 50) {
-          (p as any).style['text-indent'] = '0'
-        }
-      })
+      try {
+        document.querySelectorAll('img').forEach((i) => {
+          i.src = i.src.replace('media', 'img/media')
+        });
+
+        Array.from(Array.from(document.getElementsByTagName('main'))[0].querySelectorAll('main a:not(a[href*="http"])')).map((link) => {
+          // console.log(link)
+          link.addEventListener(
+            'click',
+            function (e) {
+
+              e.preventDefault()
+              e.stopPropagation()
+              router.push({ path: (link as any).href.split(window.location.host)[1] })
+            },
+            false
+          )
+        })
+        Array.from(document.querySelectorAll('div > p')).map((p) => {
+          // Remove indent for any paragraphs that are 2 lines or less.
+          if (p.clientHeight <= 50) {
+            (p as any).style['text-indent'] = '0'
+          }
+        })
+      }
+      catch (e) {
+        console.log(e);
+      }
     }, 200)
 
   });

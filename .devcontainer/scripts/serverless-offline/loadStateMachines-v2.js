@@ -32,7 +32,7 @@ module.exports = () => {
           }
         }
       };
-      console.log(stateMachines);
+      // console.log(stateMachines);
 
     });
 

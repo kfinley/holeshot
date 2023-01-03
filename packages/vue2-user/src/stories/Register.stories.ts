@@ -1,7 +1,6 @@
 import Vuex from 'vuex';
 import { Story } from '@storybook/vue/types-6-0';
 import Register from "@/components/Register.vue";
-import { container } from 'inversify-props';
 import { RegisterRequest, RegisterResponse } from '@/types';
 import { RegistrationStatus } from '@/store';
 import { setupModules } from '@/plugin';
@@ -11,6 +10,7 @@ import { AlertType } from '@finley/vue2-components/src/types';
 import { Command } from '@holeshot/commands/src';
 import { messages } from '@/resources/messages';
 import { RegisterCommand } from "@/commands";
+import { container } from '../inversify.config';
 
 class mockRegisterCommand implements Command<RegisterRequest, RegisterResponse> {
   public async runAsync(login: RegisterRequest): Promise<RegisterResponse> {
@@ -28,8 +28,8 @@ class mockRegisterCommand implements Command<RegisterRequest, RegisterResponse> 
 container.addTransient<RegisterCommand>(mockRegisterCommand, "RegisterCommand");
 
 let store = new Vuex.Store({});
-setupNotificationModule(store);
-setupModules(store);
+setupNotificationModule(store, container);
+setupModules(store, container);
 
 export default {
   title: 'Components/User/Register',

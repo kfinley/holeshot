@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity": "^3.34.0",
-    "@aws-sdk/client-cognito-identity-provider": "^3.34.0",
-    "@aws-sdk/client-dynamodb": "^3.34.0",
-    "@aws-sdk/util-dynamodb": "^3.34.0",
-    "@holeshot/aws-commands": "^1.0.0",
-    "@holeshot/commands": "^1.0.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.226.0",
+    "@aws-sdk/client-dynamodb": "^3.226.0",
+    "@aws-sdk/client-ses": "^3.226.0",
+    "@aws-sdk/util-dynamodb": "^3.226.0",
+    "@holeshot/aws-commands": "1.0.0",
+    "@holeshot/commands": "1.0.0",
+    "@holeshot/types": "1.0.0",
     "inversify-props": "^2.2.6",
     "source-map-support": "^0.5.19"
   },

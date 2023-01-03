@@ -1,25 +1,30 @@
 import { Context, Handler } from 'aws-lambda';
 import bootstrapper from './../bootstrapper';
-import { GetConnectionByUserIdCommand } from '../commands';
+import { GetUserCommand } from './../commands/get-user';
+import { createResponse } from './../create-response';
 
 const container = bootstrapper();
 
 export const handler: Handler = async (event: any, context: Context) => {
 
-    const getConnectionCmd = () => container.get<GetConnectionByUserIdCommand>("GetConnectionByUserIdCommand");
+  try {
+    const getUserCmd = container.get<GetUserCommand>("GetUserCommand");
 
-    console.log(`getConnection`, event);
+    // console.log(`getUser`, event);
 
-    const { userId } = JSON.parse(event.message);
+    const { email } = event;
 
-    const response = await getConnectionCmd().runAsync({
-        userId
+    const response = await getUserCmd.runAsync({
+      email
     });
 
-    if (response && response.success) {
-        return {
-            ...event,
-            connectionId: response.connectionId
-        };
-    } return event;
+    return {
+      ...event,
+      ...response
+    };
+
+  } catch (error) {
+    console.log(error);
+    return createResponse(event, 500, error as string);
+  }
 };

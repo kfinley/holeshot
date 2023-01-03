@@ -1,10 +1,11 @@
 import { LoginRequest, LoginResponse } from '../types';
 import { AuthStatus } from '../store';
 import { Command } from '@holeshot/commands/src';
-import { Inject } from 'inversify-props';
+import { Inject, injectable } from 'inversify-props';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { config } from "@holeshot/web-core/src/config";
 
+@injectable()
 export class LoginCommand implements Command<LoginRequest, LoginResponse> {
 
   @Inject('CognitoIdentityProvider')
@@ -24,6 +25,7 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
     try {
 
       var result = await this.provider.initiateAuth(request);
+
       if (result.AuthenticationResult) {
         return {
           status: AuthStatus.LoggedIn,
@@ -36,6 +38,7 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
           },
         }
       }
+      
       if (result.ChallengeName == "NEW_PASSWORD_REQUIRED") {
         return {
           status: AuthStatus.NewPasswordRequired,
@@ -46,7 +49,10 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
       const message = `Login failed. Error: ${e.message}`;
       if (e.message === 'Resource not found') {
         console.log('Confirm Cognito UserPool ClientID is correct.', e);
+      } else {
+        console.log(e);
       }
+
       throw new Error(message);
     }
 

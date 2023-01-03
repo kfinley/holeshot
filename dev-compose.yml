@@ -12,6 +12,14 @@ services:
       AWS_SECRET_ACCESS_KEY: S3RVER
     command: sleep infinity
 
+  holeshot.cognito:
+    container_name: holeshot.cognito
+    image: jagregory/cognito-local:latest
+    ports:
+      - "9229:9229"
+    volumes:
+      - ./.devcontainer/.cognito:/app/.cognito
+
   holeshot.sfn:
     container_name: holeshot.sfn
     image: amazon/aws-stepfunctions-local
@@ -58,7 +66,7 @@ services:
 
   holeshot.sls:
     container_name: holeshot.sls
-    image: node:14
+    image: node:16
     # Custom docker build that will run dotnet support branch of serverless-offline
     # build:
     # context: .
@@ -66,10 +74,13 @@ services:
     tty: true
     stdin_open: true
     ports:
-      - "3001:3001"
+      - "3000:3000" # For api gateway rest endpoints
+      - "3001:3001" # For api gateway based websockets
       - "3002:3002"
       - "4002:4002"
       - "4569:4569"
+      - "8005:8005" # for serverless-offline-ses-v2
+      - "9228:9228" # node debugger
     environment:
       AWS_ACCOUNT_ID: 146665891952
       AWS_REGION: us-east-1
@@ -82,7 +93,7 @@ services:
 
   holeshot.web:
     container_name: holeshot.web
-    image: node:14
+    image: node:16
     ports:
       - "8080:8080"
     working_dir: /vite-client
@@ -92,7 +103,7 @@ services:
 
   holeshot.storybooks:
     container_name: holeshot.storybooks
-    image: node:14
+    image: node:16
     ports:
       - "6006:6006"
     working_dir: /workspace

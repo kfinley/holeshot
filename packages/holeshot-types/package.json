@@ -8,5 +8,8 @@
   "author": {
     "name": "Kyle Finley",
     "email": "kyle@kylefinley.net"
-  }
+  },
+   "dependencies": {
+    "@types/node": "^18.11.17"
+   }
 }

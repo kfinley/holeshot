@@ -1,37 +1,37 @@
-import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators';
-import { container } from 'inversify-props';
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { RegistrationState, RegistrationStatus } from './state';
 import { RegisterRequest } from './../types';
 import { RegisterCommand } from '../commands';
-import NotificationModule from '@finley/vue2-components/src/store/notification-module';
+import { notificationModule } from '@finley/vue2-components/src/store'
 import { AlertType } from "@finley/vue2-components/src/types";
 import { messages } from "../resources/messages";
-import { Store } from 'vuex';
+import { Inject } from 'inversify-props';
 
 @Module({ namespaced: true, name: 'Registration' })
-export class RegistrationModule extends VuexModule implements RegistrationState {
+export default class RegistrationModule extends VuexModule implements RegistrationState {
   status = RegistrationStatus.Unknown;
   email: string | undefined;
   error: string | undefined;
 
-  notificationModule: any; //= container.get<NotificationModule>("NotificationModule")
+  @Inject("RegisterCommand")
+  private registerCommand!: RegisterCommand;
 
   @Action
   async register(params: RegisterRequest) {
-    this.notificationModule.dismissAll();
+    notificationModule.dismissAll();
 
     this.context.commit('request', { email: params.email });
 
     try {
-      const cmd = container.get<RegisterCommand>("RegisterCommand");
-      const response = await cmd.runAsync(params);
+
+      const response = await this.registerCommand.runAsync(params);
 
       if (!response.success) {
         this.context.commit('fail', response.error);
       }
 
       this.context.commit('registered');
-      this.notificationModule.add({
+      notificationModule.add({
         header: messages.Registration.Registered.header,
         message: messages.Registration.Registered.message,
         type: AlertType.success
@@ -39,7 +39,7 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
 
     } catch (error) {
       this.context.commit('fail', error);
-      this.notificationModule.handleError({ error, rethrow: false });
+      notificationModule.handleError({ error, rethrow: false });
     }
   }
 
@@ -55,7 +55,7 @@ export class RegistrationModule extends VuexModule implements RegistrationState 
     this.error = undefined;
     this.email = undefined;
     this.status = RegistrationStatus.Unknown;
-    this.notificationModule.dismissAll();
+    notificationModule.dismissAll();
   }
 
   @Mutation

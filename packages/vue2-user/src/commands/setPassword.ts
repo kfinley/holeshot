@@ -1,9 +1,10 @@
 import { SetPasswordRequest, SetPasswordResponse } from '../types';
 import { Command } from '@holeshot/commands/src';
-import { Inject } from 'inversify-props';
+import { Inject, injectable } from 'inversify-props';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { config } from "@holeshot/web-core/src/config";
 
+@injectable()
 export class SetPasswordCommand implements Command<SetPasswordRequest, SetPasswordResponse> {
 
   @Inject('CognitoIdentityProvider')
@@ -38,6 +39,7 @@ export class SetPasswordCommand implements Command<SetPasswordRequest, SetPasswo
           }
         }
       } catch (e: any) {
+        console.log('setPassword Error: ', e);
         throw new Error(`Failed to set password. Error: ${e.message}`);
       }
     }
