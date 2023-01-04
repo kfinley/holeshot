@@ -44,6 +44,7 @@ mono_crash.*
 packages/**/storybooks
 packages/**/storybook
 storybooks/*
+storybook/*
 .env
 
 # lerna files

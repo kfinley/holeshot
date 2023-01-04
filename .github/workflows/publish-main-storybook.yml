@@ -38,8 +38,7 @@ jobs:
       - name: Build Storybook
         run: |
           cd $GITHUB_WORKSPACE/main
-          cd packages/holeshot-plugin
-          npm run deploy-storybook -- --out=storybook --dry-run
+          npm run deploy-storybook:local
 
       - name: Checkout storybook
         uses: actions/checkout@v2
@@ -47,10 +46,10 @@ jobs:
           ref: storybook
           path: storybook
 
-      - name: Commit Storybook to storybook branch #storybook branch must exist
+      - name: Commit Storybooks to storybook branch #storybook branch must exist
         run: |
           cd $GITHUB_WORKSPACE/storybook
-          cp $GITHUB_WORKSPACE/main/packages/holeshot-plugin/storybook/* $GITHUB_WORKSPACE/storybook
+          cp -r $GITHUB_WORKSPACE/main/storybooks/* $GITHUB_WORKSPACE/storybooks
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .
@@ -58,6 +57,6 @@ jobs:
           if git diff-index --quiet HEAD --; then
               echo 'No changes to commit';
           else
-              git commit -m "Deploying main branch Storybook to GitHub Pages 🚀";
+              git commit -m "Deploying Storybooks to GitHub Pages 🚀";
               git push;
           fi

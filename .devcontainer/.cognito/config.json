@@ -4,9 +4,12 @@
       "accessKeyId": "local",
       "secretAccessKey": "local"
     },
-    "region": "us-east-1"
+    "region": "us-east-1",
+    "endpoint": "http://holeshot.sls:3002"
   },
-  "TriggerFunctions": {},
+  "TriggerFunctions": {
+    "postAuthentication": "User-GetUser"
+  },
   "UserPoolDefaults": {
     "Id": "local",
     "UsernameAttributes": [

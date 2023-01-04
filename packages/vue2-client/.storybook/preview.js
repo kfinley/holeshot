@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { setupValidation } from '@finley/vue2-components/src/validation';
+import { setupValidation } from '@finley/vue2-components/src/components/validation';
 import { extend } from 'vee-validate';
 import { action } from '@storybook/addon-actions';
 

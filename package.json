@@ -21,7 +21,7 @@
     "storybook:components": "lerna run storybook --stream --scope=@kfinley/vue2-components",
     "storybook:holeshot": "lerna run storybook --stream --scope=@holeshot/plugin",
     "storybook:user": "lerna run storybook --stream --scope=@holeshot/vue2-user",
-    "deploy-storybook:local": "rm -rf storybooks && storybook-to-ghpages --out=storybooks --packages packages --dry-run && find packages -type f -name storybooks -exec rm -f {} \\;",
+    "deploy-storybook:local": "rm -rf storybook && storybook-to-ghpages --out=storybook --packages packages --dry-run && find packages -type f -name storybook -exec rm -f {} \\;",
     "dev:client": "lerna run dev --stream --scope=@holeshot/vue2-client",
     "build:cdk": "lerna run build --stream --scope=@holeshot/infrastructure",
     "dev:client:docker": "lerna run dev:docker --stream --scope=@holeshot/vue2-client",

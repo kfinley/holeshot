@@ -1,0 +1,60 @@
+CognitoUserPoolUsers:
+  Type: AWS::Cognito::UserPool
+  Properties:
+    UsernameAttributes:
+      - "email"
+    # AutoVerifiedAttributes:
+    #   - "email"
+    # EmailVerificationMessage: "email message: {####}"
+    # EmailVerificationSubject: "email subject: {####}"
+
+CognitoUserPool:
+  Type: AWS::Cognito::UserPool
+  Properties:
+    UserPoolName: Holeshot-Users_local
+    Schema:
+      - Name: name
+        AttributeDataType: String
+        Mutable: true
+        Required: true
+      - Name: email
+        AttributeDataType: String
+        Mutable: true
+        Required: true
+    Policies:
+      PasswordPolicy:
+        MinimumLength: 8
+        RequireLowercase: false
+        RequireNumbers: false
+        RequireSymbols: false
+        RequireUppercase: false
+    UsernameAttributes:
+      - email
+    MfaConfiguration: "OFF"
+    #LambdaConfig:
+      #CreateAuthChallenge: !GetAtt createAuthChallenge.Arn
+      #DefineAuthChallenge: !GetAtt defineAuthChallenge.Arn
+      #PreSignUp: !GetAtt preSignUp.Arn
+      #VerifyAuthChallengeResponse: !GetAtt verifyAuthChallengeResponse.Arn
+      #PostAuthentication: !GetAtt postAuthentication.Arn
+
+
+CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: ${self:app}-${self:provider.stage}-user-pool
+      UsernameAttributes:
+        - email
+      AutoVerifiedAttributes:
+        - email
+
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: ${self:app}-${self:provider.stage}-user-pool-client
+      UserPoolId:
+        Ref: CognitoUserPool
+      ExplicitAuthFlows:
+        - USER_PASSWORD_AUTH
+        - ADMIN_NO_SRP_AUTH
+      GenerateSecret: false
