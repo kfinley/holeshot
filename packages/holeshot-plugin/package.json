@@ -5,17 +5,7 @@
     "name": "Kyle Finley",
     "email": "kyle@kylefinley.net"
   },
-  "scripts": {
-    "build": "vite build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "storybook": "start-storybook -p 6007",
-    "build-storybook": "build-storybook",
-    "deploy-storybook": "storybook-to-ghpages"
-  },
   "dependencies": {
-    "@finley/vue2-components": "1.0.0",
-    "@holeshot/types": "1.0.0",
     "interactjs": "^1.10.11"
   },
   "devDependencies": {

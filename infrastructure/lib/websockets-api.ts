@@ -1,5 +1,4 @@
 import { Stack, Duration, CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { WebSocketApi, WebSocketStage } from '@aws-cdk/aws-apigatewayv2-alpha';
 import { WebSocketLambdaAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers-alpha';
 import { WebSocketLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
@@ -14,11 +13,10 @@ import { Chain, Choice, Condition, Fail, LogLevel, Pass, StateMachine, Succeed }
 import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
+import { createLambda } from '.';
 
 export interface WebSocketsApiProps {
   connectionsTable: Table;
-  gitHubClientId: string;
-  gitHubClientSecret: string;
   node_env: string;
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
@@ -32,28 +30,7 @@ export class WebSocketsApi extends Construct {
 
     const functionsPath = '../../services/WebSockets/dist';
 
-    const createLambda = (name: string, handler: string, env?: {
-      [key: string]: string;
-    } | undefined) => {
-
-      return new lambda.Function(this, name, {
-        runtime: lambda.Runtime.NODEJS_16_X,
-        memorySize: 1024,
-        timeout: Duration.seconds(5),
-        functionName: `Holeshot-Infrastructure-${name}`,
-        handler,
-        code: new lambda.AssetCode(join(__dirname, `${functionsPath}`)),
-        environment: {
-          REGION: Stack.of(this).region,
-          AVAILABILITY_ZONES: JSON.stringify(
-            Stack.of(this).availabilityZones,
-          ),
-          NODE_ENV: props!.node_env,
-          ...env
-        },
-      });
-    };
-
+    // TODO: remove...
     const createNodeJsFunction = (name: string, path: string) => {
 
       const nodeJsFunctionProps: NodejsFunctionProps = {
@@ -83,37 +60,41 @@ export class WebSocketsApi extends Construct {
       }
 
       return new NodejsFunction(this, name, {
-
         ...nodeJsFunctionProps
       });
     }
 
+    const newLamda = (name: string, handler: string, env?: {
+      [key: string]: string;
+    } | undefined) => {
+      return createLambda(this, name, functionsPath, handler, props!.node_env, env);
+    }
+
     // Lambda Functions....
+    const authorizerHandler = newLamda('AuthorizerHandler', 'functions/auth.handler');
 
-    const authorizerHandler = createLambda('AuthorizerHandler', 'functions/auth.handler');
-
-    const onConnectHandler = createLambda('OnConnectHandler', 'functions/connect.handler', {
+    const onConnectHandler = newLamda('OnConnectHandler', 'functions/connect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(onConnectHandler);
 
-    const onDisconnectHandler = createLambda('OnDisconnectHandler', 'functions/disconnect.handler', {
+    const onDisconnectHandler = newLamda('OnDisconnectHandler', 'functions/disconnect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(onDisconnectHandler);
 
-    const onMessageHandler = createLambda('OnMessageHandler', 'functions/default.handler',);
+    const onMessageHandler = newLamda('OnMessageHandler', 'functions/default.handler');
 
-    const getConnection = createLambda('GetConnection', 'functions/getConnection.handler', {
+    const getConnection = newLamda('GetConnection', 'functions/getConnection.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(getConnection);
 
-    const sendMessage = createLambda('SendMessage', 'functions/sendMessage.handler', {
+    const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
       APIGW_ENDPOINT: '6ii0i7gdbe.execute-api.us-east-1.amazonaws.com/v1' //TODO: deal with this...
     });
 
-    const startSendMessageNotification = createLambda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
+    const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
 
     // Lambda Functions end...
 

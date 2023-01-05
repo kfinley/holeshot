@@ -38,20 +38,19 @@ CognitoUserPool:
       #VerifyAuthChallengeResponse: !GetAtt verifyAuthChallengeResponse.Arn
       #PostAuthentication: !GetAtt postAuthentication.Arn
 
-
-CognitoUserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      UserPoolName: ${self:app}-${self:provider.stage}-user-pool
-      UsernameAttributes:
-        - email
-      AutoVerifiedAttributes:
-        - email
+# CognitoUserPool:
+#     Type: AWS::Cognito::UserPool
+#     Properties:
+#       UserPoolName: ${self:app}-${self:provider.stage}-user-pool
+#       UsernameAttributes:
+#         - email
+#       AutoVerifiedAttributes:
+#         - email
 
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: ${self:app}-${self:provider.stage}-user-pool-client
+      ClientName: ${self:service}-${self:provider.stage}-user-pool-client
       UserPoolId:
         Ref: CognitoUserPool
       ExplicitAuthFlows:

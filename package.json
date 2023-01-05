@@ -41,9 +41,8 @@
     "ses:copy-templates": "cp services/User/EmailTemplates/ConfirmRegistrationTemplate.json .devcontainer/.ses/email-templates/"
   },
   "workspaces": [
-    "packages/*",
-    "infrastructure",
-    "services/*"
+    "packages/serverless-offline-ses-v2",
+    "packages/aws-ses-v2-local"
   ],
   "dependencies": {
     "lerna": "^6.1.0",

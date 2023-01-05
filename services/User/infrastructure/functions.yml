@@ -18,10 +18,10 @@ SaveUser:
 SendConfirmation:
   handler: sendConfirmation.handler
 
-# postAuthentication:
-#   handler: src/functions/auth/post-authentication.main
-#   events:
-#     - cognitoUserPool:
-#         pool: ${self:custom.userpool}
-#         trigger: PostAuthentication
-#         existing: true
+PostAuthentication:
+  handler: postAuthentication.handler
+  # events:
+  #   - cognitoUserPool:
+  #       pool: ${self:custom.userpool}
+  #       trigger: PostAuthentication
+  #       existing: true

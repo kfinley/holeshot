@@ -7,6 +7,7 @@ module.exports = {
   context: __dirname,
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   entry: slsw.lib.entries,
+  // devtool: 'source-map',
   devtool: slsw.lib.webpack.isLocal ? 'eval-cheap-module-source-map' : 'source-map', // we're only running sls local so should be able to just ditch these...
   resolve: {
     extensions: ['.mjs', '.js', '.json', '.ts'],

@@ -8,12 +8,13 @@
     "endpoint": "http://holeshot.sls:3002"
   },
   "TriggerFunctions": {
-    "postAuthentication": "User-GetUser"
+    "PostAuthentication": "holeshot-Dev-User-PostAuthentication"
   },
   "UserPoolDefaults": {
     "Id": "local",
     "UsernameAttributes": [
       "email"
-    ]
+    ],
+    "MfaConfiguration": "OFF"
   }
 }

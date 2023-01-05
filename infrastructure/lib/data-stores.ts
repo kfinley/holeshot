@@ -1,5 +1,5 @@
 import { RemovalPolicy } from 'aws-cdk-lib'
-import { AttributeType, BillingMode, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, ProjectionType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
 import { BlockPublicAccess, Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 
@@ -12,27 +12,55 @@ export class DataStores extends Construct {
   readonly connectionsTable: Table;
   readonly frontEndBucket: Bucket;
   readonly mediaBucket: Bucket;
+  readonly coreTable: Table;
 
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
     super(scope, id);
 
-    this.connectionsTable = new Table(this, 'WebSockets-Connections', {
-      tableName: `Holeshot-WebSockets-Connections`,
-      partitionKey: { name: 'userId', type: AttributeType.STRING },
-      sortKey: { name: 'connectionId', type: AttributeType.STRING },
-      billingMode: BillingMode.PAY_PER_REQUEST,
+    // Core Service
+    this.coreTable = new Table(this, 'Core', {
+      tableName: `Holeshot-Core`,
+      partitionKey: { name: 'PK', type: AttributeType.STRING },
+      sortKey: { name: 'SK', type: AttributeType.STRING },
+      billingMode: BillingMode.PROVISIONED,
+      readCapacity: 1,
+      writeCapacity: 1,
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
       encryption: TableEncryption.AWS_MANAGED,
       pointInTimeRecovery: false // set to "true" to enable PITR
     });
 
-    this.mediaBucket = new Bucket(this, 'imagesBucket', {
+    this.coreTable.addGlobalSecondaryIndex({
+      indexName: 'GSI1',
+      partitionKey: { name: 'PK', type: AttributeType.STRING },
+      sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
+      readCapacity: 1,
+      writeCapacity: 1,
+      projectionType: ProjectionType.ALL,
+    })
+
+    // WebSockets Service
+    this.connectionsTable = new Table(this, 'WebSockets-Connections', {
+      tableName: `Holeshot-WebSockets-Connections`,
+      partitionKey: { name: 'userId', type: AttributeType.STRING },
+      sortKey: { name: 'connectionId', type: AttributeType.STRING },
+      billingMode: BillingMode.PROVISIONED,
+      readCapacity: 1,
+      writeCapacity: 1,
+      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+      encryption: TableEncryption.AWS_MANAGED,
+      pointInTimeRecovery: false // set to "true" to enable PITR
+    });
+
+    // Media S3 Bucket
+    this.mediaBucket = new Bucket(this, 'mediaBucket', {
       bucketName: `images.${props?.domainName}`,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
 
+    // Web Front-End Bucket
     this.frontEndBucket = new Bucket(this, 'S3Bucket', {
       bucketName: props?.domainName,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
@@ -43,7 +71,7 @@ export class DataStores extends Construct {
           allowedMethods: [
             HttpMethods.GET,
           ],
-          allowedOrigins: ['*'],
+          allowedOrigins: ['*'], // TODO: fix this..
           allowedHeaders: ['*'],
         },
       ],

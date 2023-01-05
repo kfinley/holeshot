@@ -1,0 +1,52 @@
+name: "Deploy System"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deployment:
+    name: "Deployment"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Bootstrap & Build
+        env:
+          WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID }}
+          WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET }}
+        run: |
+          npm run i:prod && cd ./packages/vue2-client
+          echo 'VITE_GITHUB_OAUTH_CLIENT_ID=${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID }}' > .env
+          echo 'VITE_GITHUB_OAUTH_CLIENT_SECRET=${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET }}' >> .env
+          echo 'VITE_GITHUB_OAUTH_REDIRECT_URL=https://kylefinley.net/github_auth_callback' >> .env
+          cd ../.. && npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: "Bootstrap & Deploy CDK and sync media"
+        working-directory: ./infrastructure
+        env:
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          NODE_ENV: production
+          WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID }}
+          WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET }}
+        run: |
+          npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
+          npm run deploy
+          cd ../media && aws s3 sync . s3://images.kylefinley.net

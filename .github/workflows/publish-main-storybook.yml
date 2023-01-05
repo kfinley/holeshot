@@ -9,7 +9,7 @@ on:
     #   - packages/holeshot-plugin/src/styles/**
 
 jobs:
-  storybook:
+  Storybooks:
     runs-on: ubuntu-latest
 
     steps:

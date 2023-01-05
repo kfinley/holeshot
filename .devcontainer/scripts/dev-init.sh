@@ -4,6 +4,8 @@ echo
 echo 'Running dev initialization script...'
 echo
 
+git config --global --add safe.directory /workspace
+
 # Open up docker socket for docker-in-docker as non-root
 sudo chmod 777 /var/run/docker-host.sock
 

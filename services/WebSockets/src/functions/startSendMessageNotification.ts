@@ -1,5 +1,5 @@
 import { SNSEvent, Context } from 'aws-lambda';
-import { PublishMessageCommand, StartStepFunctionCommand } from '@holeshot/aws-commands/src';
+import { StartStepFunctionCommand } from '@holeshot/aws-commands/src';
 import bootstrapper from './../bootstrapper';
 
 const container = bootstrapper();
