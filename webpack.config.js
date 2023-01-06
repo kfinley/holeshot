@@ -29,7 +29,9 @@ module.exports = {
     concatenateModules: true,
   },
   target: 'node',
-  externals: [nodeExternals()],
+  externals: [nodeExternals({
+    modulesFromFile: true,
+  })],
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
@@ -45,6 +47,7 @@ module.exports = {
         ],
         options: {
           transpileOnly: true,
+          projectReferences: true,
           experimentalWatchApi: true,
         },
       },

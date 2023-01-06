@@ -86,7 +86,6 @@ export default function bootstrapper(container: Container) {
         :
         new S3Client({ // Local Dev
           region: "us-east-1",
-          c
           forcePathStyle: true,
           credentials: {
             accessKeyId: 'S3RVER',

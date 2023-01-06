@@ -31,7 +31,7 @@ module.exports = {
           loader: 'sass-loader',
           options: {
             additionalData: `
-                        @import "./node_modules/@finley/vue2-components/src/styles/styles.scss";
+                         @import "./src/styles/styles.scss";
                     `
           }
         },

@@ -4,6 +4,7 @@
   "description": "User service",
   "main": "index.js",
   "scripts": {
+    "build": "tsc && echo 'Copying node_modules to /dist' && cp -LRv node_modules dist > /dev/null 2>&1 && echo 'WebSockets build complete!'",
     "test:unit": "jest"
   },
   "author": {
@@ -16,9 +17,9 @@
     "@aws-sdk/client-dynamodb": "^3.226.0",
     "@aws-sdk/client-ses": "^3.226.0",
     "@aws-sdk/util-dynamodb": "^3.226.0",
-    "@holeshot/aws-commands": "1.0.0",
-    "@holeshot/commands": "1.0.0",
-    "@holeshot/types": "1.0.0",
+    "@holeshot/aws-commands": "^1.0.0",
+    "@holeshot/commands": "^1.0.0",
+    "@holeshot/types": "^1.0.0",
     "inversify-props": "^2.2.6",
     "source-map-support": "^0.5.19"
   },

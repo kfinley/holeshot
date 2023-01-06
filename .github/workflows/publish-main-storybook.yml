@@ -49,7 +49,7 @@ jobs:
       - name: Commit Storybooks to storybook branch #storybook branch must exist
         run: |
           cd $GITHUB_WORKSPACE/storybook
-          cp -r $GITHUB_WORKSPACE/main/storybooks/* $GITHUB_WORKSPACE/storybooks
+          cp -r $GITHUB_WORKSPACE/main/storybooks/* $GITHUB_WORKSPACE/storybook
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
           git add .

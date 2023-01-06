@@ -3,7 +3,7 @@ name: "Deploy System"
 on:
   push:
     branches:
-      - main
+      - DO_NOT_RUN
 
 jobs:
   deployment:

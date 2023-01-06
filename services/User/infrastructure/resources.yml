@@ -47,13 +47,13 @@ CognitoUserPool:
 #       AutoVerifiedAttributes:
 #         - email
 
-  CognitoUserPoolClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      ClientName: ${self:service}-${self:provider.stage}-user-pool-client
-      UserPoolId:
-        Ref: CognitoUserPool
-      ExplicitAuthFlows:
-        - USER_PASSWORD_AUTH
-        - ADMIN_NO_SRP_AUTH
-      GenerateSecret: false
+CognitoUserPoolClient:
+  Type: AWS::Cognito::UserPoolClient
+  Properties:
+    ClientName: ${self:service}-${self:provider.stage}-user-pool-client
+    UserPoolId:
+      Ref: CognitoUserPool
+    ExplicitAuthFlows:
+      - USER_PASSWORD_AUTH
+      - ADMIN_NO_SRP_AUTH
+    GenerateSecret: false

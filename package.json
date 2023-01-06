@@ -21,7 +21,8 @@
     "storybook:components": "lerna run storybook --stream --scope=@kfinley/vue2-components",
     "storybook:holeshot": "lerna run storybook --stream --scope=@holeshot/plugin",
     "storybook:user": "lerna run storybook --stream --scope=@holeshot/vue2-user",
-    "deploy-storybook:local": "rm -rf storybook && storybook-to-ghpages --out=storybook --packages packages --dry-run && find packages -type f -name storybook -exec rm -f {} \\;",
+    "link:bootstrap": "lerna -- exec 'cd node_modules && ln -s ../../../node_modules/bootstrap bootstrap' --scope=@holeshot/plugin --scope=@holeshot/vue2-client --scope=@holeshot/vue2-user --scope=@finley/vue2-components",
+    "deploy-storybook:local": "npm run link:bootstrap && rm -rf storybooks && storybook-to-ghpages --out=storybooks --packages packages --dry-run && find packages -type f -name storybooks -exec rm -f {} \\;",
     "dev:client": "lerna run dev --stream --scope=@holeshot/vue2-client",
     "build:cdk": "lerna run build --stream --scope=@holeshot/infrastructure",
     "dev:client:docker": "lerna run dev:docker --stream --scope=@holeshot/vue2-client",
@@ -30,7 +31,6 @@
     "sls": "sls",
     "dev:sls": "npm run ses:copy-templates && sls offline start --migrate",
     "sls:build-plugins": "lerna run build --stream --scope=serverless-offline-stepfunctions-plugin",
-    "sls:debug": "node --inspect node_modules/serverless/bin/serverless offline -s dev",
     "sls:start": "export SLS_DEBUG=* && node --inspect=0.0.0.0:9228 node_modules/serverless/bin/serverless offline start --printOutput -s Dev",
     "sls:start-debug": "export SLS_DEBUG=* && sls offline start --printOutput -s Dev",
     "sls:plugin-template": "cd packages/sls-plugins && sls create --template plugin",
@@ -41,8 +41,9 @@
     "ses:copy-templates": "cp services/User/EmailTemplates/ConfirmRegistrationTemplate.json .devcontainer/.ses/email-templates/"
   },
   "workspaces": [
-    "packages/serverless-offline-ses-v2",
-    "packages/aws-ses-v2-local"
+    "packages/*",
+    "infrastructure",
+    "services/*"
   ],
   "dependencies": {
     "lerna": "^6.1.0",
@@ -51,6 +52,8 @@
   "devDependencies": {
     "@storybook/storybook-deployer": "^2.8.16",
     "@types/jest": "^27.0.2",
+    "aws-crt": "1.15.5",
+    "@aws-sdk/signature-v4-crt": "3.226.0",
     "aws-ses-v2-local": "file://packages/aws-ses-v2-local",
     "dotenv": "^16.0.3",
     "inversify-props": "^2.2.6",
