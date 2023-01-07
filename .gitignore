@@ -31,10 +31,6 @@ dist
 # lambda dotnetcore deploy packages
 *-deploy-package.zip
 
-# dotnet
-bin
-obj
-
 # Mac
 .DS_Store
 

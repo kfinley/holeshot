@@ -1,6 +1,7 @@
 export * from './data-stores';
 export * from './infrastructure-stack';
-export * from './websockets-api';
+export * from './websockets-stack';
+export * from './user-stack';
 import { Duration, Stack } from 'aws-cdk-lib';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
@@ -16,7 +17,7 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
     timeout: Duration.seconds(5),
     functionName: `Holeshot-Infrastructure-${name}`,
     handler,
-    code: new lambda.AssetCode(join(__dirname, `${functionsPath}`)),
+    code: new lambda.AssetCode(join(__dirname, functionsPath)),
     environment: {
       REGION: Stack.of(scope).region,
       AVAILABILITY_ZONES: JSON.stringify(

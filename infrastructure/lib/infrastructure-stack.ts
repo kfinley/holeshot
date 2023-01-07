@@ -7,17 +7,19 @@ import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import { OriginRequestCookieBehavior, OriginRequestHeaderBehavior, OriginRequestPolicy, OriginRequestQueryStringBehavior } from 'aws-cdk-lib/aws-cloudfront';
-import { WebSocketsApi } from './websockets-api';
+import { AllowedMethods, CachePolicy, OriginRequestCookieBehavior, OriginRequestHeaderBehavior, OriginRequestPolicy, OriginRequestQueryStringBehavior, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+import { WebSocketsStack } from './websockets-stack';
 import { DataStores } from './data-stores';
+import { UserServiceStack } from './user-stack';
+import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
 export interface InfraStackProps extends StackProps {
+  senderEmail: string;
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
-  gitHubClientId: string;
-  gitHubClientSecret: string;
   node_env: string;
+
 }
 
 export class InfrastructureStack extends Stack {
@@ -27,20 +29,29 @@ export class InfrastructureStack extends Stack {
 
     const domainName = this.node.tryGetContext('domainName');
 
-    //TODO: Bad names from previous setup. Have to remove the rsources in order to rename them.
-    const dataStores = new DataStores(this, 'Holeshot-DatabaseStack', {
+    // Setup Data Stores
+    const dataStores = new DataStores(this, 'Holeshot-DataStoreseStack', {
       domainName,
     });
 
-    //TODO: Bad names from previous setup. Have to remove the rsources in order to rename them.
-    const webSocketsApi = new WebSocketsApi(this, 'Holeshot-WebSocketsStack', {
+    // // Setup User Service
+    const userService = new UserServiceStack(this, 'Holeshot-UserServiceStack', {
+      coreTable: dataStores?.coreTable!, // HOLESHOT_CORE_TABLE: Holeshot-Core-Table
+      siteUrl: 'https://holeshot-bmx.com',
+      senderEmail: props?.senderEmail!,
       logLevel: props?.logLevel!,
-      connectionsTable: dataStores?.connectionsTable!,
-      gitHubClientId: props!.gitHubClientId,
-      gitHubClientSecret: props!.gitHubClientSecret,
       node_env: props!.node_env
     });
 
+    // Setup WebSockets
+    const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
+      connectionsTable: dataStores?.connectionsTable!,
+      logLevel: props?.logLevel!,
+      node_env: props!.node_env
+    });
+
+
+    // Handle Route53 DNS bits
     const {
       accountId,
       region,
@@ -68,6 +79,7 @@ export class InfrastructureStack extends Stack {
       queryStringBehavior: OriginRequestQueryStringBehavior.all(),
     });
 
+    // Create CloudFront Distribution
     const cloudFrontDistribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
       domainNames: [domainName],
       defaultBehavior: {
@@ -80,18 +92,20 @@ export class InfrastructureStack extends Stack {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
-      // example of how to put a REST api behind CF
+
+      // TEST....
       // source: https://github.com/apoorvmote/cdk-examples/blob/master/http-api/lib/cloudfront-http-api-stack.ts
-      // additionalBehaviors: {
-      //   'api/*': {
-      //     origin: new HttpOrigin(api.apiEndpoint.replace('https://', '')),
-      //     allowedMethods: AllowedMethods.ALLOW_ALL,
-      //     cachePolicy: CachePolicy.CACHING_DISABLED,
-      //     compress: false,
-      //     originRequestPolicy: apiOriginPolicy,
-      //     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
-      //   }
-      // },
+      additionalBehaviors: {
+        'user/*': {
+          origin: new HttpOrigin(userService.restApi.url.replace('https://', '')),
+          allowedMethods: AllowedMethods.ALLOW_ALL,
+          cachePolicy: CachePolicy.CACHING_DISABLED,
+          compress: false,
+          originRequestPolicy: apiOriginPolicy,
+          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
+        }
+      },
+
       errorResponses: [
         {
           httpStatus: 403,
@@ -164,55 +178,49 @@ export class InfrastructureStack extends Stack {
       ),
     });
 
-    new route53.ARecord(this, 'FTPRecord', {
-      recordName: `ftp.${domainName}`,
-      zone: hostedZone,
-      target: route53.RecordTarget.fromIpAddresses('143.95.251.45')
-    })
+    // new route53.MxRecord(this, 'MXRecords', {
+    //   recordName: domainName,
+    //   zone: hostedZone,
+    //   values: [{
+    //     hostName: 'alt1.aspmx.l.google.com',
+    //     priority: 5
+    //   },
+    //   {
+    //     hostName: 'alt2.aspmx.l.google.com',
+    //     priority: 5
+    //   },
+    //   {
+    //     hostName: 'aspmx.l.google.com',
+    //     priority: 1
+    //   },
+    //   {
+    //     hostName: 'aspmx2.googlemail.com',
+    //     priority: 10
+    //   },
+    //   {
+    //     hostName: 'aspmx3.googlemail.com',
+    //     priority: 10
+    //   },
+    //   {
+    //     hostName: `mail.${domainName}`,
+    //     priority: 20
+    //   }
+    //   ]
+    // });
 
-    new route53.MxRecord(this, 'MXRecords', {
-      recordName: domainName,
-      zone: hostedZone,
-      values: [{
-        hostName: 'alt1.aspmx.l.google.com',
-        priority: 5
-      },
-      {
-        hostName: 'alt2.aspmx.l.google.com',
-        priority: 5
-      },
-      {
-        hostName: 'aspmx.l.google.com',
-        priority: 1
-      },
-      {
-        hostName: 'aspmx2.googlemail.com',
-        priority: 10
-      },
-      {
-        hostName: 'aspmx3.googlemail.com',
-        priority: 10
-      },
-      {
-        hostName: `mail.${domainName}`,
-        priority: 20
-      }
-      ]
-    });
+    // new route53.CnameRecord(this, 'MailCNameRecord', {
+    //   recordName: `mail.${domainName}`,
+    //   zone: hostedZone,
+    //   domainName: 'ghs.google.com'
+    // })
 
-    new route53.CnameRecord(this, 'MailCNameRecord', {
-      recordName: `mail.${domainName}`,
-      zone: hostedZone,
-      domainName: 'ghs.google.com'
-    })
-
-    new route53.TxtRecord(this, 'TxtRecord', {
-      recordName: domainName,
-      zone: hostedZone,
-      values: [
-        'v=spf1 include:aspmx.googlemail.com ~all' //TODO: research this... ~all is probably to wide here. This was pulled from old DNS records.
-      ]
-    })
+    // new route53.TxtRecord(this, 'TxtRecord', {
+    //   recordName: domainName,
+    //   zone: hostedZone,
+    //   values: [
+    //     'v=spf1 include:aspmx.googlemail.com ~all' //TODO: research this... ~all is probably to wide here. This was pulled from old DNS records.
+    //   ]
+    // })
 
     new s3deploy.BucketDeployment(this, 'S3BucketDeploy', {
       sources: [s3deploy.Source.asset('../packages/vue2-client/dist')],

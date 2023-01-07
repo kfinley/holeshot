@@ -19,21 +19,22 @@ module.exports = () => {
     let stateMachinesFiles = fs.readdirSync(`${basePath}infrastructure/state-machines`);
 
     stateMachinesFiles.forEach((fileName) => {
-      let stateMachine = fs.readFileSync(`${basePath}infrastructure/state-machines/${fileName}`, "utf8");
-      stateMachine = stateMachine.replace(/\$\{self:service:::toUpperCase\}/g, serviceName.toUpperCase);
-      stateMachine = stateMachine.replace(/\$\{self:service\}/g, serviceName);
-      let name = fileName.split('.')[0];
+      if (fileName != '.gitignore') {
+        let stateMachine = fs.readFileSync(`${basePath}infrastructure/state-machines/${fileName}`, "utf8");
+        stateMachine = stateMachine.replace(/\$\{self:service:::toUpperCase\}/g, serviceName.toUpperCase);
+        stateMachine = stateMachine.replace(/\$\{self:service\}/g, serviceName);
+        let name = fileName.split('.')[0];
 
-      stateMachines = {
-        ...stateMachines,
-        ...{
-          [`Holeshot-${serviceName}-${name.charAt(0).toUpperCase()}${name.slice(1)}`]: {
-            definition: yaml.parse(stateMachine)
+        stateMachines = {
+          ...stateMachines,
+          ...{
+            [`Holeshot-${serviceName}-${name.charAt(0).toUpperCase()}${name.slice(1)}`]: {
+              definition: yaml.parse(stateMachine)
+            }
           }
-        }
-      };
-      // console.log(stateMachines);
-
+        };
+        // console.log(stateMachines);
+      }
     });
 
   });

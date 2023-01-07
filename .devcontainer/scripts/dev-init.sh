@@ -11,16 +11,13 @@ sudo chmod 777 /var/run/docker-host.sock
 
 # Run npm & lerna installs
 if ! [ -d './node_modules' ]; then
-    # Do we still need these?
-    # sudo apt install python2 -y
-    # npm config set python python2
-    npm install silent
+    npm i
     npm run bootstrap
 
     echo
     echo 'Building serverless-offline-ses-v2 and aws-ses-v2-local'
     npm run lerna -- run build --scope=serverless-offline-ses-v2 --scope=aws-ses-v2-local --stream
-    
+
     echo
     echo 'Restarting containers...'
     # ensure services, sls, and vite dev client are started

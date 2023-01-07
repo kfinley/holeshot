@@ -7,19 +7,22 @@ import { GetUserDetailsCommand } from './commands/getUserDetails';
 export default function bootstrapper(container: Container) {
 
   // console.log('vue2-user bootstrapper');
-
   if (!container.isBound("CognitoIdentityProvider")) {
     container.bind<CognitoIdentityProvider>("CognitoIdentityProvider")
-      .toDynamicValue(() => new CognitoIdentityProvider({
-        endpoint: "http://localhost:9229",
-        region: 'us-east-1'
-      }));
+      .toDynamicValue(() => process.env.NODE_ENV === 'production'
+        ?
+        new CognitoIdentityProvider({ region: "us-east-1" })
+        :
+        new CognitoIdentityProvider({
+          endpoint: "http://localhost:9229",
+          credentials: {
+            accessKeyId: "local",
+            secretAccessKey: "local",
+          },
+          region: "us-east-1",
+        }));
   }
 
-  // container.bind<CognitoIdentityProvider>("CognitoIdentityProvider")
-  //   .toDynamicValue(() => new CognitoIdentityProvider({
-  //     region: "us-west-1"
-  //   }));
 
   addTransientIfNeeded<ApiClient>(apiClient, 'ApiClient', container);
   addTransientIfNeeded<LoginCommand>(LoginCommand, "LoginCommand", container);

@@ -3,7 +3,7 @@ name: "Deploy System"
 on:
   push:
     branches:
-      - DO_NOT_RUN
+      - main
 
 jobs:
   deployment:
@@ -20,16 +20,23 @@ jobs:
         with:
           node-version: "16"
 
+      # TODO: switch this to pull config from a file on s3 somewhere...
       - name: Bootstrap & Build
-        env:
-          WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID }}
-          WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET }}
         run: |
           npm run i:prod && cd ./packages/vue2-client
-          echo 'VITE_GITHUB_OAUTH_CLIENT_ID=${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID }}' > .env
-          echo 'VITE_GITHUB_OAUTH_CLIENT_SECRET=${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET }}' >> .env
-          echo 'VITE_GITHUB_OAUTH_REDIRECT_URL=https://kylefinley.net/github_auth_callback' >> .env
-          cd ../.. && npm run build
+          echo 'VITE_APP_CLIENT_ID=${{ secrets.APP_CLIENT_ID }}' > .env
+          echo 'VITE_APP_POOL_ID=${{ secrets.APP_POOL_ID }}' >> .env
+          echo 'VITE_APP_HOST=${{ secrets.APP_HOST }}' >> .env
+          echo 'VITE_APP_AGENT=${{ secrets.APP_AGENT }}' >> .env
+          echo 'VITE_APP_API=${{ secrets.APP_API }}' >> .env
+          echo 'VITE_APP_AGENT=${{ secrets.APP_AGENT }}' >> .env
+          echo 'VITE_APP_SERVICE_WORKER_PATH=service-worker.js' >> .env
+          echo 'VITE_APP_WEBSOCKET=${{ secrets.APP_WEBSOCKET }}' >> .env
+          echo 'VITE_APP_WEBSOCKET_PORT=${{ secrets.APP_WEBSOCKET_PORT }}' >> .env
+          cd ../..
+          npm run bootstrap:client && npm run build:client
+          npm run sls:webpack
+          cd .serverless && unzip holeshot.zip
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
@@ -38,15 +45,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: "Bootstrap & Deploy CDK and sync media"
+      - name: "Bootstrap, Deploy CDK, & sync S3 media "
         working-directory: ./infrastructure
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           NODE_ENV: production
-          WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_ID }}
-          WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET: ${{ secrets.WEBSOCKETS_GITHUB_OAUTH_CLIENT_SECRET }}
         run: |
           npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
           npm run deploy
-          cd ../media && aws s3 sync . s3://images.kylefinley.net
+          cd ../media && aws s3 sync . s3://images.holeshot-bmx.com

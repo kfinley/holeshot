@@ -15,20 +15,20 @@ import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { createLambda } from '.';
 
-export interface WebSocketsApiProps {
+export interface WebSocketsStackProps {
   connectionsTable: Table;
   node_env: string;
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
 
-export class WebSocketsApi extends Construct {
+export class WebSocketsStack extends Construct {
 
   public webSocketApi: WebSocketApi;
 
-  constructor(scope: Construct, id: string, props?: WebSocketsApiProps) {
+  constructor(scope: Construct, id: string, props?: WebSocketsStackProps) {
     super(scope, id);
 
-    const functionsPath = '../../services/WebSockets/dist';
+    const functionsPath = '../../.serverless/services/WebSockets/src';
 
     // TODO: remove...
     const createNodeJsFunction = (name: string, path: string) => {

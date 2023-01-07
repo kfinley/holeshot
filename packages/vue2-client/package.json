@@ -1,7 +1,7 @@
 {
   "name": "@holeshot/vue2-client",
   "version": "1.0.0",
-  "description": "Holeshot BMX vue2 site.",
+  "description": "Holeshot BMX vue2 site",
   "private": true,
   "author": {
     "name": "Kyle Finley",

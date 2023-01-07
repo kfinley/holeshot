@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "../..",
     "experimentalDecorators": true,
     "sourceMap": false,
     "moduleResolution": "node",
