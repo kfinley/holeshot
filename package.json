@@ -9,7 +9,7 @@
     "bootstrap:prod": "set NODE_ENV=production && lerna bootstrap -- --omit=dev",
     "bootstrap:client": "lerna bootstrap --scope=@holeshot/api-client --scope=@holeshot/commands --scope=@holeshot/aws-commands --scope=@finley/vue2-components --scope=@holeshot/vue2-user --scope=@holeshot/plugin --scope=@holeshot/vue2-client",
     "build": "npm run clean:js-files && npm run bootstrap:client && npm run build:client && npm run build:lambdas",
-    "build:client": "pnpm --filter @holeshot/vue2-client && npm run post-build:fix-img-paths",
+    "build:client": "pnpm --filter @holeshot/vue2-client run build && npm run post-build:fix-img-paths",
     "build:lambdas": "./infrastructure/scripts/build-lambdas.sh",
     "build:cdk": "lerna run build --stream --scope=@holeshot/infrastructure",
     "i:prod": "NODE_ENV=production pnpm i --production && cd infrastructure && npm i --omit=dev",
