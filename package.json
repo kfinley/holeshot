@@ -9,7 +9,7 @@
     "bootstrap:prod": "set NODE_ENV=production && lerna bootstrap -- --omit=dev",
     "bootstrap:client": "lerna bootstrap --scope=@holeshot/api-client --scope=@holeshot/commands --scope=@holeshot/aws-commands --scope=@finley/vue2-components --scope=@holeshot/vue2-user --scope=@holeshot/plugin --scope=@holeshot/vue2-client",
     "build": "npm run clean:js-files && npm run bootstrap:client && npm run build:client && npm run build:lambdas",
-    "build:client": "npm run lerna -- run build --scope=@holeshot/vue2-client && npm run post-build:fix-img-paths",
+    "build:client": "lerna run build --scope=@holeshot/vue2-client && npm run post-build:fix-img-paths",
     "build:lambdas": "./infrastructure/scripts/build-lambdas.sh",
     "build:cdk": "lerna run build --stream --scope=@holeshot/infrastructure",
     "i:prod": "npm i --omit=dev && npm run bootstrap:prod && cd infrastructure && npm i --omit=dev",
@@ -28,8 +28,6 @@
     "storybook:holeshot": "lerna run storybook --stream --scope=@holeshot/plugin",
     "storybook:user": "lerna run storybook --stream --scope=@holeshot/vue2-user",
     "link:bootstrap": "lerna exec 'cd node_modules && ln -s ../../../node_modules/bootstrap bootstrap' --scope=@holeshot/plugin --scope=@holeshot/vue2-client --scope=@holeshot/vue2-user --scope=@finley/vue2-components --stream",
-    "link:vue2-components": "lerna exec 'cd node_modules && ln -s ../../../node_modules/bootstrap @finley' --scope=@holeshot/plugin --scope=@holeshot/vue2-client --scope=@holeshot/vue2-user --stream",
-
     "deploy-storybook:local": "rm -rf storybooks && storybook-to-ghpages --out=storybooks --packages packages --dry-run && find packages -type f -name storybooks -exec rm -f {} \\;",
     "dev:client": "lerna run dev --stream --scope=@holeshot/vue2-client",
     "dev:client:docker": "lerna run dev:docker --stream --scope=@holeshot/vue2-client",

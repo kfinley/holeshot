@@ -3,7 +3,6 @@ import bootstrapper from "./../bootstrapper";
 import Vue from "vue";
 import { Store } from "vuex";
 import { ArticlesModule } from '../store/articles-module'
-import { setupValidation } from '@finley/vue2-components/src/components/validation';
 import { extend } from 'vee-validate';
 import { ClientPlugin, ClientPluginOptions } from '@finley/vue2-components/src/types';
 import ComponentLibraryPlugin from '@finley/vue2-components/src/plugin';
@@ -12,6 +11,7 @@ import VuexPersist from "vuex-persist";
 import { RouteNames } from "./../router/RouteNames";
 import { NotificationState } from "@finley/vue2-components/src/store/state";
 import { RegistrationState, UserState } from "@holeshot/vue2-user/src/store";
+import { setupValidation } from '@finley/vue2-components/src/components/validation';
 
 //Move these maybe??
 import "bootstrap/dist/css/bootstrap.css";
