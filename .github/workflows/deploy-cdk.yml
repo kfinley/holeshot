@@ -23,7 +23,7 @@ jobs:
       # TODO: switch this to pull config from a file on s3 somewhere...
       - name: Bootstrap & Build
         run: |
-          npm i:prod && cd ./packages/vue2-client
+          npm run i:prod && cd ./packages/vue2-client
           echo 'VITE_APP_CLIENT_ID=${{ secrets.APP_CLIENT_ID }}' > .env
           echo 'VITE_APP_POOL_ID=${{ secrets.APP_POOL_ID }}' >> .env
           echo 'VITE_APP_HOST=${{ secrets.APP_HOST }}' >> .env
