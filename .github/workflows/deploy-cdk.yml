@@ -23,7 +23,7 @@ jobs:
       # TODO: switch this to pull config from a file on s3 somewhere...
       - name: Bootstrap & Build
         run: |
-          npm i && cd ./packages/vue2-client
+          npm i:prod && cd ./packages/vue2-client
           echo 'VITE_APP_CLIENT_ID=${{ secrets.APP_CLIENT_ID }}' > .env
           echo 'VITE_APP_POOL_ID=${{ secrets.APP_POOL_ID }}' >> .env
           echo 'VITE_APP_HOST=${{ secrets.APP_HOST }}' >> .env
@@ -32,7 +32,6 @@ jobs:
           echo 'VITE_APP_SERVICE_WORKER_PATH=service-worker.js' >> .env
           echo 'VITE_APP_WEBSOCKET=${{ secrets.APP_WEBSOCKET }}' >> .env
           cd ../..
-          contents="$(jq '.useWorkspaces = false' lerna.json)" && echo -E "${contents}" > lerna.json
           npm run bootstrap:client && npm run build:client
           npm run sls:webpack && cd .serverless && unzip holeshot.zip
 
