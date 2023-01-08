@@ -65,13 +65,11 @@ importers:
 
   packages/api-client:
     specifiers:
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@types/node': ^18.11.17
       axios: 1.2.1
       inversify-props: ^2.2.6
       tslib: ^2.4.0
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       '@types/node': 18.11.18
       axios: 1.2.1
       inversify-props: 2.2.6
@@ -88,7 +86,6 @@ importers:
       '@aws-sdk/client-sns': 3.226.0
       '@aws-sdk/util-dynamodb': 3.226.0
       '@holeshot/commands': ^1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@types/node': ^18.11.17
       inversify-props: ^2.2.6
     dependencies:
@@ -101,7 +98,6 @@ importers:
       '@aws-sdk/client-sns': 3.226.0
       '@aws-sdk/util-dynamodb': 3.226.0
       '@holeshot/commands': link:../commands
-      '@holeshot/vue2-client': link:../vue2-client
       '@types/node': 18.11.18
       inversify-props: 2.2.6
 
@@ -109,7 +105,6 @@ importers:
     specifiers:
       '@aws-sdk/client-ses': ^3.204.0
       '@aws-sdk/client-sesv2': ^3.204.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@types/express': ^4.17.14
       '@types/jest': ^29.2.2
       '@types/json-schema': ^7.0.11
@@ -128,7 +123,6 @@ importers:
       ts-jest: ^29.0.3
       typescript: ^4.8.4
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       ajv: 8.12.0
       express: 4.18.2
       mailparser: 3.6.3
@@ -152,17 +146,14 @@ importers:
 
   packages/commands:
     specifiers:
-      '@holeshot/vue2-client': workspace:^1.0.0
       tslib: ^2.4.0
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       tslib: 2.4.1
 
   packages/holeshot-plugin:
     specifiers:
       '@babel/core': ^7.17.5
       '@finley/vue2-components': 1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@storybook/addon-actions': 6.4.19
       '@storybook/addon-docs': 6.4.19
       '@storybook/addon-essentials': 6.4.19
@@ -202,7 +193,6 @@ importers:
       webpack: ^5.20.2
     dependencies:
       '@finley/vue2-components': link:../vue2-components
-      '@holeshot/vue2-client': link:../vue2-client
       interactjs: 1.10.17
     devDependencies:
       '@babel/core': 7.20.12
@@ -245,15 +235,12 @@ importers:
 
   packages/holeshot-types:
     specifiers:
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@types/node': ^18.11.17
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       '@types/node': 18.11.18
 
   packages/serverless-offline-ses-v2:
     specifiers:
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@types/jest': ^27.0.2
       '@types/serverless': ^3.12.5
       '@typescript-eslint/eslint-plugin': ^5.3.0
@@ -267,7 +254,6 @@ importers:
       ts-jest: ^27.0.7
       typescript: ^4.4.4
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       aws-ses-v2-local: link:../aws-ses-v2-local
     devDependencies:
       '@types/jest': 27.5.2
@@ -284,7 +270,6 @@ importers:
 
   packages/serverless-offline-stepfunctions-plugin:
     specifiers:
-      '@holeshot/vue2-client': workspace:^1.0.0
       aws-sdk: ^2.1290.0
       babel-eslint: ^10.0.2
       eslint: ^6.0.1
@@ -295,7 +280,6 @@ importers:
       jest: ^24.8.0
       prettier: ^1.18.2
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       aws-sdk: 2.1290.0
     devDependencies:
       babel-eslint: 10.1.0_eslint@6.8.0
@@ -312,7 +296,6 @@ importers:
       '@babel/core': ^7.17.5
       '@finley/vue2-components': 1.0.0
       '@holeshot/types': 1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@holeshot/vue2-user': 1.0.0
       '@storybook/addon-actions': 6.4.19
       '@storybook/addon-docs': 6.4.19
@@ -373,7 +356,6 @@ importers:
     dependencies:
       '@finley/vue2-components': link:../vue2-components
       '@holeshot/types': link:../holeshot-types
-      '@holeshot/vue2-client': 'link:'
       '@holeshot/vue2-user': link:../vue2-user
       bootstrap: 5.2.3
       bootstrap-icons: 1.10.3
@@ -437,7 +419,6 @@ importers:
   packages/vue2-components:
     specifiers:
       '@babel/core': ^7.17.5
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@storybook/addon-actions': 6.4.19
       '@storybook/addon-docs': 6.4.19
       '@storybook/addon-essentials': 6.4.19
@@ -483,7 +464,6 @@ importers:
       vuex-module-decorators: ^1.0.1
       webpack: ^5.20.2
     dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
       interactjs: 1.10.17
       v-click-outside: 3.2.0
       vee-validate: 3.4.14_vue@2.7.14
@@ -538,7 +518,6 @@ importers:
       '@finley/vue2-components': 1.0.0
       '@holeshot/api-client': 1.0.0
       '@holeshot/commands': 1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@holeshot/web-core': 1.0.0
       '@storybook/addon-actions': 6.4.19
       '@storybook/addon-docs': 6.4.19
@@ -592,7 +571,6 @@ importers:
       '@finley/vue2-components': link:../vue2-components
       '@holeshot/api-client': link:../api-client
       '@holeshot/commands': link:../commands
-      '@holeshot/vue2-client': link:../vue2-client
       '@holeshot/web-core': link:../web-core
     devDependencies:
       '@babel/core': 7.20.12
@@ -646,10 +624,7 @@ importers:
 
   packages/web-core:
     specifiers:
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@types/node': ^18.11.17
-    dependencies:
-      '@holeshot/vue2-client': link:../vue2-client
     devDependencies:
       '@types/node': 18.11.18
 
@@ -657,7 +632,6 @@ importers:
     specifiers:
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.0.6
@@ -670,7 +644,6 @@ importers:
     dependencies:
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
-      '@holeshot/vue2-client': link:../../packages/vue2-client
       inversify-props: 2.2.6
       source-map-support: 0.5.21
       typescript: 4.9.4
@@ -692,7 +665,6 @@ importers:
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
       '@holeshot/types': ^1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
@@ -711,7 +683,6 @@ importers:
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
       '@holeshot/types': link:../../packages/holeshot-types
-      '@holeshot/vue2-client': link:../../packages/vue2-client
       inversify-props: 2.2.6
       source-map-support: 0.5.21
     devDependencies:
@@ -731,7 +702,6 @@ importers:
       '@holeshot/api-client': ^1.0.0
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
-      '@holeshot/vue2-client': workspace:^1.0.0
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
@@ -749,7 +719,6 @@ importers:
       '@holeshot/api-client': link:../../packages/api-client
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
-      '@holeshot/vue2-client': link:../../packages/vue2-client
       '@types/aws-lambda': 8.10.109
       '@types/node': 18.11.18
       inversify-props: 2.2.6
@@ -19678,7 +19647,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.2_debug@4.3.4
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -30104,7 +30073,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1
+      jest: 27.5.1_ts-node@10.9.1
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
