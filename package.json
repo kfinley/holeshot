@@ -12,7 +12,7 @@
     "build:client": "lerna run build --scope=@holeshot/vue2-client && npm run post-build:fix-img-paths",
     "build:lambdas": "./infrastructure/scripts/build-lambdas.sh",
     "build:cdk": "lerna run build --stream --scope=@holeshot/infrastructure",
-    "i:prod": "npm i --omit=dev && npm run bootstrap:prod && cd infrastructure && npm i --omit=dev",
+    "i:prod": "NODE_ENV=production pnpm i --production && cd infrastructure && npm i --omit=dev",
     "cdk": "cd infrastructure && npm run cdk",
     "containers:restart": "./.devcontainer/scripts/local-containers.sh restart",
     "containers:start": "./.devcontainer/scripts/local-containers.sh start",
@@ -44,10 +44,6 @@
     "smoke": "npm run build && npm run cdk synth",
     "ses:copy-templates": "cp services/User/EmailTemplates/ConfirmRegistration.json ./email-templates/"
   },
-  "workspaces": [
-    "packages/*",
-    "services/*"
-  ],
   "dependencies": {
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",
@@ -62,13 +58,12 @@
     "dotenv": "^16.0.3",
     "lerna": "^6.1.0",
     "http-server": "^14.1.1",
-    "sb": "6.4.19",
     "serverless": "^2.72.3",
     "serverless-dynamodb-local": "^0.2.40",
     "serverless-offline": "^8.8.1",
     "serverless-offline-ses-v2": "1.0.1",
     "serverless-offline-sns": "^0.76.0",
-    "serverless-offline-stepfunctions-plugin": "^0.0.1",
+    "@holeshot/serverless-offline-stepfunctions-plugin": "^1.0.0",
     "serverless-s3-local": "^0.7.1",
     "serverless-step-functions": "^3.10.0",
     "serverless-webpack": "^5.10.0",

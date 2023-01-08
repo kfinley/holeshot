@@ -47,3 +47,5 @@ storybook/*
 # lerna files
 lerna-debug.log
 package.json.lerna_backup
+
+.pnpm-store
