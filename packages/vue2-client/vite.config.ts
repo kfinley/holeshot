@@ -12,12 +12,7 @@ export default defineConfig(
     build: {
       // target: 'es2020',
       chunkSizeWarningLimit: 600,
-      cssCodeSplit: false,
-      rollupOptions: {
-        external: [
-          "@finley/vue2-components"
-        ]
-      }
+      cssCodeSplit: false
     },
     // optimizeDeps: {
     //   esbuildOptions: {
