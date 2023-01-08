@@ -12,7 +12,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@types/node": "^18.11.17",
     "@aws-sdk/client-cognito-identity": "3.226.0",
     "@aws-sdk/client-cognito-identity-provider": "3.226.0",
     "@aws-sdk/client-dynamodb": "3.226.0",
@@ -22,6 +21,7 @@
     "@aws-sdk/client-sns": "3.226.0",
     "@aws-sdk/util-dynamodb": "3.226.0",
     "@holeshot/commands": "^1.0.0",
+    "@types/node": "^18.11.17",
     "inversify-props": "^2.2.6"
   }
 }
