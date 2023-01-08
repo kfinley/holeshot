@@ -32,7 +32,7 @@ jobs:
           echo 'VITE_APP_SERVICE_WORKER_PATH=service-worker.js' >> .env
           echo 'VITE_APP_WEBSOCKET=${{ secrets.APP_WEBSOCKET }}' >> .env
           cd ../..
-          npm run bootstrap && npm run build:client
+          npm run bootstrap && npm run link:vue2-components && npm run build:client
           npm run sls:webpack && cd .serverless && unzip holeshot.zip
 
       - name: Configure AWS Credentials

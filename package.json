@@ -28,6 +28,8 @@
     "storybook:holeshot": "lerna run storybook --stream --scope=@holeshot/plugin",
     "storybook:user": "lerna run storybook --stream --scope=@holeshot/vue2-user",
     "link:bootstrap": "lerna exec 'cd node_modules && ln -s ../../../node_modules/bootstrap bootstrap' --scope=@holeshot/plugin --scope=@holeshot/vue2-client --scope=@holeshot/vue2-user --scope=@finley/vue2-components --stream",
+    "link:vue2-components": "lerna exec 'cd node_modules && ln -s ../../../node_modules/bootstrap @finley' --scope=@holeshot/plugin --scope=@holeshot/vue2-client --scope=@holeshot/vue2-user --stream",
+
     "deploy-storybook:local": "rm -rf storybooks && storybook-to-ghpages --out=storybooks --packages packages --dry-run && find packages -type f -name storybooks -exec rm -f {} \\;",
     "dev:client": "lerna run dev --stream --scope=@holeshot/vue2-client",
     "dev:client:docker": "lerna run dev:docker --stream --scope=@holeshot/vue2-client",
