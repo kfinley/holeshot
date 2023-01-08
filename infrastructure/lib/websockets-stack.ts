@@ -28,7 +28,7 @@ export class WebSocketsStack extends Construct {
   constructor(scope: Construct, id: string, props?: WebSocketsStackProps) {
     super(scope, id);
 
-    const functionsPath = '../../.serverless/services/WebSockets/src';
+    const functionsPath = '../../services/WebSockets/dist';
 
     // TODO: remove...
     const createNodeJsFunction = (name: string, path: string) => {

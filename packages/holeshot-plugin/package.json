@@ -1,6 +1,10 @@
 {
   "name": "@holeshot/plugin",
   "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "module": "./dist/holeshot-plugin.js",
+  "types": "./dist/plugin.d.ts",
   "scripts": {
     "build": "vite build",
     "test:unit": "vue-cli-service test:unit",

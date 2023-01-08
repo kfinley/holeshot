@@ -33,8 +33,7 @@ jobs:
           echo 'VITE_APP_SERVICE_WORKER_PATH=service-worker.js' >> .env
           echo 'VITE_APP_WEBSOCKET=${{ secrets.APP_WEBSOCKET }}' >> .env
           cd ../..
-          pnpm run build:client
-          pnpm run sls:webpack && cd .serverless && unzip holeshot.zip
+          pnpm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
@@ -50,6 +49,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           NODE_ENV: production
         run: |
-          pnpm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
-          pnpm run deploy
+          npm i --omit=dev
+          npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
+          npm run deploy
           cd ../media && aws s3 sync . s3://images.holeshot-bmx.com

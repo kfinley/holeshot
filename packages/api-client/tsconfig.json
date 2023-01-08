@@ -16,6 +16,7 @@
     "emitDecoratorMetadata": true,
     "isolatedModules": true,
     "baseUrl": ".",
+    "outDir": "./dist",
     "types": ["node"],
     "paths": {
       "@/*": ["src/*"]

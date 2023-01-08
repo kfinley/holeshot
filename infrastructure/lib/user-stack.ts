@@ -30,7 +30,7 @@ export class UserServiceStack extends Construct {
 
     super(scope, id);
 
-    const functionsPath = '../../.serverless/services/User/src';
+    const functionsPath = '../../services/User/dist';
 
     const newLamda = (name: string, handler: string, env?: {
       [key: string]: string;

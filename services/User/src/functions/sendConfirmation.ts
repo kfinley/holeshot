@@ -1,4 +1,4 @@
-import { SendConfirmationCommand, SendConfirmationRequest } from '@/commands/sendRegistrationConfirmation';
+import { SendConfirmationCommand, SendConfirmationRequest } from '../commands/sendRegistrationConfirmation';
 import {
     Handler,
     Context,
@@ -14,7 +14,7 @@ export const handler: Handler = async (event: any, context: Context) => {
     // console.log('context', context);
 
     try {
-      
+
       const request = event as SendConfirmationRequest;
       console.log('sendConfirmation', request);
 

@@ -3,7 +3,7 @@ import {
 } from 'aws-lambda';
 import bootstrapper from './../bootstrapper';
 import { createResponse } from '../create-response';
-import { CreateCognitoUserCommand, CreateCognitoUserCommandRequest } from '@/commands/create-cognito-user';
+import { CreateCognitoUserCommand, CreateCognitoUserCommandRequest } from '../commands/create-cognito-user';
 
 const container = bootstrapper();
 

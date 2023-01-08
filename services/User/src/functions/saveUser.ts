@@ -1,4 +1,4 @@
-import { SaveUserCommand, SaveUserRequest } from '@/commands/save-user';
+import { SaveUserCommand, SaveUserRequest } from '../commands/save-user';
 import {
   Context,
   Handler,

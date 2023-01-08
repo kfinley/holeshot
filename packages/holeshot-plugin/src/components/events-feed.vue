@@ -157,7 +157,6 @@ export default class EventList extends Vue {
 
 
 <style lang="scss">
-// TODO: deal with this...
 .card-body {
   padding: 10px;
 }

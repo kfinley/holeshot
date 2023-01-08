@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Vue2 plugin that provides user registration, login, and profile management features",
   "private": true,
+  "type": "module",
+  "module": "./dist/vue2-user.js",
+  "types": "./dist/plugin.d.ts",
   "author": {
     "name": "Kyle Finley",
     "email": "kyle@kylefinley.net"

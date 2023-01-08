@@ -2,7 +2,7 @@ name: Publish main branch Storybook
 
 on:
   push:
-    branches: [main]
+    branches: [DISABLED]
     # paths:
     #   - packages/holeshot-plugin/src/stories/**
     #   - packages/holeshot-plugin/src/components/**
