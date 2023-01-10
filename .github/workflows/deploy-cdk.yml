@@ -20,10 +20,33 @@ jobs:
         with:
           node-version: "16"
 
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+        
       # TODO: switch this to pull config from a file on s3 somewhere...
       - name: Bootstrap & Build
         run: |
-          npm install -g pnpm
           pnpm i && cd ./packages/vue2-client
           echo 'VITE_APP_CLIENT_ID=${{ secrets.APP_CLIENT_ID }}' > .env
           echo 'VITE_APP_POOL_ID=${{ secrets.APP_POOL_ID }}' >> .env
