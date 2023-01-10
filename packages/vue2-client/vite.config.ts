@@ -42,9 +42,10 @@ export default defineConfig(
       }
     },
     resolve: {
-      alias: {
-        '@': path.resolve(__dirname, './src/')
-      },
+      alias: [{
+        find: '@finley/vue2-components',
+        replacement: '../vue2-components/src',
+      }],
     },
     define: {
       'process.env': process.env
