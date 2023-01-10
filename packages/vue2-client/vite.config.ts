@@ -14,6 +14,9 @@ export default defineConfig(
       chunkSizeWarningLimit: 600,
       cssCodeSplit: false
     },
+    optimizeDeps: {
+      exclude: ['@finley/vue2-components']
+    },
     // optimizeDeps: {
     //   esbuildOptions: {
     //     target: 'es2020',
