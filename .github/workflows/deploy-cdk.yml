@@ -45,33 +45,38 @@ jobs:
         run: pnpm install
 
       # TODO: switch this to pull config from a file on s3 somewhere...
+      # TODO: move config.js file build to user-service cdk construct
       - name: Bootstrap & Build
         run: |
-          pnpm i && cd ./packages/vue2-client
-          echo 'VITE_APP_CLIENT_ID=${{ secrets.APP_CLIENT_ID }}' > .env
-          echo 'VITE_APP_POOL_ID=${{ secrets.APP_POOL_ID }}' >> .env
-          echo 'VITE_APP_HOST=${{ secrets.APP_HOST }}' >> .env
-          echo 'VITE_APP_AGENT=${{ secrets.APP_AGENT }}' >> .env
-          echo 'VITE_APP_API=${{ secrets.APP_API }}' >> .env
-          echo 'VITE_APP_SERVICE_WORKER_PATH=service-worker.js' >> .env
-          echo 'VITE_APP_WEBSOCKET=${{ secrets.APP_WEBSOCKET }}' >> .env
+          pnpm i && cd ./packages/vue2-client/dist
+          rm config.js
+          echo -e'window.HoleshotConfig = {' > config.js
+          echo -e 'ClientId: "vla4cwe66kb2k1u0kj37albj",' >> config.js
+          echo -e 'PoolId: "us-east-1_local",' >> config.js
+          echo -e 'ServiceWorkerPath: "service-worker.js",' >> config.js
+          echo -e 'Host: "localhost",' >> config.js
+          echo -e 'Api: "localhost",' >> config.js
+          echo -e 'Agent: "holeshot-web/0.0.1,' >> config.js
+          echo -e '};' >> config.js
           cd ../..
-          pnpm run build
+          pnpm run build:lambdas
 
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v1-node16
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ secrets.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      # - name: "Bootstrap, Deploy CDK, & sync S3 media "
-      #   working-directory: ./infrastructure
-      #   env:
-      #     AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
-      #     AWS_REGION: ${{ secrets.AWS_REGION }}
-      #     NODE_ENV: production
-      #   run: |
-      #     npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
-      #     npm run deploy
-      #     cd ../media && aws s3 sync . s3://images.holeshot-bmx.com
+      - name: "Bootstrap, Deploy CDK, & sync S3 media "
+        working-directory: ./infrastructure
+        env:
+          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          NODE_ENV: production
+        run: |
+          npm run cdk synth
+
+        # npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
+        # npm run deploy
+        # cd ../media && aws s3 sync . s3://images.holeshot-bmx.com

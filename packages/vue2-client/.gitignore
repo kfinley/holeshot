@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
-/dist
+# building client locally until build works in GH Actions
+!dist
 
 
 # local env files

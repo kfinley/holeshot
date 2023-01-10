@@ -6,8 +6,8 @@ export interface Configuration {
   Agent: string;
   Api: string;
   ApiPorts?: string;
-  WebSocket: string,
-  WebSocketPort: string
+  WebSocket?: string,
+  WebSocketPort?: string
 }
 
 export const config: Configuration = {
