@@ -42,10 +42,9 @@ export default defineConfig(
       }
     },
     resolve: {
-      alias: [{
-        find: '@finley/vue2-components',
-        replacement: '/home/runner/work/holeshot/holeshot/packages/vue2-components',
-      }],
+      alias: {
+        '@': path.resolve(__dirname, './src/')
+      },
     },
     define: {
       'process.env': process.env
