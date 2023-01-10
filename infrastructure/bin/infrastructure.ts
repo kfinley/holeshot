@@ -12,7 +12,7 @@ const app = new cdk.App();
 // CDK-NAG security checks
 //Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
 
-const infraStack = new InfrastructureStack(app, `KyleFinleyNet-Infrastructure`, {
+const infraStack = new InfrastructureStack(app, `HoleshotBMX-Infrastructure`, {
   senderEmail: process.env.SES_SENDER_EMAIL!,
   logLevel: LOG_LEVEL,
   node_env: process.env.NODE_ENV!,
