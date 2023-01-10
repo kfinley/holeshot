@@ -12,6 +12,7 @@ import { WebSocketsStack } from './websockets-stack';
 import { DataStores } from './data-stores';
 import { UserServiceStack } from './user-stack';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
+import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -23,6 +24,8 @@ export interface InfraStackProps extends StackProps {
 }
 
 export class InfrastructureStack extends Stack {
+
+  private hostedZone: PublicHostedZone;
 
   constructor(scope: Construct, id: string, props?: InfraStackProps) {
     super(scope, id, props);
@@ -59,7 +62,7 @@ export class InfrastructureStack extends Stack {
 
     // Deploy Step 1: Create Hosted Zone
     const step1 = () => {
-      const hostedZone = new route53.PublicHostedZone(this, 'HostedZone', {
+      this.hostedZone = new route53.PublicHostedZone(this, 'HostedZone', {
         zoneName: domainName,
         comment: `Hosted zone for ${domainName}`
       });
@@ -69,7 +72,7 @@ export class InfrastructureStack extends Stack {
     const step2 = () => {
       const certificateManagerCertificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
         domainName,
-        hostedZone,
+        hostedZone: this.hostedZone,
         region: region,
         validation: acm.CertificateValidation.fromDns(),
       });
@@ -136,7 +139,7 @@ export class InfrastructureStack extends Stack {
 
       new route53.ARecord(this, 'ARecord', {
         recordName: domainName,
-        zone: hostedZone,
+        zone: this.hostedZone,
         target: route53.RecordTarget.fromAlias(
           new targets.CloudFrontTarget(cloudFrontDistribution)
         ),
