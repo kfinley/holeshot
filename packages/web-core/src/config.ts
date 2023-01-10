@@ -5,7 +5,7 @@ export interface Configuration {
   Host: string;
   Agent: string;
   Api: string;
-  ApiPorts?: string;
+  // ApiPorts?: string;
   WebSocket?: string,
   WebSocketPort?: string
 }
