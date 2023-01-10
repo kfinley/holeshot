@@ -58,6 +58,7 @@
 
   },
   "dependencies": {
+    "@finley/vue2-components": "workspace:1.0.0",
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",
     "aws-crt": "1.15.5",
