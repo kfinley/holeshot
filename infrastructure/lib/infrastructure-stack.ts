@@ -68,6 +68,9 @@ export class InfrastructureStack extends Stack {
       });
     };
 
+    //TODO: update Route53 Name Servers with values from hosted zone
+
+    // Confirm DNS works using dig before applying step 2
     // Deploy Step 2: Create Certificate, DNS Records, CloudFront, and S3 Deploy Bucket
     const step2 = () => {
       const certificateManagerCertificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
@@ -245,6 +248,10 @@ export class InfrastructureStack extends Stack {
     }
 
     step1();
+
+    step2();
+
+    step3();
 
     new CfnOutput(this, 'DeployURL', {
       value: `https://${domainName}`,
