@@ -3,7 +3,6 @@ window.HoleshotConfig = {
   PoolId: 'us-east-1_local',
   ServiceWorkerPath: 'service-worker.js',
   Host: 'localhost:8080',
-  Api: 'localhost',
-  APiPorts: 'user:3000',
+  Api: 'localhost:3000',
   Agent: 'holeshot-web/0.0.1',
 };
