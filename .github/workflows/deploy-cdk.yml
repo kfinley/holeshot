@@ -51,12 +51,12 @@ jobs:
           pnpm i && cd ./packages/vue2-client/dist
           rm config.js
           echo -e 'window.HoleshotConfig = {' > config.js
-          echo -e 'ClientId: "vla4cwe66kb2k1u0kj37albj",' >> config.js
-          echo -e 'PoolId: "us-east-1_local",' >> config.js
+          echo -e 'ClientId: "3r7f04fbcuse64vgtjji2g4adu",' >> config.js
+          echo -e 'PoolId: "us-east-1_nmrmokUDK",' >> config.js
           echo -e 'ServiceWorkerPath: "service-worker.js",' >> config.js
-          echo -e 'Host: "localhost",' >> config.js
-          echo -e 'Api: "localhost",' >> config.js
-          echo -e 'Agent: "holeshot-web/0.0.1,' >> config.js
+          echo -e 'Host: "holeshot-bmx.com",' >> config.js
+          echo -e 'Api: "https://4dlp5ls3hl.execute-api.us-east-1.amazonaws.com/v1",' >> config.js
+          echo -e 'Agent: "holeshot-web/0.0.1",' >> config.js
           echo -e '};' >> config.js
           cd ../..
           pnpm run build:lambdas
