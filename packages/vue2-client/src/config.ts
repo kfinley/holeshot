@@ -1,6 +1,6 @@
 // HACK: Load config from import.meta (Vite)
 // TODO: Fix this...
-import { config } from '@holeshot/types/src';
+import { config } from '@holeshot/web-core/src';
 config.ClientId = import.meta.env.VITE_APP_CLIENT_ID as string;
 config.PoolId = import.meta.env.VITE_APP_POOL_ID as string;
 config.Api = import.meta.env.VITE_APP_API as string;

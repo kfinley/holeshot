@@ -10,7 +10,7 @@ plugins:
   - serverless-offline-sns
   - serverless-s3-local
   - serverless-step-functions
-  - serverless-offline-stepfunctions-plugin
+  - ./serverless-plugins/offline-step-functions
   - serverless-offline
   - serverless-offline-ses-v2
 

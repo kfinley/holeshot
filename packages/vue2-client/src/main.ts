@@ -1,7 +1,8 @@
 // Config should be imported as early as possible
 // in order to prevent any missing values.
 // TODO: remove when config is reworked.
-// import "./config";
+import "./config";
+
 import Vue from "vue";
 import App from "./App.vue";
 import ClientPlugin from "./plugins/client";

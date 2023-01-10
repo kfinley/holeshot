@@ -6,10 +6,10 @@ importers:
     specifiers:
       '@aws-sdk/signature-v4-crt': 3.226.0
       '@finley/vue2-components': workspace:1.0.0
-      '@holeshot/serverless-offline-stepfunctions-plugin': ^1.0.0
       '@storybook/storybook-deployer': ^2.8.16
       '@types/jest': ^27.0.2
       aws-crt: 1.15.5
+      aws-sdk: ^2.1291.0
       aws-ses-v2-local: 2.1.0
       dotenv: ^16.0.3
       http-server: ^14.1.1
@@ -36,11 +36,11 @@ importers:
       '@aws-sdk/signature-v4-crt': 3.226.0
       '@finley/vue2-components': link:packages/vue2-components
       aws-crt: 1.15.5
+      aws-sdk: 2.1291.0
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
       tslib: 2.4.1
     devDependencies:
-      '@holeshot/serverless-offline-stepfunctions-plugin': link:packages/serverless-offline-stepfunctions-plugin
       '@storybook/storybook-deployer': 2.8.16
       '@types/jest': 27.5.2
       aws-ses-v2-local: link:packages/aws-ses-v2-local
@@ -268,35 +268,13 @@ importers:
       ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
       typescript: 4.9.4
 
-  packages/serverless-offline-stepfunctions-plugin:
-    specifiers:
-      aws-sdk: ^2.1290.0
-      babel-eslint: ^10.0.2
-      eslint: ^6.0.1
-      eslint-config-airbnb-base: ^13.2.0
-      eslint-config-prettier: ^6.0.0
-      eslint-plugin-import: ^2.18.0
-      eslint-plugin-prettier: ^3.1.0
-      jest: ^24.8.0
-      prettier: ^1.18.2
-    dependencies:
-      aws-sdk: 2.1290.0
-    devDependencies:
-      babel-eslint: 10.1.0_eslint@6.8.0
-      eslint: 6.8.0
-      eslint-config-airbnb-base: 13.2.0_rweni25kkda7eskrwa223jl4pa
-      eslint-config-prettier: 6.15.0_eslint@6.8.0
-      eslint-plugin-import: 2.26.0_eslint@6.8.0
-      eslint-plugin-prettier: 3.4.1_w56nqx62sqpcgkca3sb3623wsa
-      jest: 24.9.0
-      prettier: 1.19.1
-
   packages/vue2-client:
     specifiers:
       '@babel/core': ^7.17.5
       '@finley/vue2-components': workspace:1.0.0
       '@holeshot/types': workspace:1.0.0
       '@holeshot/vue2-user': workspace:1.0.0
+      '@holeshot/web-core': workspace:1.0.0
       '@storybook/addon-actions': 6.4.19
       '@storybook/addon-docs': 6.4.19
       '@storybook/addon-essentials': 6.4.19
@@ -358,6 +336,7 @@ importers:
       '@finley/vue2-components': link:../vue2-components
       '@holeshot/types': link:../holeshot-types
       '@holeshot/vue2-user': link:../vue2-user
+      '@holeshot/web-core': link:../web-core
       bootstrap: 5.2.3
       bootstrap-icons: 1.10.3
       core-js: 3.27.1
@@ -11109,8 +11088,8 @@ packages:
       - supports-color
       - utf-8-validate
 
-  /aws-sdk/2.1290.0:
-    resolution: {integrity: sha512-qRrXLgK4FpkdxeagjrHuhtEEvYrvRbddTBg1I7KBuMCIhXHzSS3nEUmdZjdyMuQJEvt0BCJjwVkNh8e/5TauDQ==}
+  /aws-sdk/2.1291.0:
+    resolution: {integrity: sha512-iM82Md2Wb29MZ72BpNF4YeIHtkJTyw+JMGXJG48Dwois2Rq7rLcriX6NN/4Fx4b5EEtUkwAO/wJc+NTHI7QeJw==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -15261,20 +15240,6 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-config-airbnb-base/13.2.0_rweni25kkda7eskrwa223jl4pa:
-    resolution: {integrity: sha512-1mg/7eoB4AUeB0X1c/ho4vb2gYkNH8Trr/EgCT/aGmKhhG+F6vF5s8+iRBlWAzFIAphxIdp3YfEKgEl0f9Xg+w==}
-    engines: {node: '>= 4'}
-    peerDependencies:
-      eslint: ^4.19.1 || ^5.3.0
-      eslint-plugin-import: ^2.17.2
-    dependencies:
-      confusing-browser-globals: 1.0.11
-      eslint: 6.8.0
-      eslint-plugin-import: 2.26.0_eslint@6.8.0
-      object.assign: 4.1.4
-      object.entries: 1.1.6
-    dev: true
-
   /eslint-config-airbnb-base/14.2.1_hpmu7kn6tcn2vnxpfzvv33bxmy:
     resolution: {integrity: sha512-GOrQyDtVEc1Xy20U7vsB2yAoB4nBlfH5HZJeatRXHleO+OS5Ot+MWij4Dpltw4/DyIkqUfqz1epfhVR5XWWQPA==}
     engines: {node: '>= 6'}
@@ -15377,34 +15342,6 @@ packages:
       webpack: 4.46.0
     dev: true
 
-  /eslint-module-utils/2.7.4_3akxazyi5uydx2miksxoojvrny:
-    resolution: {integrity: sha512-j4GT+rqzCoRKHwURX7pddtIPGySnX9Si/cgMI5ztrcqOPtk5dDEeZ34CQVPphnqkJytlc97Vuk05Um2mJ3gEQA==}
-    engines: {node: '>=4'}
-    peerDependencies:
-      '@typescript-eslint/parser': '*'
-      eslint: '*'
-      eslint-import-resolver-node: '*'
-      eslint-import-resolver-typescript: '*'
-      eslint-import-resolver-webpack: '*'
-    peerDependenciesMeta:
-      '@typescript-eslint/parser':
-        optional: true
-      eslint:
-        optional: true
-      eslint-import-resolver-node:
-        optional: true
-      eslint-import-resolver-typescript:
-        optional: true
-      eslint-import-resolver-webpack:
-        optional: true
-    dependencies:
-      debug: 3.2.7
-      eslint: 6.8.0
-      eslint-import-resolver-node: 0.3.6
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /eslint-module-utils/2.7.4_52bpdphohir5ssk2yxymlnqszu:
     resolution: {integrity: sha512-j4GT+rqzCoRKHwURX7pddtIPGySnX9Si/cgMI5ztrcqOPtk5dDEeZ34CQVPphnqkJytlc97Vuk05Um2mJ3gEQA==}
     engines: {node: '>=4'}
@@ -15496,36 +15433,6 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-import/2.26.0_eslint@6.8.0:
-    resolution: {integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==}
-    engines: {node: '>=4'}
-    peerDependencies:
-      '@typescript-eslint/parser': '*'
-      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8
-    peerDependenciesMeta:
-      '@typescript-eslint/parser':
-        optional: true
-    dependencies:
-      array-includes: 3.1.6
-      array.prototype.flat: 1.3.1
-      debug: 2.6.9
-      doctrine: 2.1.0
-      eslint: 6.8.0
-      eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.4_3akxazyi5uydx2miksxoojvrny
-      has: 1.0.3
-      is-core-module: 2.11.0
-      is-glob: 4.0.3
-      minimatch: 3.1.2
-      object.values: 1.1.6
-      resolve: 1.22.1
-      tsconfig-paths: 3.14.1
-    transitivePeerDependencies:
-      - eslint-import-resolver-typescript
-      - eslint-import-resolver-webpack
-      - supports-color
-    dev: true
-
   /eslint-plugin-import/2.26.0_svbcgol4eugangr56tjqme4uwe:
     resolution: {integrity: sha512-hYfi3FXaM8WPLf4S1cikh/r4IxnO6zrhZbEGz2b660EJRbuxgpDS5gkCuYgGWg2xxh2rBuIr4Pvhve/7c31koA==}
     engines: {node: '>=4'}
@@ -15570,23 +15477,6 @@ packages:
     dependencies:
       eslint: 6.8.0
       prettier: 2.8.2
-      prettier-linter-helpers: 1.0.0
-    dev: true
-
-  /eslint-plugin-prettier/3.4.1_w56nqx62sqpcgkca3sb3623wsa:
-    resolution: {integrity: sha512-htg25EUYUeIhKHXjOinK4BgCcDwtLHjqaxCDsMy5nbnUMkKFvIhMVCp+5GFUXQ4Nr8lBsPqtGAqBenbpFqAA2g==}
-    engines: {node: '>=6.0.0'}
-    peerDependencies:
-      eslint: '>=5.0.0'
-      eslint-config-prettier: '*'
-      prettier: '>=1.13.0'
-    peerDependenciesMeta:
-      eslint-config-prettier:
-        optional: true
-    dependencies:
-      eslint: 6.8.0
-      eslint-config-prettier: 6.15.0_eslint@6.8.0
-      prettier: 1.19.1
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -24202,12 +24092,6 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier/1.19.1:
-    resolution: {integrity: sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==}
-    engines: {node: '>=4'}
-    hasBin: true
-    dev: true
-
   /prettier/2.3.0:
     resolution: {integrity: sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==}
     engines: {node: '>=10.13.0'}
@@ -26010,7 +25894,7 @@ packages:
     resolution: {integrity: sha512-8wPtFxeJnRKTN3u8x1jG7Cs5VlkO0GkUPfb+DCKIDzjGM5n+qjHXoVsr4YZ/TPwET9kMUgH1Jv39oaEyeSJvYQ==}
     engines: {node: '>=4.0'}
     dependencies:
-      aws-sdk: 2.1290.0
+      aws-sdk: 2.1291.0
       bluebird: 3.7.2
       dynamodb-localhost: 0.0.9
       lodash: 4.17.21
@@ -26019,7 +25903,7 @@ packages:
   /serverless-offline-sns/0.76.0:
     resolution: {integrity: sha512-HKQnFcM2OO+Zh97/P+Fx1OydNx2brTgSxWAJUbWp/9dAfM5yzZPYE64wZz0ad8aYOVhGYeHEiws1ePDV4kqIVg==}
     dependencies:
-      aws-sdk: 2.1290.0
+      aws-sdk: 2.1291.0
       body-parser: 1.20.1
       cors: 2.8.5
       express: 4.18.2
@@ -26088,7 +25972,7 @@ packages:
       '@hapi/boom': 9.1.4
       '@hapi/h2o2': 9.1.0
       '@hapi/hapi': 20.2.2
-      aws-sdk: 2.1290.0
+      aws-sdk: 2.1291.0
       boxen: 5.1.2
       chalk: 4.1.2
       cuid: 2.1.8
@@ -26199,7 +26083,7 @@ packages:
       ajv: 6.12.6
       ajv-keywords: 3.5.2_ajv@6.12.6
       archiver: 5.3.1
-      aws-sdk: 2.1290.0
+      aws-sdk: 2.1291.0
       bluebird: 3.7.2
       boxen: 5.1.2
       cachedir: 2.3.0
@@ -27817,7 +27701,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1_ts-node@10.9.1
+      jest: 27.5.1
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
