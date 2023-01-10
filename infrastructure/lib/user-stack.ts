@@ -227,7 +227,7 @@ export class UserServiceStack extends Construct {
             }).next(success))
           .otherwise(createUserInvocation
             .next(new Choice(this, 'UserCreated?')
-              .when(Condition.booleanEquals('$success', true),
+              .when(Condition.booleanEquals('$.success', true),
                 saveUserInvocation.next(
                   new Choice(this, 'UserSaved?')
                     .when(Condition.booleanEquals('$.success', true), sendConfirmationInvocation.next(success))
