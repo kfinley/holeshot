@@ -181,7 +181,7 @@ export class UserServiceStack extends Construct {
         ],
         allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
         allowCredentials: true,
-        allowOrigins: [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://localhost:8080'],
+        allowOrigins: ['https://holeshot-bmx.com'], // [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://dev.holeshot-bmx.com'],
       }
     });
 
