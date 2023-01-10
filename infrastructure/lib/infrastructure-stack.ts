@@ -127,6 +127,7 @@ export class InfrastructureStack extends Stack {
         enableIpv6: true,
       });
     }
+
     // Deploy Step 4, Create Web CF Distro, DNS entry, and S3 BucketDeployment
     const step4 = () => {
       const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOriginAccessIdentity', {
@@ -139,7 +140,6 @@ export class InfrastructureStack extends Stack {
         queryStringBehavior: OriginRequestQueryStringBehavior.all(),
       });
 
-      // Create CloudFront Distribution
       this.cloudFrontDistribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
         domainNames: [domainName],
         defaultBehavior: {
@@ -152,12 +152,6 @@ export class InfrastructureStack extends Stack {
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         },
-
-        // TEST....
-        // source: https://github.com/apoorvmote/cdk-examples/blob/master/http-api/lib/cloudfront-http-api-stack.ts
-        // additionalBehaviors: {
-        // },
-
         errorResponses: [
           {
             httpStatus: 403,
@@ -203,7 +197,8 @@ export class InfrastructureStack extends Stack {
 
 
       this.cloudFrontDistribution.addBehavior('user/*',
-        new HttpOrigin(userService.restApi.url.replace('https://', '')), {
+        // Seems kludgy...
+        new HttpOrigin(userService.restApi.url.replace('https://', '').replace('/v1', '')), {
         allowedMethods: AllowedMethods.ALLOW_ALL,
         cachePolicy: CachePolicy.CACHING_DISABLED,
         compress: false,
@@ -261,7 +256,7 @@ export class InfrastructureStack extends Stack {
 
     step3();
 
-    // step3();
+    step4();
 
     new CfnOutput(this, 'DeployURL', {
       value: `https://${domainName}`,

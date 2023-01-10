@@ -193,8 +193,6 @@ export class UserServiceStack extends Construct {
         new LambdaIntegration(register, { proxy: true }),
       );
 
-    new CfnOutput(this, 'Holeshot BMX Url', { value: this.restApi.url });
-
     // Step Functions...
     //
     const getUserInvocation = new LambdaInvoke(this, "GetUserInvocation", {
