@@ -57,127 +57,145 @@ export class InfrastructureStack extends Stack {
       region,
     } = new cdk.ScopedAws(this);
 
-    const hostedZone = new route53.PublicHostedZone(this, 'HostedZone', {
-      zoneName: domainName,
-      comment: `Hosted zone for ${domainName}`
-    });
+    // Deploy Step 1: Create Hosted Zone
+    const step1 = () => {
+      const hostedZone = new route53.PublicHostedZone(this, 'HostedZone', {
+        zoneName: domainName,
+        comment: `Hosted zone for ${domainName}`
+      });
+    };
 
-    const certificateManagerCertificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
-      domainName,
-      hostedZone,
-      region: region,
-      validation: acm.CertificateValidation.fromDns(),
-    });
+    // Deploy Step 2: Create Certificate, DNS Records, CloudFront, and S3 Deploy Bucket
+    const step2 = () => {
+      const certificateManagerCertificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
+        domainName,
+        hostedZone,
+        region: region,
+        validation: acm.CertificateValidation.fromDns(),
+      });
 
-    const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOriginAccessIdentity', {
-      comment: `${domainName} Domain Hosting Environment`,
-    });
+      const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOriginAccessIdentity', {
+        comment: `${domainName} Domain Hosting Environment`,
+      });
 
-    const apiOriginPolicy = new OriginRequestPolicy(this, 'apiOriginPolicy', {
-      cookieBehavior: OriginRequestCookieBehavior.all(),
-      headerBehavior: OriginRequestHeaderBehavior.none(),
-      queryStringBehavior: OriginRequestQueryStringBehavior.all(),
-    });
+      const apiOriginPolicy = new OriginRequestPolicy(this, 'apiOriginPolicy', {
+        cookieBehavior: OriginRequestCookieBehavior.all(),
+        headerBehavior: OriginRequestHeaderBehavior.none(),
+        queryStringBehavior: OriginRequestQueryStringBehavior.all(),
+      });
 
-    // Create CloudFront Distribution
-    const cloudFrontDistribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
-      domainNames: [domainName],
-      defaultBehavior: {
-        origin: new origins.S3Origin(dataStores.frontEndBucket, {
-          originAccessIdentity: cloudFrontOAI
-        }),
-        compress: true,
-        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-        cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-      },
-
-      // TEST....
-      // source: https://github.com/apoorvmote/cdk-examples/blob/master/http-api/lib/cloudfront-http-api-stack.ts
-      additionalBehaviors: {
-        'user/*': {
-          origin: new HttpOrigin(userService.restApi.url.replace('https://', '')),
-          allowedMethods: AllowedMethods.ALLOW_ALL,
-          cachePolicy: CachePolicy.CACHING_DISABLED,
-          compress: false,
-          originRequestPolicy: apiOriginPolicy,
-          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
-        }
-      },
-
-      errorResponses: [
-        {
-          httpStatus: 403,
-          responsePagePath: '/index.html', //TODO: fix this...
-          responseHttpStatus: 200,
-          ttl: cdk.Duration.minutes(0),
+      // Create CloudFront Distribution
+      const cloudFrontDistribution = new cloudfront.Distribution(this, 'CloudFrontDistribution', {
+        domainNames: [domainName],
+        defaultBehavior: {
+          origin: new origins.S3Origin(dataStores.frontEndBucket, {
+            originAccessIdentity: cloudFrontOAI
+          }),
+          compress: true,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         },
-        {
-          httpStatus: 404,
-          responsePagePath: '/index.html', //TODO: fix this...
-          responseHttpStatus: 200,
-          ttl: cdk.Duration.minutes(0),
+
+        // TEST....
+        // source: https://github.com/apoorvmote/cdk-examples/blob/master/http-api/lib/cloudfront-http-api-stack.ts
+        additionalBehaviors: {
+          'user/*': {
+            origin: new HttpOrigin(userService.restApi.url.replace('https://', '')),
+            allowedMethods: AllowedMethods.ALLOW_ALL,
+            cachePolicy: CachePolicy.CACHING_DISABLED,
+            compress: false,
+            originRequestPolicy: apiOriginPolicy,
+            viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS
+          }
         },
-      ],
-      priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
-      enabled: true,
-      certificate: certificateManagerCertificate,
-      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      httpVersion: cloudfront.HttpVersion.HTTP2,
-      defaultRootObject: 'index.html',
-      enableIpv6: true,
-    });
 
+        errorResponses: [
+          {
+            httpStatus: 403,
+            responsePagePath: '/index.html', //TODO: fix this...
+            responseHttpStatus: 200,
+            ttl: cdk.Duration.minutes(0),
+          },
+          {
+            httpStatus: 404,
+            responsePagePath: '/index.html', //TODO: fix this...
+            responseHttpStatus: 200,
+            ttl: cdk.Duration.minutes(0),
+          },
+        ],
+        priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
+        enabled: true,
+        certificate: certificateManagerCertificate,
+        minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+        httpVersion: cloudfront.HttpVersion.HTTP2,
+        defaultRootObject: 'index.html',
+        enableIpv6: true,
+      });
 
-    const imagesCloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'Images-CloudFrontOriginAccessIdentity', {
-      comment: `images.${domainName} Domain Hosting Environment`,
-    });
+      new route53.ARecord(this, 'ARecord', {
+        recordName: domainName,
+        zone: hostedZone,
+        target: route53.RecordTarget.fromAlias(
+          new targets.CloudFrontTarget(cloudFrontDistribution)
+        ),
+      });
 
-    //TODO: remove this and put it behind /media
-    const imagesCloudFrontDistribution = new cloudfront.Distribution(this, 'Images-CloudFrontDistribution', {
-      // domainNames: [domainName], //TODO: could use an images. subdomain here
-      defaultBehavior: {
-        origin: new origins.S3Origin(dataStores.mediaBucket, {
-          originAccessIdentity: imagesCloudFrontOAI
-        }),
-        compress: true,
-        allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
-        cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
-        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-      },
-      errorResponses: [
-        {
-          httpStatus: 403,
-          responsePagePath: '/index.html', //TODO: fix this...
-          responseHttpStatus: 200,
-          ttl: cdk.Duration.minutes(0),
+      new s3deploy.BucketDeployment(this, 'S3BucketDeploy', {
+        sources: [s3deploy.Source.asset('../packages/vue2-client/dist')],
+        destinationBucket: dataStores.frontEndBucket,
+        distribution: cloudFrontDistribution,
+        distributionPaths: ['/*'],
+      });
+
+    };
+    // Deploy Step 3: Image bucket and CF Distro
+    const step3 = () => {
+      const imagesCloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'Images-CloudFrontOriginAccessIdentity', {
+        comment: `images.${domainName} Domain Hosting Environment`,
+      });
+
+      //TODO: remove this and put it behind /media
+      const imagesCloudFrontDistribution = new cloudfront.Distribution(this, 'Images-CloudFrontDistribution', {
+        // domainNames: [domainName], //TODO: could use an images. subdomain here
+        defaultBehavior: {
+          origin: new origins.S3Origin(dataStores.mediaBucket, {
+            originAccessIdentity: imagesCloudFrontOAI
+          }),
+          compress: true,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD,
+          cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         },
-        {
-          httpStatus: 404,
-          responsePagePath: '/index.html', //TODO: fix this...
-          responseHttpStatus: 200,
-          ttl: cdk.Duration.minutes(0),
-        },
-      ],
-      priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
-      enabled: true,
-      // certificate: certificateManagerCertificate,
-      minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-      httpVersion: cloudfront.HttpVersion.HTTP2,
-      // defaultRootObject: 'index.html',
-      enableIpv6: true,
-    });
+        errorResponses: [
+          {
+            httpStatus: 403,
+            responsePagePath: '/index.html', //TODO: fix this...
+            responseHttpStatus: 200,
+            ttl: cdk.Duration.minutes(0),
+          },
+          {
+            httpStatus: 404,
+            responsePagePath: '/index.html', //TODO: fix this...
+            responseHttpStatus: 200,
+            ttl: cdk.Duration.minutes(0),
+          },
+        ],
+        priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
+        enabled: true,
+        // certificate: certificateManagerCertificate,
+        minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+        httpVersion: cloudfront.HttpVersion.HTTP2,
+        // defaultRootObject: 'index.html',
+        enableIpv6: true,
+      });
 
-    new route53.ARecord(this, 'ARecord', {
-      recordName: domainName,
-      zone: hostedZone,
-      target: route53.RecordTarget.fromAlias(
-        new targets.CloudFrontTarget(cloudFrontDistribution)
-      ),
-    });
+    }
 
+    // Deploy Step 4: Additional DNS Records (MX and other CNames)
+    const step4 = () => {
     // new route53.MxRecord(this, 'MXRecords', {
     //   recordName: domainName,
     //   zone: hostedZone,
@@ -221,13 +239,9 @@ export class InfrastructureStack extends Stack {
     //     'v=spf1 include:aspmx.googlemail.com ~all' //TODO: research this... ~all is probably to wide here. This was pulled from old DNS records.
     //   ]
     // })
+    }
 
-    new s3deploy.BucketDeployment(this, 'S3BucketDeploy', {
-      sources: [s3deploy.Source.asset('../packages/vue2-client/dist')],
-      destinationBucket: dataStores.frontEndBucket,
-      distribution: cloudFrontDistribution,
-      distributionPaths: ['/*'],
-    });
+    step1();
 
     new CfnOutput(this, 'DeployURL', {
       value: `https://${domainName}`,
