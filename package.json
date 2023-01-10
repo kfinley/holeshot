@@ -9,7 +9,6 @@
     "cdk": "cd infrastructure && npm run cdk",
     "client": "pnpm --filter @holeshot/vue2-client",
     "vue2-components": "pnpm --filter @finley/vue2-components",
-    "vue2-components2": "pnpm --filter @finley/vue2-components2",
     "vue2-user": "pnpm --filter @holeshot/vue2-user",
     "holeshot": "pnpm --filter @holeshot/plugin",
     "build": "pnpm run build:lambdas",
