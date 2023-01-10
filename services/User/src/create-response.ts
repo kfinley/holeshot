@@ -4,7 +4,7 @@ export function createResponse(event: APIGatewayProxyEvent, statusCode: number, 
 
   let response = {
     statusCode,
-    body
+    body,
     headers: {
       // Required for CORS support to work
       'Access-Control-Allow-Origin': '*',
