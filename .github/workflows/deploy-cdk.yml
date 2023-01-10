@@ -43,7 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        
+
       # TODO: switch this to pull config from a file on s3 somewhere...
       - name: Bootstrap & Build
         run: |
@@ -58,20 +58,20 @@ jobs:
           cd ../..
           pnpm run build
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1-node16
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: "Bootstrap, Deploy CDK, & sync S3 media "
-        working-directory: ./infrastructure
-        env:
-          AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          NODE_ENV: production
-        run: |
-          npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
-          npm run deploy
-          cd ../media && aws s3 sync . s3://images.holeshot-bmx.com
+      # - name: "Bootstrap, Deploy CDK, & sync S3 media "
+      #   working-directory: ./infrastructure
+      #   env:
+      #     AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+      #     AWS_REGION: ${{ secrets.AWS_REGION }}
+      #     NODE_ENV: production
+      #   run: |
+      #     npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
+      #     npm run deploy
+      #     cd ../media && aws s3 sync . s3://images.holeshot-bmx.com
