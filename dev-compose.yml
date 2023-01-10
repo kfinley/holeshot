@@ -87,7 +87,7 @@ services:
       AWS_ACCESS_KEY_ID: S3RVER
       AWS_SECRET_ACCESS_KEY: S3RVER
     working_dir: /sls-offline
-    command: sh -c "npm run sls:start"
+    command: sh -c "npm install -g pnpm && pnpm run sls:start"
     volumes:
       - .:/sls-offline
 
@@ -97,7 +97,7 @@ services:
     ports:
       - "8080:8080"
     working_dir: /vite-client
-    command: sh -c "npm run dev:client:docker"
+    command: sh -c "npm install -g pnpm && pnpm run dev:client:docker"
     volumes:
       - .:/vite-client
 
@@ -107,6 +107,6 @@ services:
     ports:
       - "6006:6006"
     working_dir: /workspace
-    command: sh -c "npm run deploy-storybook:local && npx http-server -p 6006 storybooks"
+    command: sh -c "npm install -g pnpm && pnpm run deploy-storybook:local && npx http-server -p 6006 storybooks"
     volumes:
       - .:/workspace

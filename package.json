@@ -4,44 +4,62 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "client": "pnpm --filter @holeshot/vue2-client",
-    "build": "pnpm --filter @finley/vue2-components run build && pnpm --recursive --stream --filter @holeshot/* run build",
-
-    "build:client": "npm run client build && npm run post-build:fix-img-paths",
-    "build:lambdas": "./infrastructure/scripts/build-lambdas.sh",
-    "build:cdk": "lerna run build --stream --scope=@holeshot/infrastructure",
     "i:prod": "NODE_ENV=production pnpm i --production && cd infrastructure && npm i --omit=dev",
+    "dev:init": "./.devcontainer/scripts/dev-init.sh",
+
     "cdk": "cd infrastructure && npm run cdk",
+
+    "client": "pnpm --filter @holeshot/vue2-client",
+    "vue2-components": "pnpm --filter @finley/vue2-components",
+    "vue2-components2": "pnpm --filter @finley/vue2-components2",
+    "vue2-user": "pnpm --filter @holeshot/vue2-user",
+    "holeshot": "pnpm --filter @holeshot/plugin",
+
+    "build": "pnpm run build:client && pnpm run build:lambdas",
+    "build:lambdas": "pnpm --recursive --stream --filter @holeshot/user-service --filter @holeshot/core-service --filter @holeshot/aws-websockets run build",
+    "build:client": "npm run client build && npm run post-build:fix-img-paths",
+    "build:cdk": "cd infrastructure && npm run build",
+
+
+
     "containers:restart": "./.devcontainer/scripts/local-containers.sh restart",
     "containers:start": "./.devcontainer/scripts/local-containers.sh start",
     "containers:stop": "./.devcontainer/scripts/local-containers.sh stop",
-    "clean": "lerna clean --yes",
-    "clean:js-files": "./.devcontainer/scripts/clean-js-files.sh",
-    "super-clean": "rm -rf node_modules && rm -rf package-lock.json && npm run clean && lerna exec -- rm package-lock.json || true && rm -rf .webpack && rm -rf services/Core/dist && rm -rf services/User/dist && rm -rf services/WebSockets/dist && rm -rf infrastructure/cdk.out && npm run clean:js-files",
-    "dev:init": "./.devcontainer/scripts/dev-init.sh",
-    "test": "npm run lerna -- run test:unit --scope=@holeshot/plugin --scope=@finley/vue2-components --stream",
-    "update-init-submodules": "git submodule update --init --recursive",
-    "storybook:components": "lerna run storybook --stream --scope=@kfinley/vue2-components",
-    "storybook:holeshot": "lerna run storybook --stream --scope=@holeshot/plugin",
-    "storybook:user": "lerna run storybook --stream --scope=@holeshot/vue2-user",
+
+
+    "test": "pnpm --stream --filter @holeshot/plugin --filter @finley/vue2-components run test:unit",
+
+
+    "storybook:components": "pnpm --stream --filter @kfinley/vue2-components run storybook ",
+    "storybook:holeshot": "pnpm --stream --filter @holeshot/plugin run storybook",
+    "storybook:user": "pnpm --stream --filter @holeshot/vue2-user run storybook",
+
     "link:bootstrap": "lerna exec 'cd node_modules && ln -s ../../../node_modules/bootstrap bootstrap' --scope=@holeshot/plugin --scope=@holeshot/vue2-client --scope=@holeshot/vue2-user --scope=@finley/vue2-components --stream",
     "deploy-storybook:local": "rm -rf storybooks && storybook-to-ghpages --out=storybooks --packages packages --dry-run && find packages -type f -name storybooks -exec rm -f {} \\;",
-    "dev:client": "lerna run dev --stream --scope=@holeshot/vue2-client",
-    "dev:client:docker": "lerna run dev:docker --stream --scope=@holeshot/vue2-client",
+
+    "dev:client": "pnpm run client dev",
+    "dev:client:docker": "pnpm run client dev:docker",
     "generate-sitemap": "./infrastructure/scripts/generate-sitemap.sh ./packages/vue2-client/public/sitemap.xml",
     "post-build:fix-img-paths": "./infrastructure/scripts/fix-img-paths.sh",
     "sls": "sls",
     "dev:sls": "npm run ses:copy-templates && sls offline start --migrate",
+
     "sls:build-plugins": "lerna run build --stream --scope=serverless-offline-stepfunctions-plugin",
+
     "sls:start": "export SLS_DEBUG=* && node --inspect=0.0.0.0:9228 node_modules/serverless/bin/serverless offline start --printOutput -s Dev",
     "sls:start-debug": "export SLS_DEBUG=* && sls offline start --printOutput -s Dev",
     "sls:plugin-template": "cd packages/sls-plugins && sls create --template plugin",
     "sls:webpack": "export SLS_DEBUG=* && serverless webpack",
-    "clean-smoke": "npm run super-clean && npm run i:prod && npm run smoke",
-    "smoke": "npm run build && npm run cdk synth",
-    "ses:copy-templates": "cp services/User/EmailTemplates/ConfirmRegistration.json ./email-templates/"
+
+
+    "smoke": "pnpm run build && pnpm run cdk synth",
+    "ses:copy-templates": "cp services/User/EmailTemplates/ConfirmRegistration.json ./email-templates/",
+    "update-init-submodules": "git submodule update --init --recursive"
+
   },
   "dependencies": {
+    "@finley/vue2-components": "workspace:1.0.0",
+    "@holeshot/vue2-user": "workspace:1.0.0",
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",
     "aws-crt": "1.15.5",

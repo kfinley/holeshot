@@ -25,15 +25,15 @@ jobs:
 
       - name: npm install and lerna bootstrap
         run: |
-          cd $GITHUB_WORKSPACE/main && npm install -g npm@latest && npm i && npm run bootstrap
+          cd $GITHUB_WORKSPACE/main && npm install -g pnpm && pnpm run i:prod
 
       # - name: Run unit tests
       #   run: |
-      #     cd $GITHUB_WORKSPACE/main && npm run test
+      #     cd $GITHUB_WORKSPACE/main && pnpm run test
 
       - name: Build Storybook
         run: |
-          cd $GITHUB_WORKSPACE/main && npm run link:bootstrap && npm run deploy-storybook:local
+          cd $GITHUB_WORKSPACE/main && pnpm run deploy-storybook:local
 
       - name: Checkout storybook
         uses: actions/checkout@v2

@@ -1,10 +1,6 @@
 {
   "name": "@holeshot/plugin",
   "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "module": "./dist/holeshot-plugin.js",
-  "types": "./dist/plugin.d.ts",
   "scripts": {
     "build": "vite build",
     "test:unit": "vue-cli-service test:unit",
@@ -18,7 +14,8 @@
     "email": "kyle@kylefinley.net"
   },
   "dependencies": {
-    "@finley/vue2-components": "1.0.0",
+    "@finley/vue2-components": "workspace:1.0.0",
+    "@holeshot/types": "workspace:1.0.0",
     "interactjs": "^1.10.11"
   },
   "devDependencies": {
@@ -47,7 +44,6 @@
     "css-loader": "^3.6.0",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.2.2",
-    "ip": "^1.1.8",
     "node-sass": "7.0.1",
     "sass-loader": "12.6.0",
     "style-loader": "^2.0.0",
@@ -59,24 +55,5 @@
     "vue-property-decorator": "^9.1.2",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.20.2"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  }
 }

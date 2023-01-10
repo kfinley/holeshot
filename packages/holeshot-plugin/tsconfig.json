@@ -27,7 +27,7 @@
         "esnext",
         "ES2018",
         "dom",
-        "dom.iterable",
+        "dom.iterable", 
         "scripthost"
       ]
     },

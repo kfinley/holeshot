@@ -24,7 +24,7 @@ jobs:
       - name: Bootstrap & Build
         run: |
           npm install -g pnpm
-          pnpm i && cd ./packages/vue2-client
+          pnpm run i:prod && cd ./packages/vue2-client
           echo 'VITE_APP_CLIENT_ID=${{ secrets.APP_CLIENT_ID }}' > .env
           echo 'VITE_APP_POOL_ID=${{ secrets.APP_POOL_ID }}' >> .env
           echo 'VITE_APP_HOST=${{ secrets.APP_HOST }}' >> .env
@@ -49,7 +49,6 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           NODE_ENV: production
         run: |
-          npm i --omit=dev
           npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
           npm run deploy
           cd ../media && aws s3 sync . s3://images.holeshot-bmx.com

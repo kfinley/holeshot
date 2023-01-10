@@ -8,8 +8,11 @@ import { routes, RouteNames } from "./router";
 import { getModule } from "vuex-module-decorators";
 import { authHelper } from "@holeshot/api-client/src/helpers";
 import bootstrapper from "./bootstrapper";
-import { ClientPlugin, ClientPluginOptions } from "@finley/vue2-components/src/types";
+import { ClientPlugin } from "@finley/vue2-components/src/types";
+import { ClientPluginOptions } from "@finley/vue2-components/src/plugin";
 import { Container } from "inversify-props";
+
+import './styles/styles.scss';
 
 export interface UserPluginOptions extends ClientPluginOptions {
   DefaultRoute: string;
