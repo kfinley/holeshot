@@ -44,7 +44,7 @@ export default defineConfig(
     resolve: {
       alias: [{
         find: '@finley/vue2-components',
-        replacement: '../vue2-components/src',
+        replacement: '../vue2-components',
       }],
     },
     define: {
