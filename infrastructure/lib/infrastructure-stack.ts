@@ -13,6 +13,7 @@ import { DataStores } from './data-stores';
 import { UserServiceStack } from './user-stack';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
+import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -26,6 +27,7 @@ export interface InfraStackProps extends StackProps {
 export class InfrastructureStack extends Stack {
 
   private hostedZone: PublicHostedZone;
+  private certificate: DnsValidatedCertificate;
 
   constructor(scope: Construct, id: string, props?: InfraStackProps) {
     super(scope, id, props);
@@ -71,15 +73,18 @@ export class InfrastructureStack extends Stack {
     //TODO: update Route53 Name Servers with values from hosted zone
 
     // Confirm DNS works using dig before applying step 2
-    // Deploy Step 2: Create Certificate, DNS Records, CloudFront, and S3 Deploy Bucket
+    // Deploy Step 2: Create Certificate
     const step2 = () => {
-      const certificateManagerCertificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
+      this.certificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
         domainName,
         hostedZone: this.hostedZone,
         region: region,
         validation: acm.CertificateValidation.fromDns(),
       });
+    }
 
+    // Deploy Step 3: Create CF Distros, DNS entries, and S3 deploy bucket
+    const step3 = () => {
       const cloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'CloudFrontOriginAccessIdentity', {
         comment: `${domainName} Domain Hosting Environment`,
       });
@@ -133,7 +138,7 @@ export class InfrastructureStack extends Stack {
         ],
         priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
         enabled: true,
-        certificate: certificateManagerCertificate,
+        certificate: this.certificate,
         minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
         httpVersion: cloudfront.HttpVersion.HTTP2,
         defaultRootObject: 'index.html',
@@ -155,9 +160,6 @@ export class InfrastructureStack extends Stack {
         distributionPaths: ['/*'],
       });
 
-    };
-    // Deploy Step 3: Image bucket and CF Distro
-    const step3 = () => {
       const imagesCloudFrontOAI = new cloudfront.OriginAccessIdentity(this, 'Images-CloudFrontOriginAccessIdentity', {
         comment: `images.${domainName} Domain Hosting Environment`,
       });
@@ -251,7 +253,7 @@ export class InfrastructureStack extends Stack {
 
     step2();
 
-    step3();
+    // step3();
 
     new CfnOutput(this, 'DeployURL', {
       value: `https://${domainName}`,
