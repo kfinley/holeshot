@@ -44,7 +44,7 @@ export default defineConfig(
     resolve: {
       alias: [{
         find: '@finley/vue2-components',
-        replacement: '../vue2-components',
+        replacement: '/home/runner/work/holeshot/holeshot/packages/vue2-components',
       }],
     },
     define: {
