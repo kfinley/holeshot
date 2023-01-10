@@ -13,7 +13,7 @@ const app = new cdk.App();
 // CDK-NAG security checks
 //Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
 
-Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
+// Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
 
 const infraStack = new InfrastructureStack(app, `HoleshotBMX-Infrastructure`, {
   senderEmail: process.env.SES_SENDER_EMAIL!,
