@@ -76,7 +76,6 @@ jobs:
           NODE_ENV: production
         run: |
           npm i --omit=dev
-          npm run cdk synth
           npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
           npm run deploy
           cd ../media && aws s3 sync . s3://images.holeshot-bmx.com
