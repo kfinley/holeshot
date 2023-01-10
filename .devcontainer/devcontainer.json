@@ -45,7 +45,8 @@
         "threadheap.serverless-ide-vscode",
         "ms-azuretools.vscode-docker",
         "joshbolduc.story-explorer",
-        "qkk.sfn-preview"
+        "qkk.sfn-preview",
+        "cschleiden.vscode-github-actions"
       ]
     }
   },

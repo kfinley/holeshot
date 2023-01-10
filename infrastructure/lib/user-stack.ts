@@ -87,16 +87,8 @@ export class UserServiceStack extends Construct {
       idTokenValidity: Duration.days(1),
       accessTokenValidity: Duration.days(1),
       authFlows: {
-        userPassword: false,
-        userSrp: false,
-        custom: true,
-      },
-      oAuth: {
-        flows: {
-          authorizationCodeGrant: false,
-          implicitCodeGrant: false,
-          clientCredentials: true
-        },
+        adminUserPassword: true,
+        userPassword: true,
       },
       preventUserExistenceErrors: true,
       generateSecret: true,
