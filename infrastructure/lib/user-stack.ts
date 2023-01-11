@@ -1,5 +1,5 @@
 import { CfnOutput, Duration, RemovalPolicy } from "aws-cdk-lib";
-import { LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
+import { LambdaIntegration, RestApi, LambdaRestApi, ApiKeySourceType } from "aws-cdk-lib/aws-apigateway";
 import { AccountRecovery, StringAttribute, UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Effect, IRole, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -8,7 +8,7 @@ import { Topic } from "aws-cdk-lib/aws-sns";
 import { Chain, Choice, Condition, Fail, LogLevel, Pass, Result, StateMachine, Succeed } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { Construct } from "constructs";
-import { createLambda } from '.';
+import { createLambda, addCorsOptions } from '.';
 import { CfnTemplate } from "aws-cdk-lib/aws-ses";
 import { VerifySesEmailAddress } from "@seeebiii/ses-verify-identities";
 
@@ -96,7 +96,6 @@ export class UserServiceStack extends Construct {
 
     // Create the rest of the Lambdas
     //
-
     const register = newLamda('RegisterHandler', 'functions/register.handler');
 
     const getUser = newLamda('GetUserHandler', 'functions/getUser.handler', {
@@ -167,31 +166,47 @@ export class UserServiceStack extends Construct {
 
     // Create API Gateway REST api and endpiont for /registration
     //
+
+    // this.restApi = new LambdaRestApi(this, 'HoleshotApi', {
+    //   description: 'Holeshot BMX api gateway',
+    //   handler: FUNCTION, // attaching lambda function
+    //   apiKeySourceType: ApiKeySourceType.HEADER,
+    //   restApiName: 'HoleshotApi',
+    //   deployOptions: { stageName: props!.node_env === 'production' ? 'v1' : 'dev', },
+    //   defaultMethodOptions: {
+    //     apiKeyRequired: false
+    //   },
+    //   proxy: false
+    // });
+
     this.restApi = new RestApi(this, 'HoleshotApi', {
       description: 'Holeshot BMX api gateway',
       deployOptions: {
         stageName: props!.node_env === 'production' ? 'v1' : 'dev',
       },
-      defaultCorsPreflightOptions: {
-        allowHeaders: [
-          'Content-Type',
-          'X-Amz-Date',
-          'Authorization',
-          'X-Api-Key',
-        ],
-        allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-        allowCredentials: true,
-        allowOrigins: ['https://holeshot-bmx.com'], // [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://dev.holeshot-bmx.com'],
-      }
+      // defaultCorsPreflightOptions: {
+      //   allowHeaders: [
+      //     'Content-Type',
+      //     'X-Amz-Date',
+      //     'Authorization',
+      //     'X-Api-Key',
+      //   ],
+      //   allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+      //   allowCredentials: true,
+      //   allowOrigins: ['https://holeshot-bmx.com'], // [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://dev.holeshot-bmx.com'],
+      // }
     });
 
     const registration = this.restApi.root
       .addResource('user')
-      .addResource('registration')
-      .addMethod(
-        'POST',
-        new LambdaIntegration(register, { proxy: true }),
-      );
+      .addResource('registration');
+
+    registration.addMethod(
+      'POST',
+      new LambdaIntegration(register, { proxy: true }),
+    );
+
+    addCorsOptions(registration);
 
     // Step Functions...
     //

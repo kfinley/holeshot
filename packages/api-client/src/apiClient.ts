@@ -24,7 +24,6 @@ export class apiClient implements ApiClient {
       const configHeaders = {
         'content-type': 'application/json',
         Accept: 'application/json',
-        "Access-Control-Allow-Origin": "*",
       };
 
       (requestConfig.headers as any) = {
