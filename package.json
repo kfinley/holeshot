@@ -46,7 +46,7 @@
     "aws-crt": "1.15.5",
     "aws-sdk": "^2.1291.0",
     "@aws-sdk/signature-v4-crt": "3.226.0",
-    "tslib": "^2.4.0"
+    "tslib": "^2.4.1"
   },
   "devDependencies": {
     "@storybook/storybook-deployer": "^2.8.16",
