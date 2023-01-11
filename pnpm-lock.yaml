@@ -145,10 +145,7 @@ importers:
       typescript: 4.9.4
 
   packages/commands:
-    specifiers:
-      tslib: ^2.4.0
-    dependencies:
-      tslib: 2.4.1
+    specifiers: {}
 
   packages/holeshot-plugin:
     specifiers:
