@@ -28,5 +28,3 @@ export interface Event extends Entity {
 export interface SwipeableEvent extends Event {
   visible: boolean;
 }
-
-export * from './config';
