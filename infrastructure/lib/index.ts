@@ -13,7 +13,7 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
 } | undefined) => {
 
   return new lambda.Function(scope, name, {
-    runtime: lambda.Runtime.NODEJS_16_X,
+    runtime: lambda.Runtime.NODEJS_18_X,
     memorySize: 1024,
     timeout: Duration.seconds(5),
     functionName: `Holeshot-Infrastructure-${name}`,
