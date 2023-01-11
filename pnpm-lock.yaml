@@ -656,6 +656,7 @@ importers:
       '@aws-sdk/client-dynamodb': ^3.226.0
       '@aws-sdk/client-ses': ^3.226.0
       '@aws-sdk/config-resolver': ^3.226.0
+      '@aws-sdk/util-base64': 3.208.0
       '@aws-sdk/util-config-provider': ^3.208.0
       '@aws-sdk/util-dynamodb': ^3.226.0
       '@holeshot/aws-commands': ^1.0.0
@@ -679,6 +680,7 @@ importers:
       '@aws-sdk/client-dynamodb': 3.245.0
       '@aws-sdk/client-ses': 3.245.0
       '@aws-sdk/config-resolver': 3.234.0
+      '@aws-sdk/util-base64': 3.208.0
       '@aws-sdk/util-config-provider': 3.208.0
       '@aws-sdk/util-dynamodb': 3.245.0
       '@holeshot/aws-commands': link:../../packages/aws-commands
@@ -19346,7 +19348,7 @@ packages:
       pretty-format: 27.5.1
       slash: 3.0.0
       strip-json-comments: 3.1.1
-      ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
+      ts-node: 10.9.1_typescript@4.9.4
     transitivePeerDependencies:
       - bufferutil
       - canvas
