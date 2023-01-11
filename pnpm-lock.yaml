@@ -665,6 +665,7 @@ importers:
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
+      inversify: 5.1.1
       inversify-props: ^2.2.6
       jest: ^27.5.1
       reflect-metadata: ^0.1.13
@@ -681,6 +682,7 @@ importers:
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
       '@holeshot/types': link:../../packages/holeshot-types
+      inversify: 5.1.1
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
