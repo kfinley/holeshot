@@ -167,43 +167,43 @@ export class UserServiceStack extends Construct {
     // Create API Gateway REST api and endpiont for /registration
     //
 
-    // this.restApi = new LambdaRestApi(this, 'HoleshotApi', {
-    //   description: 'Holeshot BMX api gateway',
-    //   handler: FUNCTION, // attaching lambda function
-    //   apiKeySourceType: ApiKeySourceType.HEADER,
-    //   restApiName: 'HoleshotApi',
-    //   deployOptions: { stageName: props!.node_env === 'production' ? 'v1' : 'dev', },
-    //   defaultMethodOptions: {
-    //     apiKeyRequired: false
-    //   },
-    //   proxy: false
-    // });
-
-    this.restApi = new RestApi(this, 'HoleshotApi', {
+    this.restApi = new LambdaRestApi(this, 'HoleshotApi', {
       description: 'Holeshot BMX api gateway',
-      deployOptions: {
-        stageName: props!.node_env === 'production' ? 'v1' : 'dev',
+      handler: register,
+      apiKeySourceType: ApiKeySourceType.HEADER,
+      restApiName: 'HoleshotApi',
+      deployOptions: { stageName: props!.node_env === 'production' ? 'v1' : 'dev', },
+      defaultMethodOptions: {
+        apiKeyRequired: false
       },
-      // defaultCorsPreflightOptions: {
-      //   allowHeaders: [
-      //     'Content-Type',
-      //     'X-Amz-Date',
-      //     'Authorization',
-      //     'X-Api-Key',
-      //   ],
-      //   allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-      //   allowCredentials: true,
-      //   allowOrigins: ['https://holeshot-bmx.com'], // [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://dev.holeshot-bmx.com'],
-      // }
+      proxy: false
     });
+
+    // this.restApi = new RestApi(this, 'HoleshotApi', {
+    //   description: 'Holeshot BMX api gateway',
+    //   deployOptions: {
+    //     stageName: props!.node_env === 'production' ? 'v1' : 'dev',
+    //   },
+    //   // defaultCorsPreflightOptions: {
+    //   //   allowHeaders: [
+    //   //     'Content-Type',
+    //   //     'X-Amz-Date',
+    //   //     'Authorization',
+    //   //     'X-Api-Key',
+    //   //   ],
+    //   //   allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    //   //   allowCredentials: true,
+    //   //   allowOrigins: ['https://holeshot-bmx.com'], // [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://dev.holeshot-bmx.com'],
+    //   // }
+    // });
 
     const registration = this.restApi.root
       .addResource('user')
-      .addResource('registration');
+      .addResource('register');
 
     registration.addMethod(
-      'POST',
-      new LambdaIntegration(register, { proxy: true }),
+      'POST', undefined
+      // new LambdaIntegration(register, { proxy: true }),
     );
 
     addCorsOptions(registration);
