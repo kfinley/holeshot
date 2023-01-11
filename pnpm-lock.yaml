@@ -632,6 +632,7 @@ importers:
       '@types/jest': ^27.0.6
       inversify-props: ^2.2.6
       jest: ^27.0.5
+      reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
       ts-jest: ^27.0.5
       ts-node: ^10.9.1
@@ -640,8 +641,8 @@ importers:
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
       inversify-props: 2.2.6
+      reflect-metadata: 0.1.13
       source-map-support: 0.5.21
-      typescript: 4.9.4
     devDependencies:
       '@tsconfig/node18': 1.0.1
       '@types/aws-lambda': 8.10.109
@@ -649,6 +650,7 @@ importers:
       jest: 27.5.1_ts-node@10.9.1
       ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
       ts-node: 10.9.1_typescript@4.9.4
+      typescript: 4.9.4
 
   services/User:
     specifiers:
@@ -665,6 +667,7 @@ importers:
       '@types/jest': ^27.5.2
       inversify-props: ^2.2.6
       jest: ^27.5.1
+      reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
       ts-jest: ^27.1.4
       ts-node: ^10.9.1
@@ -679,6 +682,7 @@ importers:
       '@holeshot/commands': link:../../packages/commands
       '@holeshot/types': link:../../packages/holeshot-types
       inversify-props: 2.2.6
+      reflect-metadata: 0.1.13
       source-map-support: 0.5.21
     devDependencies:
       '@tsconfig/node18': 1.0.1
@@ -718,13 +722,13 @@ importers:
       '@types/node': 18.11.18
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
-      typescript: 4.9.4
     devDependencies:
       '@tsconfig/node18': 1.0.1
       '@types/jest': 27.5.2
       jest: 27.5.1_ts-node@10.9.1
       ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
       ts-node: 10.9.1_awa2wsr5thmg3i7jqycphctjfq
+      typescript: 4.9.4
 
 packages:
 
@@ -27701,7 +27705,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1
+      jest: 27.5.1_ts-node@10.9.1
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
@@ -28103,6 +28107,7 @@ packages:
     resolution: {integrity: sha512-Uz+dTXYzxXXbsFpM86Wh3dKCxrQqUcVMxwU54orwlJjOpO3ao8L7j5lH+dWfTwgCwIuM9GQ2kvVotzYJMXTBZg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
+    dev: true
 
   /uc.micro/1.0.6:
     resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}

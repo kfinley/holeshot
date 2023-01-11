@@ -4,7 +4,7 @@
   "description": "User service",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build --clean && tsc --build",
+    "build": "tsc --build --clean && tsc --build && cp -LRv node_modules dist > /dev/null 2>&1 && echo 'User build complete!'",
     "test:unit": "jest"
   },
   "author": {
@@ -21,7 +21,8 @@
     "@holeshot/commands": "^1.0.0",
     "@holeshot/types": "^1.0.0",
     "inversify-props": "^2.2.6",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.0",
