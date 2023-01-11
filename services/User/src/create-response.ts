@@ -3,9 +3,8 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 export function createResponse(event: APIGatewayProxyEvent, statusCode: number, body: string) {
 
   let response = {
-    isBase64Encoded: false,
-    statusCode,
-    body,
+    "statusCode": statusCode,
+    "body": body,
     headers: {
       'Content-Type': 'application/json',
       // 👇 allow CORS for all origins
