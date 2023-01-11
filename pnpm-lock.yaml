@@ -655,6 +655,7 @@ importers:
       '@aws-sdk/client-cognito-identity-provider': ^3.226.0
       '@aws-sdk/client-dynamodb': ^3.226.0
       '@aws-sdk/client-ses': ^3.226.0
+      '@aws-sdk/config-resolver': ^3.226.0
       '@aws-sdk/util-dynamodb': ^3.226.0
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
@@ -676,6 +677,7 @@ importers:
       '@aws-sdk/client-cognito-identity-provider': 3.245.0
       '@aws-sdk/client-dynamodb': 3.245.0
       '@aws-sdk/client-ses': 3.245.0
+      '@aws-sdk/config-resolver': 3.234.0
       '@aws-sdk/util-dynamodb': 3.245.0
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
