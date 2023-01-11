@@ -15,7 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "baseUrl": ".",
-    "outDir": "./dist",
+    // "outDir": "./dist",
     "types": [],
     "paths": {
       "@/*": ["src/*"]

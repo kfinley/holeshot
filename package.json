@@ -12,7 +12,7 @@
     "vue2-user": "pnpm --filter @holeshot/vue2-user",
     "holeshot": "pnpm --filter @holeshot/plugin",
     "build": "pnpm run client build && pnpm run build:lambdas",
-    "build:lambdas": "pnpm --recursive --stream --filter @holeshot/user-service --filter @holeshot/core-service --filter @holeshot/aws-websockets run build",
+    "build:lambdas": "pnpm --recursive --stream --filter @holeshot/commands--filter @holeshot/aws-commands --filter @holeshot/types --filter @holeshot/user-service --filter @holeshot/core-service --filter @holeshot/aws-websockets run build",
     "build:client": "pnpm run client build && pnpm run post-build:fix-img-paths",
     "build:cdk": "cd infrastructure && npm run build",
     "post-build:fix-img-paths": "./infrastructure/scripts/fix-img-paths.sh",
