@@ -9,7 +9,7 @@ import {
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { SES, SESClient } from '@aws-sdk/client-ses';
+import { SES } from '@aws-sdk/client-ses';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 export default function bootstrapper(container: Container) {
@@ -20,7 +20,7 @@ export default function bootstrapper(container: Container) {
     container.bind<CognitoIdentityClient>("CognitoIdentityClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new CognitoIdentityClient({}) // Prod
+        new CognitoIdentityClient({ region: "us-east-1" }) // Prod
         :
         new CognitoIdentityClient({ // Local Dev
           endpoint: "http://holeshot.cognito:9229"
@@ -31,7 +31,7 @@ export default function bootstrapper(container: Container) {
     container.bind<CognitoIdentityProvider>("CognitoIdentityProvider")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new CognitoIdentityProvider({})
+        new CognitoIdentityProvider({ region: "us-east-1" })
         :
         new CognitoIdentityProvider({
           endpoint: "http://holeshot.cognito:9229",
@@ -48,7 +48,7 @@ export default function bootstrapper(container: Container) {
       .toDynamicValue(() =>
         process.env.NODE_ENV === 'production'
           ?
-          new DynamoDBClient({}) // Prod
+          new DynamoDBClient({ region: "us-east-1" }) // Prod
           :
           new DynamoDBClient({ // Local Dev
             endpoint: "http://holeshot.dynamodb:8000"
@@ -59,7 +59,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SNSClient>("SNSClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SNSClient({}) // Prod
+        new SNSClient({ region: "us-east-1" }) // Prod
         :
         new SNSClient({ // Local Dev
           region: "us-east-1",
@@ -71,7 +71,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SFNClient>("SFNClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SFNClient({}) // Prod
+        new SFNClient({ region: "us-east-1" }) // Prod
         :
         new SFNClient({ // Local Dev
           endpoint: "http://holeshot.sfn:8083"
@@ -82,7 +82,7 @@ export default function bootstrapper(container: Container) {
     container.bind<S3Client>("S3Client")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new S3Client({}) // Prod
+        new S3Client({ region: "us-east-1" }) // Prod
         :
         new S3Client({ // Local Dev
           region: "us-east-1",
