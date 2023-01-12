@@ -28,6 +28,7 @@
     "uuid": "8.3.2",
     "@aws-sdk/util-retry": "^3.229.0",
     "@aws-sdk/smithy-client": "^3.234.0",
+    "@aws-sdk/middleware-signing": "^3.226.0",
     "inversify": "5.1.1",
     "inversify-props": "^2.2.6",
     "source-map-support": "^0.5.21",
