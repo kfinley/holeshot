@@ -671,6 +671,7 @@ importers:
       jest: ^27.5.1
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
+      strnum: 1.0.5
       ts-jest: ^27.1.4
       ts-node: ^10.9.1
       tslib: ^2.4.1
@@ -692,6 +693,7 @@ importers:
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
+      strnum: 1.0.5
       tslib: 2.4.1
     devDependencies:
       '@tsconfig/node18': 1.0.1
@@ -27714,7 +27716,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1_ts-node@10.9.1
+      jest: 27.5.1
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2

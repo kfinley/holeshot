@@ -24,6 +24,7 @@
     "@holeshot/commands": "^1.0.0",
     "@holeshot/types": "^1.0.0",
     "fast-xml-parser": "4.0.11",
+    "strnum": "1.0.5",
     "inversify": "5.1.1",
     "inversify-props": "^2.2.6",
     "source-map-support": "^0.5.21",
