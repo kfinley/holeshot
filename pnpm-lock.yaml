@@ -676,6 +676,7 @@ importers:
       ts-node: ^10.9.1
       tslib: ^2.4.1
       typescript: ^4.1.5
+      uuid: 8.3.2
     dependencies:
       '@aws-sdk/client-cognito-identity': 3.245.0
       '@aws-sdk/client-cognito-identity-provider': 3.245.0
@@ -695,6 +696,7 @@ importers:
       source-map-support: 0.5.21
       strnum: 1.0.5
       tslib: 2.4.1
+      uuid: 8.3.2
     devDependencies:
       '@tsconfig/node18': 1.0.1
       '@types/aws-lambda': 8.10.109
@@ -12107,7 +12109,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -24235,6 +24237,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -27716,7 +27727,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1
+      jest: 27.5.1_ts-node@10.9.1
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
