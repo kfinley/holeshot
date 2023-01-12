@@ -26,6 +26,7 @@
     "fast-xml-parser": "4.0.11",
     "strnum": "1.0.5",
     "uuid": "8.3.2",
+    "@aws-sdk/util-retry": "^3.229.0",
     "inversify": "5.1.1",
     "inversify-props": "^2.2.6",
     "source-map-support": "^0.5.21",
