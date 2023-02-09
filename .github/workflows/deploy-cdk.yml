@@ -74,6 +74,7 @@ jobs:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           NODE_ENV: production
+          SES_SENDER_EMAIL: ${{ secrets.SES_SENDER_EMAIL }}
         run: |
           npm i --omit=dev
           npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}

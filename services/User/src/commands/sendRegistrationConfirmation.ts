@@ -43,7 +43,7 @@ export class SendConfirmationCommand implements Command<SendConfirmationRequest,
         Destination: {
           ToAddresses: [
             params.email
-          ]
+          ],
         },
         TemplateData: JSON.stringify(templateData),
       });
