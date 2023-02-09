@@ -18,9 +18,9 @@ export const handler: Handler = async (event: any, context: Context) => {
       const request = event as SendConfirmationRequest;
       console.log('sendConfirmation', request);
 
-      const saveUserCmd = container.get<SendConfirmationCommand>("SendConfirmationCommand");
+      const sendConfirmationCmd = container.get<SendConfirmationCommand>("SendConfirmationCommand");
 
-      const response = await saveUserCmd.runAsync(request);
+      const response = await sendConfirmationCmd.runAsync(request);
 
       return {
         ...event,
