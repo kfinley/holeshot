@@ -51,7 +51,7 @@ jobs:
           pnpm i && cd ./packages/vue2-client/dist
           rm config.js
           echo -e 'window.HoleshotConfig = {' > config.js
-          echo -e 'ClientId: "3r7f04fbcuse64vgtjji2g4adu",' >> config.js
+          echo -e 'ClientId: "2u61k6gggc4acjhj9tda7ale9m",' >> config.js
           echo -e 'PoolId: "us-east-1_nmrmokUDK",' >> config.js
           echo -e 'ServiceWorkerPath: "service-worker.js",' >> config.js
           echo -e 'Host: "holeshot-bmx.com",' >> config.js
