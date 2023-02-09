@@ -51,6 +51,16 @@ States:
     Type: Task
     Resource:
       Fn::GetAtt: [SendConfirmationStep, Arn]
-    Next: FinalState
+    Next: ConfirmationSent
+  ConfirmationSent:
+    Type: Choice
+    Choices:
+      - Variable: $.success
+        BooleanEquals: true
+        Next: FinalState
+    Default: SendConfirmationFailed
+  SendConfirmationFailed:
+    Type: Fail
+    Error: "Failed to send confirmation email"
   FinalState:
     Type: Succeed

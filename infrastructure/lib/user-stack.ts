@@ -131,6 +131,19 @@ export class UserServiceStack extends Construct {
       HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE: 'ConfirmationRegistraiton'
     });
 
+    const lambdaSesSendTemplatedEmailPolicy = new Policy(this, 'lambdaSesSendTemplatedEmailPolicy');
+    lambdaSesSendTemplatedEmailPolicy.addStatements(
+      new PolicyStatement({
+        actions: [
+          'ses:SendTemplatedEmail'
+        ],
+        effect: Effect.ALLOW,
+        resources: [
+          `${sendConfirmation.functionArn}:$LATEST`
+        ],
+        sid: 'lambdaSesSendTemplatedEmailPolicy'
+      })
+    )
     // TODO: smells... move this to a shared policy import
     const lambdaSfnStatusUpdatePolicy = new Policy(this, 'lambdaSfnStatusUpdatePolicy');
     lambdaSfnStatusUpdatePolicy.addStatements(
@@ -250,16 +263,24 @@ export class UserServiceStack extends Construct {
           .when(Condition.isPresent('$.userId'),
             new Pass(this, "UserAlreadyExists", {
               result: Result.fromString("User already exists")
-            }).next(success))
+            }).next(
+              success))
           .otherwise(createUserInvocation
-            .next(new Choice(this, 'UserCreated?')
-              .when(Condition.booleanEquals('$.success', true),
-                saveUserInvocation.next(
-                  new Choice(this, 'UserSaved?')
-                    .when(Condition.booleanEquals('$.success', true), sendConfirmationInvocation.next(success))
-                    .otherwise(new Fail(this, 'SaveUserFailed', { error: "Failed to save user" })),
-                ))
-              .otherwise(new Fail(this, "CreateUserFailed", { error: "Failed to create user" })))));
+            .next(
+              new Choice(this, 'UserCreated?')
+                .when(Condition.booleanEquals('$.success', true),
+                  saveUserInvocation.next(
+                    new Choice(this, 'UserSaved?')
+                      .when(Condition.booleanEquals('$.success', true),
+                        sendConfirmationInvocation.next(
+                          new Choice(this, 'ConfirmationSent?')
+                            .when(Condition.booleanEquals('$.success', true),
+                              success)
+                            .otherwise(new Fail(this, 'SendConfirmationFailed', { error: "Failed to send confirmation email" }))
+                        ))
+                      .otherwise(new Fail(this, 'SaveUserFailed', { error: "Failed to save user" })),
+                  ))
+                .otherwise(new Fail(this, "CreateUserFailed", { error: "Failed to create user" })))));
 
     const stateMachine = new StateMachine(this, 'Holeshot-User-Register', {
       stateMachineName: 'Holeshot-User-Register',
