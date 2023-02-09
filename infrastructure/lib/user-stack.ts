@@ -252,7 +252,8 @@ export class UserServiceStack extends Construct {
     })
 
     const sendConfirmationInvocation = new LambdaInvoke(this, 'SendConfirmationInvocation', {
-      lambdaFunction: sendConfirmation
+      lambdaFunction: sendConfirmation,
+      outputPath: '$.Payload'
     })
     const success = new Succeed(this, "Success");
 
