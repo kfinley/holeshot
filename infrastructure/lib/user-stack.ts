@@ -107,6 +107,19 @@ export class UserServiceStack extends Construct {
       USER_POOL_ID: this.userPool.userPoolId
     });
 
+    const lambdaCognitoAdmintCreateUserPolicy = new Policy(this, 'lambdaCognitoAdminCreateUserPolicy');
+    lambdaCognitoAdmintCreateUserPolicy.addStatements(
+      new PolicyStatement({
+        actions: [
+          "cognito-idp:AdminCreateUser"
+        ],
+        effect: Effect.ALLOW,
+        resources: ['*'],  //TODO: tighten this up...,
+        sid: "LambdaCognitoAdmintCreateUserPolicy"
+      })
+    )
+    createUser.role?.attachInlinePolicy(lambdaCognitoAdmintCreateUserPolicy);
+
     const saveUser = newLamda('SaveUserHandler', 'functions/saveUser.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName!
     });
