@@ -138,10 +138,8 @@ export class UserServiceStack extends Construct {
           'ses:SendTemplatedEmail'
         ],
         effect: Effect.ALLOW,
-        resources: [
-          `${sendConfirmation.functionArn}:$LATEST`
-        ],
-        sid: 'lambdaSesSendTemplatedEmailPolicy'
+        resources: ['*'],  //TODO: tighten this up...
+        sid: 'LambdaSesSendTemplatedEmailPolicy'
       })
     );
     sendConfirmation.role?.attachInlinePolicy(lambdaSesSendTemplatedEmailPolicy);
