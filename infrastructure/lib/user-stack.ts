@@ -168,9 +168,7 @@ export class UserServiceStack extends Construct {
 
     const cfnTemplate = new CfnTemplate(this, 'ConfirmRegistration-SES-Template', /* all optional props */ {
       template: {
-        subjectPart: 'subjectPart',
-
-        // the properties below are optional
+        subjectPart: 'Confirm Holeshot-BMX Account',
         htmlPart: confirmRegistrationTemplate.Body.Html.Data,
         templateName: 'ConfirmRegistration',
         textPart: confirmRegistrationTemplate.Body.Text.Data,
