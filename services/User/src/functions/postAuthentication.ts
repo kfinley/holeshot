@@ -9,9 +9,9 @@ export const handler = async (event: any, context: Context) => {
 
   try {
 
-    console.log(`PostAuthentication:`, { event });
+    console.log(`PostAuthentication:`, event.request.userAttributes);
 
-    if (event.request.userAtributes["cognito:user_status"] == 'FORCE_CHANGE_PASSWORD') {
+    if (event.request.userAttributes["cognito:user_status"] == 'FORCE_CHANGE_PASSWORD') {
       return event;
     }
 
