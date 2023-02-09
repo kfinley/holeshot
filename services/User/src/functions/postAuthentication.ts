@@ -1,6 +1,7 @@
 import { Context } from 'aws-lambda';
 import { PublishMessageCommand } from '@holeshot/aws-commands/src';
 import bootstrapper from './../bootstrapper';
+import { createResponse } from '../create-response';
 
 const container = bootstrapper();
 
@@ -8,8 +9,7 @@ export const handler = async (event: any, context: Context) => {
 
   try {
 
-    debugger;
-    console.log(`PostAuthentication: ${event}`);
+    console.log(`PostAuthentication:`, { event });
 
     const response = await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
       topic: 'Holeshot-PostAuthenticationTopic',  // SNS Topic
@@ -20,10 +20,7 @@ export const handler = async (event: any, context: Context) => {
 
     console.log('response', response);
 
-    return {
-      status_code: response.statusCode
-    };
-
+    return createResponse(event, 200, 'success');
   } catch (error) {
     console.log("error", error);
     return {
