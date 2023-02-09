@@ -128,7 +128,7 @@ export class UserServiceStack extends Construct {
     const sendConfirmation = newLamda('SendConfirmation', 'functions/sendConfirmation.handler', {
       HOLESHOT_SITE_URL: props?.siteUrl!,
       HOLESHOT_SENDER_EMAIL: props?.senderEmail!,
-      HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE: 'ConfirmationRegistration'
+      HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE: 'ConfirmRegistration'
     });
 
     const lambdaSesSendTemplatedEmailPolicy = new Policy(this, 'lambdaSesSendTemplatedEmailPolicy');
