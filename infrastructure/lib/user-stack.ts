@@ -143,7 +143,9 @@ export class UserServiceStack extends Construct {
         ],
         sid: 'lambdaSesSendTemplatedEmailPolicy'
       })
-    )
+    );
+    sendConfirmation.role?.attachInlinePolicy(lambdaSesSendTemplatedEmailPolicy);
+
     // TODO: smells... move this to a shared policy import
     const lambdaSfnStatusUpdatePolicy = new Policy(this, 'lambdaSfnStatusUpdatePolicy');
     lambdaSfnStatusUpdatePolicy.addStatements(
