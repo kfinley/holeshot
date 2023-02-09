@@ -91,7 +91,7 @@ export class UserServiceStack extends Construct {
         userPassword: true,
       },
       preventUserExistenceErrors: true,
-      generateSecret: true,
+      generateSecret: false,
     });
 
     // Create the rest of the Lambdas
