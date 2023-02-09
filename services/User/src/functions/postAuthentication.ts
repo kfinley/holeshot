@@ -11,6 +11,10 @@ export const handler = async (event: any, context: Context) => {
 
     console.log(`PostAuthentication:`, { event });
 
+    if (event.request.userAtributes["cognito:user_status"] == 'FORCE_CHANGE_PASSWORD') {
+      return event;
+    }
+
     const response = await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
       topic: 'Holeshot-PostAuthenticationTopic',  // SNS Topic
       subject: 'Auth/postAuthentication',        // {Store_Module}/{actionName} on client if message sent to client
@@ -19,8 +23,10 @@ export const handler = async (event: any, context: Context) => {
     });
 
     console.log('response', response);
+    return event;
 
-    return createResponse(event, 200, 'success');
+    // return createResponse(event, 200, 'success');
+
   } catch (error) {
     console.log("error", error);
     return {
