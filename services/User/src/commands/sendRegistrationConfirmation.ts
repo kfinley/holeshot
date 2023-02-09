@@ -36,6 +36,8 @@ export class SendConfirmationCommand implements Command<SendConfirmationRequest,
       Url: this.generateUrl(HOLESHOT_SITE_URL, params.userId, params.tempPassword)
     };
 
+    console.log('settings', { HOLESHOT_SITE_URL, HOLESHOT_SENDER_EMAIL, HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE });
+
     try {
       var result = await this.emailService.sendTemplatedEmail({
         Source: HOLESHOT_SENDER_EMAIL,
@@ -48,7 +50,7 @@ export class SendConfirmationCommand implements Command<SendConfirmationRequest,
         TemplateData: JSON.stringify(templateData),
       });
 
-      //console.log('result', result);
+      console.log('result', result);
 
       return {
         success: result.$metadata.httpStatusCode == 200
