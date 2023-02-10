@@ -1,7 +1,6 @@
 import { Context } from 'aws-lambda';
 import { PublishMessageCommand } from '@holeshot/aws-commands/src';
 import bootstrapper from './../bootstrapper';
-import { createResponse } from '../create-response';
 
 const container = bootstrapper();
 

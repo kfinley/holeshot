@@ -309,6 +309,7 @@ importers:
       register-service-worker: ^1.7.1
       sass: ^1.35.1
       sass-loader: 12.6.0
+      sockette: ^2.0.6
       style-loader: ^2.0.0
       ts-loader: ^9.2.6
       tsconfig-paths-webpack-plugin: ^3.5.1
@@ -342,6 +343,7 @@ importers:
       reflect-metadata: 0.1.13
       register-service-worker: 1.7.2
       sass: 1.57.1
+      sockette: 2.0.6
       vee-validate: 3.4.14_vue@2.7.14
       vite: 2.9.15_sass@1.57.1
       vite-plugin-md2vue2: 2.0.3_vtxg37nltbbl263lqif3sux5te
@@ -12115,7 +12117,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1
+      promise-inflight: 1.0.1_bluebird@3.7.2
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -24243,15 +24245,6 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /promise-inflight/1.0.1:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dev: true
-
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -26440,6 +26433,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /sockette/2.0.6:
+    resolution: {integrity: sha512-W6iG8RGV6Zife3Cj+FhuyHV447E6fqFM2hKmnaQrTvg3OydINV3Msj3WPFbX76blUlUxvQSMMMdrJxce8NqI5Q==}
+    dev: false
 
   /sockjs-client/1.6.1_supports-color@6.1.0:
     resolution: {integrity: sha512-2g0tjOR+fRs0amxENLi/q5TiJTqY+WXFOzb5UwXndlK6TO3U/mirZznpx6w34HVMoc3g7cY24yC/ZMIYnDlfkw==}

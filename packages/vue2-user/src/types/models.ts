@@ -17,7 +17,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  status: AuthStatus
+  status: AuthStatus;
   session?: string | undefined;
   authenticationResult?: AuthenticationResult;
   error?: string | undefined;
@@ -31,7 +31,7 @@ export interface SetPasswordRequest {
 }
 
 export interface AuthenticationResult {
-  accessToken?: string,
+  accessToken?: string;
   expiresIn?: number;
   tokenType?: string;
   refreshToken?: string;
@@ -53,12 +53,12 @@ export interface User {
 }
 
 export interface GetUserDetailsRequest {
-  accessToken: string
+  accessToken: string;
 }
 
 export interface GetUserDetailsResponse {
-  username: string,
-  firstName: string,
-  lastName: string,
-  email: string
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
