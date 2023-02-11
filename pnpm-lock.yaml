@@ -723,6 +723,7 @@ importers:
       '@aws-sdk/util-base64': 3.208.0
       '@aws-sdk/util-dynamodb': 3.267.0
       '@aws-sdk/util-retry': ^3.267.0
+      '@aws-sdk/util-utf8': ^3.254.0
       '@holeshot/api-client': ^1.0.0
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
@@ -749,6 +750,7 @@ importers:
       '@aws-sdk/util-base64': 3.208.0
       '@aws-sdk/util-dynamodb': 3.267.0
       '@aws-sdk/util-retry': 3.267.0
+      '@aws-sdk/util-utf8': 3.254.0
       '@holeshot/api-client': link:../../packages/api-client
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
@@ -11578,7 +11580,7 @@ packages:
   /axios/0.21.4_debug@4.3.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.2_debug@4.3.4
     transitivePeerDependencies:
       - debug
 
@@ -17052,7 +17054,6 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4
-    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
