@@ -1,4 +1,4 @@
-import { ApiGatewayManagementApi, ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
+import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 import { Command } from '@holeshot/commands/src';
 import { injectable } from 'inversify-props';
 import { container } from '../inversify.config';
@@ -12,8 +12,6 @@ export interface SendMessageResponse {
   statusCode?: number
 }
 
-// const { APIGW_ENDPOINT } = process.env; //TODO ???
-
 @injectable()
 export class SendMessageCommand implements Command<SendMessageRequest, SendMessageResponse> {
 
@@ -24,18 +22,9 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
     console.log('connectionId', params.connectionId);
     console.log('data', params.data);
 
-    // const apiGateway = new ApiGatewayManagementApi({
-    //   apiVersion: '2018-11-29',
-    //   endpoint:
-    //     `https://${APIGW_ENDPOINT}`,
-    // });
-
-    // const output = await apiGateway.postToConnection({
-    //   ConnectionId: params.connectionId,
-    //   Data: params.data as any
-    // });
-
     this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
+    console.log('endpoint', this.client.config.endpoint);
+
     const output = await this.client.send(new PostToConnectionCommand({
       ConnectionId: params.connectionId,
       Data: params.data as any

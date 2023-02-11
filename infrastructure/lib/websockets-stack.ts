@@ -92,7 +92,6 @@ export class WebSocketsStack extends Construct {
 
     const authorizer = new WebSocketLambdaAuthorizer('Authorizer', authorizerHandler, {
       identitySource: [
-        // 'route.request.header.Authorization',          // todo: ??
         'route.request.header.Sec-WebSocket-Protocol']
     });
 
@@ -205,7 +204,7 @@ export class WebSocketsStack extends Construct {
 
     // Step Functions end...
 
-    // WebSockets...
+    // Configure WebSockets...
 
     this.webSocketApi.grantManageConnections(onMessageHandler.role!);
     this.webSocketApi.grantManageConnections(sendMessage.role!);
