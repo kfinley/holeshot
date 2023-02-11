@@ -96,17 +96,17 @@ export class WebSocketsStack extends Construct {
         'route.request.header.Sec-WebSocket-Protocol']
     });
 
-    const stage = new WebSocketStage(this, 'Prod', {
-      webSocketApi: this.webSocketApi,
-      stageName: 'v1',                                    // todo: ??
-      autoDeploy: true,
-    });
-
     this.webSocketApi = new WebSocketApi(this, 'HoleshotWebSocketApi', {
       apiName: 'Holeshot Websocket API',
       connectRouteOptions: { integration: new WebSocketLambdaIntegration("ConnectIntegration", onConnectHandler), authorizer },
       disconnectRouteOptions: { integration: new WebSocketLambdaIntegration("DisconnectIntegration", onDisconnectHandler) },
       defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", onMessageHandler) },
+    });
+
+    const stage = new WebSocketStage(this, 'Prod', {
+      webSocketApi: this.webSocketApi,
+      stageName: 'v1',                                    // todo: ??
+      autoDeploy: true,
     });
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
