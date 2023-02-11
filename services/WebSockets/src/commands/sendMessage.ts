@@ -23,7 +23,7 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
     console.log('data', params.data);
 
     this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
-    console.log('client.config.endpoint', this.client.config.endpoint());
+    console.log('client.config.endpoint', await this.client.config.endpoint());
 
     const output = await this.client.send(new PostToConnectionCommand({
       ConnectionId: params.connectionId,
