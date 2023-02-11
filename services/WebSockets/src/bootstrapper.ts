@@ -27,13 +27,13 @@ export default function bootstrapper() {
   }
 
   console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
-  
+
   if (!container.isBound("ApiGatewayManagementApiClient")) {
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
         new ApiGatewayManagementApiClient({
-          endpoint: `https://${APIGW_ENDPOINT}`
+          endpoint: `https://${APIGW_ENDPOINT}/` // Trailing slash needed... seriously.
         }) // Prod
         :
         new ApiGatewayManagementApiClient({ // Local Dev
