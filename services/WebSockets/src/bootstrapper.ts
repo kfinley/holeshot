@@ -13,6 +13,8 @@ export default function bootstrapper() {
   console.log('Bootstrapper', process.env.NODE_ENV);
   console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
 
+  const endpoint = APIGW_ENDPOINT.split('/');
+
   awsCommandsBootstrapper(container);
 
   if (!container.isBound("DynamoDBClient")) {
@@ -32,7 +34,12 @@ export default function bootstrapper() {
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
         new ApiGatewayManagementApiClient({
-          endpoint: `https://${APIGW_ENDPOINT}`
+          // endpoint: `${APIGW_ENDPOINT}`,
+          endpoint: {
+            protocol: "https",
+            hostname: endpoint[0],
+            path: `/${endpoint[1]}`
+          },
         }) // Prod
         :
         new ApiGatewayManagementApiClient({ // Local Dev

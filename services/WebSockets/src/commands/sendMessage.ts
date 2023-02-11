@@ -12,7 +12,7 @@ export interface SendMessageResponse {
   statusCode?: number
 }
 
-const { APIGW_ENDPOINT } = process.env; //TODO ???
+// const { APIGW_ENDPOINT } = process.env; //TODO ???
 
 @injectable()
 export class SendMessageCommand implements Command<SendMessageRequest, SendMessageResponse> {
