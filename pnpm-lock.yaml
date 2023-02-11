@@ -718,6 +718,7 @@ importers:
     specifiers:
       '@aws-sdk/client-apigatewaymanagementapi': 3.226.0
       '@aws-sdk/client-dynamodb': 3.226.0
+      '@aws-sdk/middleware-signing': ^3.226.0
       '@aws-sdk/smithy-client': ^3.234.0
       '@aws-sdk/util-base64': 3.208.0
       '@aws-sdk/util-dynamodb': 3.226.0
@@ -742,6 +743,7 @@ importers:
     dependencies:
       '@aws-sdk/client-apigatewaymanagementapi': 3.226.0
       '@aws-sdk/client-dynamodb': 3.226.0
+      '@aws-sdk/middleware-signing': 3.226.0
       '@aws-sdk/smithy-client': 3.234.0
       '@aws-sdk/util-base64': 3.208.0
       '@aws-sdk/util-dynamodb': 3.226.0
@@ -27744,7 +27746,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1
+      jest: 27.5.1_ts-node@10.9.1
       jest-util: 27.5.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
