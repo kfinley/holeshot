@@ -35,16 +35,17 @@ export default function bootstrapper() {
         const endpoint = APIGW_ENDPOINT.replace('wss://', '').split('/');
         console.log('hostname', endpoint[0]);
         console.log('path', `/${endpoint[1]}`);
-        
+
         return process.env.NODE_ENV === 'production'
           ?
-          new ApiGatewayManagementApiClient({
-            // endpoint: `${APIGW_ENDPOINT}`,
-            endpoint: {
-              protocol: "https",
-              hostname: endpoint[0],
-              path: `/${endpoint[1]}`
-            },
+          new ApiGatewayManagementApiClient({            
+            endpoint: `https://${endpoint[0]}/${endpoint[1]}`,
+            region: 'us-east-1'
+            // endpoint: {
+            //   protocol: "https",
+            //   hostname: endpoint[0],
+            //   path: `/${endpoint[1]}/`
+            // },
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
