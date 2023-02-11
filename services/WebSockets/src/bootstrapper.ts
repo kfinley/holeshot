@@ -25,26 +25,31 @@ export default function bootstrapper() {
   }
 
   if (!container.isBound("ApiGatewayManagementApiClient")) {
-    const { APIGW_ENDPOINT } = process.env; //TODO ???
-    console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
-
-    const endpoint = APIGW_ENDPOINT.split('/');
 
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
-      .toDynamicValue(() => process.env.NODE_ENV === 'production'
-        ?
-        new ApiGatewayManagementApiClient({
-          // endpoint: `${APIGW_ENDPOINT}`,
-          endpoint: {
-            protocol: "https",
-            hostname: endpoint[0],
-            path: `/${endpoint}`
-          },
-        }) // Prod
-        :
-        new ApiGatewayManagementApiClient({ // Local Dev
-          endpoint: "http://kylefinley.sls:3001"
-        }));
+      .toDynamicValue(() => {
+
+        const { APIGW_ENDPOINT } = process.env;
+        console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
+
+        const endpoint = APIGW_ENDPOINT.split('/');
+
+        return process.env.NODE_ENV === 'production'
+          ?
+          new ApiGatewayManagementApiClient({
+            // endpoint: `${APIGW_ENDPOINT}`,
+            endpoint: {
+              protocol: "https",
+              hostname: endpoint[0],
+              path: `/${endpoint}`
+            },
+          }) // Prod
+          :
+          new ApiGatewayManagementApiClient({ // Local Dev
+            endpoint: "http://kylefinley.sls:3001"
+          })
+      }
+      );
   }
 
   container.bind<AuthorizeConnectionCommand>("AuthorizeConnectionCommand").to(AuthorizeConnectionCommand);
