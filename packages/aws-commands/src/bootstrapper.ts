@@ -15,7 +15,7 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 export default function bootstrapper(container: Container) {
 
-  // console.log('aws-commands bootstrapper');
+  console.log('aws-commands bootstrapper');
 
   if (!container.isBound("CognitoIdentityClient")) {
     container.bind<CognitoIdentityClient>("CognitoIdentityClient")

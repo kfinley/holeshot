@@ -1,12 +1,9 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { container } from 'inversify-props';
 import { createResponse } from '../createResponse';
 import bootstrapper from '../bootstrapper';
 import { AuthorizeConnectionCommand } from '../commands';
 
-bootstrapper();
-
-const authConnectionCmd = () => container.get<AuthorizeConnectionCommand>("AuthorizeConnectionCommand");
+const authConnectionCmd = () => bootstrapper().get<AuthorizeConnectionCommand>("AuthorizeConnectionCommand");
 
 export const handler: APIGatewayProxyHandler = async (event) => {
 
@@ -16,7 +13,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   const response = await authConnectionCmd().runAsync({
     resource: '*', //TODO: tighten this up...
     authorization: Authorization,
-    token,
+    token
   });
 
   if (response && response.success) {

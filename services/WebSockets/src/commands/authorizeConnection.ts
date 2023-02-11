@@ -1,6 +1,7 @@
 import { Command } from '@holeshot/commands/src';
 import { AuthorizeCommand, AuthorizeResponse } from "@holeshot/aws-commands/src";
 import { Inject, injectable } from 'inversify-props';
+import { container } from '../inversify.config';
 
 export interface AuthorizeConnectionRequest {
   resource: string;
@@ -62,9 +63,9 @@ export class AuthorizeConnectionCommand implements Command<AuthorizeConnectionRe
     let authResult;
 
     if (params.token) {
-      authResult = await this.authorizeCommand.runAsync({ token: params.token });
+      authResult = await this.authorizeCommand.runAsync({ token: params.token, container });
     } else if (params.authorization) {
-      authResult = await this.authorizeCommand.runAsync({ authHeader: params.authorization });
+      authResult = await this.authorizeCommand.runAsync({ authHeader: params.authorization, container });
     }
 
     if (authResult) {

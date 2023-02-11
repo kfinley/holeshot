@@ -1,10 +1,12 @@
 import { Inject, injectable } from 'inversify-props';
 import { Command } from '@holeshot/commands/src';
 import { CognitoIdentityProvider, AttributeType } from "@aws-sdk/client-cognito-identity-provider";
+import { Container } from 'inversify-props';
 
 export interface AuthorizeRequest {
   authHeader?: string;
   token?: string;
+  container: Container;
 }
 
 export interface AuthorizeResponse {
@@ -16,12 +18,13 @@ export interface AuthorizeResponse {
 @injectable()
 export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResponse> {
 
-  @Inject('CognitoIdentityProvider')
+  // @Inject('CognitoIdentityProvider') // not working with error "No matching bindings found for serviceIdentifier: CognitoIdentityProvider"
   private provider!: CognitoIdentityProvider;
 
   async runAsync(params: AuthorizeRequest): Promise<AuthorizeResponse> {
 
     let token = params.token;
+    this.provider = params.container.get<CognitoIdentityProvider>("CognitoIdentityProvider");
 
     if (params.authHeader) {
 
