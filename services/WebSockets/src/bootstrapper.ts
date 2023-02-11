@@ -6,14 +6,9 @@ import { AuthorizeConnectionCommand, DeleteConnectionByUserIdCommand, DeleteConn
 import { IMessageCommand } from './commands/messageCommand';
 import { PingMessageCommand } from './commands/pingMessage';
 
-const { APIGW_ENDPOINT } = process.env; //TODO ???
-
 export default function bootstrapper() {
 
   console.log('Bootstrapper', process.env.NODE_ENV);
-  console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
-
-  const endpoint = APIGW_ENDPOINT.split('/');
 
   awsCommandsBootstrapper(container);
 
@@ -30,6 +25,11 @@ export default function bootstrapper() {
   }
 
   if (!container.isBound("ApiGatewayManagementApiClient")) {
+    const { APIGW_ENDPOINT } = process.env; //TODO ???
+    console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
+
+    const endpoint = APIGW_ENDPOINT.split('/');
+
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
@@ -38,7 +38,7 @@ export default function bootstrapper() {
           endpoint: {
             protocol: "https",
             hostname: endpoint[0],
-            path: `/${endpoint[1]}`
+            path: `/${endpoint}`
           },
         }) // Prod
         :
