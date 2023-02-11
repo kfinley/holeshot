@@ -22,8 +22,6 @@ import '../styles/styles.scss';
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
   store.registerModule('WebSockets', WebSockets);
-
-  // initializeModules(store);
 };
 
 const plugin: ClientPlugin = {

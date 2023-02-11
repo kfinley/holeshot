@@ -32,6 +32,7 @@ export class WebSockets extends BaseModule implements WebSocketsState {
 
   @Action
   connect(token: string) {
+    console.log('connect');
 
     const wsUrl = `${this.protocol}://${this.url}`;
 
