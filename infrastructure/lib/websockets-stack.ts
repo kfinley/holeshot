@@ -90,8 +90,21 @@ export class WebSocketsStack extends Construct {
     });
     props?.connectionsTable.grantReadWriteData(getConnection);
 
+    const authorizer = new WebSocketLambdaAuthorizer('Authorizer', authorizerHandler, {
+      identitySource: [
+        // 'route.request.header.Authorization',          // todo: ??
+        'route.request.header.Sec-WebSocket-Protocol']
+    });
+
+    this.webSocketApi = new WebSocketApi(this, 'HoleshotWebSocketApi', {
+      apiName: 'Holeshot Websocket API',
+      connectRouteOptions: { integration: new WebSocketLambdaIntegration("ConnectIntegration", onConnectHandler), authorizer },
+      disconnectRouteOptions: { integration: new WebSocketLambdaIntegration("DisconnectIntegration", onDisconnectHandler) },
+      defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", onMessageHandler) },
+    });
+
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' //TODO: deal with this... apigateway.us-east-1.amazonaws.com
+      APIGW_ENDPOINT: `${this.webSocketApi.apiEndpoint}/v1` // '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' //TODO: deal with this...
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
@@ -187,19 +200,6 @@ export class WebSocketsStack extends Construct {
     // Step Functions end...
 
     // WebSockets...
-
-    const authorizer = new WebSocketLambdaAuthorizer('Authorizer', authorizerHandler, {
-      identitySource: [
-        // 'route.request.header.Authorization',          // todo: ??
-        'route.request.header.Sec-WebSocket-Protocol']
-    });
-
-    this.webSocketApi = new WebSocketApi(this, 'HoleshotWebSocketApi', {
-      apiName: 'Holeshot Websocket API',
-      connectRouteOptions: { integration: new WebSocketLambdaIntegration("ConnectIntegration", onConnectHandler), authorizer },
-      disconnectRouteOptions: { integration: new WebSocketLambdaIntegration("DisconnectIntegration", onDisconnectHandler) },
-      defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", onMessageHandler) },
-    });
 
     const stage = new WebSocketStage(this, 'Prod', {
       webSocketApi: this.webSocketApi,

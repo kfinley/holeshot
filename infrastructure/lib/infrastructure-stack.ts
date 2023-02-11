@@ -57,7 +57,6 @@ export class InfrastructureStack extends Stack {
       node_env: props!.node_env
     });
 
-
     // Handle Route53 DNS bits
     const {
       accountId,
