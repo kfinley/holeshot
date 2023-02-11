@@ -32,7 +32,7 @@ export default function bootstrapper() {
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
         new ApiGatewayManagementApiClient({
-          endpoint: `${APIGW_ENDPOINT}`
+          endpoint: `https://${APIGW_ENDPOINT}`
         }) // Prod
         :
         new ApiGatewayManagementApiClient({ // Local Dev

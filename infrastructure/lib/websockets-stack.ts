@@ -91,7 +91,7 @@ export class WebSocketsStack extends Construct {
     props?.connectionsTable.grantReadWriteData(getConnection);
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: '6ii0i7gdbe.execute-api.us-east-1.amazonaws.com/v1' //TODO: deal with this...
+      APIGW_ENDPOINT: '6ii0i7gdbe.apigateway.us-east-1.amazonaws.com/v1' //TODO: deal with this... apigateway.us-east-1.amazonaws.com
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
