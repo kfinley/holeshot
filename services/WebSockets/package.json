@@ -21,7 +21,8 @@
     "@types/node": "^18.11.17",
     "inversify": "5.1.1",
     "inversify-props": "^2.2.6",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "tslib": "^2.4.1"
   },
   "devDependencies": {
     "@tsconfig/node18": "^1.0.0",
