@@ -57,3 +57,15 @@ CognitoUserPoolClient:
       - USER_PASSWORD_AUTH
       - ADMIN_NO_SRP_AUTH
     GenerateSecret: false
+
+PostAuthenticationTopic:
+  Type: "AWS::SNS::Topic"
+  Properties:
+    DisplayName: ${self:service}-PostAuthenticationTopic
+
+PostAuthenticationSubscription:
+  Type: "AWS::SNS::Subscription"
+  Properties:
+    Endpoint: arn:aws:sns:us-east-1:146665891952:StartProcessTransactions
+    Protocol: lambda
+    TopicArn: arn:aws:sns:us-east-1:146665891952:${self:service}-PostAuthenticationTopic

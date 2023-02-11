@@ -14,9 +14,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
   const token = event.headers["Sec-WebSocket-Protocol"];
 
   const response = await authConnectionCmd().runAsync({
-    resource: event.resource,
+    resource: '*', //TODO: tighten this up...
     authorization: Authorization,
-    token
+    token,
   });
 
   if (response && response.success) {

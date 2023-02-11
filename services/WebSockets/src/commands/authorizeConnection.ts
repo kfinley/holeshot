@@ -1,6 +1,6 @@
 import { Command } from '@holeshot/commands/src';
 import { AuthorizeCommand, AuthorizeResponse } from "@holeshot/aws-commands/src";
-import { Inject } from 'inversify-props';
+import { Inject, injectable } from 'inversify-props';
 
 export interface AuthorizeConnectionRequest {
   resource: string;
@@ -33,6 +33,7 @@ const generatePolicy = (principalId: any, effect: any, resource: any) => {
     statement.Resource = resource;
     policyDocument.Statement[0] = statement;
     authResponse.policyDocument = policyDocument;
+    authResponse.context = { auth: true } // blows up if context doesn't have any value
   }
   return authResponse;
 };
@@ -50,6 +51,7 @@ const generateAuthResponse = (authResponse: AuthorizeResponse, resource: string 
 
 };
 
+@injectable()
 export class AuthorizeConnectionCommand implements Command<AuthorizeConnectionRequest, AuthorizeConnectionResponse> {
 
   @Inject("AuthorizeCommand")

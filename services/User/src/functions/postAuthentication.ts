@@ -10,18 +10,22 @@ export const handler = async (event: any, context: Context) => {
 
     console.log(`PostAuthentication:`, event.request.userAttributes);
 
-    if (event.request.userAttributes["cognito:user_status"] == 'FORCE_CHANGE_PASSWORD') {
-      return event;
-    }
+    // if (event.request.userAttributes["cognito:user_status"] == 'FORCE_CHANGE_PASSWORD') {
+    //   return event;
+    // }
 
-    const response = await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
-      topic: 'Holeshot-PostAuthenticationTopic',  // SNS Topic
-      subject: 'Auth/postAuthentication',        // {Store_Module}/{actionName} on client if message sent to client
-      message: JSON.stringify(event),
-      container
-    });
+    // const response = await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
+    //   topic: 'Holeshot-AuthProcessedTopic',  // SNS Topic
+    //   subject: 'WebSocketsModule/connected',                      // {Store_Module}/{actionName} on client if message sent to client
+    //   message: JSON.stringify({     // params sent to store action
+    //     userId: authorizer.principalId,
+    //     access_token: authorizer.access_token
+    //   }),
+    //   container
+    // });
 
-    console.log('response', response);
+    // console.log('response', response);
+
     return event;
 
     // return createResponse(event, 200, 'success');

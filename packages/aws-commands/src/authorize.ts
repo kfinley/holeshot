@@ -1,4 +1,4 @@
-import { Inject } from 'inversify-props';
+import { Inject, injectable } from 'inversify-props';
 import { Command } from '@holeshot/commands/src';
 import { CognitoIdentityProvider, AttributeType } from "@aws-sdk/client-cognito-identity-provider";
 
@@ -13,6 +13,7 @@ export interface AuthorizeResponse {
   authorized: boolean;
 }
 
+@injectable()
 export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResponse> {
 
   @Inject('CognitoIdentityProvider')

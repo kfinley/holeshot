@@ -1,24 +1,24 @@
-import Vue from "vue";
-import { Store } from "vuex";
+import Vue from 'vue';
+import { Store } from 'vuex';
 import {
   initializeModules,
   UserState,
   AuthStatus,
   registrationModule,
   userModule,
-} from "./store";
-import { RegistrationModule, UserModule } from "./store/store-modules";
-import NotificationModule from "@finley/vue2-components/src/store/notification-module";
-import ComponentLibraryPlugin from "@finley/vue2-components/src/plugin";
-import { routes, RouteNames } from "./router";
-import { getModule } from "vuex-module-decorators";
-import { authHelper } from "@holeshot/api-client/src/helpers";
-import bootstrapper from "./bootstrapper";
-import { ClientPlugin } from "@finley/vue2-components/src/types";
-import { ClientPluginOptions } from "@finley/vue2-components/src/plugin";
-import { Container } from "inversify-props";
+} from './store';
+import { RegistrationModule, UserModule } from './store/store-modules';
+import NotificationModule from '@finley/vue2-components/src/store/notification-module';
+import ComponentLibraryPlugin from '@finley/vue2-components/src/plugin';
+import { routes, RouteNames } from './router';
+import { getModule } from 'vuex-module-decorators';
+import { authHelper } from '@holeshot/api-client/src/helpers';
+import bootstrapper from './bootstrapper';
+import { ClientPlugin } from '@finley/vue2-components/src/types';
+import { ClientPluginOptions } from '@finley/vue2-components/src/plugin';
+import { Container } from 'inversify-props';
 
-import "./styles/styles.scss";
+import './styles/styles.scss';
 
 export interface UserPluginOptions extends ClientPluginOptions {
   defaultRoute: string;
@@ -28,15 +28,14 @@ export interface UserPluginOptions extends ClientPluginOptions {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setupModules = (store: Store<any>, container: Container): void => {
-  store.registerModule("Registration", RegistrationModule);
-  store.registerModule("User", UserModule);
-  store.registerModule("WebSockets", WebSocketsModule);
+  store.registerModule('Registration', RegistrationModule);
+  store.registerModule('User', UserModule);
 
   initializeModules(store);
 
-  container.bind<UserModule>("UserModule").toDynamicValue(() => userModule);
+  container.bind<UserModule>('UserModule').toDynamicValue(() => userModule);
   container
-    .bind<RegistrationModule>("RegistrationModule")
+    .bind<RegistrationModule>('RegistrationModule')
     .toDynamicValue(() => registrationModule);
 };
 
@@ -60,42 +59,38 @@ const userPlugin: ClientPlugin = {
       bootstrapper(options.container);
 
       userModule.mutate(
-        (state: UserState) =>
-          (state.postAuthFunction = userOptions.postAuthFunction)
+        (state: UserState) => (state.postAuthFunction = userOptions.postAuthFunction)
       );
 
       routes.forEach((route) => options.router.addRoute(route));
 
       options.router.beforeEach(async (to, from, next) => {
+        const userState = <UserState>options.store.state.User;
+
         await (options.store as any).restored;
-        if ((options.store.state.User as UserState).authTokens) {
+
+        if (userState.authTokens?.accessToken) {
           userModule.mutate((s) => {
             s.authStatus = AuthStatus.LoggedIn;
           });
 
           //TODO: deal with this stuff....
           authHelper.authToken = () => {
-            return (options.store.state.User as UserState).authTokens
-              ?.accessToken as string;
+            return userState.authTokens?.accessToken as string;
           };
           authHelper.refreshToken = () => {
-            return (options.store.state.User as UserState).authTokens
-              ?.refreshToken as string;
+            return userState.authTokens?.refreshToken as string;
           };
           authHelper.username = () => {
-            return (options.store.state.User as UserState).currentUser
-              ?.username as string;
+            return userState.currentUser?.username as string;
           };
         }
 
-        const authStatus = (<UserState>options.store.state.User).authStatus;
+        const authStatus = userState.authStatus;
 
         if (to.meta?.allowAnonymous) {
-          if (
-            authStatus === AuthStatus.LoggedIn &&
-            to.name === RouteNames.Login
-          ) {
-            next("/");
+          if (authStatus === AuthStatus.LoggedIn && to.name === RouteNames.Login) {
+            next('/');
           } else {
             next();
           }
@@ -139,8 +134,7 @@ const userPlugin: ClientPlugin = {
           switch (newValue) {
             case AuthStatus.LoggedIn:
               if (
-                options.router.currentRoute.name !==
-                userOptions.loginRedirectRouteName
+                options.router.currentRoute.name !== userOptions.loginRedirectRouteName
               ) {
                 options.router.push({
                   name: userOptions.loginRedirectRouteName,

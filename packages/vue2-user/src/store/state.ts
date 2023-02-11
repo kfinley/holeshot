@@ -1,4 +1,4 @@
-import { User, AuthenticationResult } from "./../types";
+import { User, AuthenticationResult } from './../types';
 
 export interface RegistrationState {
   error: string | undefined;
@@ -9,8 +9,8 @@ export interface UserState {
   authStatus: AuthStatus;
   authSession?: string | undefined;
   currentUser: User | undefined;
-  authTokens?: AuthenticationResult | undefined;
-  postAuthFunction?: string;
+  authTokens?: AuthenticationResult;
+  postAuthFunction?: string | undefined;
 }
 
 export enum RegistrationStatus {
@@ -18,7 +18,7 @@ export enum RegistrationStatus {
   Failed = 'Failed',
   Registered = 'Registered',
   Registering = 'Registering',
-  Success = 'Success'
+  Success = 'Success',
 }
 
 export enum AuthStatus {
@@ -28,7 +28,7 @@ export enum AuthStatus {
   LoginFailed = 'LoginFailed',
   NewPasswordRequired = 'NewPasswordRequired',
   SettingPassword = 'SettingPassword',
-  Refreshing = 'Refreshing',    // ???
-  Registering = 'Registering',  // ???
+  Refreshing = 'Refreshing', // ???
+  Registering = 'Registering', // ???
   Locked = 'Locked',
 }

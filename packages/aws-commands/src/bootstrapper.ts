@@ -5,7 +5,8 @@ import { Container } from 'inversify-props';
 import {
   PublishMessageCommand,
   StartStepFunctionCommand,
-  GetStoredObjectCommand
+  GetStoredObjectCommand,
+  AuthorizeCommand
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
@@ -95,7 +96,6 @@ export default function bootstrapper(container: Container) {
   }
 
   if (!container.isBound("SES")) {
-
     container.bind<SES>("SES")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
@@ -108,7 +108,7 @@ export default function bootstrapper(container: Container) {
         }));
   }
 
-
+  container.bind<AuthorizeCommand>("AuthorizeCommand").to(AuthorizeCommand);
   container.bind<GetStoredObjectCommand>("GetStoredObjectCommand").to(GetStoredObjectCommand);
   container.bind<PublishMessageCommand>("PublishMessageCommand").to(PublishMessageCommand);
   container.bind<StartStepFunctionCommand>("StartStepFunctionCommand").to(StartStepFunctionCommand);

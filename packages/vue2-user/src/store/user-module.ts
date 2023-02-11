@@ -1,34 +1,29 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { UserState, AuthStatus } from "./state";
-import {
-  User,
-  SetPasswordRequest,
-  LoginRequest,
-  AuthenticationResult,
-} from "./../types";
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { UserState, AuthStatus } from './state';
+import { User, SetPasswordRequest, LoginRequest, AuthenticationResult } from './../types';
 // import NotificationModule from "@finley/vue2-components/src/store/notification-module";
-import { notificationModule } from "@finley/vue2-components/src/store/";
-import { LoginCommand, SetPasswordCommand } from "../commands";
+import { notificationModule } from '@finley/vue2-components/src/store/';
+import { LoginCommand, SetPasswordCommand } from '../commands';
 // import { container } from 'inversify-props';
-import { authHelper } from "@holeshot/api-client/src/helpers";
-import { GetUserDetailsCommand } from "@/commands/getUserDetails";
-import { Inject } from "inversify-props";
+import { authHelper } from '@holeshot/api-client/src/helpers';
+import { GetUserDetailsCommand } from '@/commands/getUserDetails';
+import { Inject } from 'inversify-props';
 
-@Module({ namespaced: true, name: "User" })
+@Module({ namespaced: true, name: 'User' })
 export default class UserModule extends VuexModule implements UserState {
   authStatus = AuthStatus.LoggedOut;
-  authSession = "";
+  authSession = undefined;
   currentUser!: User;
-  authTokens!: AuthenticationResult;
-  postAuthFunction!: string;
+  authTokens: AuthenticationResult = {}; // AuthenticationResult;
+  postAuthFunction = ''; //: string | undefined = undefined; // !: string; // look into this... shouldn't have to do this but if we don't then the prop isn't on the obj in plugin
 
-  @Inject("LoginCommand")
+  @Inject('LoginCommand')
   private loginCommand!: LoginCommand;
 
-  @Inject("GetUserDetailsCommand")
+  @Inject('GetUserDetailsCommand')
   private getUserDetailsCommand!: GetUserDetailsCommand;
 
-  @Inject("SetPasswordCommand")
+  @Inject('SetPasswordCommand')
   private setPasswordCommand!: SetPasswordCommand;
 
   @Action
@@ -36,26 +31,22 @@ export default class UserModule extends VuexModule implements UserState {
     notificationModule.dismissAll();
 
     this.context.commit(
-      "mutate",
+      'mutate',
       (state: UserState) => (state.authStatus = AuthStatus.LoggingIn)
     );
 
     try {
       const login = await this.loginCommand.runAsync(params);
 
-      console.log("login.authenticationResult", login.authenticationResult);
-
       if (login.status == AuthStatus.LoggedIn) {
-        authHelper.setTokens(
-          login.authenticationResult as AuthenticationResult
-        );
+        authHelper.setTokens(login.authenticationResult as AuthenticationResult);
 
         const userDetails = await this.getUserDetailsCommand.runAsync({
           accessToken: login.authenticationResult?.accessToken as string,
         });
         authHelper.username = () => userDetails.username;
 
-        this.context.commit("mutate", (state: UserState) => {
+        this.context.commit('mutate', (state: UserState) => {
           state.authTokens = login.authenticationResult;
           state.currentUser = {
             ...userDetails,
@@ -64,16 +55,18 @@ export default class UserModule extends VuexModule implements UserState {
         });
 
         if (this.postAuthFunction) {
+          console.log('running postAuthFunction', this.postAuthFunction);
           this.context.dispatch(
             this.postAuthFunction,
             this.authTokens.accessToken,
             {
               root: true,
-            });
+            }
+          );
         }
       }
 
-      this.context.commit("mutate", (state: UserState) => {
+      this.context.commit('mutate', (state: UserState) => {
         state.authStatus = login.status;
         state.authSession = login.session;
       });
@@ -83,7 +76,7 @@ export default class UserModule extends VuexModule implements UserState {
       }
     } catch (error) {
       this.context.commit(
-        "mutate",
+        'mutate',
         (state: UserState) => (state.authStatus = AuthStatus.LoginFailed)
       );
 
@@ -96,7 +89,7 @@ export default class UserModule extends VuexModule implements UserState {
     notificationModule.dismissAll();
 
     this.context.commit(
-      "mutate",
+      'mutate',
       (state: UserState) => (state.authStatus = AuthStatus.SettingPassword)
     );
 
@@ -114,23 +107,18 @@ export default class UserModule extends VuexModule implements UserState {
 
       if (response) {
         if (response.authenticationResult) {
-          this.context.commit("mutate", (state: UserState) => {
+          this.context.commit('mutate', (state: UserState) => {
             state.authStatus = AuthStatus.LoggedIn;
-            state.authTokens =
-              response.authenticationResult as AuthenticationResult;
+            state.authTokens = response.authenticationResult as AuthenticationResult;
             state.authSession = undefined;
           });
 
-          authHelper.setTokens(
-            response.authenticationResult as AuthenticationResult
-          );
+          authHelper.setTokens(response.authenticationResult as AuthenticationResult);
 
           if (this.postAuthFunction) {
-            this.context.dispatch(
-              this.postAuthFunction,
-              response.authenticationResult,
-              { root: true }
-            );
+            this.context.dispatch(this.postAuthFunction, response.authenticationResult, {
+              root: true,
+            });
           }
         }
 
@@ -138,13 +126,12 @@ export default class UserModule extends VuexModule implements UserState {
           throw new Error(response.error);
         }
       } else {
-        throw new Error("No response");
+        throw new Error('No response');
       }
     } catch (error) {
       this.context.commit(
-        "mutate",
-        (state: UserState) =>
-          (state.authStatus = AuthStatus.NewPasswordRequired)
+        'mutate',
+        (state: UserState) => (state.authStatus = AuthStatus.NewPasswordRequired)
       );
 
       notificationModule.handleError({ error, rethrow: false });
