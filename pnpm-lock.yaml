@@ -726,6 +726,7 @@ importers:
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
       '@types/node': ^18.11.17
+      inversify: 5.1.1
       inversify-props: ^2.2.6
       jest: ^27.5.1
       reflect-metadata: ^0.1.13
@@ -741,6 +742,7 @@ importers:
       '@holeshot/commands': link:../../packages/commands
       '@types/aws-lambda': 8.10.109
       '@types/node': 18.11.18
+      inversify: 5.1.1
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
     devDependencies:
