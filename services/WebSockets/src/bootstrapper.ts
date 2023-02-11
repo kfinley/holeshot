@@ -6,8 +6,6 @@ import { AuthorizeConnectionCommand, DeleteConnectionByUserIdCommand, DeleteConn
 import { IMessageCommand } from './commands/messageCommand';
 import { PingMessageCommand } from './commands/pingMessage';
 
-const { APIGW_ENDPOINT } = process.env; //TODO ???
-
 export default function bootstrapper() {
 
   console.log('Bootstrapper', process.env.NODE_ENV);
@@ -26,20 +24,18 @@ export default function bootstrapper() {
           }));
   }
 
-  console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
-
-  if (!container.isBound("ApiGatewayManagementApiClient")) {
-    container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
-      .toDynamicValue(() => process.env.NODE_ENV === 'production'
-        ?
-        new ApiGatewayManagementApiClient({
-          endpoint: `https://${APIGW_ENDPOINT}/` // Trailing slash needed... seriously.
-        }) // Prod
-        :
-        new ApiGatewayManagementApiClient({ // Local Dev
-          endpoint: "http://Holeshot.sls:3001"
-        }));
-  }
+  // if (!container.isBound("ApiGatewayManagementApiClient")) {
+  //   container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
+  //     .toDynamicValue(() => process.env.NODE_ENV === 'production'
+  //       ?
+  //       new ApiGatewayManagementApiClient({
+  //         endpoint: `https://${APIGW_ENDPOINT}/` // Trailing slash needed... seriously.
+  //       }) // Prod
+  //       :
+  //       new ApiGatewayManagementApiClient({ // Local Dev
+  //         endpoint: "http://Holeshot.sls:3001"
+  //       }));
+  // }
 
   container.bind<AuthorizeConnectionCommand>("AuthorizeConnectionCommand").to(AuthorizeConnectionCommand);
   container.bind<DeleteConnectionCommand>("DeleteConnectionCommand").to(DeleteConnectionCommand);
