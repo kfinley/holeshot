@@ -11,11 +11,11 @@
     "test:unit": "jest"
   },
   "dependencies": {
-    "@aws-sdk/client-apigatewaymanagementapi": "3.226.0",
-    "@aws-sdk/client-dynamodb": "3.226.0",
-    "@aws-sdk/middleware-signing": "^3.226.0",
-    "@aws-sdk/smithy-client": "^3.234.0",
-    "@aws-sdk/util-dynamodb": "3.226.0",
+    "@aws-sdk/client-apigatewaymanagementapi": "3.267.0",
+    "@aws-sdk/client-dynamodb": "3.267.0",
+    "@aws-sdk/middleware-signing": "^3.267.0",
+    "@aws-sdk/smithy-client": "^3.267.0",
+    "@aws-sdk/util-dynamodb": "3.267.0",
     "@aws-sdk/util-base64": "3.208.0",
     "@holeshot/api-client": "^1.0.0",
     "@holeshot/aws-commands": "^1.0.0",
