@@ -14,7 +14,6 @@ export default function bootstrapper() {
 
   awsCommandsBootstrapper(container);
 
-
   if (!container.isBound("DynamoDBClient")) {
     container.bind<DynamoDBClient>("DynamoDBClient")
       .toDynamicValue(() =>
@@ -27,6 +26,8 @@ export default function bootstrapper() {
           }));
   }
 
+  console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
+  
   if (!container.isBound("ApiGatewayManagementApiClient")) {
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
