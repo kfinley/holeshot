@@ -96,6 +96,12 @@ export class WebSocketsStack extends Construct {
         'route.request.header.Sec-WebSocket-Protocol']
     });
 
+    const stage = new WebSocketStage(this, 'Prod', {
+      webSocketApi: this.webSocketApi,
+      stageName: 'v1',                                    // todo: ??
+      autoDeploy: true,
+    });
+
     this.webSocketApi = new WebSocketApi(this, 'HoleshotWebSocketApi', {
       apiName: 'Holeshot Websocket API',
       connectRouteOptions: { integration: new WebSocketLambdaIntegration("ConnectIntegration", onConnectHandler), authorizer },
@@ -104,7 +110,7 @@ export class WebSocketsStack extends Construct {
     });
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: `${this.webSocketApi.apiEndpoint}/v1` // '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' //TODO: deal with this...
+      APIGW_ENDPOINT: stage.url.replace('wss://', '')
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
@@ -200,12 +206,6 @@ export class WebSocketsStack extends Construct {
     // Step Functions end...
 
     // WebSockets...
-
-    const stage = new WebSocketStage(this, 'Prod', {
-      webSocketApi: this.webSocketApi,
-      stageName: 'v1',                                    // todo: ??
-      autoDeploy: true,
-    });
 
     this.webSocketApi.grantManageConnections(onMessageHandler.role!);
     this.webSocketApi.grantManageConnections(sendMessage.role!);

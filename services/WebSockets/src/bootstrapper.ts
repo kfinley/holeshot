@@ -11,6 +11,7 @@ const { APIGW_ENDPOINT } = process.env; //TODO ???
 export default function bootstrapper() {
 
   console.log('Bootstrapper', process.env.NODE_ENV);
+  console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
 
   awsCommandsBootstrapper(container);
 
