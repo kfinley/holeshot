@@ -109,7 +109,7 @@ export class WebSocketsStack extends Construct {
     });
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: stage.url
+      APIGW_ENDPOINT: '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' // stage.url
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
