@@ -251,14 +251,14 @@ export class InfrastructureStack extends Stack {
     step2();
 
     // Setup WebSockets
-    // const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
-    //   connectionsTable: dataStores?.connectionsTable!,
-    //   logLevel: props?.logLevel!,
-    //   node_env: props!.node_env,
-    //   domainName,
-    //   zone: this.hostedZone,
-    //   certificate: this.certificate
-    // });
+    const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
+      connectionsTable: dataStores?.connectionsTable!,
+      logLevel: props?.logLevel!,
+      node_env: props!.node_env,
+      domainName,
+      zone: this.hostedZone,
+      certificate: this.certificate
+    });
 
     // new CfnOutput(this, 'apiEndpoint', {
     //   value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
