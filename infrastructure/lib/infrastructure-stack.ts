@@ -44,15 +44,8 @@ export class InfrastructureStack extends Stack {
     // // Setup User Service
     const userService = new UserServiceStack(this, 'Holeshot-UserServiceStack', {
       coreTable: dataStores?.coreTable!, // HOLESHOT_CORE_TABLE: Holeshot-Core-Table
-      siteUrl: 'https://holeshot-bmx.com',
+      siteUrl: `https://${domainName}`,
       senderEmail: props?.senderEmail!,
-      logLevel: props?.logLevel!,
-      node_env: props!.node_env
-    });
-
-    // Setup WebSockets
-    const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
-      connectionsTable: dataStores?.connectionsTable!,
       logLevel: props?.logLevel!,
       node_env: props!.node_env
     });
@@ -252,6 +245,16 @@ export class InfrastructureStack extends Stack {
     step1();
 
     step2();
+
+    // Setup WebSockets
+    const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
+      connectionsTable: dataStores?.connectionsTable!,
+      logLevel: props?.logLevel!,
+      node_env: props!.node_env,
+      domainName,
+      zone: this.hostedZone,
+      certificate: this.certificate
+    });
 
     step3();
 

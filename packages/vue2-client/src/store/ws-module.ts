@@ -13,7 +13,7 @@ export class WebSockets extends BaseModule implements WebSocketsState {
   //TODO: fix this...
   url: string = `${
     process.env.NODE_ENV === 'production'
-      ? '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1'
+      ? 'ws.holeshot-bmx.com' // TODO: do better...
       : 'localhost:3001'
   }`;
 

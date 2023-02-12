@@ -14,8 +14,15 @@ import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { createLambda } from '.';
+import { CfnDomainName } from 'aws-cdk-lib/aws-apigateway';
+import { CfnApiMapping } from 'aws-cdk-lib/aws-apigatewayv2';
+import { CnameRecord, HostedZone } from 'aws-cdk-lib/aws-route53';
+import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 
 export interface WebSocketsStackProps {
+  domainName: string;
+  zone: HostedZone;
+  certificate: DnsValidatedCertificate;
   connectionsTable: Table;
   node_env: string;
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
@@ -108,8 +115,28 @@ export class WebSocketsStack extends Construct {
       autoDeploy: true,
     });
 
+    // custom domain for websocket api
+
+    const apigatewaydomainsocket = new CfnDomainName(this, "apigatewaydomainsocket", {
+      domainName: props!.domainName,
+      certificateArn: props!.certificate.certificateArn
+    });
+
+    const apigatewaymappingsocket = new CfnApiMapping(this, "apigatewaymappingsocket", {
+      domainName: apigatewaydomainsocket.ref,
+      apiId: this.webSocketApi.apiId,
+      stage: stage.stageName
+    });
+
+    // create the subdomain
+    const route53websocket = new CnameRecord(this, "route53websocket", {
+      recordName: "ws",
+      zone: props!.zone,
+      domainName: apigatewaydomainsocket.attrRegionalDomainName
+    });
+
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' // stage.url
+      APIGW_ENDPOINT: `ws.${props!.domainName}` // '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' // stage.url
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
