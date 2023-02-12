@@ -216,6 +216,16 @@ export class WebSocketsStack extends Construct {
     this.webSocketApi.grantManageConnections(onMessageHandler);
     this.webSocketApi.grantManageConnections(sendMessage);
 
+    const connectionsArns = this.webSocketApi.stack.formatArn({
+      service: 'execute-api',
+      resourceName: `${stage.stageName}/POST/*`,
+      resource: this.webSocketApi.apiId,
+    });
+
+    sendMessage.addToRolePolicy(
+      new PolicyStatement({ actions: ['execute-api:ManageConnections'], resources: [connectionsArns] })
+    );
+    
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {
       value: `api endpoint: ${this.webSocketApi.apiEndpoint}`
     });
