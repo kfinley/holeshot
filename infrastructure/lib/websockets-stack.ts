@@ -116,7 +116,7 @@ export class WebSocketsStack extends Construct {
     });
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: stage.url.replace('wss://', '')
+      APIGW_ENDPOINT: `ws.${props!.domainName}`
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
