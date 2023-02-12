@@ -117,13 +117,13 @@ export class WebSocketsStack extends Construct {
 
     // custom domain for websocket api
 
-    const apigatewaydomainsocket = new CfnDomainName(this, "apigatewaydomainsocket", {
-      domainName: props!.domainName,
-      certificateArn: props!.certificate.certificateArn
-    });
+    // const apigatewaydomainsocket = new CfnDomainName(this, "apigatewaydomainsocket", {
+    //   domainName: props!.domainName,
+    //   certificateArn: props!.certificate.certificateArn
+    // });
 
     const apigatewaymappingsocket = new CfnApiMapping(this, "apigatewaymappingsocket", {
-      domainName: apigatewaydomainsocket.ref,
+      domainName: props!.domainName,
       apiId: this.webSocketApi.apiId,
       stage: stage.stageName
     });
@@ -132,7 +132,7 @@ export class WebSocketsStack extends Construct {
     const route53websocket = new CnameRecord(this, "route53websocket", {
       recordName: "ws",
       zone: props!.zone,
-      domainName: apigatewaydomainsocket.attrRegionalDomainName
+      domainName: props!.domainName
     });
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
@@ -235,7 +235,7 @@ export class WebSocketsStack extends Construct {
 
     this.webSocketApi.grantManageConnections(onMessageHandler.role!);
     this.webSocketApi.grantManageConnections(sendMessage.role!);
-   
+
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {
       value: `api endpoint: ${this.webSocketApi.apiEndpoint}`
     });
