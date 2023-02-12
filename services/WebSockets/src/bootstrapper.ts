@@ -33,18 +33,21 @@ export default function bootstrapper() {
         console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
 
         const endpointParts = APIGW_ENDPOINT.replace('wss://', '').split('/');
-        const endpoint = `https://${endpointParts[0]}/${endpointParts[1]}`;
+        const endpoint = encodeURI(`https://${endpointParts[0]}/${endpointParts[1]}`);
         console.log('endpoint', endpoint);
 
-        return process.env.NODE_ENV === 'production'
+        const client = process.env.NODE_ENV === 'production'
           ?
           new ApiGatewayManagementApiClient({            
             endpoint,
+            apiVersion: 'latest'
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
             endpoint: "http://kylefinley.sls:3001"
-          })
+          });
+          
+          return client;
       }
       );
   }

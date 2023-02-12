@@ -104,7 +104,7 @@ export class WebSocketsStack extends Construct {
 
     const stage = new WebSocketStage(this, 'Prod', {
       webSocketApi: this.webSocketApi,
-      stageName: 'v1',                                    // todo: ??
+      stageName: 'v1',
       autoDeploy: true,
     });
 
@@ -208,7 +208,7 @@ export class WebSocketsStack extends Construct {
 
     this.webSocketApi.grantManageConnections(onMessageHandler.role!);
     this.webSocketApi.grantManageConnections(sendMessage.role!);
-
+   
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {
       value: `api endpoint: ${this.webSocketApi.apiEndpoint}`
     });
