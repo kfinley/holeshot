@@ -1,4 +1,4 @@
-import { Stack, Duration, CfnOutput, RemovalPolicy } from 'aws-cdk-lib';
+import { CfnOutput, RemovalPolicy, ScopedAws } from 'aws-cdk-lib';
 import { WebSocketApi, WebSocketStage } from '@aws-cdk/aws-apigatewayv2-alpha';
 import { WebSocketLambdaAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers-alpha';
 import { WebSocketLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
@@ -9,14 +9,12 @@ import { NodejsFunction, NodejsFunctionProps, SourceMapMode } from 'aws-cdk-lib/
 import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-import { Chain, Choice, Condition, Fail, LogLevel, Pass, StateMachine, Succeed } from 'aws-cdk-lib/aws-stepfunctions';
+import { Chain, Choice, Condition, Fail, LogLevel, StateMachine } from 'aws-cdk-lib/aws-stepfunctions';
 import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { createLambda } from '.';
-import { BasePathMapping, CfnDomainName, DomainName, EndpointType } from 'aws-cdk-lib/aws-apigateway';
-import { CfnApiMapping } from 'aws-cdk-lib/aws-apigatewayv2';
-import { CnameRecord, HostedZone } from 'aws-cdk-lib/aws-route53';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 
 export interface WebSocketsStackProps {
@@ -115,8 +113,10 @@ export class WebSocketsStack extends Construct {
       autoDeploy: true,
     });
 
+    const { region } = new ScopedAws(this);
+
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: `ws.${props!.domainName}/v1`
+      APIGW_ENDPOINT: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1` // `ws.${props!.domainName}/v1`
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')

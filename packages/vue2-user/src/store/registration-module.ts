@@ -2,9 +2,9 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { RegistrationState, RegistrationStatus } from './state';
 import { RegisterRequest } from './../types';
 import { RegisterCommand } from '../commands';
-import { notificationModule } from '@finley/vue2-components/src/store'
-import { AlertType } from "@finley/vue2-components/src/types";
-import { messages } from "../resources/messages";
+import { notificationModule } from '@finley/vue2-components/src/store';
+import { AlertType } from '@finley/vue2-components/src/types';
+import { messages } from '../resources/messages';
 import { Inject } from 'inversify-props';
 
 @Module({ namespaced: true, name: 'Registration' })
@@ -13,7 +13,7 @@ export default class RegistrationModule extends VuexModule implements Registrati
   email: string | undefined;
   error: string | undefined;
 
-  @Inject("RegisterCommand")
+  @Inject('RegisterCommand')
   private registerCommand!: RegisterCommand;
 
   @Action
@@ -23,7 +23,6 @@ export default class RegistrationModule extends VuexModule implements Registrati
     this.context.commit('request', { email: params.email });
 
     try {
-
       const response = await this.registerCommand.runAsync(params);
 
       if (!response.success) {
@@ -34,9 +33,8 @@ export default class RegistrationModule extends VuexModule implements Registrati
       notificationModule.add({
         header: messages.Registration.Registered.header,
         message: messages.Registration.Registered.message,
-        type: AlertType.success
+        type: AlertType.success,
       });
-
     } catch (error) {
       this.context.commit('fail', error);
       notificationModule.handleError({ error, rethrow: false });
@@ -82,8 +80,6 @@ export default class RegistrationModule extends VuexModule implements Registrati
   mutate(mutation: (state: RegistrationState) => void) {
     mutation(this);
   }
-
 }
 
 // export const getRegistrationModule = (store: Store<any>) => getModule(RegistrationModule, store);
-
