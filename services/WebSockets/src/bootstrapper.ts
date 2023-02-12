@@ -32,17 +32,10 @@ export default function bootstrapper() {
         const { APIGW_ENDPOINT } = process.env;
         console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
 
-        const endpointParts = APIGW_ENDPOINT.replace('wss://', '').split('/');
-        // const endpoint = 'https://6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1'; // encodeURI(`https://${endpointParts[0]}/${endpointParts[1]}`);
-        const endpoint = APIGW_ENDPOINT;
-        console.log('endpoint', endpoint);
-
         const client = process.env.NODE_ENV === 'production'
           ?
           new ApiGatewayManagementApiClient({            
-            endpoint,
-            apiVersion: '2018-11-29',
-            region: "us-east-1",
+            endpoint: `https://${APIGW_ENDPOINT}`
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
