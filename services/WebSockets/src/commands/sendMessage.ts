@@ -28,14 +28,14 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
 
         const apigatewaymanagementapi = new ApiGatewayManagementApi({
           apiVersion: '2018-11-29',
+          //endpoint: `https://ag49r7wqy7.execute-api.us-east-1.amazonaws.com/v1`
           endpoint: {
-            hostname: 'ag49r7wqy7.execute-api.us-east-1.amazonaws.com',
+            hostname: '6ii0i7gdbe.execute-api.us-east-1.amazonaws.com',
             protocol: 'https',
             path: '/v1',
           }
         });
-      //        `https://ag49r7wqy7.execute-api.us-east-1.amazonaws.com/v1`
-        console.log('endpoint', await apigatewaymanagementapi.config.endpoint());
+      //  console.log('endpoint', await apigatewaymanagementapi.config.endpoint());
 
         const output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
 
