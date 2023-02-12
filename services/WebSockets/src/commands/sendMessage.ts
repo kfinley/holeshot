@@ -1,6 +1,7 @@
 import { ApiGatewayManagementApi, ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 import { Command } from '@holeshot/commands/src';
-import { Inject, injectable } from 'inversify-props';
+import { injectable } from 'inversify-props';
+import { container } from '../inversify.config';
 
 export interface SendMessageRequest {
   connectionId: string;
@@ -14,7 +15,7 @@ export interface SendMessageResponse {
 @injectable()
 export class SendMessageCommand implements Command<SendMessageRequest, SendMessageResponse> {
 
-  @Inject("ApiGatewayManagementApiClient")
+  // @Inject("ApiGatewayManagementApiClient")
   private client!: ApiGatewayManagementApiClient;
 
   async runAsync(params: SendMessageRequest): Promise<SendMessageResponse> {
@@ -26,18 +27,9 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
 
       const apigatewaymanagementapi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint: `https://ag49r7wqy7.execute-api.us-east-1.amazonaws.com/v1` });
 
-      let output: any = {};
-      apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
-        .then(out => {
-          output = {
-            statusCode: out.$metadata.httpStatusCode
-          };
-        })
-        .catch(error => {
-          console.log('Error posting to connection', error);
-          throw error;
-        });
+      const output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
 
+      //this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
       // const output = await this.client.send(new PostToConnectionCommand({
       //   ConnectionId: params.connectionId,
       //   Data: params.data as any
