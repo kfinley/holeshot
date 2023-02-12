@@ -25,7 +25,6 @@ export default function bootstrapper() {
   }
 
   if (!container.isBound("ApiGatewayManagementApiClient")) {
-
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
       .toDynamicValue(() => {
 

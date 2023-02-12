@@ -6,11 +6,11 @@ const container = bootstrapper();
 
 export const handler: Handler = async (event: any, context: Context) => {
 
-  const sendMessageCmd = () => container.get<SendMessageCommand>("SendMessageCommand");
+  const sendMessageCmd = container.get<SendMessageCommand>("SendMessageCommand");
 
   const { connectionId, subject, message } = event;
 
-  const response = await sendMessageCmd().runAsync({
+  const response = await sendMessageCmd.runAsync({
     connectionId,
     data: JSON.stringify({
       subject,
