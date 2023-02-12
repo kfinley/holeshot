@@ -14,7 +14,7 @@ import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { createLambda } from '.';
-import { CfnDomainName } from 'aws-cdk-lib/aws-apigateway';
+import { BasePathMapping, CfnDomainName, DomainName, EndpointType } from 'aws-cdk-lib/aws-apigateway';
 import { CfnApiMapping } from 'aws-cdk-lib/aws-apigatewayv2';
 import { CnameRecord, HostedZone } from 'aws-cdk-lib/aws-route53';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
@@ -117,10 +117,12 @@ export class WebSocketsStack extends Construct {
 
     // custom domain for websocket api
 
-    // const apigatewaydomainsocket = new CfnDomainName(this, "apigatewaydomainsocket", {
-    //   domainName: props!.domainName,
-    //   certificateArn: props!.certificate.certificateArn
-    // });
+    // First create a custom domain:
+    const customDomain = new DomainName(this, 'customDomain', {
+      domainName: `ws.${props!.domainName}`,
+      certificate: props!.certificate,
+      endpointType: EndpointType.EDGE
+    });
 
     const apigatewaymappingsocket = new CfnApiMapping(this, "apigatewaymappingsocket", {
       domainName: props!.domainName,
@@ -130,7 +132,7 @@ export class WebSocketsStack extends Construct {
 
     // create the subdomain
     const route53websocket = new CnameRecord(this, "route53websocket", {
-      recordName: "ws",
+      recordName: customDomain.domainName,
       zone: props!.zone,
       domainName: props!.domainName
     });
