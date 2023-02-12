@@ -119,6 +119,9 @@ export class WebSocketsStack extends Construct {
       APIGW_ENDPOINT: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1` // `ws.${props!.domainName}/v1`
     });
 
+    new CfnOutput(this, 'apigateay-endpoint', {
+      value: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1`
+    });
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
 
     // Lambda Functions end...
