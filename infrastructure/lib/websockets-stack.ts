@@ -115,30 +115,8 @@ export class WebSocketsStack extends Construct {
       autoDeploy: true,
     });
 
-    // custom domain for websocket api
-
-    // First create a custom domain:
-    const customDomain = new DomainName(this, 'customDomain', {
-      domainName: `ws.${props!.domainName}`,
-      certificate: props!.certificate,
-      endpointType: EndpointType.EDGE
-    });
-
-    const apigatewaymappingsocket = new CfnApiMapping(this, "apigatewaymappingsocket", {
-      domainName: props!.domainName,
-      apiId: this.webSocketApi.apiId,
-      stage: stage.stageName
-    });
-
-    // create the subdomain
-    const route53websocket = new CnameRecord(this, "route53websocket", {
-      recordName: customDomain.domainName,
-      zone: props!.zone,
-      domainName: props!.domainName
-    });
-
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: `ws.${props!.domainName}` // '6pljjv0abd.execute-api.us-east-1.amazonaws.com/v1' // stage.url
+      APIGW_ENDPOINT: stage.url.replace('wss://', '')
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')

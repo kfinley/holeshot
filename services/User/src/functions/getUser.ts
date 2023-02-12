@@ -8,13 +8,10 @@ const container = bootstrapper();
 export const handler: Handler = async (event: any, context: Context) => {
 
   try {
-    const getUserCmd = container.get<GetUserCommand>("GetUserCommand");
-
-    // console.log(`getUser`, event);
 
     const { email } = event;
 
-    const response = await getUserCmd.runAsync({
+    const response = await container.get<GetUserCommand>("GetUserCommand").runAsync({
       email
     });
 

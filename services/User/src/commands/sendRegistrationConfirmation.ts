@@ -9,7 +9,7 @@ const HOLESHOT_SENDER_EMAIL = process.env.HOLESHOT_SENDER_EMAIL as string;
 const HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE = process.env.HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE as string;
 
 export interface SendConfirmationRequest {
-  userId: string;
+  username: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -33,7 +33,7 @@ export class SendConfirmationCommand implements Command<SendConfirmationRequest,
 
     const templateData = {
       FirstName: params.firstName,
-      Url: this.generateUrl(HOLESHOT_SITE_URL, params.userId, params.tempPassword)
+      Url: this.generateUrl(HOLESHOT_SITE_URL, params.username, params.tempPassword)
     };
 
     console.log('settings', { HOLESHOT_SITE_URL, HOLESHOT_SENDER_EMAIL, HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE });

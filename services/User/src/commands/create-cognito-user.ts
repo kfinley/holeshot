@@ -8,14 +8,14 @@ export type CreateCognitoUserCommandRequest = {
   lastName: string;
   firstName: string;
   email: string;
-  userId?: string;
+  username?: string;
 }
 
 export type CreateCognitoUserCommandResponse = {
   success: boolean;
   firstName: string;
   lastName: string;
-  userId?: string;
+  username?: string;
   tempPassword?: string;
   email: string;
 }
@@ -30,13 +30,11 @@ export class CreateCognitoUserCommand implements Command<CreateCognitoUserComman
 
     try {
 
-      // console.log('CreateCognitoUserCommand');
-
       const tempPassword = Math.random().toString(36).slice(-8); //generate random password: https://stackoverflow.com/a/9719815
 
       const response = await this.cognitoIdentityProvider.adminCreateUser({
         UserPoolId: USER_POOL_ID,
-        Username: params.email,
+        Username: params.username,
         MessageAction: MessageActionType.SUPPRESS,
         TemporaryPassword: tempPassword,
         UserAttributes: [
@@ -51,6 +49,10 @@ export class CreateCognitoUserCommand implements Command<CreateCognitoUserComman
           {
             Name: "family_name",
             Value: params.lastName
+          },
+          {
+            Name: "sub", // User ID in Cognito
+            Value: params.username
           }
         ]
       });
