@@ -1,4 +1,4 @@
-import { CfnOutput, RemovalPolicy, ScopedAws } from 'aws-cdk-lib';
+import { CfnOutput, Duration, RemovalPolicy, ScopedAws } from 'aws-cdk-lib';
 import { WebSocketApi, WebSocketStage } from '@aws-cdk/aws-apigatewayv2-alpha';
 import { WebSocketLambdaAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers-alpha';
 import { WebSocketLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
@@ -149,7 +149,14 @@ export class WebSocketsStack extends Construct {
     });
 
     const sendMessageInvocation = new LambdaInvoke(this, "SendMessageInvocation", {
-      lambdaFunction: sendMessage
+      lambdaFunction: sendMessage,
+    });
+
+    sendMessageInvocation.addRetry({
+      errors: ['UnknownException'],
+      maxAttempts: 3,
+      backoffRate: 2,
+      interval: Duration.seconds(10)
     });
 
     const isConnected = new Choice(this, 'HasConnectionId?');

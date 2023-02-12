@@ -32,18 +32,15 @@ export default function bootstrapper() {
         const { APIGW_ENDPOINT } = process.env;
         console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
 
-        const client = process.env.NODE_ENV === 'production'
+        return process.env.NODE_ENV === 'production'
           ?
           new ApiGatewayManagementApiClient({
-            apiVersion: '2018-11-29',
             endpoint: `https://${APIGW_ENDPOINT}`
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
             endpoint: "http://kylefinley.sls:3001"
           });
-          
-          return client;
       }
       );
   }
