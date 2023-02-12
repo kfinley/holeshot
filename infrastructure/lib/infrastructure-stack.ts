@@ -256,6 +256,16 @@ export class InfrastructureStack extends Stack {
       certificate: this.certificate
     });
 
+    new CfnOutput(this, 'webSocketApi.apiEndpoint', {
+      value: webSocketsApi.webSocketApi.apiEndpoint,
+    });
+
+    new route53.CnameRecord(this, 'WebSocketCnameRecord', {
+      recordName: `ws.${domainName}`,
+      zone: this.hostedZone,
+      domainName: webSocketsApi.webSocketApi.apiEndpoint
+    })
+
     step3();
 
     step4();

@@ -19,20 +19,24 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
 
   async runAsync(params: SendMessageRequest): Promise<SendMessageResponse> {
 
-    console.log('connectionId', params.connectionId);
-    console.log('data', params.data);
-    console.log('client.config.endpoint', await this.client.config.endpoint());
+    try {
+      console.log('connectionId', params.connectionId);
+      console.log('data', params.data);
+      console.log('client.config.endpoint', await this.client.config.endpoint());
 
-    const output = await this.client.send(new PostToConnectionCommand({
-      ConnectionId: params.connectionId,
-      Data: params.data as any
-    }));
+      const output = await this.client.send(new PostToConnectionCommand({
+        ConnectionId: params.connectionId,
+        Data: params.data as any
+      }));
 
-    console.log('output', output);
+      console.log('output', output);
 
-    return {
-      statusCode: output.$metadata.httpStatusCode
-    };
-
+      return {
+        statusCode: output.$metadata.httpStatusCode
+      };
+    } catch (e) {
+      console.log('Error in sendMessageCommand', e);
+      throw e;
+    }
   }
 }
