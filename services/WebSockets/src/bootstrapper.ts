@@ -34,8 +34,9 @@ export default function bootstrapper() {
 
         const client = process.env.NODE_ENV === 'production'
           ?
-          new ApiGatewayManagementApiClient({            
-            endpoint: `https://${APIGW_ENDPOINT}`
+          new ApiGatewayManagementApiClient({
+            apiVersion: '2018-11-29',
+            endpoint: `${APIGW_ENDPOINT}`
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
