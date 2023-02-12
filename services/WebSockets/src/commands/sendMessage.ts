@@ -24,16 +24,23 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       console.log('connectionId', params.connectionId);
       console.log('data', params.data);
 
-      const apigatewaymanagementapi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint: `https://ag49r7wqy7.execute-api.us-east-1.amazonaws.com/v1` });
+      try {
 
-      let output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
+        const apigatewaymanagementapi = new ApiGatewayManagementApi({ apiVersion: '2018-11-29', endpoint: `https://ag49r7wqy7.execute-api.us-east-1.amazonaws.com/v1` });
 
-      console.log('output', output);
+        console.log('endpoint', apigatewaymanagementapi.config.endpoint);
+
+        const output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
+
+        console.log('output', output);
+      } catch (e) {
+        console.log('failed with ApiGatewayManagementApi', e);
+      }
 
       this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
       console.log('client.config.endpoint', await this.client.config.endpoint());
 
-      output = await this.client.send(new PostToConnectionCommand({
+      const output = await this.client.send(new PostToConnectionCommand({
         ConnectionId: params.connectionId,
         Data: params.data as any
       }));
