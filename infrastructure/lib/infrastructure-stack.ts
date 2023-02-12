@@ -264,25 +264,25 @@ export class InfrastructureStack extends Stack {
       value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
     });
 
-    // const customDomain = new DomainName(this, 'ApiGatewayCustomDomain', {
-    //   domainName: `ws.${domainName}`,
-    //   certificate: Certificate.fromCertificateArn(this, 'Certificate', this.certificate.certificateArn),
-    //   endpointType: EndpointType.EDGE,
-    // });
+    const customDomain = new DomainName(this, 'ApiGatewayCustomDomain', {
+      domainName: `ws.${domainName}`,
+      certificate: Certificate.fromCertificateArn(this, 'Certificate', this.certificate.certificateArn),
+      endpointType: EndpointType.EDGE,
+    });
 
-    // new RecordSet(this, 'WebSocketApiRecordSetA', {
-    //   zone: this.hostedZone,
-    //   recordType: RecordType.A,
-    //   recordName: 'ws',
-    //   target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
-    // });
+    new RecordSet(this, 'WebSocketApiRecordSetA', {
+      zone: this.hostedZone,
+      recordType: RecordType.A,
+      recordName: 'ws',
+      target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
+    });
 
-    // new RecordSet(this, 'ApiRecordSetAAAA', {
-    //   zone: this.hostedZone,
-    //   recordType: RecordType.AAAA,
-    //   recordName: 'ws',
-    //   target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
-    // });
+    new RecordSet(this, 'ApiRecordSetAAAA', {
+      zone: this.hostedZone,
+      recordType: RecordType.AAAA,
+      recordName: 'ws',
+      target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
+    });
 
     step3();
 
