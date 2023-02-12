@@ -21,7 +21,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     console.log('event', event),
     console.log('context', context);
-
+    console.log('endpoint', `https://${event.requestContext.domainName}/${event.requestContext.stage}`);
+    
     if (authorizer === null || authorizer === undefined) { // || authorizer.policyDocument === undefined
       return createResponse(event, 401, 'Unauthorized');
     }
