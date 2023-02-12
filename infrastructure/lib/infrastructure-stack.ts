@@ -12,8 +12,10 @@ import { WebSocketsStack } from './websockets-stack';
 import { DataStores } from './data-stores';
 import { UserServiceStack } from './user-stack';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
-import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { PublicHostedZone, RecordSet, RecordTarget, RecordType } from 'aws-cdk-lib/aws-route53';
+import { Certificate, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { DomainName, EndpointType } from 'aws-cdk-lib/aws-apigateway';
+import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -262,12 +264,25 @@ export class InfrastructureStack extends Stack {
       value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
     });
 
-    new route53.CnameRecord(this, 'WebSocketCnameRecord', {
-      recordName: `ws.${domainName}`,
-      zone: this.hostedZone,
-      domainName: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`
+    const customDomain = new DomainName(this, 'ApiGatewayCustomDomain', {
+      domainName: `ws.${domainName}`,
+      certificate: Certificate.fromCertificateArn(this, 'Certificate', this.certificate.certificateArn),
+      endpointType: EndpointType.EDGE,
     })
 
+    new RecordSet(this, 'WebSocketApiRecordSetA', {
+      zone: this.hostedZone,
+      recordType: RecordType.A,
+      recordName: 'ws',
+      target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
+    })
+
+    new RecordSet(this, 'ApiRecordSetAAAA', {
+      zone: this.hostedZone,
+      recordType: RecordType.AAAA,
+      recordName: 'ws',
+      target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
+    })
     step3();
 
     step4();
