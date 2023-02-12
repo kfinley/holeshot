@@ -1,7 +1,6 @@
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 import { Command } from '@holeshot/commands/src';
-import { injectable } from 'inversify-props';
-import { container } from '../inversify.config';
+import { Inject, injectable } from 'inversify-props';
 
 export interface SendMessageRequest {
   connectionId: string;
@@ -15,14 +14,13 @@ export interface SendMessageResponse {
 @injectable()
 export class SendMessageCommand implements Command<SendMessageRequest, SendMessageResponse> {
 
+  @Inject("ApiGatewayManagementApiClient")
   private client!: ApiGatewayManagementApiClient;
 
   async runAsync(params: SendMessageRequest): Promise<SendMessageResponse> {
 
     console.log('connectionId', params.connectionId);
     console.log('data', params.data);
-
-    this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
     console.log('client.config.endpoint', await this.client.config.endpoint());
 
     const output = await this.client.send(new PostToConnectionCommand({
