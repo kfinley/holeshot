@@ -257,13 +257,13 @@ export class InfrastructureStack extends Stack {
     });
 
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {
-      value: webSocketsApi.webSocketApi.apiEndpoint,
+      value: webSocketsApi.webSocketApi.apiEndpoint.replace('wss://', ''),
     });
 
     new route53.CnameRecord(this, 'WebSocketCnameRecord', {
       recordName: `ws.${domainName}`,
       zone: this.hostedZone,
-      domainName: webSocketsApi.webSocketApi.apiEndpoint
+      domainName: webSocketsApi.webSocketApi.apiEndpoint.replace('wss://', '')
     })
 
     step3();

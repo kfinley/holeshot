@@ -11,7 +11,7 @@ export class WebSockets extends BaseModule implements WebSocketsState {
   socket!: Socket;
 
   //TODO: fix this...
-  url: string = `${
+  url = `${
     process.env.NODE_ENV === 'production'
       ? 'ws.holeshot-bmx.com' // TODO: do better...
       : 'localhost:3001'
