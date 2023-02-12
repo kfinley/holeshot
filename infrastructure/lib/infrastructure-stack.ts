@@ -71,10 +71,12 @@ export class InfrastructureStack extends Stack {
     const step2 = () => {
       this.certificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
         domainName,
+        subjectAlternativeNames: [`*.${domainName}`],
         hostedZone: this.hostedZone,
-        region: region,
+        region,
         validation: acm.CertificateValidation.fromDns(),
       });
+
     }
 
     // Deploy Step 3: Create images CF Distro
