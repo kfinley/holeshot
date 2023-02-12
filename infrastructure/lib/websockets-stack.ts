@@ -116,7 +116,7 @@ export class WebSocketsStack extends Construct {
     const { region } = new ScopedAws(this);
 
     const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
-      APIGW_ENDPOINT: `ws.${props!.domainName}/v1` // `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1`
+      APIGW_ENDPOINT: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1` // `ws.${props!.domainName}/v1`
     });
 
     const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
@@ -213,8 +213,8 @@ export class WebSocketsStack extends Construct {
 
     // Configure WebSockets...
 
-    this.webSocketApi.grantManageConnections(onMessageHandler.role!);
-    this.webSocketApi.grantManageConnections(sendMessage.role!);
+    this.webSocketApi.grantManageConnections(onMessageHandler);
+    this.webSocketApi.grantManageConnections(sendMessage);
 
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {
       value: `api endpoint: ${this.webSocketApi.apiEndpoint}`
