@@ -4,20 +4,14 @@ import Sockette from 'sockette';
 import { Socket } from '../types';
 import BaseModule from './base-module';
 import { Store } from 'vuex';
+import { config } from '@holeshot/web-core/src/config';
 
 @Module({ name: 'WebSockets', namespaced: true })
 export class WebSockets extends BaseModule implements WebSocketsState {
   status: WebSocketsStatus = WebSocketsStatus.None;
   socket!: Socket;
 
-  //TODO: fix this...
-  url = `${
-    process.env.NODE_ENV === 'production'
-      ? 'ws.holeshot-bmx.com/v1' // TODO: do better...
-      : 'localhost:3001'
-  }`;
-
-  protocol = `${process.env.NODE_ENV === 'production' ? 'wss' : 'ws'}`;
+  wsUrl = `${process.env.NODE_ENV === 'production' ? 'wss' : 'ws'}://${config.WebSocket}`
 
   @Action
   handleSocketMessage(ev: MessageEvent) {
@@ -34,11 +28,9 @@ export class WebSockets extends BaseModule implements WebSocketsState {
   connect(token: string) {
     console.log('connect');
 
-    const wsUrl = `${this.protocol}://${this.url}`;
-
     if (this.socket == undefined) {
-      console.log(`connecting to socket: ${wsUrl}`);
-      const socket = new Sockette(wsUrl, {
+      console.log(`connecting to socket: ${this.wsUrl}`);
+      const socket = new Sockette(this.wsUrl, {
         protocols: token,
         onmessage: this.handleSocketMessage,
         // onreconnect?: (this: Sockette, ev: Event | CloseEvent) => any;

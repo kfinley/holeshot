@@ -5,9 +5,7 @@ export interface Configuration {
   Host: string;
   Agent: string;
   Api: string;
-  // ApiPorts?: string;
-  WebSocket?: string,
-  WebSocketPort?: string
+  WebSocket: string,
 }
 
 export const config: Configuration = {
@@ -17,7 +15,5 @@ export const config: Configuration = {
   Host: process.env.VITE_APP_HOST as string,
   Agent: process.env.VITE_APP_AGENT as string,
   Api: process.env.VITE_APP_API as string,
-  ApiPorts: process.env.VITE_APP_API_PORTS,
   WebSocket: process.env.VITE_APP_WEBSOCKET as string,
-  WebSocketPort: process.env.VITE_APP_WEBSOCKET_PORT as string,
 };

@@ -71,7 +71,7 @@ export class InfrastructureStack extends Stack {
     const step2 = () => {
       this.certificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
         domainName,
-        subjectAlternativeNames: [`*.${domainName}`],
+        subjectAlternativeNames: [`ws.${domainName}`],
         hostedZone: this.hostedZone,
         region,
         validation: acm.CertificateValidation.fromDns(),
