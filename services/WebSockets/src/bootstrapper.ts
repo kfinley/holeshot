@@ -36,7 +36,7 @@ export default function bootstrapper() {
           ?
           new ApiGatewayManagementApiClient({
             apiVersion: '2018-11-29',
-            endpoint: `${APIGW_ENDPOINT}`
+            endpoint: `https://${APIGW_ENDPOINT}`
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
