@@ -45,7 +45,7 @@ export class InfrastructureStack extends Stack {
 
     // // Setup User Service
     const userService = new UserServiceStack(this, 'Holeshot-UserServiceStack', {
-      coreTable: dataStores?.coreTable!, // HOLESHOT_CORE_TABLE: Holeshot-Core-Table
+      coreTable: dataStores?.coreTable!,
       siteUrl: `https://${domainName}`,
       senderEmail: props?.senderEmail!,
       logLevel: props?.logLevel!,
@@ -73,7 +73,7 @@ export class InfrastructureStack extends Stack {
     const step2 = () => {
       this.certificate = new acm.DnsValidatedCertificate(this, 'CertificateManagerCertificate', {
         domainName,
-        subjectAlternativeNames: [`ws.${domainName}`],
+        subjectAlternativeNames: [`ws.${domainName}`],    // placeholder for getting websocket custom domain working
         hostedZone: this.hostedZone,
         region,
         validation: acm.CertificateValidation.fromDns(),
@@ -251,38 +251,38 @@ export class InfrastructureStack extends Stack {
     step2();
 
     // Setup WebSockets
-    const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
-      connectionsTable: dataStores?.connectionsTable!,
-      logLevel: props?.logLevel!,
-      node_env: props!.node_env,
-      domainName,
-      zone: this.hostedZone,
-      certificate: this.certificate
-    });
+    // const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
+    //   connectionsTable: dataStores?.connectionsTable!,
+    //   logLevel: props?.logLevel!,
+    //   node_env: props!.node_env,
+    //   domainName,
+    //   zone: this.hostedZone,
+    //   certificate: this.certificate
+    // });
 
-    new CfnOutput(this, 'apiEndpoint', {
-      value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
-    });
+    // new CfnOutput(this, 'apiEndpoint', {
+    //   value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
+    // });
 
-    const customDomain = new DomainName(this, 'ApiGatewayCustomDomain', {
-      domainName: `ws.${domainName}`,
-      certificate: Certificate.fromCertificateArn(this, 'Certificate', this.certificate.certificateArn),
-      endpointType: EndpointType.EDGE,
-    });
+    // const customDomain = new DomainName(this, 'ApiGatewayCustomDomain', {
+    //   domainName: `ws.${domainName}`,
+    //   certificate: Certificate.fromCertificateArn(this, 'Certificate', this.certificate.certificateArn),
+    //   endpointType: EndpointType.EDGE,
+    // });
 
-    new RecordSet(this, 'WebSocketApiRecordSetA', {
-      zone: this.hostedZone,
-      recordType: RecordType.A,
-      recordName: 'ws',
-      target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
-    });
+    // new RecordSet(this, 'WebSocketApiRecordSetA', {
+    //   zone: this.hostedZone,
+    //   recordType: RecordType.A,
+    //   recordName: 'ws',
+    //   target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
+    // });
 
-    new RecordSet(this, 'ApiRecordSetAAAA', {
-      zone: this.hostedZone,
-      recordType: RecordType.AAAA,
-      recordName: 'ws',
-      target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
-    });
+    // new RecordSet(this, 'ApiRecordSetAAAA', {
+    //   zone: this.hostedZone,
+    //   recordType: RecordType.AAAA,
+    //   recordName: 'ws',
+    //   target: RecordTarget.fromAlias(new ApiGatewayDomain(customDomain))
+    // });
 
     step3();
 
