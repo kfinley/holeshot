@@ -1,6 +1,6 @@
 import { ApiGatewayManagementApi, ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 import { Command } from '@holeshot/commands/src';
-import { injectable } from 'inversify-props';
+import { Inject, injectable } from 'inversify-props';
 import { container } from '../inversify.config';
 
 export interface SendMessageRequest {
@@ -15,29 +15,16 @@ export interface SendMessageResponse {
 @injectable()
 export class SendMessageCommand implements Command<SendMessageRequest, SendMessageResponse> {
 
-  // @Inject("ApiGatewayManagementApiClient")
+  @Inject("ApiGatewayManagementApiClient")
   private client!: ApiGatewayManagementApiClient;
 
   async runAsync(params: SendMessageRequest): Promise<SendMessageResponse> {
 
     try {
-      console.log('connectionId', params.connectionId);
-      console.log('data', params.data);
+      // console.log('connectionId', params.connectionId);
+      // console.log('data', params.data);
 
-      try {
-        const { APIGW_ENDPOINT } = process.env;
-        const apigatewaymanagementapi = new ApiGatewayManagementApi({
-          endpoint: `https://${APIGW_ENDPOINT}`
-        });
-
-        const output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
-
-        console.log('output', output);
-      } catch (e) {
-        console.log('failed with ApiGatewayManagementApi', e);
-      }
-
-      this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
+      // this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
 
       // This is a total hack because for some reason the hostname and path are losing values
       // looks like a bug was introduced into smithy-client.. possibly when resolve-path.ts was introduced
@@ -48,14 +35,15 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
           async (args) => {
             const { request } = args as any
 
-            console.log('args.request', request);
-
             if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
+              console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
               request.hostname = hostname;
               request.path = path + request.path;
-            }
+              console.log('args.request', args.request);
 
-            console.log('args.request', args.request);
+            } else {
+              console.log('ALERT!!! ApiGatewayManagementApiClient middleware hack may no longer be needed.');
+            }
 
             return await next(args);
           },
@@ -67,7 +55,7 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
         Data: params.data as any
       }));
 
-      console.log('output', output);
+      // console.log('output', output);
 
       return {
         statusCode: output.$metadata.httpStatusCode
