@@ -42,12 +42,11 @@ export default function bootstrapper() {
           });
 
         // This is a total hack because for some reason the hostname and path are losing values
-        // looks like a bug was introduced into smithy-client.. possibly when resolve-path.ts was introduced
-
+        // looks like a bug was introduced into smithy-client.. maybe when resolve-path.ts was introduced
         client.middlewareStack.add(
           (next) =>
             async (args) => {
-              const { hostname, path } = await this.client.config.endpoint();
+              const { hostname, path } = await client.config.endpoint();
               const { request } = args as any
 
               console.log('request.hostname', request.hostname);
