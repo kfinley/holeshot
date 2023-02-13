@@ -27,7 +27,7 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       try {
 
         const apigatewaymanagementapi = new ApiGatewayManagementApi({});
-      //  console.log('endpoint', await apigatewaymanagementapi.config.endpoint());
+        //  console.log('endpoint', await apigatewaymanagementapi.config.endpoint());
 
         const output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
 
@@ -38,6 +38,17 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
 
       this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
       console.log('client.config.endpoint', await this.client.config.endpoint());
+
+      this.client.middlewareStack.add(
+        (next) =>
+          async (args) => {
+            console.log('args.request', args.request);
+            // args.request.path = STAGE + args.request.path;
+            return await next(args);
+
+          },
+        { step: "build" },
+      );
 
       const output = await this.client.send(new PostToConnectionCommand({
         ConnectionId: params.connectionId,
