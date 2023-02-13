@@ -46,11 +46,14 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
           async (args) => {
             const { request } = args as any
 
-            console.log('args.request', args.request);
-            if (request.host.indexOf(hostname.split('.')[0]) < 0) {
-              (args.request as any).hostname = hostname;
-              (args.request as any).path = path + (args.request as any).path;
+            console.log('args.request', request);
+
+            if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
+              request.hostname = hostname;
+              request.path = path + request.path;
             }
+
+            // args.request = request;
 
             console.log('args.request', args.request);
 
