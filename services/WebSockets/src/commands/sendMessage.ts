@@ -42,10 +42,15 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       this.client.middlewareStack.add(
         (next) =>
           async (args) => {
-            console.log('args.request', args.request);
-            // args.request.path = STAGE + args.request.path;
-            return await next(args);
 
+            console.log('args.input', args.input);
+            console.log('args.request', args.request);
+            (args.request as any).hostname = 'ag49r7wqy7.' + (args.request as any).hostname;
+            (args.request as any).path = '/v1' + (args.request as any).path;
+
+            console.log('args.request', args.request);
+
+            return await next(args);
           },
         { step: "build" },
       );
