@@ -37,16 +37,20 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       }
 
       this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
-      console.log('client.config.endpoint', await this.client.config.endpoint());
+
+      // This is a total hack because for some reason the hostname and path are losing values
+      const { hostname, path } = await this.client.config.endpoint();
 
       this.client.middlewareStack.add(
         (next) =>
           async (args) => {
+            const { request } = args as any
 
-            console.log('args.input', args.input);
             console.log('args.request', args.request);
-            (args.request as any).hostname = 'ag49r7wqy7.' + (args.request as any).hostname;
-            (args.request as any).path = '/v1' + (args.request as any).path;
+            if (request.host.indexOf(hostname.split('.')[0]) < 0) {
+              (args.request as any).hostname = hostname;
+              (args.request as any).path = path + (args.request as any).path;
+            }
 
             console.log('args.request', args.request);
 
