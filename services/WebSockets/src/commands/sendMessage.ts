@@ -25,9 +25,10 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       console.log('data', params.data);
 
       try {
-
-        const apigatewaymanagementapi = new ApiGatewayManagementApi({});
-        //  console.log('endpoint', await apigatewaymanagementapi.config.endpoint());
+        const { APIGW_ENDPOINT } = process.env;
+        const apigatewaymanagementapi = new ApiGatewayManagementApi({
+          endpoint: `https://${APIGW_ENDPOINT}`
+        });
 
         const output = await apigatewaymanagementapi.postToConnection({ ConnectionId: params.connectionId, Data: Buffer.from(params.data, 'base64') })
 
@@ -39,6 +40,7 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
 
       // This is a total hack because for some reason the hostname and path are losing values
+      // looks like a bug was introduced into smithy-client.. possibly when resolve-path.ts was introduced
       const { hostname, path } = await this.client.config.endpoint();
 
       this.client.middlewareStack.add(
@@ -52,8 +54,6 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
               request.hostname = hostname;
               request.path = path + request.path;
             }
-
-            // args.request = request;
 
             console.log('args.request', args.request);
 
