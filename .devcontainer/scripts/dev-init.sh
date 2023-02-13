@@ -9,7 +9,7 @@ git config --global --add safe.directory /workspace
 # Open up docker socket for docker-in-docker as non-root
 sudo chmod 777 /var/run/docker-host.sock
 
-# Run npm & lerna installs
+# Run pnpm install & build
 if ! [ -d './node_modules' ]; then
     pnpm i
 
@@ -23,7 +23,16 @@ if ! [ -d './node_modules' ]; then
     npm run containers:restart
 
 else
-    echo 'Existing repo setup... skipping npm & lerna setup.'
+    echo 'Existing repo setup... skipping pnpm install & build.'
+fi
+
+echo
+if [[ $(dotnet lambda) == *'Amazon Lambda Tools for .NET Core applications'* ]]; then
+  echo 'Skipping dotnet tools install...'
+else
+  echo 'Running dotnet tools install...'
+  # Install additional .net tools (ef, lambda, etc.)
+  ./.devcontainer/scripts/install-dotnet-tools.sh
 fi
 
 echo
