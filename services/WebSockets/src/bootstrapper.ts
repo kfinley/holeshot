@@ -50,10 +50,10 @@ export default function bootstrapper() {
               const { request } = args as any
 
               if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
-                console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
+                // console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
                 request.hostname = hostname;
                 request.path = path + request.path;
-                console.log('args.request', args.request);
+                // console.log('args.request', args.request);
 
               } else {
                 console.log('ALERT!!! ApiGatewayManagementApiClient middleware hack may no longer be needed.');
