@@ -28,10 +28,9 @@ export default function bootstrapper() {
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
       .toDynamicValue(() => {
 
-        const { APIGW_ENDPOINT } = process.env;
-        // console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
+        const { APIGW_ENDPOINT, NODE_ENV } = process.env;
 
-        const client = process.env.NODE_ENV === 'production'
+        const client = NODE_ENV === 'production'
           ?
           new ApiGatewayManagementApiClient({
             endpoint: `https://${APIGW_ENDPOINT}`
@@ -41,17 +40,14 @@ export default function bootstrapper() {
             endpoint: "http://kylefinley.sls:3001"
           });
 
-        // This is a total hack because for some reason the hostname and path are losing values
-        // looks like a bug was introduced into smithy-client.. maybe when resolve-path.ts was introduced
+        //HACK: For some reason the hostname and path values are changing.
+        // similar to what's mentioned in closed ticket: https://github.com/aws/aws-sdk-js-v3/issues/1830
+        // Looks like a bug was introduced into smithy-client.. maybe when resolve-path.ts was introduced
         client.middlewareStack.add(
           (next) =>
             async (args) => {
               const { hostname, path } = await client.config.endpoint();
               const { request } = args as any
-
-              console.log('request.hostname', request.hostname);
-              console.log('hostname', hostname);
-              console.log('hostname.split', hostname.split('.')[0]);
 
               if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
                 console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
