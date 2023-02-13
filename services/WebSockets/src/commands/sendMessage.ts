@@ -1,6 +1,6 @@
-import { ApiGatewayManagementApi, ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
+import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 import { Command } from '@holeshot/commands/src';
-import { Inject, injectable } from 'inversify-props';
+import { injectable } from 'inversify-props';
 import { container } from '../inversify.config';
 
 export interface SendMessageRequest {
@@ -15,7 +15,6 @@ export interface SendMessageResponse {
 @injectable()
 export class SendMessageCommand implements Command<SendMessageRequest, SendMessageResponse> {
 
-  @Inject("ApiGatewayManagementApiClient")
   private client!: ApiGatewayManagementApiClient;
 
   async runAsync(params: SendMessageRequest): Promise<SendMessageResponse> {
@@ -24,7 +23,8 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
       // console.log('connectionId', params.connectionId);
       // console.log('data', params.data);
 
-      // this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
+      // injecting with atteribute isn't working atm
+      this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
 
       const output = await this.client.send(new PostToConnectionCommand({
         ConnectionId: params.connectionId,

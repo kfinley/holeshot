@@ -50,6 +50,10 @@ export default function bootstrapper() {
               const { hostname, path } = await this.client.config.endpoint();
               const { request } = args as any
 
+              console.log('request.hostname', request.hostname);
+              console.log('hostname', hostname);
+              console.log('hostname.split', hostname.split('.')[0]);
+
               if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
                 console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
                 request.hostname = hostname;
