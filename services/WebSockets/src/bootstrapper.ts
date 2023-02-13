@@ -29,9 +29,9 @@ export default function bootstrapper() {
       .toDynamicValue(() => {
 
         const { APIGW_ENDPOINT } = process.env;
-        console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
+        // console.log('APIGW_ENDPOINT', APIGW_ENDPOINT);
 
-        return process.env.NODE_ENV === 'production'
+        const client = process.env.NODE_ENV === 'production'
           ?
           new ApiGatewayManagementApiClient({
             endpoint: `https://${APIGW_ENDPOINT}`
@@ -40,6 +40,31 @@ export default function bootstrapper() {
           new ApiGatewayManagementApiClient({ // Local Dev
             endpoint: "http://kylefinley.sls:3001"
           });
+
+        // This is a total hack because for some reason the hostname and path are losing values
+        // looks like a bug was introduced into smithy-client.. possibly when resolve-path.ts was introduced
+
+        client.middlewareStack.add(
+          (next) =>
+            async (args) => {
+              const { hostname, path } = await this.client.config.endpoint();
+              const { request } = args as any
+
+              if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
+                console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
+                request.hostname = hostname;
+                request.path = path + request.path;
+                console.log('args.request', args.request);
+
+              } else {
+                console.log('ALERT!!! ApiGatewayManagementApiClient middleware hack may no longer be needed.');
+              }
+
+              return await next(args);
+            },
+          { step: "build" },
+        );
+        return client;
       }
       );
   }

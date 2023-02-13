@@ -26,30 +26,6 @@ export class SendMessageCommand implements Command<SendMessageRequest, SendMessa
 
       // this.client = container.get<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient");
 
-      // This is a total hack because for some reason the hostname and path are losing values
-      // looks like a bug was introduced into smithy-client.. possibly when resolve-path.ts was introduced
-      const { hostname, path } = await this.client.config.endpoint();
-
-      this.client.middlewareStack.add(
-        (next) =>
-          async (args) => {
-            const { request } = args as any
-
-            if (request.hostname.indexOf(hostname.split('.')[0]) < 0) {
-              console.log('ApiGatewayManagementApiClient middleware hack: rewriting args.request:', request);
-              request.hostname = hostname;
-              request.path = path + request.path;
-              console.log('args.request', args.request);
-
-            } else {
-              console.log('ALERT!!! ApiGatewayManagementApiClient middleware hack may no longer be needed.');
-            }
-
-            return await next(args);
-          },
-        { step: "build" },
-      );
-
       const output = await this.client.send(new PostToConnectionCommand({
         ConnectionId: params.connectionId,
         Data: params.data as any
