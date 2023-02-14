@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 
 using ServiceProviderFunctions;
+using Holeshot.Crawler.Commands;
 
 namespace Holeshot.Crawler.Functions {
   public abstract class BaseFunction : ServiceProviderFunction {
@@ -16,11 +17,14 @@ namespace Holeshot.Crawler.Functions {
     }
 
     protected override void ConfigureServices(IServiceCollection serviceCollection, IConfiguration configuration) {
+
       serviceCollection
         .AddOptions()
         .AddDefaultAWSOptions(configuration.GetAWSOptions())
         .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions("Service:SNS"))
-        .AddMediatR(Aws.Commands.CommandsAssembly.Value);
+        .Configure<Settings>(configuration.GetSection("Services:Crawler"))
+        .AddMediatR(Aws.Commands.CommandsAssembly.Value)
+        .AddMediatR(Crawler.Commands.CommandsAssembly.Value);
     }
   }
 }

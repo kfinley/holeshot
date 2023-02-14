@@ -12,5 +12,5 @@
   "function-runtime": "dotnet6",
   "function-memory-size": 256,
   "function-timeout": 30,
-  "function-handler": "Holeshot.Crawler::Holeshot.Crawler.Function::FunctionHandler"
+  "function-handler": "Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler"
 }

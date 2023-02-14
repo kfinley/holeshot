@@ -9,7 +9,6 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <!-- Generate ready to run images during publishing to improve cold start time. -->
     <PublishReadyToRun>true</PublishReadyToRun>
-    <EnvironmentName>Development</EnvironmentName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.101.8" />
@@ -30,7 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="appsettings.*.json" Exclude="appsettings.$(EnvironmentName).json" DependentUpon="appsettings.json" CopyToOutputDirectory="Never" />
-    <Content Include="appsettings.$(EnvironmentName).json" DependentUpon="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="appsettings.*.json" Exclude="appsettings.$(ASPNETCORE_ENVIRONMENT).json" DependentUpon="appsettings.json" CopyToOutputDirectory="Never" />
+    <Content Include="appsettings.$(ASPNETCORE_ENVIRONMENT).json" DependentUpon="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

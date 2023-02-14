@@ -12,10 +12,9 @@ import { WebSocketsStack } from './websockets-stack';
 import { DataStores } from './data-stores';
 import { UserServiceStack } from './user-stack';
 import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
-import { PublicHostedZone, RecordSet, RecordTarget, RecordType } from 'aws-cdk-lib/aws-route53';
+import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
 import { Certificate, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { DomainName, EndpointType } from 'aws-cdk-lib/aws-apigateway';
-import { ApiGatewayDomain } from 'aws-cdk-lib/aws-route53-targets';
+import { CrawlerService } from './crawler-service';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -41,6 +40,10 @@ export class InfrastructureStack extends Stack {
     // Setup Data Stores
     const dataStores = new DataStores(this, 'Holeshot-DataStoreseStack', {
       domainName,
+    });
+
+    const crawlerService = new CrawlerService(this, 'Holeshot-CrawlerService', {
+      crawlerBucket: dataStores.crawlerBucket
     });
 
     // // Setup User Service

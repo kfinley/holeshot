@@ -13,6 +13,7 @@ export class DataStores extends Construct {
   readonly frontEndBucket: Bucket;
   readonly mediaBucket: Bucket;
   readonly coreTable: Table;
+  readonly crawlerBucket: Bucket;
 
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
     super(scope, id);
@@ -77,7 +78,11 @@ export class DataStores extends Construct {
       ],
     });
 
+    this.crawlerBucket = new Bucket(this, 'crawlerBucket', {
+      bucketName: `${props?.domainName}.crawler`,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    })
   }
-
-
 }

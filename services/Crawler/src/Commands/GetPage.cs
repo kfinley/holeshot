@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Holeshot.Aws.Commands;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Holeshot.Crawler.Commands {
 
@@ -20,14 +21,14 @@ namespace Holeshot.Crawler.Commands {
     public string Contents { get; set; }
   }
 
-  public class GetPage : CrawlerBase, IRequestHandler<GetPageRequest, GetPageResponse> {
+  public class GetPageHandler : Crawly, IRequestHandler<GetPageRequest, GetPageResponse> {
 
-    public GetPage(IMediator mediator) : base(mediator) { }
+    public GetPageHandler(IMediator mediator, IOptions<Settings> settings) : base(mediator, settings.Value) { }
 
     private async Task<GetS3ObjectResponse> GetFile(string key) {
       return await this.Send(new GetS3ObjectRequest {
         Key = key,
-        Bucket = "xxxxxxxxxxxxxxx"
+        Bucket = this.settings.Bucket
       });
     }
 
@@ -49,7 +50,7 @@ namespace Holeshot.Crawler.Commands {
 
         var response = await this.Send(new DownloadToS3Request {
           Key = request.Key,
-          Bucket = "xxxxxxxxxxxxxxx"
+          Bucket = this.settings.Bucket
         });
         file = await GetFile(request.Key);
 

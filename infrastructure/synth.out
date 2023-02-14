@@ -1,0 +1,3172 @@
+
+> @holeshot/infrastructure@1.0.0 cdk
+> cdk synth
+
+Resources:
+  HoleshotDataStoreseStackCore4F8492E2:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+        - AttributeName: GSI1SK
+          AttributeType: S
+      GlobalSecondaryIndexes:
+        - IndexName: GSI1
+          KeySchema:
+            - AttributeName: PK
+              KeyType: HASH
+            - AttributeName: GSI1SK
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      SSESpecification:
+        SSEEnabled: true
+      TableName: Holeshot-Core
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/Core/Resource
+  HoleshotDataStoreseStackWebSocketsConnections7DDE917A:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: connectionId
+          KeyType: RANGE
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: connectionId
+          AttributeType: S
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      SSESpecification:
+        SSEEnabled: true
+      TableName: Holeshot-WebSockets-Connections
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/WebSockets-Connections/Resource
+  HoleshotDataStoreseStackmediaBucket1062BF4A:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: images.holeshot-bmx.com
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: aws-cdk:auto-delete-objects
+          Value: "true"
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/mediaBucket/Resource
+  HoleshotDataStoreseStackmediaBucketPolicyF51486EC:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: HoleshotDataStoreseStackmediaBucket1062BF4A
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:DeleteObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+                  - Arn
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackmediaBucket1062BF4A
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotDataStoreseStackmediaBucket1062BF4A
+                        - Arn
+                    - /*
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal:
+              CanonicalUser:
+                Fn::GetAtt:
+                  - ImagesCloudFrontOriginAccessIdentity45469040
+                  - S3CanonicalUserId
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - HoleshotDataStoreseStackmediaBucket1062BF4A
+                      - Arn
+                  - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/mediaBucket/Policy/Resource
+  HoleshotDataStoreseStackmediaBucketAutoDeleteObjectsCustomResource053A72E2:
+    Type: Custom::S3AutoDeleteObjects
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F
+          - Arn
+      BucketName:
+        Ref: HoleshotDataStoreseStackmediaBucket1062BF4A
+    DependsOn:
+      - HoleshotDataStoreseStackmediaBucketPolicyF51486EC
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/mediaBucket/AutoDeleteObjectsCustomResource/Default
+  HoleshotDataStoreseStackS3BucketDAB99728:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: holeshot-bmx.com
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - GET
+            AllowedOrigins:
+              - "*"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: aws-cdk:auto-delete-objects
+          Value: "true"
+        - Key: aws-cdk:cr-owned:1709051d
+          Value: "true"
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/S3Bucket/Resource
+  HoleshotDataStoreseStackS3BucketPolicy7493025C:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: HoleshotDataStoreseStackS3BucketDAB99728
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:DeleteObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+                  - Arn
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackS3BucketDAB99728
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotDataStoreseStackS3BucketDAB99728
+                        - Arn
+                    - /*
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal:
+              CanonicalUser:
+                Fn::GetAtt:
+                  - CloudFrontOriginAccessIdentity04EB66DA
+                  - S3CanonicalUserId
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - HoleshotDataStoreseStackS3BucketDAB99728
+                      - Arn
+                  - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/S3Bucket/Policy/Resource
+  HoleshotDataStoreseStackS3BucketAutoDeleteObjectsCustomResourceA7435AD3:
+    Type: Custom::S3AutoDeleteObjects
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F
+          - Arn
+      BucketName:
+        Ref: HoleshotDataStoreseStackS3BucketDAB99728
+    DependsOn:
+      - HoleshotDataStoreseStackS3BucketPolicy7493025C
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/S3Bucket/AutoDeleteObjectsCustomResource/Default
+  HoleshotDataStoreseStackcrawlerBucketBF83E346:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: holeshot-bmx.com.crawler
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: aws-cdk:auto-delete-objects
+          Value: "true"
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/crawlerBucket/Resource
+  HoleshotDataStoreseStackcrawlerBucketPolicy488DF77E:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: HoleshotDataStoreseStackcrawlerBucketBF83E346
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:DeleteObject*
+              - s3:GetBucket*
+              - s3:List*
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::GetAtt:
+                  - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+                  - Arn
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackcrawlerBucketBF83E346
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotDataStoreseStackcrawlerBucketBF83E346
+                        - Arn
+                    - /*
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/crawlerBucket/Policy/Resource
+  HoleshotDataStoreseStackcrawlerBucketAutoDeleteObjectsCustomResourceB9A31AA3:
+    Type: Custom::S3AutoDeleteObjects
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F
+          - Arn
+      BucketName:
+        Ref: HoleshotDataStoreseStackcrawlerBucketBF83E346
+    DependsOn:
+      - HoleshotDataStoreseStackcrawlerBucketPolicy488DF77E
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-DataStoreseStack/crawlerBucket/AutoDeleteObjectsCustomResource/Default
+  CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+      ManagedPolicyArns:
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role
+  CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: 2332a8953f2d92ebffdc01cf20d5a2fb5bf2ef29764cda4186f01c55edee8c73.zip
+      Timeout: 900
+      MemorySize: 128
+      Handler: __entrypoint__.handler
+      Role:
+        Fn::GetAtt:
+          - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+          - Arn
+      Runtime: nodejs14.x
+      Description:
+        Fn::Join:
+          - ""
+          - - "Lambda function for auto-deleting objects in "
+            - Ref: HoleshotDataStoreseStackmediaBucket1062BF4A
+            - " S3 bucket."
+    DependsOn:
+      - CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler
+      aws:asset:path: asset.2332a8953f2d92ebffdc01cf20d5a2fb5bf2ef29764cda4186f01c55edee8c73
+      aws:asset:property: Code
+  HoleshotCrawlerServiceHoleshotGetTracksForRegionServiceRole2C9329FD:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-CrawlerService/Holeshot-GetTracksForRegion/ServiceRole/Resource
+  HoleshotCrawlerServiceHoleshotGetTracksForRegion9638222B:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: cb5f11cbcbb37d986733de1dbf2dbcc2f64087413ea6f63dbbc55848669acc81.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotCrawlerServiceHoleshotGetTracksForRegionServiceRole2C9329FD
+          - Arn
+      Handler: Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler
+      Runtime: dotnet6
+    DependsOn:
+      - HoleshotCrawlerServiceHoleshotGetTracksForRegionServiceRole2C9329FD
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-CrawlerService/Holeshot-GetTracksForRegion/Resource
+      aws:asset:path: asset.cb5f11cbcbb37d986733de1dbf2dbcc2f64087413ea6f63dbbc55848669acc81
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  HoleshotUserServiceStackPostAuthenticationServiceRole17906C23:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/PostAuthentication/ServiceRole/Resource
+  HoleshotUserServiceStackPostAuthenticationServiceRoleDefaultPolicy0B925C57:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: sns:Publish
+            Effect: Allow
+            Resource:
+              Ref: HoleshotUserServiceStacksnstopicFDDFAA04
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStackPostAuthenticationServiceRoleDefaultPolicy0B925C57
+      Roles:
+        - Ref: HoleshotUserServiceStackPostAuthenticationServiceRole17906C23
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/PostAuthentication/ServiceRole/DefaultPolicy/Resource
+  HoleshotUserServiceStackPostAuthentication7E70213D:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackPostAuthenticationServiceRole17906C23
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+      FunctionName: Holeshot-Infrastructure-PostAuthentication
+      Handler: functions/postAuthentication.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotUserServiceStackPostAuthenticationServiceRoleDefaultPolicy0B925C57
+      - HoleshotUserServiceStackPostAuthenticationServiceRole17906C23
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/PostAuthentication/Resource
+      aws:asset:path: asset.edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotUserServiceStackHoleshotUsersPostAuthenticationCognitoC3DF8637:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackPostAuthentication7E70213D
+          - Arn
+      Principal: cognito-idp.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackHoleshotUsers1258D560
+          - Arn
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Holeshot-Users/PostAuthenticationCognito
+  HoleshotUserServiceStackHoleshotUsers1258D560:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      AutoVerifiedAttributes:
+        - email
+      EmailVerificationMessage: The verification code to your new account is {####}
+      EmailVerificationSubject: Verify your new account
+      LambdaConfig:
+        PostAuthentication:
+          Fn::GetAtt:
+            - HoleshotUserServiceStackPostAuthentication7E70213D
+            - Arn
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 6
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+          RequireUppercase: false
+      Schema:
+        - Mutable: true
+          Name: given_name
+          Required: true
+        - Mutable: true
+          Name: family_name
+          Required: true
+        - AttributeDataType: String
+          Mutable: true
+          Name: country
+        - AttributeDataType: String
+          Mutable: true
+          Name: city
+        - AttributeDataType: String
+          Mutable: true
+          Name: isAdmin
+      SmsVerificationMessage: The verification code to your new account is {####}
+      UsernameAttributes:
+        - email
+      UserPoolName: Holeshot-Users
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+        EmailMessage: The verification code to your new account is {####}
+        EmailSubject: Verify your new account
+        SmsMessage: The verification code to your new account is {####}
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Holeshot-Users/Resource
+  HoleshotUserServiceStackHoleshotUsersHoleshotclientE50933C7:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId:
+        Ref: HoleshotUserServiceStackHoleshotUsers1258D560
+      AccessTokenValidity: 1440
+      AllowedOAuthFlows:
+        - implicit
+        - code
+      AllowedOAuthFlowsUserPoolClient: true
+      AllowedOAuthScopes:
+        - profile
+        - phone
+        - email
+        - openid
+        - aws.cognito.signin.user.admin
+      CallbackURLs:
+        - https://example.com
+      ClientName: Holeshot-client
+      ExplicitAuthFlows:
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+      GenerateSecret: false
+      IdTokenValidity: 1440
+      PreventUserExistenceErrors: ENABLED
+      SupportedIdentityProviders:
+        - COGNITO
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Holeshot-Users/Holeshot-client/Resource
+  HoleshotUserServiceStackRegisterHandlerServiceRoleF7B159AC:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/RegisterHandler/ServiceRole/Resource
+  HoleshotUserServiceStackRegisterHandlerE4AB3410:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackRegisterHandlerServiceRoleF7B159AC
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+      FunctionName: Holeshot-Infrastructure-RegisterHandler
+      Handler: functions/register.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotUserServiceStackRegisterHandlerServiceRoleF7B159AC
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/RegisterHandler/Resource
+      aws:asset:path: asset.edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotUserServiceStackGetUserHandlerServiceRoleA7196461:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/GetUserHandler/ServiceRole/Resource
+  HoleshotUserServiceStackGetUserHandlerServiceRoleDefaultPolicyDEC3FACC:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:ConditionCheckItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:Query
+              - dynamodb:Scan
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackCore4F8492E2
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotDataStoreseStackCore4F8492E2
+                        - Arn
+                    - /index/*
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStackGetUserHandlerServiceRoleDefaultPolicyDEC3FACC
+      Roles:
+        - Ref: HoleshotUserServiceStackGetUserHandlerServiceRoleA7196461
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/GetUserHandler/ServiceRole/DefaultPolicy/Resource
+  HoleshotUserServiceStackGetUserHandler5A5490C6:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackGetUserHandlerServiceRoleA7196461
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          HOLESHOT_CORE_TABLE:
+            Ref: HoleshotDataStoreseStackCore4F8492E2
+      FunctionName: Holeshot-Infrastructure-GetUserHandler
+      Handler: functions/getUser.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotUserServiceStackGetUserHandlerServiceRoleDefaultPolicyDEC3FACC
+      - HoleshotUserServiceStackGetUserHandlerServiceRoleA7196461
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/GetUserHandler/Resource
+      aws:asset:path: asset.edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotUserServiceStackCreateUserHandlerServiceRoleF112A53A:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/CreateUserHandler/ServiceRole/Resource
+  HoleshotUserServiceStackCreateUserHandler71676788:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackCreateUserHandlerServiceRoleF112A53A
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          USER_POOL_ID:
+            Ref: HoleshotUserServiceStackHoleshotUsers1258D560
+      FunctionName: Holeshot-Infrastructure-CreateUserHandler
+      Handler: functions/createUser.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotUserServiceStackCreateUserHandlerServiceRoleF112A53A
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/CreateUserHandler/Resource
+      aws:asset:path: asset.edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotUserServiceStacklambdaCognitoAdminCreateUserPolicy730C7CC1:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: cognito-idp:AdminCreateUser
+            Effect: Allow
+            Resource: "*"
+            Sid: LambdaCognitoAdmintCreateUserPolicy
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStacklambdaCognitoAdminCreateUserPolicy730C7CC1
+      Roles:
+        - Ref: HoleshotUserServiceStackCreateUserHandlerServiceRoleF112A53A
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/lambdaCognitoAdminCreateUserPolicy/Resource
+  HoleshotUserServiceStackSaveUserHandlerServiceRole091E95E7:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SaveUserHandler/ServiceRole/Resource
+  HoleshotUserServiceStackSaveUserHandlerServiceRoleDefaultPolicyC4596437:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+              - dynamodb:ConditionCheckItem
+              - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:PutItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:UpdateItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackCore4F8492E2
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotDataStoreseStackCore4F8492E2
+                        - Arn
+                    - /index/*
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStackSaveUserHandlerServiceRoleDefaultPolicyC4596437
+      Roles:
+        - Ref: HoleshotUserServiceStackSaveUserHandlerServiceRole091E95E7
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SaveUserHandler/ServiceRole/DefaultPolicy/Resource
+  HoleshotUserServiceStackSaveUserHandlerB3AEC7E1:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackSaveUserHandlerServiceRole091E95E7
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          HOLESHOT_CORE_TABLE:
+            Ref: HoleshotDataStoreseStackCore4F8492E2
+      FunctionName: Holeshot-Infrastructure-SaveUserHandler
+      Handler: functions/saveUser.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotUserServiceStackSaveUserHandlerServiceRoleDefaultPolicyC4596437
+      - HoleshotUserServiceStackSaveUserHandlerServiceRole091E95E7
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SaveUserHandler/Resource
+      aws:asset:path: asset.edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotUserServiceStackSendConfirmationServiceRole2D19C093:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SendConfirmation/ServiceRole/Resource
+  HoleshotUserServiceStackSendConfirmation67702936:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackSendConfirmationServiceRole2D19C093
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          HOLESHOT_SITE_URL: https://holeshot-bmx.com
+          HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE: ConfirmRegistration
+      FunctionName: Holeshot-Infrastructure-SendConfirmation
+      Handler: functions/sendConfirmation.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotUserServiceStackSendConfirmationServiceRole2D19C093
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SendConfirmation/Resource
+      aws:asset:path: asset.edfd48bbc02df2d017525f9ba02376863cc06d6a93dc09184dc5af4509d39213
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotUserServiceStacklambdaSesSendTemplatedEmailPolicy3CFAF554:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: ses:SendTemplatedEmail
+            Effect: Allow
+            Resource: "*"
+            Sid: LambdaSesSendTemplatedEmailPolicy
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStacklambdaSesSendTemplatedEmailPolicy3CFAF554
+      Roles:
+        - Ref: HoleshotUserServiceStackSendConfirmationServiceRole2D19C093
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/lambdaSesSendTemplatedEmailPolicy/Resource
+  HoleshotUserServiceStacklambdaSfnStatusUpdatePolicy362425F1:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - states:ListStateMachines
+              - states:SendTaskFailure
+              - states:SendTaskSuccess
+              - states:StartExecution
+            Effect: Allow
+            Resource: "*"
+            Sid: lambdaSfnStatusUpdatePolicy
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStacklambdaSfnStatusUpdatePolicy362425F1
+      Roles:
+        - Ref: HoleshotUserServiceStackRegisterHandlerServiceRoleF7B159AC
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/lambdaSfnStatusUpdatePolicy/Resource
+  HoleshotUserServiceStackConfirmRegistrationSESTemplate9BCF95B3:
+    Type: AWS::SES::Template
+    Properties:
+      Template:
+        HtmlPart: |-
+          <!DOCTYPE html>
+          <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+            xmlns:o="urn:schemas-microsoft-com:office:office">
+
+          <head>
+            <meta charset="utf-8"> <!-- utf-8 works for most cases -->
+            <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
+            <meta name="x-apple-disable-message-reformatting"> <!-- Disable auto-scale in iOS 10 Mail entirely -->
+            <title>Confirm Account Registration</title> <!-- The title tag shows in email notifications, like Android 4.4. -->
+
+            <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+
+            <!-- CSS Reset : BEGIN -->
+            <style>
+              /* What it does: Remove spaces around the email design added by some email clients. */
+              /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+              html,
+              body {
+                margin: 0 auto !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+                background: #f1f1f1;
+              }
+
+              /* What it does: Stops email clients resizing small text. */
+              * {
+                -ms-text-size-adjust: 100%;
+                -webkit-text-size-adjust: 100%;
+              }
+
+              /* What it does: Centers email on Android 4.4 */
+              div[style*="margin: 16px 0"] {
+                margin: 0 !important;
+              }
+
+              /* What it does: Stops Outlook from adding extra spacing to tables. */
+              table,
+              td {
+                mso-table-lspace: 0pt !important;
+                mso-table-rspace: 0pt !important;
+              }
+
+              /* What it does: Fixes webkit padding issue. */
+              table {
+                border-spacing: 0 !important;
+                border-collapse: collapse !important;
+                table-layout: fixed !important;
+                margin: 0 auto !important;
+              }
+
+              /* What it does: Uses a better rendering method when resizing images in IE. */
+              img {
+                -ms-interpolation-mode: bicubic;
+              }
+
+              /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
+              a {
+                text-decoration: none;
+              }
+
+              /* What it does: A work-around for email clients meddling in triggered links. */
+              *[x-apple-data-detectors],
+              /* iOS */
+              .unstyle-auto-detected-links *,
+              .aBn {
+                border-bottom: 0 !important;
+                cursor: default !important;
+                color: inherit !important;
+                text-decoration: none !important;
+                font-size: inherit !important;
+                font-family: inherit !important;
+                font-weight: inherit !important;
+                line-height: inherit !important;
+              }
+
+              /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
+              .a6S {
+                display: none !important;
+                opacity: 0.01 !important;
+              }
+
+              /* What it does: Prevents Gmail from changing the text color in conversation threads. */
+              .im {
+                color: inherit !important;
+              }
+
+              /* If the above doesn't work, add a .g-img class to any image in question. */
+              img.g-img+div {
+                display: none !important;
+              }
+
+              /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+              /* Create one of these media queries for each additional viewport size you'd like to fix */
+
+              /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
+              @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+                u~div .email-container {
+                  min-width: 320px !important;
+                }
+              }
+
+              /* iPhone 6, 6S, 7, 8, and X */
+              @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+                u~div .email-container {
+                  min-width: 375px !important;
+                }
+              }
+
+              /* iPhone 6+, 7+, and 8+ */
+              @media only screen and (min-device-width: 414px) {
+                u~div .email-container {
+                  min-width: 414px !important;
+                }
+              }
+
+            </style>
+
+            <!-- CSS Reset : END -->
+
+            <!-- Progressive Enhancements : BEGIN -->
+            <style>
+              .primary {
+                background: #853644;
+              }
+
+              .bg_white {
+                background: #ffffff;
+              }
+
+              .bg_light {
+                background: #fafafa;
+              }
+
+              .bg_black {
+                background: #000000;
+              }
+
+              .bg_dark {
+                background: rgba(0, 0, 0, .8);
+              }
+
+              .email-section {
+                padding: 2.5em;
+              }
+
+              /*BUTTON*/
+              .btn {
+                padding: 10px 15px;
+                display: inline-block;
+              }
+
+              .btn.btn-primary {
+                border-radius: 5px;
+                background: #853644;
+                color: #ffffff;
+              }
+
+              .btn.btn-white {
+                border-radius: 5px;
+                background: #ffffff;
+                color: #000000;
+              }
+
+              .btn.btn-white-outline {
+                border-radius: 5px;
+                background: transparent;
+                border: 1px solid #fff;
+                color: #fff;
+              }
+
+              .btn.btn-black-outline {
+                border-radius: 0px;
+                background: transparent;
+                border: 2px solid #000;
+                color: #000;
+                font-weight: 700;
+              }
+
+              h1,
+              h2,
+              h3,
+              h4,
+              h5,
+              h6 {
+                font-family: 'Lato', sans-serif;
+                color: #000000;
+                margin-top: 0;
+                font-weight: 400;
+              }
+
+              body {
+                font-family: 'Lato', sans-serif;
+                font-weight: 400;
+                font-size: 15px;
+                line-height: 1.8;
+                color: rgba(0, 0, 0, .4);
+              }
+
+              a {
+                color: #853644;
+              }
+
+              table {}
+
+              /*LOGO*/
+
+              .logo h1 {
+                margin: 0;
+              }
+
+              .logo h1 a {
+                color: #853644;
+                font-size: 24px;
+                font-weight: 700;
+                font-family: 'Lato', sans-serif;
+              }
+
+              /*HERO*/
+              .hero {
+                position: relative;
+                z-index: 0;
+              }
+
+              .hero .text {
+                color: rgba(0, 0, 0, .3);
+              }
+
+              .hero .text h2 {
+                color: #000;
+                font-size: 40px;
+                margin-bottom: 0;
+                font-weight: 400;
+                line-height: 1.4;
+              }
+
+              .hero .text h3 {
+                font-size: 24px;
+                font-weight: 300;
+              }
+
+              .hero .text h2 span {
+                font-weight: 600;
+                color: #853644;
+              }
+
+
+              /*HEADING SECTION*/
+              .heading-section {}
+
+              .heading-section h2 {
+                color: #000000;
+                font-size: 28px;
+                margin-top: 0;
+                line-height: 1.4;
+                font-weight: 400;
+              }
+
+              .heading-section .subheading {
+                margin-bottom: 20px !important;
+                display: inline-block;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: rgba(0, 0, 0, .4);
+                position: relative;
+              }
+
+              .heading-section .subheading::after {
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: -10px;
+                content: '';
+                width: 100%;
+                height: 2px;
+                background: #30e3ca;
+                margin: 0 auto;
+              }
+
+              .heading-section-white {
+                color: rgba(255, 255, 255, .8);
+              }
+
+              .heading-section-white h2 {
+                font-family:
+                  line-height: 1;
+                padding-bottom: 0;
+              }
+
+              .heading-section-white h2 {
+                color: #ffffff;
+              }
+
+              .heading-section-white .subheading {
+                margin-bottom: 0;
+                display: inline-block;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: rgba(255, 255, 255, .4);
+              }
+
+
+              ul.social {
+                padding: 0;
+              }
+
+              ul.social li {
+                display: inline-block;
+                margin-right: 10px;
+              }
+
+              /*FOOTER*/
+
+              .footer {
+                border-top: 1px solid rgba(0, 0, 0, .05);
+                color: rgba(0, 0, 0, .5);
+              }
+
+              .footer .heading {
+                color: #000;
+                font-size: 20px;
+              }
+
+              .footer ul {
+                margin: 0;
+                padding: 0;
+              }
+
+              .footer ul li {
+                list-style: none;
+                margin-bottom: 10px;
+              }
+
+              .footer ul li a {
+                color: rgba(0, 0, 0, 1);
+              }
+
+
+              @media screen and (max-width: 500px) {}
+
+            </style>
+
+          </head>
+
+          <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
+            <center style="width: 100%; background-color: #f1f1f1;">
+              <div
+                style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
+                &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+              </div>
+              <div style="max-width: 600px; margin: 0 auto;" class="email-container">
+                <!-- BEGIN BODY -->
+                <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                  style="margin: auto;">
+                  <tr>
+                    <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tr>
+                          <td class="logo" style="text-align: center;">
+                            <h1><a href="#">Holeshot BMX</a></h1>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr><!-- end tr -->
+                  <tr>
+                    <td valign="middle" class="hero bg_white" style="padding: 3em 0 2em 0;">
+                      <!-- <img src="images/email.png" alt=""
+                        style="width: 300px; max-width: 600px; height: auto; margin: auto; display: block;"> -->
+                    </td>
+                  </tr><!-- end tr -->
+                  <tr>
+                    <td valign="middle" class="hero bg_white" style="padding: 2em 0 4em 0;">
+                      <table>
+                        <tr>
+                          <td>
+                            <div class="text" style="padding: 0 2.5em; text-align: center;">
+                              <h2>Continue Registration</h2>
+                              <h3>Hi {{FirstName}}!<h3>
+                                  <h3>To continue registration please confirm this is your email address.</h3>
+                                  <p><a href="{{Url}}" class="btn btn-primary">Confirm Email Address</a></p>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr><!-- end tr -->
+                  <!-- 1 Column Text + Button : END -->
+                </table>
+                <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                  style="margin: auto;">
+                  <tr>
+                    <td valign="middle" class="bg_light footer email-section">
+                      <table>
+                        <tr>
+                          <td valign="top" width="33.333%" style="padding-top: 20px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                              <tr>
+                                <td style="text-align: left; padding-right: 10px;">
+                                  <h3 class="heading">About</h3>
+                                  <p>
+                                    Holeshot BMX
+                                  </p>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td valign="top" width="33.333%" style="padding-top: 20px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                              <tr>
+                                <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
+                                  <h3 class="heading">Contact Info</h3>
+                                  <ul>
+                                    <li><span class="text">contact@holeshot-bmx.com</span></li>
+                                  </ul>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                          <td valign="top" width="33.333%" style="padding-top: 20px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                              <tr>
+                                <td style="text-align: left; padding-left: 10px;">
+                                  <h3 class="heading">Resources</h3>
+                                  <ul>
+                                    <li><a href="https://holeshot-bmx.com">Home</a></li>
+                                    <li><a href="https://holeshot-bmx.com/about">About</a></li>
+                                  </ul>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr><!-- end: tr -->
+                  <tr>
+                    <td class="bg_light" style="text-align: center;">
+                      <p>Copyright © Holeshot-BMX.com</a></p>
+                    </td>
+                  </tr>
+                </table>
+
+              </div>
+            </center>
+          </body>
+
+          </html>
+        SubjectPart: Confirm Holeshot-BMX Account
+        TemplateName: ConfirmRegistration
+        TextPart: Hi {{FirstName}}! To continue registration please confirm by going to the following link {{Url}}
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/ConfirmRegistration-SES-Template
+  HoleshotUserServiceStackSesEmailVerificationVerifyEmailIdentitykylekylefinleynetC1DE6311:
+    Type: Custom::AWS
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd22872D164C4C
+          - Arn
+      Create: '{"service":"SES","action":"verifyEmailIdentity","parameters":{"EmailAddress":"kyle@kylefinley.net"},"physicalResourceId":{"id":"verify-kyle@kylefinley.net"}}'
+      Delete: '{"service":"SES","action":"deleteIdentity","parameters":{"Identity":"kyle@kylefinley.net"}}'
+      InstallLatestAwsSdk: true
+    DependsOn:
+      - HoleshotUserServiceStackSesEmailVerificationVerifyEmailIdentitykylekylefinleynetCustomResourcePolicy69744D32
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SesEmailVerification/VerifyEmailIdentitykyle@kylefinley.net/Resource/Default
+  HoleshotUserServiceStackSesEmailVerificationVerifyEmailIdentitykylekylefinleynetCustomResourcePolicy69744D32:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ses:DeleteIdentity
+              - ses:VerifyEmailIdentity
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStackSesEmailVerificationVerifyEmailIdentitykylekylefinleynetCustomResourcePolicy69744D32
+      Roles:
+        - Ref: AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/SesEmailVerification/VerifyEmailIdentitykyle@kylefinley.net/CustomResourcePolicy/Resource
+  HoleshotUserServiceStacksnstopicFDDFAA04:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: PostAuthenticationTopic
+      TopicName: Holeshot-PostAuthenticationTopic
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/sns-topic/Resource
+  HoleshotUserServiceStackHoleshotApiD13EAFBF:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      ApiKeySourceType: HEADER
+      Description: Holeshot BMX api gateway
+      Name: HoleshotApi
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Resource
+  HoleshotUserServiceStackHoleshotApiDeployment62CDACBF3ab178110578593ab04c6087d027f1c0:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId:
+        Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+      Description: Holeshot BMX api gateway
+    DependsOn:
+      - HoleshotUserServiceStackHoleshotApiuserregisterOPTIONSDD732C08
+      - HoleshotUserServiceStackHoleshotApiuserregisterPOST38F37661
+      - HoleshotUserServiceStackHoleshotApiuserregister345B1F51
+      - HoleshotUserServiceStackHoleshotApiuser0924B3E4
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Deployment/Resource
+  HoleshotUserServiceStackHoleshotApiDeploymentStagedev3E31C358:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      RestApiId:
+        Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+      DeploymentId:
+        Ref: HoleshotUserServiceStackHoleshotApiDeployment62CDACBF3ab178110578593ab04c6087d027f1c0
+      StageName: dev
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/DeploymentStage.dev/Resource
+  HoleshotUserServiceStackHoleshotApiuser0924B3E4:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackHoleshotApiD13EAFBF
+          - RootResourceId
+      PathPart: user
+      RestApiId:
+        Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Default/user/Resource
+  HoleshotUserServiceStackHoleshotApiuserregister345B1F51:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Ref: HoleshotUserServiceStackHoleshotApiuser0924B3E4
+      PathPart: register
+      RestApiId:
+        Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Default/user/register/Resource
+  HoleshotUserServiceStackHoleshotApiuserregisterPOSTApiPermissionHoleshotBMXInfrastructureHoleshotUserServiceStackHoleshotApi1D8E2EB5POSTuserregister5495CE78:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackRegisterHandlerE4AB3410
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+            - /
+            - Ref: HoleshotUserServiceStackHoleshotApiDeploymentStagedev3E31C358
+            - /POST/user/register
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Default/user/register/POST/ApiPermission.HoleshotBMXInfrastructureHoleshotUserServiceStackHoleshotApi1D8E2EB5.POST..user.register
+  HoleshotUserServiceStackHoleshotApiuserregisterPOSTApiPermissionTestHoleshotBMXInfrastructureHoleshotUserServiceStackHoleshotApi1D8E2EB5POSTuserregisterA3248983:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackRegisterHandlerE4AB3410
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+            - /test-invoke-stage/POST/user/register
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Default/user/register/POST/ApiPermission.Test.HoleshotBMXInfrastructureHoleshotUserServiceStackHoleshotApi1D8E2EB5.POST..user.register
+  HoleshotUserServiceStackHoleshotApiuserregisterPOST38F37661:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: POST
+      ResourceId:
+        Ref: HoleshotUserServiceStackHoleshotApiuserregister345B1F51
+      RestApiId:
+        Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+      ApiKeyRequired: false
+      AuthorizationType: NONE
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - HoleshotUserServiceStackRegisterHandlerE4AB3410
+                  - Arn
+              - /invocations
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Default/user/register/POST/Resource
+  HoleshotUserServiceStackHoleshotApiuserregisterOPTIONSDD732C08:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      HttpMethod: OPTIONS
+      ResourceId:
+        Ref: HoleshotUserServiceStackHoleshotApiuserregister345B1F51
+      RestApiId:
+        Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+      ApiKeyRequired: false
+      AuthorizationType: NONE
+      Integration:
+        IntegrationResponses:
+          - ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Allow-Credentials: "'false'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,PUT,POST,DELETE'"
+            StatusCode: "200"
+        PassthroughBehavior: NEVER
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+        Type: MOCK
+      MethodResponses:
+        - ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Credentials: true
+            method.response.header.Access-Control-Allow-Origin: true
+          StatusCode: "200"
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/HoleshotApi/Default/user/register/OPTIONS/Resource
+  HoleshotUserServiceStackRegisterSFNLogD530B9C8:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: Holeshot-User-Register-StepFunction
+      RetentionInDays: 7
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Register-SFN-Log/Resource
+  HoleshotUserServiceStackHoleshotUserRegisterRole1BB83631:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: states.us-east-1.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Holeshot-User-Register/Role/Resource
+  HoleshotUserServiceStackHoleshotUserRegisterRoleDefaultPolicy6BD4C449:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogDelivery
+              - logs:DeleteLogDelivery
+              - logs:DescribeLogGroups
+              - logs:DescribeResourcePolicies
+              - logs:GetLogDelivery
+              - logs:ListLogDeliveries
+              - logs:PutResourcePolicy
+              - logs:UpdateLogDelivery
+            Effect: Allow
+            Resource: "*"
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotUserServiceStackCreateUserHandler71676788
+                  - Arn
+              - Fn::GetAtt:
+                  - HoleshotUserServiceStackGetUserHandler5A5490C6
+                  - Arn
+              - Fn::GetAtt:
+                  - HoleshotUserServiceStackSaveUserHandlerB3AEC7E1
+                  - Arn
+              - Fn::GetAtt:
+                  - HoleshotUserServiceStackSendConfirmation67702936
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotUserServiceStackCreateUserHandler71676788
+                        - Arn
+                    - :*
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotUserServiceStackGetUserHandler5A5490C6
+                        - Arn
+                    - :*
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotUserServiceStackSaveUserHandlerB3AEC7E1
+                        - Arn
+                    - :*
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotUserServiceStackSendConfirmation67702936
+                        - Arn
+                    - :*
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStackHoleshotUserRegisterRoleDefaultPolicy6BD4C449
+      Roles:
+        - Ref: HoleshotUserServiceStackHoleshotUserRegisterRole1BB83631
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Holeshot-User-Register/Role/DefaultPolicy/Resource
+  HoleshotUserServiceStackHoleshotUserRegister8E611B9E:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn:
+        Fn::GetAtt:
+          - HoleshotUserServiceStackHoleshotUserRegisterRole1BB83631
+          - Arn
+      DefinitionString:
+        Fn::Join:
+          - ""
+          - - '{"StartAt":"GetUserInvocation","States":{"GetUserInvocation":{"Next":"UserExists?","Retry":[{"ErrorEquals":["Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:'
+            - Ref: AWS::Partition
+            - :states:::lambda:invoke","Parameters":{"FunctionName":"
+            - Fn::GetAtt:
+                - HoleshotUserServiceStackGetUserHandler5A5490C6
+                - Arn
+            - '","Payload.$":"$"}},"UserExists?":{"Type":"Choice","Choices":[{"Variable":"$.userId","IsPresent":true,"Next":"UserAlreadyExists"}],"Default":"CreateUserInvocation"},"CreateUserInvocation":{"Next":"UserCreated?","Retry":[{"ErrorEquals":["Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:'
+            - Ref: AWS::Partition
+            - :states:::lambda:invoke","Parameters":{"FunctionName":"
+            - Fn::GetAtt:
+                - HoleshotUserServiceStackCreateUserHandler71676788
+                - Arn
+            - '","Payload.$":"$"}},"UserCreated?":{"Type":"Choice","Choices":[{"Variable":"$.success","BooleanEquals":true,"Next":"SaveUserInvocation"}],"Default":"CreateUserFailed"},"CreateUserFailed":{"Type":"Fail","Error":"Failed to create user"},"SaveUserInvocation":{"Next":"UserSaved?","Retry":[{"ErrorEquals":["Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:'
+            - Ref: AWS::Partition
+            - :states:::lambda:invoke","Parameters":{"FunctionName":"
+            - Fn::GetAtt:
+                - HoleshotUserServiceStackSaveUserHandlerB3AEC7E1
+                - Arn
+            - '","Payload.$":"$"}},"UserSaved?":{"Type":"Choice","Choices":[{"Variable":"$.success","BooleanEquals":true,"Next":"SendConfirmationInvocation"}],"Default":"SaveUserFailed"},"SaveUserFailed":{"Type":"Fail","Error":"Failed to save user"},"SendConfirmationInvocation":{"Next":"ConfirmationSent?","Retry":[{"ErrorEquals":["Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:'
+            - Ref: AWS::Partition
+            - :states:::lambda:invoke","Parameters":{"FunctionName":"
+            - Fn::GetAtt:
+                - HoleshotUserServiceStackSendConfirmation67702936
+                - Arn
+            - '","Payload.$":"$"}},"ConfirmationSent?":{"Type":"Choice","Choices":[{"Variable":"$.success","BooleanEquals":true,"Next":"Success"}],"Default":"SendConfirmationFailed"},"SendConfirmationFailed":{"Type":"Fail","Error":"Failed to send confirmation email"},"Success":{"Type":"Succeed"},"UserAlreadyExists":{"Type":"Pass","Result":"User already exists","Next":"Success"}}}'
+      LoggingConfiguration:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn:
+                Fn::GetAtt:
+                  - HoleshotUserServiceStackRegisterSFNLogD530B9C8
+                  - Arn
+        IncludeExecutionData: true
+        Level: ALL
+      StateMachineName: Holeshot-User-Register
+    DependsOn:
+      - HoleshotUserServiceStackHoleshotUserRegisterRoleDefaultPolicy6BD4C449
+      - HoleshotUserServiceStackHoleshotUserRegisterRole1BB83631
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/Holeshot-User-Register/Resource
+  HoleshotUserServiceStacksfnLambdaInvokePolicyF1F9FEBF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - HoleshotUserServiceStackRegisterHandlerE4AB3410
+                      - Arn
+                  - :$LATEST
+            Sid: sfnLambdaInvokePolicy
+        Version: "2012-10-17"
+      PolicyName: HoleshotUserServiceStacksfnLambdaInvokePolicyF1F9FEBF
+      Roles:
+        - Ref: HoleshotUserServiceStackHoleshotUserRegisterRole1BB83631
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-UserServiceStack/sfnLambdaInvokePolicy/Resource
+  AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource
+  AWS679f53fac002430cb0da5b7982bd22872D164C4C:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: 400f664767ec04a0966c8d688fa643ee8f6d0c94c8d91a71d3af814cc9b9e6ab.zip
+      Role:
+        Fn::GetAtt:
+          - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+          - Arn
+      Handler: index.handler
+      Runtime: nodejs14.x
+      Timeout: 120
+    DependsOn:
+      - AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/AWS679f53fac002430cb0da5b7982bd2287/Resource
+      aws:asset:path: asset.400f664767ec04a0966c8d688fa643ee8f6d0c94c8d91a71d3af814cc9b9e6ab
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HostedZoneDB99F866:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      HostedZoneConfig:
+        Comment: Hosted zone for holeshot-bmx.com
+      Name: holeshot-bmx.com.
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/HostedZone/Resource
+  CertificateManagerCertificateCertificateRequestorFunctionServiceRole39CBE3CA:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CertificateManagerCertificate/CertificateRequestorFunction/ServiceRole/Resource
+  CertificateManagerCertificateCertificateRequestorFunctionServiceRoleDefaultPolicy6F05AD3D:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - acm:AddTagsToCertificate
+              - acm:DeleteCertificate
+              - acm:DescribeCertificate
+              - acm:RequestCertificate
+              - route53:GetChange
+            Effect: Allow
+            Resource: "*"
+          - Action: route53:changeResourceRecordSets
+            Condition:
+              ForAllValues:StringEquals:
+                route53:ChangeResourceRecordSetsRecordTypes:
+                  - CNAME
+                route53:ChangeResourceRecordSetsActions:
+                  - UPSERT
+              ForAllValues:StringLike:
+                route53:ChangeResourceRecordSetsNormalizedRecordNames:
+                  - "*.holeshot-bmx.com"
+                  - "*.ws.holeshot-bmx.com"
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - arn:aws:route53:::hostedzone/
+                  - Ref: HostedZoneDB99F866
+        Version: "2012-10-17"
+      PolicyName: CertificateManagerCertificateCertificateRequestorFunctionServiceRoleDefaultPolicy6F05AD3D
+      Roles:
+        - Ref: CertificateManagerCertificateCertificateRequestorFunctionServiceRole39CBE3CA
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CertificateManagerCertificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource
+  CertificateManagerCertificateCertificateRequestorFunction9E036FFB:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: 861509f9607aa6bb9fd7034fb10fe6f0c60d91dfd7f010b9ef666869dec9bbd9.zip
+      Role:
+        Fn::GetAtt:
+          - CertificateManagerCertificateCertificateRequestorFunctionServiceRole39CBE3CA
+          - Arn
+      Handler: index.certificateRequestHandler
+      Runtime: nodejs14.x
+      Timeout: 900
+    DependsOn:
+      - CertificateManagerCertificateCertificateRequestorFunctionServiceRoleDefaultPolicy6F05AD3D
+      - CertificateManagerCertificateCertificateRequestorFunctionServiceRole39CBE3CA
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CertificateManagerCertificate/CertificateRequestorFunction/Resource
+      aws:asset:path: asset.861509f9607aa6bb9fd7034fb10fe6f0c60d91dfd7f010b9ef666869dec9bbd9
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  CertificateManagerCertificateCertificateRequestorResourceCEC8AEDD:
+    Type: AWS::CloudFormation::CustomResource
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CertificateManagerCertificateCertificateRequestorFunction9E036FFB
+          - Arn
+      DomainName: holeshot-bmx.com
+      SubjectAlternativeNames:
+        - ws.holeshot-bmx.com
+      HostedZoneId:
+        Ref: HostedZoneDB99F866
+      Region:
+        Ref: AWS::Region
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CertificateManagerCertificate/CertificateRequestorResource/Default
+  HoleshotWebSocketsStackAuthorizerHandlerServiceRole914FC988:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/AuthorizerHandler/ServiceRole/Resource
+  HoleshotWebSocketsStackAuthorizerHandler69FA9D75:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackAuthorizerHandlerServiceRole914FC988
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+      FunctionName: Holeshot-Infrastructure-AuthorizerHandler
+      Handler: functions/auth.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackAuthorizerHandlerServiceRole914FC988
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/AuthorizerHandler/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackOnConnectHandlerServiceRole6E8092F3:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnConnectHandler/ServiceRole/Resource
+  HoleshotWebSocketsStackOnConnectHandlerServiceRoleDefaultPolicy980F89AC:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+              - dynamodb:ConditionCheckItem
+              - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:PutItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:UpdateItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackWebSocketsConnections7DDE917A
+                  - Arn
+              - Ref: AWS::NoValue
+          - Action: sns:Publish
+            Effect: Allow
+            Resource:
+              Ref: HoleshotWebSocketsStacksnstopic4A407570
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStackOnConnectHandlerServiceRoleDefaultPolicy980F89AC
+      Roles:
+        - Ref: HoleshotWebSocketsStackOnConnectHandlerServiceRole6E8092F3
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnConnectHandler/ServiceRole/DefaultPolicy/Resource
+  HoleshotWebSocketsStackOnConnectHandler9502C5AC:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackOnConnectHandlerServiceRole6E8092F3
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          WEBSOCKETS_CONNECTION_TABLE:
+            Ref: HoleshotDataStoreseStackWebSocketsConnections7DDE917A
+      FunctionName: Holeshot-Infrastructure-OnConnectHandler
+      Handler: functions/connect.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackOnConnectHandlerServiceRoleDefaultPolicy980F89AC
+      - HoleshotWebSocketsStackOnConnectHandlerServiceRole6E8092F3
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnConnectHandler/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleFD4AF7DD:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnDisconnectHandler/ServiceRole/Resource
+  HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleDefaultPolicyE840A962:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+              - dynamodb:ConditionCheckItem
+              - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:PutItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:UpdateItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackWebSocketsConnections7DDE917A
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleDefaultPolicyE840A962
+      Roles:
+        - Ref: HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleFD4AF7DD
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnDisconnectHandler/ServiceRole/DefaultPolicy/Resource
+  HoleshotWebSocketsStackOnDisconnectHandler0745B1AF:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleFD4AF7DD
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          WEBSOCKETS_CONNECTION_TABLE:
+            Ref: HoleshotDataStoreseStackWebSocketsConnections7DDE917A
+      FunctionName: Holeshot-Infrastructure-OnDisconnectHandler
+      Handler: functions/disconnect.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleDefaultPolicyE840A962
+      - HoleshotWebSocketsStackOnDisconnectHandlerServiceRoleFD4AF7DD
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnDisconnectHandler/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackOnMessageHandlerServiceRole530378E6:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnMessageHandler/ServiceRole/Resource
+  HoleshotWebSocketsStackOnMessageHandlerServiceRoleDefaultPolicyAF6DA370:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: execute-api:ManageConnections
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:execute-api:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+                  - /*/*/@connections/*
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStackOnMessageHandlerServiceRoleDefaultPolicyAF6DA370
+      Roles:
+        - Ref: HoleshotWebSocketsStackOnMessageHandlerServiceRole530378E6
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnMessageHandler/ServiceRole/DefaultPolicy/Resource
+  HoleshotWebSocketsStackOnMessageHandler2FC19985:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackOnMessageHandlerServiceRole530378E6
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+      FunctionName: Holeshot-Infrastructure-OnMessageHandler
+      Handler: functions/default.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackOnMessageHandlerServiceRoleDefaultPolicyAF6DA370
+      - HoleshotWebSocketsStackOnMessageHandlerServiceRole530378E6
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/OnMessageHandler/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackGetConnectionServiceRole774CF348:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/GetConnection/ServiceRole/Resource
+  HoleshotWebSocketsStackGetConnectionServiceRoleDefaultPolicyA9F4647E:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - dynamodb:BatchGetItem
+              - dynamodb:BatchWriteItem
+              - dynamodb:ConditionCheckItem
+              - dynamodb:DeleteItem
+              - dynamodb:DescribeTable
+              - dynamodb:GetItem
+              - dynamodb:GetRecords
+              - dynamodb:GetShardIterator
+              - dynamodb:PutItem
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:UpdateItem
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackWebSocketsConnections7DDE917A
+                  - Arn
+              - Ref: AWS::NoValue
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStackGetConnectionServiceRoleDefaultPolicyA9F4647E
+      Roles:
+        - Ref: HoleshotWebSocketsStackGetConnectionServiceRole774CF348
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/GetConnection/ServiceRole/DefaultPolicy/Resource
+  HoleshotWebSocketsStackGetConnection9F7425F5:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackGetConnectionServiceRole774CF348
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          WEBSOCKETS_CONNECTION_TABLE:
+            Ref: HoleshotDataStoreseStackWebSocketsConnections7DDE917A
+      FunctionName: Holeshot-Infrastructure-GetConnection
+      Handler: functions/getConnection.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackGetConnectionServiceRoleDefaultPolicyA9F4647E
+      - HoleshotWebSocketsStackGetConnectionServiceRole774CF348
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/GetConnection/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: Holeshot Websocket API
+      ProtocolType: WEBSOCKET
+      RouteSelectionExpression: $request.body.action
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApiconnectRouteConnectIntegrationPermissionA1B0EA26:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackOnConnectHandler9502C5AC
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+            - /*/*$connect
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$connect-Route/ConnectIntegration-Permission
+  HoleshotWebSocketsStackHoleshotWebSocketApiconnectRouteConnectIntegrationF04E0850:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ""
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - HoleshotWebSocketsStackOnConnectHandler9502C5AC
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$connect-Route/ConnectIntegration/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApiconnectRoute8F166F95:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      RouteKey: $connect
+      AuthorizationType: CUSTOM
+      AuthorizerId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApiAuthorizer2ACF2D1F
+      Target:
+        Fn::Join:
+          - ""
+          - - integrations/
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApiconnectRouteConnectIntegrationF04E0850
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$connect-Route/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApiAuthorizer2ACF2D1F:
+    Type: AWS::ApiGatewayV2::Authorizer
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      AuthorizerType: REQUEST
+      Name: Authorizer
+      AuthorizerUri:
+        Fn::Join:
+          - ""
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - HoleshotWebSocketsStackAuthorizerHandler69FA9D75
+                - Arn
+            - /invocations
+      IdentitySource:
+        - route.request.header.Sec-WebSocket-Protocol
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/Authorizer/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApiHoleshotBMXInfrastructureHoleshotWebSocketsStackHoleshotWebSocketApiAuthorizerB9322376PermissionB6F037E2:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackAuthorizerHandler69FA9D75
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+            - /authorizers/
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApiAuthorizer2ACF2D1F
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/HoleshotBMXInfrastructureHoleshotWebSocketsStackHoleshotWebSocketApiAuthorizerB9322376-Permission
+  HoleshotWebSocketsStackHoleshotWebSocketApidisconnectRouteDisconnectIntegrationPermission18656160:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackOnDisconnectHandler0745B1AF
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+            - /*/*$disconnect
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$disconnect-Route/DisconnectIntegration-Permission
+  HoleshotWebSocketsStackHoleshotWebSocketApidisconnectRouteDisconnectIntegrationC5705871:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ""
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - HoleshotWebSocketsStackOnDisconnectHandler0745B1AF
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$disconnect-Route/DisconnectIntegration/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApidisconnectRouteAF98DBB0:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      RouteKey: $disconnect
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ""
+          - - integrations/
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApidisconnectRouteDisconnectIntegrationC5705871
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$disconnect-Route/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApidefaultRouteDefaultIntegrationPermissionC6A41504:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackOnMessageHandler2FC19985
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:"
+            - Ref: AWS::AccountId
+            - ":"
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+            - /*/*$default
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$default-Route/DefaultIntegration-Permission
+  HoleshotWebSocketsStackHoleshotWebSocketApidefaultRouteDefaultIntegrationDE176DFB:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::Join:
+          - ""
+          - - arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/
+            - Fn::GetAtt:
+                - HoleshotWebSocketsStackOnMessageHandler2FC19985
+                - Arn
+            - /invocations
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$default-Route/DefaultIntegration/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketApidefaultRoute2FDC8F29:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      RouteKey: $default
+      AuthorizationType: NONE
+      Target:
+        Fn::Join:
+          - ""
+          - - integrations/
+            - Ref: HoleshotWebSocketsStackHoleshotWebSocketApidefaultRouteDefaultIntegrationDE176DFB
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/HoleshotWebSocketApi/$default-Route/Resource
+  HoleshotWebSocketsStackProdF5E060A8:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId:
+        Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+      StageName: v1
+      AutoDeploy: true
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/Prod/Resource
+  HoleshotWebSocketsStackSendMessageServiceRoleA8C32F26:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/SendMessage/ServiceRole/Resource
+  HoleshotWebSocketsStackSendMessageServiceRoleDefaultPolicyAC4C79D0:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: execute-api:ManageConnections
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:execute-api:us-east-1:"
+                  - Ref: AWS::AccountId
+                  - ":"
+                  - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+                  - /*/*/@connections/*
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStackSendMessageServiceRoleDefaultPolicyAC4C79D0
+      Roles:
+        - Ref: HoleshotWebSocketsStackSendMessageServiceRoleA8C32F26
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/SendMessage/ServiceRole/DefaultPolicy/Resource
+  HoleshotWebSocketsStackSendMessageC61097EE:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackSendMessageServiceRoleA8C32F26
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+          APIGW_ENDPOINT:
+            Fn::Join:
+              - ""
+              - - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+                - .execute-api.
+                - Ref: AWS::Region
+                - .amazonaws.com/v1
+      FunctionName: Holeshot-Infrastructure-SendMessage
+      Handler: functions/sendMessage.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackSendMessageServiceRoleDefaultPolicyAC4C79D0
+      - HoleshotWebSocketsStackSendMessageServiceRoleA8C32F26
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/SendMessage/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackStartSendMessageNotificationServiceRole9929BC60:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/StartSendMessageNotification/ServiceRole/Resource
+  HoleshotWebSocketsStackStartSendMessageNotification9B8C0A2B:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c.zip
+      Role:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackStartSendMessageNotificationServiceRole9929BC60
+          - Arn
+      Environment:
+        Variables:
+          REGION: us-east-1
+          AVAILABILITY_ZONES:
+            Fn::Join:
+              - ""
+              - - '["'
+                - Fn::Select:
+                    - 0
+                    - Fn::GetAZs: ""
+                - '","'
+                - Fn::Select:
+                    - 1
+                    - Fn::GetAZs: ""
+                - '"]'
+      FunctionName: Holeshot-Infrastructure-StartSendMessageNotification
+      Handler: functions/startSendMessageNotification.handler
+      MemorySize: 1024
+      Runtime: nodejs18.x
+      Timeout: 5
+    DependsOn:
+      - HoleshotWebSocketsStackStartSendMessageNotificationServiceRole9929BC60
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/StartSendMessageNotification/Resource
+      aws:asset:path: asset.a679fb6beb79868cd80bfba1fc293de61b033e20ca23270f3d54912e84c71f2c
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  HoleshotWebSocketsStackStartSendMessageNotificationAllowInvokeHoleshotBMXInfrastructureHoleshotWebSocketsStacksnstopic8CC86DA8B54D97D8:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackStartSendMessageNotification9B8C0A2B
+          - Arn
+      Principal: sns.amazonaws.com
+      SourceArn:
+        Ref: HoleshotWebSocketsStacksnstopic4A407570
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/StartSendMessageNotification/AllowInvoke:HoleshotBMXInfrastructureHoleshotWebSocketsStacksnstopic8CC86DA8
+  HoleshotWebSocketsStackStartSendMessageNotificationsnstopicA1C11BF8:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Protocol: lambda
+      TopicArn:
+        Ref: HoleshotWebSocketsStacksnstopic4A407570
+      Endpoint:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackStartSendMessageNotification9B8C0A2B
+          - Arn
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/StartSendMessageNotification/sns-topic/Resource
+  HoleshotWebSocketsStacksnstopic4A407570:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: AuthProcessedTopic
+      TopicName: Holeshot-AuthProcessedTopic
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/sns-topic/Resource
+  HoleshotWebSocketsStacksfnLogD760516A:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: Holeshot-WebSockets-SendMessage-LogGroup
+      RetentionInDays: 7
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/sfnLog/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleC3C4660B:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: states.us-east-1.amazonaws.com
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/Holeshot-WebSockets-SendMessage/Role/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleDefaultPolicy09CC5D8B:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - logs:CreateLogDelivery
+              - logs:DeleteLogDelivery
+              - logs:DescribeLogGroups
+              - logs:DescribeResourcePolicies
+              - logs:GetLogDelivery
+              - logs:ListLogDeliveries
+              - logs:PutResourcePolicy
+              - logs:UpdateLogDelivery
+            Effect: Allow
+            Resource: "*"
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotWebSocketsStackGetConnection9F7425F5
+                  - Arn
+              - Fn::GetAtt:
+                  - HoleshotWebSocketsStackSendMessageC61097EE
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotWebSocketsStackGetConnection9F7425F5
+                        - Arn
+                    - :*
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotWebSocketsStackSendMessageC61097EE
+                        - Arn
+                    - :*
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleDefaultPolicy09CC5D8B
+      Roles:
+        - Ref: HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleC3C4660B
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/Holeshot-WebSockets-SendMessage/Role/DefaultPolicy/Resource
+  HoleshotWebSocketsStackHoleshotWebSocketsSendMessageCB365089:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      RoleArn:
+        Fn::GetAtt:
+          - HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleC3C4660B
+          - Arn
+      DefinitionString:
+        Fn::Join:
+          - ""
+          - - '{"StartAt":"GetConnectionInvocation","States":{"GetConnectionInvocation":{"Next":"HasConnectionId?","Retry":[{"ErrorEquals":["Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","OutputPath":"$.Payload","Resource":"arn:'
+            - Ref: AWS::Partition
+            - :states:::lambda:invoke","Parameters":{"FunctionName":"
+            - Fn::GetAtt:
+                - HoleshotWebSocketsStackGetConnection9F7425F5
+                - Arn
+            - '","Payload.$":"$"}},"HasConnectionId?":{"Type":"Choice","Choices":[{"Variable":"$.connectionId","StringEquals":"","Next":"Fail"}],"Default":"SendMessageInvocation"},"SendMessageInvocation":{"End":true,"Retry":[{"ErrorEquals":["Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2},{"ErrorEquals":["UnknownException"],"IntervalSeconds":10,"MaxAttempts":3,"BackoffRate":2}],"Type":"Task","Resource":"arn:'
+            - Ref: AWS::Partition
+            - :states:::lambda:invoke","Parameters":{"FunctionName":"
+            - Fn::GetAtt:
+                - HoleshotWebSocketsStackSendMessageC61097EE
+                - Arn
+            - '","Payload.$":"$"}},"Fail":{"Type":"Fail","Error":"No ConnectionId Found"}}}'
+      LoggingConfiguration:
+        Destinations:
+          - CloudWatchLogsLogGroup:
+              LogGroupArn:
+                Fn::GetAtt:
+                  - HoleshotWebSocketsStacksfnLogD760516A
+                  - Arn
+        IncludeExecutionData: true
+        Level: ALL
+      StateMachineName: Holeshot-WebSockets-SendMessage
+    DependsOn:
+      - HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleDefaultPolicy09CC5D8B
+      - HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleC3C4660B
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/Holeshot-WebSockets-SendMessage/Resource
+  HoleshotWebSocketsStacksfnLambdaInvokePolicy485F6499:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action: lambda:InvokeFunction
+            Effect: Allow
+            Resource:
+              Fn::Join:
+                - ""
+                - - Fn::GetAtt:
+                      - HoleshotWebSocketsStackStartSendMessageNotification9B8C0A2B
+                      - Arn
+                  - :$LATEST
+            Sid: sfnLambdaInvokePolicy
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStacksfnLambdaInvokePolicy485F6499
+      Roles:
+        - Ref: HoleshotWebSocketsStackHoleshotWebSocketsSendMessageRoleC3C4660B
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/sfnLambdaInvokePolicy/Resource
+  HoleshotWebSocketsStacklambdaSfnStatusUpdatePolicyE232EFC6:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - states:ListStateMachines
+              - states:SendTaskFailure
+              - states:SendTaskSuccess
+              - states:StartExecution
+            Effect: Allow
+            Resource: "*"
+            Sid: lambdaSfnStatusUpdatePolicy
+        Version: "2012-10-17"
+      PolicyName: HoleshotWebSocketsStacklambdaSfnStatusUpdatePolicyE232EFC6
+      Roles:
+        - Ref: HoleshotWebSocketsStackStartSendMessageNotificationServiceRole9929BC60
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Holeshot-WebSocketsStack/lambdaSfnStatusUpdatePolicy/Resource
+  ImagesCloudFrontOriginAccessIdentity45469040:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: images.holeshot-bmx.com Domain Hosting Environment
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Images-CloudFrontOriginAccessIdentity/Resource
+  ImagesCloudFrontDistribution34D54E44:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          TargetOriginId: HoleshotBMXInfrastructureImagesCloudFrontDistributionOrigin14D2B4DFB
+          ViewerProtocolPolicy: redirect-to-https
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - DomainName:
+              Fn::GetAtt:
+                - HoleshotDataStoreseStackmediaBucket1062BF4A
+                - RegionalDomainName
+            Id: HoleshotBMXInfrastructureImagesCloudFrontDistributionOrigin14D2B4DFB
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - origin-access-identity/cloudfront/
+                    - Ref: ImagesCloudFrontOriginAccessIdentity45469040
+        PriceClass: PriceClass_All
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Images-CloudFrontDistribution/Resource
+  CloudFrontOriginAccessIdentity04EB66DA:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: holeshot-bmx.com Domain Hosting Environment
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CloudFrontOriginAccessIdentity/Resource
+  apiOriginPolicyBD9E4B64:
+    Type: AWS::CloudFront::OriginRequestPolicy
+    Properties:
+      OriginRequestPolicyConfig:
+        CookiesConfig:
+          CookieBehavior: all
+        HeadersConfig:
+          HeaderBehavior: none
+        Name: HoleshotBMXInfrastructureapiOriginPolicy07E1018B
+        QueryStringsConfig:
+          QueryStringBehavior: all
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/apiOriginPolicy/Resource
+  CloudFrontDistributionBA64CE3A:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - holeshot-bmx.com
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCachingMinTTL: 0
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
+          CachedMethods:
+            - GET
+            - HEAD
+          Compress: true
+          TargetOriginId: HoleshotBMXInfrastructureCloudFrontDistributionOrigin1D02612B4
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: http2
+        IPV6Enabled: true
+        Origins:
+          - DomainName:
+              Fn::GetAtt:
+                - HoleshotDataStoreseStackS3BucketDAB99728
+                - RegionalDomainName
+            Id: HoleshotBMXInfrastructureCloudFrontDistributionOrigin1D02612B4
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - origin-access-identity/cloudfront/
+                    - Ref: CloudFrontOriginAccessIdentity04EB66DA
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn:
+            Fn::GetAtt:
+              - CertificateManagerCertificateCertificateRequestorResourceCEC8AEDD
+              - Arn
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CloudFrontDistribution/Resource
+  ARecordE7B57761:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: holeshot-bmx.com.
+      Type: A
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+            - CloudFrontDistributionBA64CE3A
+            - DomainName
+        HostedZoneId:
+          Fn::FindInMap:
+            - AWSCloudFrontPartitionHostedZoneIdMap
+            - Ref: AWS::Partition
+            - zoneId
+      HostedZoneId:
+        Ref: HostedZoneDB99F866
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/ARecord/Resource
+  S3BucketDeployAwsCliLayerDB193268:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      Content:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: 5d8d1d0aacea23824c62f362e1e3c14b7dd14a31c71b53bfae4d14a6373c5510.zip
+      Description: /opt/awscli/aws
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/S3BucketDeploy/AwsCliLayer/Resource
+      aws:asset:path: asset.5d8d1d0aacea23824c62f362e1e3c14b7dd14a31c71b53bfae4d14a6373c5510.zip
+      aws:asset:is-bundled: false
+      aws:asset:property: Content
+  S3BucketDeployCustomResource7D2D76C5:
+    Type: Custom::CDKBucketDeployment
+    Properties:
+      ServiceToken:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536
+          - Arn
+      SourceBucketNames:
+        - Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+      SourceObjectKeys:
+        - acbe26470f4368c8cd9b2428684fa9bdcd0b12908b0f6b51427cab3502a3117a.zip
+      DestinationBucketName:
+        Ref: HoleshotDataStoreseStackS3BucketDAB99728
+      Prune: true
+      DistributionId:
+        Ref: CloudFrontDistributionBA64CE3A
+      DistributionPaths:
+        - /*
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/S3BucketDeploy/CustomResource/Default
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetBucket*
+              - s3:GetObject*
+              - s3:List*
+            Effect: Allow
+            Resource:
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:s3:::"
+                    - Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+                    - /*
+              - Fn::Join:
+                  - ""
+                  - - "arn:aws:s3:::"
+                    - Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+          - Action:
+              - s3:Abort*
+              - s3:DeleteObject*
+              - s3:GetBucket*
+              - s3:GetObject*
+              - s3:List*
+              - s3:PutObject
+              - s3:PutObjectLegalHold
+              - s3:PutObjectRetention
+              - s3:PutObjectTagging
+              - s3:PutObjectVersionTagging
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - HoleshotDataStoreseStackS3BucketDAB99728
+                  - Arn
+              - Fn::Join:
+                  - ""
+                  - - Fn::GetAtt:
+                        - HoleshotDataStoreseStackS3BucketDAB99728
+                        - Arn
+                    - /*
+          - Action:
+              - cloudfront:CreateInvalidation
+              - cloudfront:GetInvalidation
+            Effect: Allow
+            Resource: "*"
+        Version: "2012-10-17"
+      PolicyName: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      Roles:
+        - Ref: CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource
+  CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket:
+          Fn::Sub: cdk-hnb659fds-assets-${AWS::AccountId}-us-east-1
+        S3Key: 2bc265c5e0569aeb24a6349c15bd54e76e845892376515e036627ab0cc70bb64.zip
+      Role:
+        Fn::GetAtt:
+          - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+          - Arn
+      Handler: index.handler
+      Layers:
+        - Ref: S3BucketDeployAwsCliLayerDB193268
+      Runtime: python3.9
+      Timeout: 900
+    DependsOn:
+      - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF
+      - CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource
+      aws:asset:path: asset.2bc265c5e0569aeb24a6349c15bd54e76e845892376515e036627ab0cc70bb64
+      aws:asset:is-bundled: false
+      aws:asset:property: Code
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/21U227bMAz9lr476mXdsMelKboVaNEg2VpgL4EsMQ4bWfJ0SZEZ/vdRkmO7WF+sQ4qkqHNEX7Ev16y9OONvbibkfqawZO3ac7EvyLVp5VHz2khy/uSlgmKx1Ql0hfvE2psg9uCjs0d5WRqF4ji6ezsbN9xRNvKatSuTK6Z1TMoonrBpuXPgHZvHpZDQKHOsQXuWa90Ojq5QvC4lZy0VuAtaeDS6GECsCrZG56K1Rl0p8EZP9x/4Eewz2BjRFcJUGr1h7S8HdmmMiiEDPoGFQjp7upU91Ds4FrmCulHcQ+G0IwpNgyJRmMA6lE5YbE4dTO2u4A1WlPnGj6x9SHdbgfPzBhNjPRwJiN6JRRJWidsMKN4EKyCSPxh9oYwfwe+MjK6M6Aoemm1PkNt47vaO5Ubu9cHs4X0AvZogBACV2BmkgkuSrrjjqGIvHh652KE+tTTYpJupKPnBVN+tCU1SosddQV8Pn+mhLUNJb+KHoSPlb5PLTKz5CoSxMl8oojWQBgKsxy0KOq3mmmiw7Fa7Z65Qkksuxu0J2Yer9IR6nu+1h8ryk0Kr2E8E80AcWfwLduCYzlMmyK019DzbJ4sV6jkx4ty9JEXQp7e9iDF3MebDiFt03mIZTge+s3PGCv4EUn8clw/cXTcROThv6g81f7+1tOaAkm6Uhi3eicakEClmY/sgGsU393/Jp+CbkN7gI2+amJfHcaPiVG3oVyIUplSFadC64mLGVbPj7OLsW//zOY/rVIk+on2Bcm3ivEdVBiOLMZhTqcaEUafBl9XqCm0ksFd3frj8yi6vqY9XhzizgZSoga3y+g+iOMOjIAUAAA==
+    Metadata:
+      aws:cdk:path: HoleshotBMX-Infrastructure/CDKMetadata/Default
+Outputs:
+  HoleshotUserServiceStackHoleshotApiEndpoint3B7E5728:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: HoleshotUserServiceStackHoleshotApiD13EAFBF
+          - .execute-api.us-east-1.
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: HoleshotUserServiceStackHoleshotApiDeploymentStagedev3E31C358
+          - /
+  HoleshotUserServiceStackStateMachineArn4844A264:
+    Value:
+      Fn::Join:
+        - ""
+        - - "Register StateMachine arn: "
+          - Ref: HoleshotUserServiceStackHoleshotUserRegister8E611B9E
+  HoleshotWebSocketsStackapigateayendpointC5BC0B72:
+    Value:
+      Fn::Join:
+        - ""
+        - - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+          - .execute-api.
+          - Ref: AWS::Region
+          - .amazonaws.com/v1
+  HoleshotWebSocketsStackAuthProcessedTopicBB7EEB1A:
+    Value:
+      Fn::Join:
+        - ""
+        - - "AuthProcessedTopic ARN: "
+          - Ref: HoleshotWebSocketsStacksnstopic4A407570
+  HoleshotWebSocketsStackStateMachineArn5D062DBA:
+    Value:
+      Fn::Join:
+        - ""
+        - - "SendMessage StateMachine arn: "
+          - Ref: HoleshotWebSocketsStackHoleshotWebSocketsSendMessageCB365089
+  HoleshotWebSocketsStackwebSocketApiapiEndpoint2C5D4010:
+    Value:
+      Fn::Join:
+        - ""
+        - - "api endpoint: "
+          - Fn::GetAtt:
+              - HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+              - ApiEndpoint
+  HoleshotWebSocketsStackstageurl2CBD49DB:
+    Value:
+      Fn::Join:
+        - ""
+        - - "stage url: wss://"
+          - Ref: HoleshotWebSocketsStackHoleshotWebSocketApi95DD1AFE
+          - .execute-api.us-east-1.
+          - Ref: AWS::URLSuffix
+          - /v1
+  DeployURL:
+    Value: https://holeshot-bmx.com
+Mappings:
+  AWSCloudFrontPartitionHostedZoneIdMap:
+    aws:
+      zoneId: Z2FDTNDATAQYW2
+    aws-cn:
+      zoneId: Z3RFFRIM2A3IF5
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+Rules:
+  CheckBootstrapVersion:
+    Assertions:
+      - Assert:
+          Fn::Not:
+            - Fn::Contains:
+                - - "1"
+                  - "2"
+                  - "3"
+                  - "4"
+                  - "5"
+                - Ref: BootstrapVersion
+        AssertDescription: CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.
+

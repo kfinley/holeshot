@@ -1,0 +1,13 @@
+
+
+GetTracksCompleteTopic:
+  Type: "AWS::SNS::Topic"
+  Properties:
+    DisplayName: ${self:service}-GetTracksCompleteTopic
+
+# GetTracksCompleteSubscription:
+#   Type: "AWS::SNS::Subscription"
+#   Properties:
+#     Endpoint: arn:aws:sns:us-east-1:146665891952:{{Send message to connected clients}}
+#     Protocol: lambda
+#     TopicArn: arn:aws:sns:us-east-1:146665891952:${self:service}-GetTracksCompleteTopic

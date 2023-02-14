@@ -14,7 +14,7 @@ using System.Threading;
 
 namespace Holeshot.Crawler.Commands {
 
-  public abstract class CrawlerBase {
+  public abstract class Crawly {
 
     protected IList<Task> Tasks;
     // protected readonly string ExePath = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
@@ -23,8 +23,11 @@ namespace Holeshot.Crawler.Commands {
 
     protected readonly IMediator mediator;
 
-    public CrawlerBase(IMediator mediator) {
+    protected readonly Settings settings;
+
+    public Crawly(IMediator mediator, Settings settings) {
       this.mediator = mediator;
+      this.settings = settings;
     }
 
     //https://freeproxyupdate.com/united-states-us

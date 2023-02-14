@@ -6,27 +6,27 @@ using System.Threading.Tasks;
 
 using AngleSharp;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Holeshot.Crawler.Commands {
 
   public class ProcessTrackPageRequest : IRequest<ProcessTrackPageResponse> {
     public string Contents { get; set; }
-    public string BaseUrl { get; set; }
   }
 
   public class ProcessTrackPageResponse {
     public bool Success { get; set; }
   }
 
-  public class ProcessTrackPage : CrawlerBase, IRequestHandler<ProcessTrackPageRequest, ProcessTrackPageResponse> {
+  public class ProcessTrackPageHandler : Crawly, IRequestHandler<ProcessTrackPageRequest, ProcessTrackPageResponse> {
 
-    public ProcessTrackPage(IMediator mediator) : base(mediator) { }
+    public ProcessTrackPageHandler(IMediator mediator, IOptions<Settings> settings) : base(mediator, settings.Value) { }
 
     /// <summary>
     /// Processes USA Bikes 'site/tracks' pages. i.e. /site/tracks/568?section_id=1
     /// </summary>
     public async Task<ProcessTrackPageResponse> Handle(ProcessTrackPageRequest request, CancellationToken cancellationToken) {
-//    public async Task<bool> Process(string baseUrl, string content, bool useProxy, string rootFolder, bool useExistingFileIfPresent) {
+      //    public async Task<bool> Process(string baseUrl, string content, bool useProxy, string rootFolder, bool useExistingFileIfPresent) {
 
       if (request.Contents == string.Empty) {
         Console.WriteLine("Content is empty");
@@ -78,7 +78,7 @@ namespace Holeshot.Crawler.Commands {
 
 
           //TODO: deal with hardcoded path
-          var email = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
+          // var email = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
 
         } else {
           contactInfo.Add(info[0].Trim(), info[1].Trim());
@@ -179,7 +179,7 @@ namespace Holeshot.Crawler.Commands {
       Console.WriteLine(string.Empty);
       try {
 
-        var tracksPageContent = await GetTracksPage(request.BaseUrl, trackId);
+        var tracksPageContent = await GetTracksPage(this.settings.BaseUrl, trackId);
 
         if (tracksPageContent == string.Empty) {
           Console.WriteLine("tracksPageContent was empty");
@@ -272,7 +272,7 @@ namespace Holeshot.Crawler.Commands {
                   throw new Exception("COACHES ELEMENT WRONG!!");
                 break;
               case "A":
-                coaches.Add(el.TextContent, $"https://{request.BaseUrl}{el.Attributes["href"].Value}");
+                coaches.Add(el.TextContent, $"https://{this.settings.BaseUrl}{el.Attributes["href"].Value}");
                 break;
               case "BR":
                 break;
@@ -318,7 +318,8 @@ namespace Holeshot.Crawler.Commands {
 
                   Console.WriteLine($"CloudFlare Encoded Email: {encEmail}");
                   Console.WriteLine("Decoded Email:");
-                  op = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
+
+                  // op = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
                 } else {
                   Console.WriteLine(op);
                 }
@@ -331,7 +332,7 @@ namespace Holeshot.Crawler.Commands {
           var eventsUrl = base.GetUniqueHrefUrls("/events/schedule", request.Contents).First();
           Console.WriteLine($"Events URL: {eventsUrl}");
 
-          var eventsPageContent = await GetEventsPage(request.BaseUrl, trackId);
+          var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, trackId);
 
           if (eventsPageContent == string.Empty) {
             Console.WriteLine("eventsPageContent was empty");
@@ -398,7 +399,7 @@ namespace Holeshot.Crawler.Commands {
               events.ForEach(e => {
                 Console.WriteLine($"Name: {e.Name}");
                 Console.WriteLine($"Date: {e.Date.ToLongDateString()}");
-                Console.WriteLine($"Url: {request.BaseUrl}{e.Url}");
+                Console.WriteLine($"Url: {this.settings.BaseUrl}{e.Url}");
                 Console.WriteLine($"Details");
                 e.Details.ForEach(d => Console.WriteLine($"{d.Item1}: {d.Item2}"));
 
@@ -475,7 +476,7 @@ namespace Holeshot.Crawler.Commands {
       var uri = $"https://{baseUrl}/tracks/{trackId}";
       var segments = uri.Split('/');
 
-      var title = $"tracks/{trackId}";
+      var title = $"USA-BMX/tracks/{trackId}";
       // await Task.Delay(Numbers.RandomBetween(2000, 4000)); // Suckfest... Force wait to try to get around rate limiter
 
       var result = await this.mediator.Send(new GetPageRequest {
@@ -492,7 +493,7 @@ namespace Holeshot.Crawler.Commands {
     private async Task<string> GetEventsPage(string baseUrl, string trackId) {
 
       var uri = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
-      var title = $"tracks.{trackId}/events/{DateTime.Now.Month}";
+      var title = $"tracks.{trackId}.events";
 
       // await Task.Delay(Numbers.RandomBetween(2000, 4000)); // Suckfest... Force wait to try to get around rate limiter
 
