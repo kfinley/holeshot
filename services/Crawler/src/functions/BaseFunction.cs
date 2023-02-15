@@ -22,8 +22,8 @@ namespace Holeshot.Crawler.Functions {
       serviceCollection
         .AddOptions()
         .AddDefaultAWSOptions(configuration.GetAWSOptions())
-        .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions("Services:SNS"))
-        .AddAWSService<IAmazonS3>()
+        .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions())
+        .AddAWSService<IAmazonS3>(configuration.GetAWSOptions())
         .Configure<Settings>(configuration.GetSection("Services:Crawler"))
         .AddMediatR(Aws.Commands.CommandsAssembly.Value)
         .AddMediatR(Crawler.Commands.CommandsAssembly.Value);
