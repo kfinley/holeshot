@@ -28,7 +28,7 @@ namespace Holeshot.Crawler.Commands {
     private async Task<GetS3ObjectResponse> GetFile(string key) {
       return await this.Send(new GetS3ObjectRequest {
         Key = key,
-        BucketName = this.settings.Bucket
+        BucketName = this.settings.BucketName
       });
     }
 
@@ -39,23 +39,23 @@ namespace Holeshot.Crawler.Commands {
 
         request.Key = $"USA-BMX/{segments[segments.Length - 2]}/{segments[segments.Length - 1].Replace("-", string.Empty).Replace("%20", string.Empty)}";
         //TODO: move ^^^^ to a clean list
-
       }
 
       Console.WriteLine($"Key: {request.Key}");
-      Console.WriteLine($"Bucket: {this.settings.Bucket}");
+      Console.WriteLine($"BucketName: {this.settings.BucketName}");
 
       var file = await GetFile(request.Key);
 
-      if (!file.Contents.HasValue()) {
+      if (!file.Contents.HasValue() && request.Url.HasValue()) {
 
         var response = await this.Send(new DownloadToS3Request {
+          Url = request.Url,
           Key = request.Key,
-          Bucket = this.settings.Bucket
+          BucketName = this.settings.BucketName
         });
         file = await GetFile(request.Key);
-
       }
+
       return new GetPageResponse {
         Key = request.Key,
         Contents = file.Contents

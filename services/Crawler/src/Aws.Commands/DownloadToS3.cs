@@ -11,7 +11,7 @@ namespace Holeshot.Aws.Commands {
 
   public class DownloadToS3Request : IRequest<DownloadToS3Response> {
     public string Url { get; set; }
-    public string Bucket { get; set; }
+    public string BucketName { get; set; }
     public string Key { get; set; }
     public string ContentType { get; set; }
   }
@@ -44,7 +44,7 @@ namespace Holeshot.Aws.Commands {
             Console.WriteLine("created stream");
 
             var response = await this.mediator.Send(new SaveStreamToS3Request {
-              BucketName = request.Bucket,
+              BucketName = request.BucketName,
               Key = request.Key,
               Stream = stream,
             });
@@ -55,7 +55,7 @@ namespace Holeshot.Aws.Commands {
             };
           }
         } catch (Exception ex) {
-          throw new Exception($"URL: {request.Url}  Bucket: {request.Bucket} Key: {request.Key} Message: {ex.Message}");
+          throw new Exception($"URL: {request.Url}  BucketName: {request.BucketName} Key: {request.Key} Message: {ex.Message}");
         }
       }
     }

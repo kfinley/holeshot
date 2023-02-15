@@ -33,7 +33,7 @@ export class CrawlerService extends Construct {
       },
       Services: {
         Crawler: {
-          Bucket: `${props!.domainName}-crawler` // props?.crawlerBucket.bucketName <-- isn't working and outputs stuff like ${Token[TOKEN.661]}
+          BucketName: `${props!.domainName}-crawler` // props?.crawlerBucket.bucketName <-- isn't working and outputs stuff like ${Token[TOKEN.661]}
         }
       }
     }
@@ -66,7 +66,7 @@ export class CrawlerService extends Construct {
         's3:GetObject',
         's3:PutObject'
       ],
-      resources: [`arn:aws:s3:::${props!.domainName}-crawler/*`],
+      resources: [`arn:aws:s3:::*`] // ${props!.domainName}-crawler/*`], <-- tighten up...
     });
 
     getTracks.role?.attachInlinePolicy(
