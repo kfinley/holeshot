@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { Bucket } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DotNetFunction } from '@xaaskit-cdk/aws-lambda-dotnet'
+import { Duration } from 'aws-cdk-lib';
 
 export interface CrawlerServiceProps {
   crawlerBucket: Bucket,
@@ -40,7 +41,8 @@ export class CrawlerService extends Construct {
       },
       projectDir: '../services/Crawler/src/functions',
       solutionDir: '../services',
-      handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler'
+      handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
+      timeout: Duration.seconds(300),
     })
   }
 }

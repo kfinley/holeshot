@@ -33,7 +33,7 @@ namespace Holeshot.Crawler.Commands {
 
     public async Task<GetTracksForRegionResponse> Handle(GetTracksForRegionRequest request, CancellationToken cancellationToken) {
 
-      this.logger.LogInformation($"Processing GetTracksForStateRequest for state: {request.Region}");
+      this.logger.LogInformation($"Processing GetTracksForStateRequest for region: {request.Region}");
 
       var url = $"https://{this.settings.BaseUrl}/tracks/search?location={request.Region.Replace(" ", "%20")}&distance=25000&commit=Search";
 
