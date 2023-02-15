@@ -43,6 +43,7 @@ export class InfrastructureStack extends Stack {
     });
 
     const crawlerService = new CrawlerService(this, 'Holeshot-CrawlerService', {
+      domainName,
       crawlerBucket: dataStores.crawlerBucket
     });
 

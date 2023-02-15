@@ -5,7 +5,9 @@ import { DotNetFunction } from '@xaaskit-cdk/aws-lambda-dotnet'
 import { Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
+import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 export interface CrawlerServiceProps {
+  domainName: string,
   crawlerBucket: Bucket,
 }
 
@@ -31,7 +33,7 @@ export class CrawlerService extends Construct {
       },
       Services: {
         Crawler: {
-          Bucket: 'holeshot-bmx.com-crawler' // props?.crawlerBucket.bucketName <-- isn't working and outputs stuff like ${Token[TOKEN.661]}
+          Bucket: `${props!.domainName}-crawler` // props?.crawlerBucket.bucketName <-- isn't working and outputs stuff like ${Token[TOKEN.661]}
         }
       }
     }
@@ -56,6 +58,18 @@ export class CrawlerService extends Construct {
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',
       logRetention: RetentionDays.ONE_WEEK
-    })
+    });
+
+    const s3ListBucketsPolicy = new PolicyStatement({
+      actions: ['s3:ListAllMyBuckets'],
+      resources: ['arn:aws:s3:::*'], // TODO: tighten this up...
+    });
+
+    getTracks.role?.attachInlinePolicy(
+      new Policy(this, 'Holeshot-list-buckets-policy', {
+        statements: [s3ListBucketsPolicy],
+      }),
+    );
+
   }
 }
