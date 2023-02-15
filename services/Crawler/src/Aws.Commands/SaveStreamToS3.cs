@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Amazon.S3;
 using Amazon.S3.Transfer;
+using System;
 
 namespace Holeshot.Aws.Commands {
   public class SaveStreamToS3Request : IRequest<SaveStreamToS3Response> {
@@ -27,6 +28,8 @@ namespace Holeshot.Aws.Commands {
     }
 
     public async Task<SaveStreamToS3Response> Handle(SaveStreamToS3Request request, CancellationToken cancellationToken) {
+
+      Console.WriteLine("SaveStreamToS3");
 
       var fileUploader = new FileUploader(null, this.s3Client);
 

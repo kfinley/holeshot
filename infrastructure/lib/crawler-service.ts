@@ -65,7 +65,7 @@ export class CrawlerService extends Construct {
         's3:ListBucket',
         's3:GetObject'
       ],
-      resources: ['arn:aws:s3:::*'], // TODO: tighten this up...
+      resources: [`arn:aws:s3:::${props!.domainName}-crawler`],
     });
 
     getTracks.role?.attachInlinePolicy(
