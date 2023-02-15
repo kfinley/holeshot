@@ -69,12 +69,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Setup dotnet
+      - name: "Bootstrap, Deploy CDK, & sync S3 media "
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
-
-      - name: "Bootstrap, Deploy CDK, & sync S3 media "
         working-directory: ./infrastructure
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
