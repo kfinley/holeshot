@@ -73,6 +73,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 6.x
+      - name: Install Amazon.Lambda.Tools
         run: dotnet tool install -g Amazon.Lambda.Tools
 
       - name: "Bootstrap, Deploy CDK, & sync S3 media "
