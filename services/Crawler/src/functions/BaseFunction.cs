@@ -4,10 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using MediatR;
+using Amazon.S3;
 
 using ServiceProviderFunctions;
+
 using Holeshot.Crawler.Commands;
-using Amazon.S3;
 
 namespace Holeshot.Crawler.Functions {
   public abstract class BaseFunction : ServiceProviderFunction {
