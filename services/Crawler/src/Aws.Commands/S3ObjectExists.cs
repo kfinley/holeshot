@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
 
 using Amazon.S3;
 using Amazon.S3.Model;

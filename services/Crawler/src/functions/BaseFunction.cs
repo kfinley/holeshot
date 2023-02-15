@@ -7,6 +7,7 @@ using MediatR;
 
 using ServiceProviderFunctions;
 using Holeshot.Crawler.Commands;
+using Amazon.S3;
 
 namespace Holeshot.Crawler.Functions {
   public abstract class BaseFunction : ServiceProviderFunction {
@@ -21,7 +22,8 @@ namespace Holeshot.Crawler.Functions {
       serviceCollection
         .AddOptions()
         .AddDefaultAWSOptions(configuration.GetAWSOptions())
-        .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions("Service:SNS"))
+        .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions("Services:SNS"))
+        .AddAWSService<IAmazonS3>()
         .Configure<Settings>(configuration.GetSection("Services:Crawler"))
         .AddMediatR(Aws.Commands.CommandsAssembly.Value)
         .AddMediatR(Crawler.Commands.CommandsAssembly.Value);
