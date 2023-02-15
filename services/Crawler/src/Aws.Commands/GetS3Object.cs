@@ -6,6 +6,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 
 using MediatR;
+using System;
 
 namespace Holeshot.Aws.Commands {
 
@@ -29,18 +30,24 @@ namespace Holeshot.Aws.Commands {
 
     public async Task<GetS3ObjectResponse> Handle(GetS3ObjectRequest request, CancellationToken cancellationToken) {
 
+      Console.WriteLine(request);
 
-      using (var response = await this.s3Client.GetObjectAsync(new GetObjectRequest {
-        BucketName = request.BucketName,
-        Key = request.Key
-      }))
-      using (var stream = response.ResponseStream)
-      using (var reader = new StreamReader(stream)) {
+      try {
+        using (var response = await this.s3Client.GetObjectAsync(new GetObjectRequest {
+          BucketName = request.BucketName,
+          Key = request.Key
+        }))
+        using (var stream = response.ResponseStream)
+        using (var reader = new StreamReader(stream)) {
 
-        return new GetS3ObjectResponse {
-          Key = request.Key,
-          Contents = reader.ReadToEnd()
-        };
+          return new GetS3ObjectResponse {
+            Key = request.Key,
+            Contents = reader.ReadToEnd()
+          };
+        }
+      } catch (Exception ex) {
+        Console.WriteLine(ex);
+        throw ex;
       }
     }
   }

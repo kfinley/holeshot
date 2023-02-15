@@ -33,7 +33,7 @@ namespace Holeshot.Crawler.Tests {
       };
 
       Sut.Setup<IOptions<Settings>, Settings>(o => o.Value).Returns(new Settings {
-        Bucket = "test-bucket"
+        BucketName = "test-bucket"
       });
 
       Sut.SetupAsync<IMediator, GetPageResponse>(m => m.Send(Argument.Is<GetPageRequest>(r =>
