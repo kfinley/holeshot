@@ -93,12 +93,13 @@ namespace Holeshot.Crawler.Commands {
           );
 
         await this.mediator.Publish(new PublishMessageRequest {
-          Topic = "GetTracksForStateTopic",
-          Subject = "Tracks/getTrackForState",
+          Topic = "Holeshot-GetTracksForRegionTopic",
+          Subject = "Tracks/getTrackForRegion",
           // To avoid dealing with mapping and setting naming option to camel case
           // just new up the message with camel casing.
           Message = JsonSerializer.Serialize(new {
-            State = request.Region
+            Region = request.Region,
+            Tracks = urls.Count()
           })
         });
 

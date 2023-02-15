@@ -12,7 +12,7 @@ using Holeshot.Crawler.Commands;
 
 namespace Holeshot.Crawler.Functions {
   public abstract class BaseFunction : ServiceProviderFunction {
-    protected IMediator Mediator {
+    protected IMediator? Mediator {
       get {
         return Scope.ServiceProvider.GetService<IMediator>();
       }

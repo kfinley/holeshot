@@ -41,9 +41,9 @@ export class CrawlerService extends Construct {
       flag: 'w',
     });
 
-    const getTracksForStateTopic = new Topic(this, 'Holeshot-GetTracksForStateTopic-sns-topic', {
-      topicName: 'Holeshot-GetTracksForStateTopic',
-      displayName: 'GetTracksForStateTopic',
+    const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
+      topicName: 'Holeshot-GetTracksForRegionTopic',
+      displayName: 'GetTracksForRegionTopic',
     });
 
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
