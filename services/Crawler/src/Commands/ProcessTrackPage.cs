@@ -69,14 +69,6 @@ namespace Holeshot.Crawler.Commands {
           Console.WriteLine($"Decocded {info[0].Trim()}:");
 
 
-
-
-
-
-
-
-
-
           //TODO: deal with hardcoded path
           // var email = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
 

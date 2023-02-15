@@ -46,17 +46,20 @@ namespace Holeshot.Crawler.Commands {
       Console.WriteLine($"Key: {request.Key}");
       Console.WriteLine($"BucketName: {this.settings.BucketName}");
 
-      var file = await GetFile(request.Key);
+      var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
+        BucketName = this.settings.BucketName,
+        Key = request.Key
+      });
 
-      if (!file.Contents.HasValue() && request.Url.HasValue()) {
-
+      if (!fileMeta.Exists) {
         var response = await this.Send(new DownloadToS3Request {
           Url = request.Url,
           Key = request.Key,
           BucketName = this.settings.BucketName
         });
-        file = await GetFile(request.Key);
       }
+
+      var file = await GetFile(request.Key);
 
       return new GetPageResponse {
         Key = request.Key,
