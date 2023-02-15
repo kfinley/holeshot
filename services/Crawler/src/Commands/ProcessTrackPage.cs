@@ -467,8 +467,8 @@ namespace Holeshot.Crawler.Commands {
     private async Task<string> GetTracksPage(string baseUrl, string trackId) {
 
 
-      var url = $"https://{baseUrl}/tracks/{trackId}/page";
-      var key = $"USA-BMX/tracks/{trackId}";
+      var url = $"https://{baseUrl}/tracks/{trackId}";
+      var key = $"USA-BMX/tracks/{trackId}/page";
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,
