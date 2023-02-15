@@ -25,7 +25,7 @@ namespace Holeshot.Aws.Commands {
     public async Task Handle(PublishMessageRequest request, CancellationToken cancellationToken) {
       var publishRequest = new PublishRequest {
         Subject = request.Subject,
-        TargetArn = $"arn:aws:sns:us-west-1:101010101010:{request.Topic}", //TODO: Fix this...
+        TargetArn = $"arn:aws:sns:us-east-1:146665891952:{request.Topic}", //TODO: Fix this...
         Message = request.Message
       };
 
