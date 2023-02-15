@@ -79,7 +79,7 @@ export class DataStores extends Construct {
     });
 
     this.crawlerBucket = new Bucket(this, 'crawlerBucket', {
-      bucketName: `${props?.domainName}.crawler`,
+      bucketName: `${props?.domainName}-crawler`,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,

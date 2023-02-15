@@ -31,7 +31,7 @@ export class CrawlerService extends Construct {
       },
       Services: {
         Crawler: {
-          Bucket: props?.crawlerBucket.bucketName
+          Bucket: 'holeshot-bmx.com-crawler' // props?.crawlerBucket.bucketName <-- isn't working and outputs stuff like ${Token[TOKEN.661]}
         }
       }
     }
