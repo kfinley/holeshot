@@ -14,7 +14,9 @@ using Microsoft.Extensions.Options;
 namespace Holeshot.Crawler.Commands {
 
   public class GetTracksForRegionRequest : IRequest<GetTracksForRegionResponse> {
-    public string Region { get; set; } // Can be state or country. USA will get all the tracks in the US
+    public string Type { get; set; } = "State";
+    public string Region { get; set; }
+    public string Distance { get; set; } = "25000";
   }
 
   public class GetTracksForRegionResponse {
@@ -35,7 +37,13 @@ namespace Holeshot.Crawler.Commands {
 
       this.logger.LogInformation($"Processing GetTracksForStateRequest for region: {request.Region}");
 
-      var url = $"https://{this.settings.BaseUrl}/tracks/search?location={request.Region.Replace(" ", "%20")}&distance=25000&commit=Search";
+      var url = $"https://{this.settings.BaseUrl}";
+
+      if (request.Type == "State") {
+        url += $"/tracks/by_state?state={request.Region}";
+      } else {
+        url += $"/tracks/search?location={request.Region.Replace(" ", "%20")}&distance={request.Distance}&commit=Search";
+      }
 
       var key = $"USA-BMX/tracks/search/{request.Region}";
 

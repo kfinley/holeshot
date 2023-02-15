@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AngleSharp;
+using Holeshot.Aws.Commands;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -465,37 +466,49 @@ namespace Holeshot.Crawler.Commands {
     /// </summary
     private async Task<string> GetTracksPage(string baseUrl, string trackId) {
 
-      var uri = $"https://{baseUrl}/tracks/{trackId}";
-      var segments = uri.Split('/');
+      var result = string.Empty;
 
-      var title = $"USA-BMX/tracks/{trackId}";
-      // await Task.Delay(Numbers.RandomBetween(2000, 4000)); // Suckfest... Force wait to try to get around rate limiter
+      var uri = $"https://{baseUrl}/tracks/{trackId}/page";
+      var key = $"USA-BMX/tracks/{trackId}";
 
-      var result = await this.mediator.Send(new GetPageRequest {
-        Url = uri,
-        Key = title
+      var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
+        BucketName = this.settings.BucketName,
+        Key = key
       });
 
-      // var result = await new GetPage().Process(uri, useProxy, rootFolder, title);
+      if (fileMeta.Exists) {
+        var getPage = await this.mediator.Send(new GetPageRequest {
+          Url = uri,
+          Key = key
+        });
+        result = getPage.Contents;
+      }
 
-      return result.Contents;
+      return result;
 
     }
 
     private async Task<string> GetEventsPage(string baseUrl, string trackId) {
 
+      var result = string.Empty;
+
       var uri = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
-      var title = $"tracks.{trackId}.events";
+      var key = $"USA-BMX/tracks/{trackId}/events";
 
-      // await Task.Delay(Numbers.RandomBetween(2000, 4000)); // Suckfest... Force wait to try to get around rate limiter
-
-      var result = await this.mediator.Send(new GetPageRequest {
-        Url = uri,
-        Key = title
+      var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
+        BucketName = this.settings.BucketName,
+        Key = key
       });
-      // var result = await new GetPage().Process(uri, useProxy, rootFolder, title);
 
-      return result.Contents;
+      if (fileMeta.Exists) {
+        var getPage = await this.mediator.Send(new GetPageRequest {
+          Url = uri,
+          Key = key
+        });
+        result = getPage.Contents;
+      }
+
+      return result;
     }
 
 
