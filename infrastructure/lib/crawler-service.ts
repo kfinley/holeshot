@@ -63,9 +63,10 @@ export class CrawlerService extends Construct {
     const s3ListBucketsPolicy = new PolicyStatement({
       actions: [
         's3:ListBucket',
-        's3:GetObject'
+        's3:GetObject',
+        's3:PutObject'
       ],
-      resources: [`arn:aws:s3:::${props!.domainName}-crawler`],
+      resources: [`arn:aws:s3:::${props!.domainName}-crawler/*`],
     });
 
     getTracks.role?.attachInlinePolicy(
