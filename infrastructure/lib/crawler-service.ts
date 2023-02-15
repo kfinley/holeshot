@@ -5,7 +5,7 @@ import { DotNetFunction } from '@xaaskit-cdk/aws-lambda-dotnet'
 import { Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
-import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 export interface CrawlerServiceProps {
   domainName: string,
   crawlerBucket: Bucket,
@@ -41,11 +41,6 @@ export class CrawlerService extends Construct {
       flag: 'w',
     });
 
-    const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
-      topicName: 'Holeshot-GetTracksForRegionTopic',
-      displayName: 'GetTracksForRegionTopic',
-    });
-
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
       bundling: {
         environment: {
@@ -75,5 +70,10 @@ export class CrawlerService extends Construct {
       }),
     );
 
+    const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
+      topicName: 'Holeshot-GetTracksForRegionTopic',
+      displayName: 'GetTracksForRegionTopic',
+    });
+    getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
   }
 }
