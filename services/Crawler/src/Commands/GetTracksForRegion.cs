@@ -40,9 +40,9 @@ namespace Holeshot.Crawler.Commands {
       var key = $"USA-BMX/tracks/search/{request.Region}";
 
       this.logger.LogInformation($"{url}, {this.settings.Bucket}, {key}");
-      
+
       var file = await base.mediator.Send(new S3ObjectExistsRequest {
-        Bucket = this.settings.Bucket,
+        BucketName = this.settings.Bucket,
         Key = key
       });
 
@@ -57,7 +57,7 @@ namespace Holeshot.Crawler.Commands {
 
       var gets3ObjectResponse = await base.mediator.Send(new GetS3ObjectRequest {
         Key = key,
-        Bucket = this.settings.Bucket
+        BucketName = this.settings.Bucket
       });
 
       if (gets3ObjectResponse.Contents != string.Empty) {

@@ -28,7 +28,7 @@ namespace Holeshot.Crawler.Commands {
     private async Task<GetS3ObjectResponse> GetFile(string key) {
       return await this.Send(new GetS3ObjectRequest {
         Key = key,
-        Bucket = this.settings.Bucket
+        BucketName = this.settings.Bucket
       });
     }
 
@@ -43,6 +43,7 @@ namespace Holeshot.Crawler.Commands {
       }
 
       Console.WriteLine($"Key: {request.Key}");
+      Console.WriteLine($"Bucket: {this.settings.Bucket}");
 
       var file = await GetFile(request.Key);
 

@@ -44,7 +44,7 @@ namespace Holeshot.Aws.Commands {
             Console.WriteLine("created stream");
 
             var response = await this.mediator.Send(new SaveStreamToS3Request {
-              Bucket = request.Bucket,
+              BucketName = request.Bucket,
               Key = request.Key,
               Stream = stream,
             });

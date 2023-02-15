@@ -9,7 +9,7 @@ using System;
 
 namespace Holeshot.Aws.Commands {
   public class SaveStreamToS3Request : IRequest<SaveStreamToS3Response> {
-    public string Bucket { get; set; }
+    public string BucketName { get; set; }
     public string Key { get; set; }
     public Stream Stream { get; set; }
   }
@@ -29,15 +29,15 @@ namespace Holeshot.Aws.Commands {
 
     public async Task<SaveStreamToS3Response> Handle(SaveStreamToS3Request request, CancellationToken cancellationToken) {
 
-      Console.WriteLine($"SaveStreamToS3 Bucket: {request.Bucket}");
+      Console.WriteLine($"SaveStreamToS3 BucketName: {request.BucketName}");
 
       var fileUploader = new FileUploader(null, this.s3Client);
 
-      var uploadId = await fileUploader.UploadFileAsync(request.Stream, request.Bucket, request.Key, null);
+      var uploadId = await fileUploader.UploadFileAsync(request.Stream, request.BucketName, request.Key, null);
 
       using (var transferUtility = new TransferUtility(s3Client)) {
         try {
-          await transferUtility.UploadAsync(request.Stream, request.Bucket, request.Key);
+          await transferUtility.UploadAsync(request.Stream, request.BucketName, request.Key);
         } catch (Exception ex) {
           Console.WriteLine($"Exception in SaveStreamToS3. {ex}");
           Console.WriteLine(ex.Message);

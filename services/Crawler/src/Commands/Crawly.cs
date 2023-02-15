@@ -79,6 +79,7 @@ namespace Holeshot.Crawler.Commands {
         var uri = basePath == string.Empty ? url : $"{basePath}{url}";
 
         Console.WriteLine($"Processing {uri}");
+
         tasks.Add(RunThen(
           async () => {
             var response = await this.mediator.Send(new GetPageRequest {

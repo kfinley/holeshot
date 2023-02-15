@@ -10,7 +10,7 @@ using MediatR;
 namespace Holeshot.Aws.Commands {
 
   public class GetS3ObjectRequest : IRequest<GetS3ObjectResponse> {
-    public string Bucket { get; set; }
+    public string BucketName { get; set; }
     public string Key { get; set; }
   }
 
@@ -29,8 +29,9 @@ namespace Holeshot.Aws.Commands {
 
     public async Task<GetS3ObjectResponse> Handle(GetS3ObjectRequest request, CancellationToken cancellationToken) {
 
+
       using (var response = await this.s3Client.GetObjectAsync(new GetObjectRequest {
-        BucketName = request.Bucket,
+        BucketName = request.BucketName,
         Key = request.Key
       }))
       using (var stream = response.ResponseStream)

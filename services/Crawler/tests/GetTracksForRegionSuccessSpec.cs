@@ -38,7 +38,7 @@ namespace Holeshot.Crawler.Tests {
 
 
       Sut.SetupAsync<IMediator, S3ObjectExistsResponse>(m => m.Send(Argument.Is<S3ObjectExistsRequest>(r =>
-         r.Bucket == "test-bucket" &&
+         r.BucketName == "test-bucket" &&
          r.Key == $"USA-BMX/tracks/search/{Request.Region}"
      ), Argument.IsAny<CancellationToken>()
      )).ReturnsAsync(new S3ObjectExistsResponse {
@@ -46,7 +46,7 @@ namespace Holeshot.Crawler.Tests {
      });
 
       Sut.SetupAsync<IMediator, GetS3ObjectResponse>(m => m.Send(Argument.Is<GetS3ObjectRequest>(r =>
-          r.Bucket == "test-bucket" &&
+          r.BucketName == "test-bucket" &&
           r.Key == $"USA-BMX/tracks/search/{Request.Region}"
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new GetS3ObjectResponse {

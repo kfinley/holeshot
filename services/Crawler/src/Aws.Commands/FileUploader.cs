@@ -26,12 +26,12 @@ namespace Holeshot.Aws.Commands {
       this.s3Client = s3Client;
     }
 
-    public async Task<string> UploadFileAsync(Stream inputStream, string bucket, string key, Action<UploadEvent> callback) {
+    public async Task<string> UploadFileAsync(Stream inputStream, string bucketName, string key, Action<UploadEvent> callback) {
 
       this.logger?.LogInformation($"Start uploading to {key}");
 
       var initiateResponse = await s3Client.InitiateMultipartUploadAsync(new InitiateMultipartUploadRequest {
-        BucketName = bucket,
+        BucketName = bucketName,
         Key = key
       });
 
@@ -62,7 +62,7 @@ namespace Holeshot.Aws.Commands {
               var partSize = nextUploadBuffer.Position;
               nextUploadBuffer.Position = 0;
               var partResponse = await s3Client.UploadPartAsync(new UploadPartRequest {
-                BucketName = bucket,
+                BucketName = bucketName,
                 Key = key,
                 UploadId = initiateResponse.UploadId,
                 InputStream = nextUploadBuffer,
@@ -90,7 +90,7 @@ namespace Holeshot.Aws.Commands {
             nextUploadBuffer.Position = 0;
 
             var partResponse = await s3Client.UploadPartAsync(new UploadPartRequest {
-              BucketName = bucket,
+              BucketName = bucketName,
               Key = key,
               UploadId = initiateResponse.UploadId,
               InputStream = nextUploadBuffer,
@@ -112,7 +112,7 @@ namespace Holeshot.Aws.Commands {
         }
 
         await s3Client.CompleteMultipartUploadAsync(new CompleteMultipartUploadRequest {
-          BucketName = bucket,
+          BucketName = bucketName,
           Key = key,
           UploadId = initiateResponse.UploadId,
           PartETags = partETags

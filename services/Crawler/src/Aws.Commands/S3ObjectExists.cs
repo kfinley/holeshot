@@ -10,7 +10,7 @@ using System;
 namespace Holeshot.Aws.Commands {
 
   public class S3ObjectExistsRequest : IRequest<S3ObjectExistsResponse> {
-    public string Bucket { get; set; }
+    public string BucketName { get; set; }
     public string Key { get; set; }
   }
 
@@ -31,7 +31,7 @@ namespace Holeshot.Aws.Commands {
 
       try {
         var response = await this.s3Client.GetObjectMetadataAsync(new GetObjectMetadataRequest {
-          BucketName = request.Bucket,
+          BucketName = request.BucketName,
           Key = request.Key
         });
 
