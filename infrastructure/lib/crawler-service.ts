@@ -20,9 +20,9 @@ export class CrawlerService extends Construct {
     } = new ScopedAws(this);
 
     const settings = {
-      AWS: {
-        Region: region
-      },
+      // AWS: {
+      //   Region: region
+      // },
       Logging: {
         LogLevel: {
           Default: "Information",
@@ -32,9 +32,6 @@ export class CrawlerService extends Construct {
       Services: {
         Crawler: {
           Bucket: props?.crawlerBucket.bucketName
-        },
-        SNS: {
-          Region: region
         }
       }
     }

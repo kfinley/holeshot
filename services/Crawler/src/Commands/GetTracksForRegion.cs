@@ -27,7 +27,7 @@ namespace Holeshot.Crawler.Commands {
 
     public GetTracksForRegionHandler(IMediator mediator,
                                     IOptions<Settings> settings,
-                              ILogger<GetTracksForRegionHandler> logger) : base(mediator, settings.Value) {
+                                    ILogger<GetTracksForRegionHandler> logger) : base(mediator, settings.Value) {
       this.logger = logger;
     }
 
