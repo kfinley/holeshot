@@ -466,9 +466,8 @@ namespace Holeshot.Crawler.Commands {
     /// </summary
     private async Task<string> GetTracksPage(string baseUrl, string trackId) {
 
-      var result = string.Empty;
 
-      var uri = $"https://{baseUrl}/tracks/{trackId}/page";
+      var url = $"https://{baseUrl}/tracks/{trackId}/page";
       var key = $"USA-BMX/tracks/{trackId}";
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
@@ -476,23 +475,24 @@ namespace Holeshot.Crawler.Commands {
         Key = key
       });
 
-      if (fileMeta.Exists) {
-        var getPage = await this.mediator.Send(new GetPageRequest {
-          Url = uri,
-          Key = key
+      if (!fileMeta.Exists) {
+        var downloadToS3Request = await base.mediator.Send(new DownloadToS3Request {
+          BucketName = this.settings.BucketName,
+          Key = key,
+          ContentType = "text/html",
+          Url = url
         });
-        result = getPage.Contents;
       }
-
-      return result;
-
+      var getPage = await this.mediator.Send(new GetPageRequest {
+        Url = url,
+        Key = key
+      });
+      return getPage.Contents;
     }
 
     private async Task<string> GetEventsPage(string baseUrl, string trackId) {
 
-      var result = string.Empty;
-
-      var uri = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
+      var url = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
       var key = $"USA-BMX/tracks/{trackId}/events";
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
@@ -501,17 +501,21 @@ namespace Holeshot.Crawler.Commands {
       });
 
       if (fileMeta.Exists) {
-        var getPage = await this.mediator.Send(new GetPageRequest {
-          Url = uri,
-          Key = key
+        var downloadToS3Request = await base.mediator.Send(new DownloadToS3Request {
+          BucketName = this.settings.BucketName,
+          Key = key,
+          ContentType = "text/html",
+          Url = url
         });
-        result = getPage.Contents;
       }
 
-      return result;
+      var getPage = await this.mediator.Send(new GetPageRequest {
+        Url = url,
+        Key = key
+      });
+
+      return getPage.Contents;
     }
-
-
   }
 }
 
