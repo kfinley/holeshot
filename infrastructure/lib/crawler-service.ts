@@ -66,6 +66,8 @@ export class CrawlerService extends Construct {
       }),
     );
 
+    console.log(__dirname);
+    
     // The code that defines your stack goes here
     const decodeEmailsLambda = new PythonLambdaFunction(this, "DecodeEmailsLambda", {
       functionName: 'Holeshot-DecodeEmails',
