@@ -35,7 +35,7 @@ namespace Holeshot.Crawler.Commands {
 
     public async Task<GetTracksForRegionResponse> Handle(GetTracksForRegionRequest request, CancellationToken cancellationToken) {
 
-      this.logger.LogInformation($"Processing GetTracksForStateRequest for region: {request.Region}");
+      // this.logger.LogInformation($"Processing GetTracksForStateRequest for region: {request.Region}");
 
       var url = $"https://{this.settings.BaseUrl}";
 

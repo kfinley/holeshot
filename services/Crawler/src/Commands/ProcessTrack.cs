@@ -13,6 +13,7 @@ namespace Holeshot.Crawler.Commands {
 
   public class ProcessTrackRequest : IRequest<ProcessTrackResponse> {
     public string Contents { get; set; }
+    public string BucketName { get; set; }
   }
 
   public class ProcessTrackResponse {
@@ -82,7 +83,6 @@ namespace Holeshot.Crawler.Commands {
 
         var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
 
-
         var trackInfo = new {
           Name = helper.GetTrackName(siteTracksDoc),
           District = helper.GetTrackDistrict(siteTracksDoc),
@@ -105,7 +105,14 @@ namespace Holeshot.Crawler.Commands {
           Events = helper.GetEvents(eventsPageDoc, this.settings.BaseUrl)
         };
 
-        Console.WriteLine($"Track {trackInfo.Name}: {JsonSerializer.Serialize(trackInfo)}");
+
+        await this.mediator.Send(new PutS3ObjectRequest {
+          BucketName = request.BucketName,
+          Key = $"USA-BMX/tracks/{trackId}/trackInfo.json",
+          Content = JsonSerializer.Serialize(trackInfo)
+        });
+        
+        //Console.WriteLine($"Track {trackInfo.Name}: {JsonSerializer.Serialize(trackInfo)}");
 
       } catch (Exception ex) {
 
