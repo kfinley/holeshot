@@ -47,8 +47,6 @@ namespace Holeshot.Crawler.Commands {
 
       var key = $"USA-BMX/tracks/search/{request.Region}";
 
-      this.logger.LogInformation($"{url}, {this.settings.BucketName}, {key}");
-
       var file = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,
         Key = key

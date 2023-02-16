@@ -71,7 +71,7 @@ namespace Holeshot.Crawler.Commands {
 
         //await Task.Delay(Numbers.RandomBetween(2000, 5000)); // Suckfest... Force wait to try to get around rate limiter
 
-        if (tasks.Count > 0) {      // HARDCODED limit of 10 active tasks
+        if (tasks.Count >= 9) {      // HARDCODED limit of 10 active tasks
           pages.Add(await tasks[0]);
           tasks.RemoveAt(0);
         }
@@ -91,7 +91,7 @@ namespace Holeshot.Crawler.Commands {
       }
 
       //TODO: Refactor. Drains the queue when 10 tasks reached
-      // await Task.WhenAll(tasks);
+      await Task.WhenAll(tasks);
 
       foreach (var t in tasks) {
         //Console.WriteLine($"GetPage result: {await t}");

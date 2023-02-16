@@ -66,9 +66,7 @@ namespace Holeshot.Crawler.Commands {
 
         var tracksPageDoc = await context.OpenAsync(req => req.Content(tracksPageContent));
 
-        // Events...
         var eventsUrl = base.GetUniqueHrefUrls("/events/schedule", request.Contents).First();
-        Console.WriteLine($"Events URL: {eventsUrl}");
 
         var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, trackId);
 

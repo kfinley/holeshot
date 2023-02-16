@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Dom;
@@ -263,8 +264,8 @@ namespace Holeshot.Crawler.Commands {
           });
         }
       }
-      Console.WriteLine(trackOperators);
-      
+      Console.WriteLine($"{JsonSerializer.Serialize(trackOperators)}");
+
       return trackOperators;
     }
 
