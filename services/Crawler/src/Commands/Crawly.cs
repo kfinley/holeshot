@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Net.Http.Headers;
 using System.Net;
-using System.Text;
 using System.Linq;
 using System.Diagnostics;
 using MediatR;

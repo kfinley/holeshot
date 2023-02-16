@@ -47,11 +47,13 @@ namespace Holeshot.Crawler.Commands {
         //Just get the DOM representation
         var siteTracksDoc = await context.OpenAsync(req => req.Content(request.Contents));
 
-        var trackLogoUrl = siteTracksDoc.GetTrackLogoUrl();
+        var helper = new HtmlHelper();
 
-        var mapLink = siteTracksDoc.GetMapLink(trackLogoUrl.HasValue());
-        var gps = siteTracksDoc.GetGps(mapLink);
-        var trackId = siteTracksDoc.GetTrackId(trackLogoUrl.HasValue());
+        var trackLogoUrl = helper.GetTrackLogoUrl(siteTracksDoc);
+
+        var mapLink = helper.GetMapLink(siteTracksDoc, trackLogoUrl.HasValue());
+        var gps = helper.GetGps(siteTracksDoc, mapLink);
+        var trackId = helper.GetTrackId(siteTracksDoc, trackLogoUrl.HasValue());
 
         var tracksPageContent = await GetTracksPage(this.settings.BaseUrl, trackId);
 
@@ -80,26 +82,27 @@ namespace Holeshot.Crawler.Commands {
 
         var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
 
+
         var trackInfo = new {
-          Name = siteTracksDoc.GetTrackName(),
-          District = siteTracksDoc.GetTrackDistrict(),
-          ContactInfo = siteTracksDoc.GetContactInfo(),
+          Name = helper.GetTrackName(siteTracksDoc),
+          District = helper.GetTrackDistrict(siteTracksDoc),
+          ContactInfo = helper.GetContactInfo(siteTracksDoc),
           LogoUrl = trackLogoUrl,
           Location = new {
-            Address = siteTracksDoc.GetAddress(trackLogoUrl.HasValue()),
+            Address = helper.GetAddress(siteTracksDoc, trackLogoUrl.HasValue()),
             MapLink = mapLink,
             GPS = new {
               Lat = gps.Item1,
               Long = gps.Item2,
             }
           },
-          Website = siteTracksDoc.GetWebsite(trackLogoUrl.HasValue()),
-          HtmlDescription = siteTracksDoc.GetDescription(),
-          Socials = tracksPageDoc.GetSocials(),
-          Sponsors = tracksPageDoc.GetSponsors(),
-          Coaches = tracksPageDoc.GetCoaches(this.settings.BaseUrl),
-          Operators = tracksPageDoc.GetOperators(),
-          Events = eventsPageDoc.GetEvents(this.settings.BaseUrl)
+          Website = helper.GetWebsite(siteTracksDoc, trackLogoUrl.HasValue()),
+          HtmlDescription = helper.GetDescription(siteTracksDoc),
+          Socials = helper.GetSocials(tracksPageDoc),
+          Sponsors = helper.GetSponsors(tracksPageDoc),
+          Coaches = helper.GetCoaches(tracksPageDoc, this.settings.BaseUrl),
+          Operators = helper.GetOperators(tracksPageDoc),
+          Events = helper.GetEvents(eventsPageDoc, this.settings.BaseUrl)
         };
 
         Console.WriteLine($"Track {trackInfo.Name}: {JsonSerializer.Serialize(trackInfo)}");
