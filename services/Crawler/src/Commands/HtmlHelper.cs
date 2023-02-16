@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using AngleSharp.Dom;
 
 namespace Holeshot.Crawler.Commands {
@@ -18,6 +19,8 @@ namespace Holeshot.Crawler.Commands {
 
       var contactInfo = new Dictionary<string, string>();
 
+      Console.WriteLine(JsonSerializer.Serialize(contactInfoElements));
+
       contactInfoElements.ForEach(e => {
         var info = e.TextContent.Split(':');
         var val = info[1].Trim();
@@ -25,9 +28,9 @@ namespace Holeshot.Crawler.Commands {
         if (val.StartsWith("[email")) {
           var node = e.InnerHtml;
           var encEmail = e.Children[1].Attributes[2].Value;
-          contactInfo.Add("Encoded Email", encEmail);
+          contactInfo.Add(info[0].Trim(), encEmail);
         } else {
-          contactInfo.Add(info[0].Trim(), info[1].Trim());
+          contactInfo.Add(info[0].Trim(), val);
         }
       });
 
