@@ -22,32 +22,52 @@ namespace Holeshot.Crawler.Tests {
       Setup(this, context, of);
     }
 
-    static Sut<ProcessTrackPageHandler> Sut = new Sut<ProcessTrackPageHandler, ProcessTrackPageResponse>();
+    static Sut<ProcessTrackHandler> Sut = new Sut<ProcessTrackHandler, ProcessTrackResponse>();
 
     static ProcessTrackPageRequest Request;
-    static ProcessTrackPageResponse Result;
+    static ProcessTrackResponse Result;
 
     Establish context = () => {
       Request = new ProcessTrackPageRequest {
-        Contents = System.IO.File.ReadAllText("../../../test-files/site.tracks.741.html")
+        Contents = System.IO.File.ReadAllText("../../../test-files/site.tracks.701.html")
       };
 
       Sut.Setup<IOptions<Settings>, Settings>(o => o.Value).Returns(new Settings {
         BucketName = "test-bucket"
       });
 
+      Sut.SetupAsync<IMediator, S3ObjectExistsResponse>(m => m.Send(Argument.Is<S3ObjectExistsRequest>(r =>
+        r.BucketName == "test-bucket" &&
+        r.Key == "USA-BMX/tracks/1971/page"
+      ), Argument.IsAny<CancellationToken>()
+      )).ReturnsAsync(new S3ObjectExistsResponse {
+        Exists = true
+      });
+
+      Sut.SetupAsync<IMediator, S3ObjectExistsResponse>(m => m.Send(Argument.Is<S3ObjectExistsRequest>(r =>
+        r.BucketName == "test-bucket" &&
+        r.Key == "USA-BMX/tracks/1971/events.2"
+      ), Argument.IsAny<CancellationToken>()
+      )).ReturnsAsync(new S3ObjectExistsResponse {
+        Exists = true
+      });
+
       Sut.SetupAsync<IMediator, GetPageResponse>(m => m.Send(Argument.Is<GetPageRequest>(r =>
-       r.Url == "https://www.usabmx.com/tracks/2003"
+       r.Url == "https://www.usabmx.com/tracks/1971" &&
+       r.Key == "USA-BMX/tracks/1971/page"
      ), Argument.IsAny<CancellationToken>()
      )).ReturnsAsync(new GetPageResponse {
-       Contents = System.IO.File.ReadAllText("../../../test-files/tracks.2003.html")
+       Contents = System.IO.File.ReadAllText("../../../test-files/tracks.1971.html"),
+       Key = "USA-BMX/tracks/1971/page"
      });
 
       Sut.SetupAsync<IMediator, GetPageResponse>(m => m.Send(Argument.Is<GetPageRequest>(r =>
-        r.Url == "https://www.usabmx.com/tracks/2003/events/schedule"
+        r.Url == "https://www.usabmx.com/tracks/1971/events/schedule" &&
+        r.Key == "USA-BMX/tracks/1971/events.2"
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new GetPageResponse {
-        Contents = System.IO.File.ReadAllText("../../../test-files/tracks.2003.events.html")
+        Contents = System.IO.File.ReadAllText("../../../test-files/tracks.1971.events.2.html"),
+        Key = "USA-BMX/tracks/1971/events.2"
       });
 
     };

@@ -30,8 +30,6 @@ namespace Holeshot.Aws.Commands {
 
     public async Task<GetS3ObjectResponse> Handle(GetS3ObjectRequest request, CancellationToken cancellationToken) {
 
-      Console.WriteLine(request);
-
       try {
         using (var response = await this.s3Client.GetObjectAsync(new GetObjectRequest {
           BucketName = request.BucketName,

@@ -42,11 +42,11 @@ export class CrawlerService extends Construct {
     });
 
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
-      bundling: {
-        environment: {
-          ASPNETCORE_ENVIRONMENT: 'Production'
-        }
-      },
+      // bundling: {
+      //   environment: {
+      //     ASPNETCORE_ENVIRONMENT: 'Production'
+      //   }
+      // },
       projectDir: '../services/Crawler/src/functions',
       solutionDir: '../services',
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',

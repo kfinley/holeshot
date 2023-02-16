@@ -23,13 +23,21 @@
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="ServiceProviderFunctions" Version="0.0.3" />
   </ItemGroup>
+  <!-- Adds EnvironmentName variable during publish -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+      <EnvironmentName>Development</EnvironmentName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+      <EnvironmentName>Production</EnvironmentName>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Commands\Crawler.Commands.csproj" />
     <ProjectReference Include="..\Aws.Commands\Aws.Commands.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="appsettings.*.json" Exclude="appsettings.$(ASPNETCORE_ENVIRONMENT).json" DependentUpon="appsettings.json" CopyToOutputDirectory="Never" />
-    <Content Include="appsettings.$(ASPNETCORE_ENVIRONMENT).json" DependentUpon="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="appsettings.*.json" Exclude="appsettings.$(EnvironmentName).json" DependentUpon="appsettings.json" CopyToOutputDirectory="Never" />
+    <Content Include="appsettings.$(EnvironmentName).json" DependentUpon="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

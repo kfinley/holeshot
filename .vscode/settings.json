@@ -7,5 +7,6 @@
   "jestrunner.debugOptions": {
     "skipFiles": ["<node_internals>/**"],
     "smartStep": true
-  }
+  },
+  "omnisharp.projectLoadTimeout": 300
 }
