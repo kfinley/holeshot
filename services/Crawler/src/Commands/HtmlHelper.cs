@@ -19,8 +19,6 @@ namespace Holeshot.Crawler.Commands {
 
       var contactInfo = new Dictionary<string, string>();
 
-      Console.WriteLine(JsonSerializer.Serialize(contactInfoElements));
-
       contactInfoElements.ForEach(e => {
         var info = e.TextContent.Split(':');
         var val = info[1].Trim();
