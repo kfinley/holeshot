@@ -40,8 +40,7 @@ namespace Holeshot.Aws.Commands {
           Exists = true
         };
 
-      } catch (AmazonS3Exception ex) {
-        Console.WriteLine($"AmazonS3Exception: {ex.Message}");
+      } catch (AmazonS3Exception ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound){
         return new S3ObjectExistsResponse {
           Exists = false
         };

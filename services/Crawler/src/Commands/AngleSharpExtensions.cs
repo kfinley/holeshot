@@ -138,11 +138,6 @@ namespace Holeshot.Crawler.Commands {
         socials.Add(li.Id, li.Children[0].Attributes[0].Value);
       });
 
-      // if (socials.Count() > 0) {
-
-      //   Console.WriteLine("Socials:");
-      //   socials.ForEach(s => Console.WriteLine(s));
-      // }
       return socials;
 
     }
@@ -238,7 +233,6 @@ namespace Holeshot.Crawler.Commands {
 
       if (trackOperator != null && trackOperator.HasChildNodes) {
 
-        Console.WriteLine("Track Operators:");
         trackOperators = trackOperator.InnerHtml.Replace("<strong>Track Operator:</strong>", string.Empty)
                                             .Replace(@"<br />\n<br />", string.Empty)
                                             .Replace("\n", string.Empty)
@@ -255,9 +249,13 @@ namespace Holeshot.Crawler.Commands {
               // Example
               // "<a href=\"/cdn-cgi/l/email-protection#5022232a31232a6761656910313f3c7e333f3d\"><span class=\"__cf_email__\" data-cfemail=\"4f3d3c352e3c35787e7a760f2e2023612c2022\">[email&nbsp;protected]</span></a>"
 
+
               var cfemail = op.Split("data-cfemail=")[1];
               var end = cfemail.IndexOf("[email") - 3;
               var encEmail = cfemail.Substring(1, end);
+
+              Console.WriteLine($"encEmail: {encEmail}");
+
               op = encEmail;
 
               // op = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
@@ -265,6 +263,8 @@ namespace Holeshot.Crawler.Commands {
           });
         }
       }
+      Console.WriteLine(trackOperators);
+      
       return trackOperators;
     }
 

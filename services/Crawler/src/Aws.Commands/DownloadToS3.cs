@@ -38,10 +38,8 @@ namespace Holeshot.Aws.Commands {
         try {
 
           var fileBytes = client.DownloadData(new Uri(request.Url));
-          Console.WriteLine(fileBytes);
 
           using (var stream = new MemoryStream(fileBytes)) {
-            Console.WriteLine("created stream");
 
             var response = await this.mediator.Send(new SaveStreamToS3Request {
               BucketName = request.BucketName,

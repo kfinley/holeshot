@@ -26,7 +26,7 @@ namespace Holeshot.Crawler.Commands {
     public GetPageHandler(IMediator mediator, IOptions<Settings> settings) : base(mediator, settings.Value) { }
 
     private async Task<GetS3ObjectResponse> GetFile(string key) {
-      Console.WriteLine($"GetFile - key: {key} BucketName: {this.settings.BucketName}");
+      // Console.WriteLine($"GetFile - key: {key} BucketName: {this.settings.BucketName}");
 
       return await this.Send(new GetS3ObjectRequest {
         Key = key,
@@ -43,8 +43,8 @@ namespace Holeshot.Crawler.Commands {
         //TODO: move ^^^^ to a clean list
       }
 
-      Console.WriteLine($"Key: {request.Key}");
-      Console.WriteLine($"BucketName: {this.settings.BucketName}");
+      // Console.WriteLine($"Key: {request.Key}");
+      // Console.WriteLine($"BucketName: {this.settings.BucketName}");
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,
