@@ -272,7 +272,8 @@ namespace Holeshot.Crawler.Commands {
         var calEvent = doc.QuerySelector(".calendar-event");
 
         var link = doc.QuerySelector("a");
-        var eventUrl = link.Attributes["href"].Value;
+        var eventUrl = $"{baseUrl}{link.Attributes["href"].Value}";
+        
         var eventTitle = link.TextContent;
 
         var eventToolTip = doc.QuerySelector(".tooltip_body");
