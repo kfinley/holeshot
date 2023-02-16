@@ -76,7 +76,7 @@ namespace Holeshot.Crawler.Commands {
             var content = page.Item2;
             // Process each track on the page
 
-            await base.mediator.Send(new ProcessTrackPageRequest {
+            await base.mediator.Send(new ProcessTrackRequest {
               Contents = content
             });
 

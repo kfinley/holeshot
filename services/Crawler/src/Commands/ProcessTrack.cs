@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace Holeshot.Crawler.Commands {
 
-  public class ProcessTrackPageRequest : IRequest<ProcessTrackResponse> {
+  public class ProcessTrackRequest : IRequest<ProcessTrackResponse> {
     public string Contents { get; set; }
   }
 
@@ -19,14 +19,14 @@ namespace Holeshot.Crawler.Commands {
     public bool Success { get; set; }
   }
 
-  public class ProcessTrackHandler : Crawly, IRequestHandler<ProcessTrackPageRequest, ProcessTrackResponse> {
+  public class ProcessTrackHandler : Crawly, IRequestHandler<ProcessTrackRequest, ProcessTrackResponse> {
 
     public ProcessTrackHandler(IMediator mediator, IOptions<Settings> settings) : base(mediator, settings.Value) { }
 
     /// <summary>
     /// Processes USA Bikes 'site/tracks' pages. i.e. /site/tracks/568?section_id=1
     /// </summary>
-    public async Task<ProcessTrackResponse> Handle(ProcessTrackPageRequest request, CancellationToken cancellationToken) {
+    public async Task<ProcessTrackResponse> Handle(ProcessTrackRequest request, CancellationToken cancellationToken) {
 
       if (request.Contents == string.Empty) {
         Console.WriteLine("Content is empty");
@@ -106,7 +106,7 @@ namespace Holeshot.Crawler.Commands {
 
       } catch (Exception ex) {
 
-        Console.WriteLine("ProcessTrackPageHandler Failed!");
+        Console.WriteLine("ProcessTrackHandler Failed!");
         Console.WriteLine(ex);
 
         return new ProcessTrackResponse {

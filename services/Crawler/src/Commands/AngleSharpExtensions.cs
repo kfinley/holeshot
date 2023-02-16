@@ -234,37 +234,34 @@ namespace Holeshot.Crawler.Commands {
 
       if (trackOperator != null && trackOperator.HasChildNodes) {
 
-        trackOperators = trackOperator.InnerHtml.Replace("<strong>Track Operator:</strong>", string.Empty)
+        var trackOperatorsSource = trackOperator.InnerHtml.Replace("<strong>Track Operator:</strong>", string.Empty)
                                             .Replace(@"<br />\n<br />", string.Empty)
                                             .Replace("\n", string.Empty)
                                             .Split("<br>")
                                             .Skip(1)
                                             .ToList();
 
-        if (trackOperators.Count() > 0) {
+        if (trackOperatorsSource.Count() > 0) {
 
-          trackOperators.ForEach(op => {
+          trackOperatorsSource.ForEach(op => {
             if (op.Contains("email-protection#")) {
 
               //Console.WriteLine(op);
               // Example
               // "<a href=\"/cdn-cgi/l/email-protection#5022232a31232a6761656910313f3c7e333f3d\"><span class=\"__cf_email__\" data-cfemail=\"4f3d3c352e3c35787e7a760f2e2023612c2022\">[email&nbsp;protected]</span></a>"
 
-
               var cfemail = op.Split("data-cfemail=")[1];
               var end = cfemail.IndexOf("[email") - 3;
               var encEmail = cfemail.Substring(1, end);
 
-              Console.WriteLine($"encEmail: {encEmail}");
+              trackOperators.Add($"EncodedEmail:{encEmail}");
 
-              op = encEmail;
-
-              // op = base.RunShellCmd($"/Users/rkf/projects/Crawly/decCFEmail.py", encEmail);
+            } else {
+              trackOperators.Add(op);
             }
           });
         }
       }
-      Console.WriteLine($"{JsonSerializer.Serialize(trackOperators)}");
 
       return trackOperators;
     }

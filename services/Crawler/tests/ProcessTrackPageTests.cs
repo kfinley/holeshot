@@ -16,19 +16,19 @@ using Microsoft.Extensions.Options;
 
 namespace Holeshot.Crawler.Tests {
   [Subject("Get Tracks For Region Success")]
-  public class When_ProcessTrackPage_Requested : SpecBase {
-    public When_ProcessTrackPage_Requested(MSpecFixture fixture)
+  public class When_ProcessTrack_Requested : SpecBase {
+    public When_ProcessTrack_Requested(MSpecFixture fixture)
       : base(fixture) {
       Setup(this, context, of);
     }
 
     static Sut<ProcessTrackHandler> Sut = new Sut<ProcessTrackHandler, ProcessTrackResponse>();
 
-    static ProcessTrackPageRequest Request;
+    static ProcessTrackRequest Request;
     static ProcessTrackResponse Result;
 
     Establish context = () => {
-      Request = new ProcessTrackPageRequest {
+      Request = new ProcessTrackRequest {
         Contents = System.IO.File.ReadAllText("../../../test-files/site.tracks.701.html")
       };
 
