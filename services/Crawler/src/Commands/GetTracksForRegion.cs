@@ -77,7 +77,8 @@ namespace Holeshot.Crawler.Commands {
             // Process each track on the page
 
             await base.mediator.Send(new ProcessTrackRequest {
-              Contents = content
+              Contents = content,
+              BucketName = this.settings.BucketName
             });
 
           } catch (Exception ex) {

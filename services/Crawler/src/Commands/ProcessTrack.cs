@@ -111,7 +111,7 @@ namespace Holeshot.Crawler.Commands {
           Key = $"USA-BMX/tracks/{trackId}/trackInfo.json",
           Content = JsonSerializer.Serialize(trackInfo)
         });
-        
+
         //Console.WriteLine($"Track {trackInfo.Name}: {JsonSerializer.Serialize(trackInfo)}");
 
       } catch (Exception ex) {

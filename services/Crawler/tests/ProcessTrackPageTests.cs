@@ -29,7 +29,8 @@ namespace Holeshot.Crawler.Tests {
 
     Establish context = () => {
       Request = new ProcessTrackRequest {
-        Contents = System.IO.File.ReadAllText("../../../test-files/site.tracks.701.html")
+        Contents = System.IO.File.ReadAllText("../../../test-files/site.tracks.701.html"),
+        BucketName = "test-bucket"
       };
 
       Sut.Setup<IOptions<Settings>, Settings>(o => o.Value).Returns(new Settings {
