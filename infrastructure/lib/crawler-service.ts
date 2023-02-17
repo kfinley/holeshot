@@ -69,12 +69,12 @@ export class CrawlerService extends Construct {
       }),
     );
 
-    const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
-      functionName: 'Holeshot-DecodeEmails',
-      code: lambda.Code.fromAsset('./lambdas/decode-emails', { exclude: ["**", "!function.py"] }),
-      handler: 'function.handler',
-      runtime: lambda.Runtime.PYTHON_3_8
-    });
+    // const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
+    //   functionName: 'Holeshot-DecodeEmails',
+    //   code: lambda.Code.fromAsset('./lambdas/decode-emails', { exclude: ["**", "!function.py"] }),
+    //   handler: 'function.handler',
+    //   runtime: lambda.Runtime.PYTHON_3_8
+    // });
 
 
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {

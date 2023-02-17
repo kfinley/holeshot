@@ -46,7 +46,8 @@
         "ms-azuretools.vscode-docker",
         "joshbolduc.story-explorer",
         "qkk.sfn-preview",
-        "cschleiden.vscode-github-actions"
+        "cschleiden.vscode-github-actions",
+        "ms-python.python"
       ]
     }
   },
