@@ -75,7 +75,19 @@ export class CrawlerService extends Construct {
       }
     });
 
-
+    decodeEmailsLambda.role?.attachInlinePolicy(
+      new Policy(this, 'Holeshot-list-buckets-policy', {
+        statements: [new PolicyStatement({
+          actions: [
+            's3:ListBucket',
+            's3:GetObject',
+            's3:PutObject'
+          ],
+          resources: [`arn:aws:s3:::*`] // ${props!.domainName}-crawler/*`], <-- tighten up...
+        })],
+      }),
+    );
+    
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
       topicName: 'Holeshot-GetTracksForRegionTopic',
       displayName: 'GetTracksForRegionTopic',

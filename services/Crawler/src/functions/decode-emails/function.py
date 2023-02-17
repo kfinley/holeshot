@@ -32,9 +32,9 @@ def handler(event, lambda_context):
     for key in message['Keys']:
       print(key)
 
-    # file_content = json.loads(s3_client.get_object(
-    #         Bucket=S3_BUCKET, Key=s3_file["Key"])["Body"].read())
-    #     print(file_content)
+    file_content = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
+
+    print(file_content)
 
     # obj = s3.Object(event.BucketName, event.Key)
     # data = json.load(obj.get()['Body'])
