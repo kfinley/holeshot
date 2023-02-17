@@ -46,7 +46,6 @@ export class CrawlerService extends Construct {
 
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
       projectDir: '../services/Crawler/src/functions',
-      solutionDir: '../services',
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',

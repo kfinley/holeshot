@@ -10,6 +10,9 @@ using ServiceProviderFunctions;
 
 using Holeshot.Crawler.Commands;
 
+// Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
+
 namespace Holeshot.Crawler.Functions {
   public abstract class BaseFunction : ServiceProviderFunction {
     protected IMediator? Mediator {
