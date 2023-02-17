@@ -10,6 +10,7 @@ import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as assets from "aws-cdk-lib/aws-s3-assets";
+import path = require('path');
 
 export interface CrawlerServiceProps {
   domainName: string,
@@ -65,8 +66,8 @@ export class CrawlerService extends Construct {
       }),
     );
 
-    const asset = new assets.Asset(this, "LambdaAssetsZip", {
-      path: 'lambdas/decode-emails'
+    const asset = new assets.Asset(this, "Holeshot-LambdaAssets", {
+      path: path.join(__dirname, '../lambdas/decode-emails/index.py')
     });
 
     const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
