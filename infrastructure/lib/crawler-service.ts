@@ -7,8 +7,9 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { PythonLambdaFunction } from './python-lambda-construct';
-import { resolve } from 'path';
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
+import * as lambda from "aws-cdk-lib/aws-lambda";
+
 export interface CrawlerServiceProps {
   domainName: string,
   crawlerBucket: Bucket,
@@ -66,13 +67,13 @@ export class CrawlerService extends Construct {
       }),
     );
 
-    // The code that defines your stack goes here
-    const decodeEmailsLambda = new PythonLambdaFunction(this, "DecodeEmailsLambda", {
+    const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
-      lambdaAssetProps: {
-        functionFolderPath: "../services/Crawler/src/Functions/Decode-Emails",
-      },
+      code: lambda.Code.fromAsset('../services/Crawler/src/Functions/Decode-Emails'),
+      handler: 'handler',
+      runtime: lambda.Runtime.PYTHON_3_8,
     });
+
 
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
       topicName: 'Holeshot-GetTracksForRegionTopic',
