@@ -1,5 +1,6 @@
 import { Duration, StackProps } from "aws-cdk-lib";
 import { Code, FunctionProps, Runtime, Function } from "aws-cdk-lib/aws-lambda";
+import { RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Asset } from "aws-cdk-lib/aws-s3-assets";
 import { Construct } from "constructs";
 
@@ -39,7 +40,8 @@ export class PythonLambdaFunction extends Construct {
       timeout: Duration.seconds(300),
       runtime: Runtime.PYTHON_3_8,
       handler: "index.handler",
-      functionName: props.functionName
+      functionName: props.functionName,
+      logRetention: RetentionDays.ONE_WEEK
     };
 
     // Override our defaults if a lambdaProps object is supplied

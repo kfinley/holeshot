@@ -14,11 +14,7 @@ def decCFEmail(encodedEmail):
 def handler(event, lambda_context):
     print(event)
 
-    
     # obj = s3.Object(event.BucketName, event.Key)
     # data = json.load(obj.get()['Body'])
     return 'Success'
-
-
-
 
