@@ -25,12 +25,12 @@ def handler(event, lambda_context):
     print(bucket)
 
     # event.Records[0].Sns.Subject
+    snsRecord = json.loads(event).Records[0].Sns
 
-    message = json.loads(event.Records[0].Sns.Message);
 
-    print(message)
+    print(snsRecord.Message)
 
-    for key in message.Keys:
+    for key in snsRecord.Message.Keys:
       print(key)
 
     # file_content = json.loads(s3_client.get_object(
