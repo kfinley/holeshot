@@ -31,12 +31,21 @@ def handler(event, lambda_context):
 
     for key in message['Keys']:
       print(key)
-      file_content = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
-      decoded_email = decCFEmail(file_content['ContactInfo']['Email'])
-      
-      print(decoded_email)
-      print(file_content)
+      trackInfo = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
+      trackInfo['ContactInfo']['Email'] = decoded_email = decCFEmail(trackInfo['ContactInfo']['Email'])
 
+      print(decoded_email)
+
+      for op in trackInfo['Operators']:
+        if (op.split(':')):
+          decoded_email = decCFEmail(op.split(':')[1])
+          op = decoded_email
+          print(decoded_email)
+
+      print(trackInfo)
+
+      s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
+      
     # obj = s3.Object(event.BucketName, event.Key)
     # data = json.load(obj.get()['Body'])
     return 'Success'
