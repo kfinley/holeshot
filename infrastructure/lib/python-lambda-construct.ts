@@ -38,7 +38,7 @@ export class PythonLambdaFunction extends Construct {
         this.lambdaAsset.s3ObjectKey
       ),
       timeout: Duration.seconds(300),
-      runtime: Runtime.PYTHON_3_8,
+      runtime: Runtime.PYTHON_3_9,
       handler: "index.handler",
       functionName: props.functionName,
       logRetention: RetentionDays.ONE_WEEK
