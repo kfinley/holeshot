@@ -7,10 +7,10 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 //import { PythonLambdaFunction } from './python-lambda-construct';
-import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as assets from "aws-cdk-lib/aws-s3-assets";
-import path = require('path');
+// import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
+// import * as lambda from "aws-cdk-lib/aws-lambda";
+// import * as assets from "aws-cdk-lib/aws-s3-assets";
+// import path = require('path');
 
 export interface CrawlerServiceProps {
   domainName: string,
@@ -22,10 +22,10 @@ export class CrawlerService extends Construct {
   constructor(scope: Construct, id: string, props?: CrawlerServiceProps) {
     super(scope, id);
 
-    const {
-      accountId,
-      region,
-    } = new ScopedAws(this);
+    // const {
+    //   accountId,
+    //   region,
+    // } = new ScopedAws(this);
 
     const settings = {
       Logging: {
@@ -49,7 +49,7 @@ export class CrawlerService extends Construct {
 
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
       projectDir: '../services/Crawler/src/Functions',
-      solutionDir: '../services',
+      // solutionDir: '../services',
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',
