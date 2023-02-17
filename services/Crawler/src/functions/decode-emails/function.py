@@ -21,31 +21,20 @@ def decCFEmail(encodedEmail):
 
 def handler(event, lambda_context):
 
-    print(event)
-    print(bucket)
-
-    # event.Records[0].Sns.Subject
     message = json.loads(event['Records'][0]['Sns']['Message'])
-
-    print(message)
 
     for key in message['Keys']:
       print(key)
       trackInfo = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
-      trackInfo['ContactInfo']['Email'] = decoded_email = decCFEmail(trackInfo['ContactInfo']['Email'])
-
-      print(decoded_email)
+      trackInfo['ContactInfo']['Email'] = decCFEmail(trackInfo['ContactInfo']['Email'])
 
       for op in trackInfo['Operators']:
         if (op.__contains__(':')):
-          decoded_email = decCFEmail(op.split(':')[1])
-          trackInfo['Operators'][trackInfo['Operators'].index(op)] = decoded_email
-          print(decoded_email)
-
-      print(trackInfo)
+          trackInfo['Operators'][trackInfo['Operators'].index(op)] = decCFEmail(op.split(':')[1])
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
 
-
-    return 'Success'
-
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Success')
+    }
