@@ -66,8 +66,11 @@ export class CrawlerService extends Construct {
       }),
     );
 
+    const p = path.join(__dirname, '../lambdas/decode-emails/index.py');
+    console.log(p);
+
     const asset = new assets.Asset(this, "Holeshot-LambdaAssets", {
-      path: path.join(__dirname, '../lambdas/decode-emails/index.py')
+      path: p
     });
 
     const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
@@ -76,7 +79,7 @@ export class CrawlerService extends Construct {
         asset.bucket,
         asset.s3ObjectKey
       ),
-      handler: 'index.handler',
+      handler: 'handler',
       runtime: lambda.Runtime.PYTHON_3_8
     });
 
