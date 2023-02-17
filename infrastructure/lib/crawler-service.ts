@@ -66,20 +66,21 @@ export class CrawlerService extends Construct {
       }),
     );
 
-    const p = path.join(__dirname, '../lambdas/decode-emails/index.py');
-    console.log(p);
+    // const p = path.join(__dirname, '../lambdas/decode-emails');
+    // console.log(p);
 
-    const asset = new assets.Asset(this, "Holeshot-LambdaAssets", {
-      path: p
-    });
+    // const asset = new assets.Asset(this, "Holeshot-LambdaAssets", {
+    //   path: p
+    // });
 
     const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
-      code: lambda.Code.fromBucket(
-        asset.bucket,
-        asset.s3ObjectKey
-      ),
-      handler: 'handler',
+      code: lambda.Code.fromAsset('./lambdas/decode-emails', { exclude: ["**", "!function.py"] }),
+      // lambda.Code.fromBucket(
+      //   asset.bucket,
+      //   asset.s3ObjectKey
+      // ),
+      handler: 'function.handler',
       runtime: lambda.Runtime.PYTHON_3_8
     });
 
