@@ -39,7 +39,7 @@ def handler(event, lambda_context):
       for op in trackInfo['Operators']:
         if (op.__contains__(':')):
           decoded_email = decCFEmail(op.split(':')[1])
-          op = decoded_email
+          trackInfo['Operators'][trackInfo.index(op)] = decoded_email
           print(decoded_email)
 
       print(trackInfo)
