@@ -8,7 +8,8 @@ import { Topic } from 'aws-cdk-lib/aws-sns';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 //import { PythonLambdaFunction } from './python-lambda-construct';
 // import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-// import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 // import * as assets from "aws-cdk-lib/aws-s3-assets";
 // import path = require('path');
 
@@ -69,12 +70,12 @@ export class CrawlerService extends Construct {
       }),
     );
 
-    // const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
-    //   functionName: 'Holeshot-DecodeEmails',
-    //   code: lambda.Code.fromAsset('./lambdas/decode-emails', { exclude: ["**", "!function.py"] }),
-    //   handler: 'function.handler',
-    //   runtime: lambda.Runtime.PYTHON_3_8
-    // });
+    const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
+      functionName: 'Holeshot-DecodeEmails',
+      code: lambda.Code.fromAsset('./lambdas/decode-emails', { exclude: ["**", "!function.py"] }),
+      handler: 'function.handler',
+      runtime: lambda.Runtime.PYTHON_3_8
+    });
 
 
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
@@ -82,7 +83,7 @@ export class CrawlerService extends Construct {
       displayName: 'GetTracksForRegionTopic',
     });
     getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
-    // getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
+    getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
 
   }
 }
