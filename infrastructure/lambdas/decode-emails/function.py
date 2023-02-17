@@ -1,7 +1,7 @@
 import sys
 from boto3 import client
 
-s3 = boto3.resource('s3')
+# s3 = boto3.resource('s3')
 
 # Source: https://stackoverflow.com/a/58111681
 def decCFEmail(encodedEmail):
