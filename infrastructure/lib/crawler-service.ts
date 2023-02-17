@@ -80,7 +80,7 @@ export class CrawlerService extends Construct {
       displayName: 'GetTracksForRegionTopic',
     });
     getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
-    getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda.lambda));
+    getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
 
   }
 }
