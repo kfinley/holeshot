@@ -6,12 +6,8 @@ import { Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-//import { PythonLambdaFunction } from './python-lambda-construct';
-// import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as lambda from "aws-cdk-lib/aws-lambda";
+import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
-// import * as assets from "aws-cdk-lib/aws-s3-assets";
-// import path = require('path');
 
 export interface CrawlerServiceProps {
   domainName: string,
@@ -50,7 +46,7 @@ export class CrawlerService extends Construct {
 
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
       projectDir: '../services/Crawler/src/functions',
-      // solutionDir: '../services',
+      solutionDir: '../services',
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',
@@ -70,11 +66,11 @@ export class CrawlerService extends Construct {
       }),
     );
 
-    const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
+    const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
-      code: lambda.Code.fromAsset('./lambdas/decode-emails', { exclude: ["**", "!function.py"] }),
+      code: Code.fromAsset('../servicdes/Crawler/src/functions/decode-emails', { exclude: ["**", "!function.py"] }),
       handler: 'function.handler',
-      runtime: lambda.Runtime.PYTHON_3_8
+      runtime: Runtime.PYTHON_3_8
     });
 
 
