@@ -29,7 +29,7 @@ def handler(event, lambda_context):
 
     print(message)
 
-    for key in message.Keys:
+    for key in message['Keys']:
       print(key)
 
     # file_content = json.loads(s3_client.get_object(
