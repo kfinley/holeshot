@@ -6,9 +6,10 @@ import { Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { PythonLambdaFunction } from './python-lambda-construct';
+//import { PythonLambdaFunction } from './python-lambda-construct';
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as assets from "aws-cdk-lib/aws-s3-assets";
 
 export interface CrawlerServiceProps {
   domainName: string,
@@ -64,9 +65,16 @@ export class CrawlerService extends Construct {
       }),
     );
 
+    const asset = new assets.Asset(this, "LambdaAssetsZip", {
+      path: 'lambdas/decode-emails'
+    });
+
     const decodeEmailsLambda = new lambda.Function(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
-      code: lambda.Code.fromAsset('lambdas/decode-emails/'),
+      code: lambda.Code.fromBucket(
+        asset.bucket,
+        asset.s3ObjectKey
+      ),
       handler: 'index.handler',
       runtime: lambda.Runtime.PYTHON_3_8
     });
