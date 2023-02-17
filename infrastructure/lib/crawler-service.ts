@@ -70,7 +70,7 @@ export class CrawlerService extends Construct {
     const decodeEmailsLambda = new PythonLambdaFunction(this, "DecodeEmailsLambda", {
       functionName: 'Holeshot-DecodeEmails',
       lambdaAssetProps: {
-        functionFolderPath: "../../services/Crawler/src/Functions/Decode-Emails",
+        functionFolderPath: "../services/Crawler/src/Functions/Decode-Emails",
       },
     });
 
