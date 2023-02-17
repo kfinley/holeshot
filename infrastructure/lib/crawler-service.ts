@@ -52,17 +52,19 @@ export class CrawlerService extends Construct {
       logRetention: RetentionDays.ONE_WEEK
     });
 
+    var bucketPolicy = new Policy(this, 'Holeshot-list-buckets-policy', {
+      statements: [new PolicyStatement({
+        actions: [
+          's3:ListBucket',
+          's3:GetObject',
+          's3:PutObject'
+        ],
+        resources: [`arn:aws:s3:::*`] // ${props!.domainName}-crawler/*`], <-- tighten up...
+      })],
+    });
+
     getTracks.role?.attachInlinePolicy(
-      new Policy(this, 'Holeshot-list-buckets-policy', {
-        statements: [new PolicyStatement({
-          actions: [
-            's3:ListBucket',
-            's3:GetObject',
-            's3:PutObject'
-          ],
-          resources: [`arn:aws:s3:::*`] // ${props!.domainName}-crawler/*`], <-- tighten up...
-        })],
-      }),
+      bucketPolicy,
     );
 
     const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
@@ -76,18 +78,9 @@ export class CrawlerService extends Construct {
     });
 
     decodeEmailsLambda.role?.attachInlinePolicy(
-      new Policy(this, 'Holeshot-list-buckets-policy', {
-        statements: [new PolicyStatement({
-          actions: [
-            's3:ListBucket',
-            's3:GetObject',
-            's3:PutObject'
-          ],
-          resources: [`arn:aws:s3:::*`] // ${props!.domainName}-crawler/*`], <-- tighten up...
-        })],
-      }),
+      bucketPolicy,
     );
-    
+
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
       topicName: 'Holeshot-GetTracksForRegionTopic',
       displayName: 'GetTracksForRegionTopic',
