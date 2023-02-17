@@ -31,10 +31,11 @@ def handler(event, lambda_context):
 
     for key in message['Keys']:
       print(key)
-
-    file_content = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
-
-    print(file_content)
+      file_content = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
+      decoded_email = decCFEmail(file_content['ContactInfo']['Email'])
+      
+      print(decoded_email)
+      print(file_content)
 
     # obj = s3.Object(event.BucketName, event.Key)
     # data = json.load(obj.get()['Body'])
