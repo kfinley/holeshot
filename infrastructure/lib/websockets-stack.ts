@@ -35,40 +35,6 @@ export class WebSocketsStack extends Construct {
 
     const functionsPath = '../../services/WebSockets/dist';
 
-    // TODO: remove...
-    const createNodeJsFunction = (name: string, path: string) => {
-
-      const nodeJsFunctionProps: NodejsFunctionProps = {
-        functionName: `Holeshot-Infrastructure-${name}`,
-        projectRoot: join(__dirname, '../../services/WebSockets'),
-        entry: join(__dirname, `../../services/WebSockets/src/functions/${path}`),
-        bundling: {
-          // assetHash: 'my-custom-hash',
-          externalModules: [
-            'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
-          ],
-          // preCompilation: true,
-          minify: true, // minify code, defaults to false
-          sourceMap: true, // include source map, defaults to false
-          sourceMapMode: SourceMapMode.INLINE, // defaults to SourceMapMode.DEFAULT
-          sourcesContent: false, // do not include original source into source map, defaults to true
-          target: 'es2020', // target environment for the generated JavaScript code,
-        },
-        depsLockFilePath: join(__dirname, '../../services/WebSockets/package-lock.json'),
-        environment: {
-          LOG_LEVEL: props?.logLevel!
-        },
-        handler: "handler",
-        allowAllOutbound: true,
-        runtime: Runtime.NODEJS_16_X,
-        tracing: Tracing.ACTIVE
-      }
-
-      return new NodejsFunction(this, name, {
-        ...nodeJsFunctionProps
-      });
-    }
-
     const newLamda = (name: string, handler: string, env?: {
       [key: string]: string;
     } | undefined) => {

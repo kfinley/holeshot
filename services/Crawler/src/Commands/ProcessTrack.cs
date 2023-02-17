@@ -18,6 +18,7 @@ namespace Holeshot.Crawler.Commands {
 
   public class ProcessTrackResponse {
     public bool Success { get; set; }
+    public string Key { get; set; }
   }
 
   public class ProcessTrackHandler : Crawly, IRequestHandler<ProcessTrackRequest, ProcessTrackResponse> {
@@ -28,6 +29,8 @@ namespace Holeshot.Crawler.Commands {
     /// Processes USA Bikes 'site/tracks' pages. i.e. /site/tracks/568?section_id=1
     /// </summary>
     public async Task<ProcessTrackResponse> Handle(ProcessTrackRequest request, CancellationToken cancellationToken) {
+
+      var key = string.Empty;
 
       if (request.Contents == string.Empty) {
         Console.WriteLine("Content is empty");
@@ -105,14 +108,13 @@ namespace Holeshot.Crawler.Commands {
           Events = helper.GetEvents(eventsPageDoc, this.settings.BaseUrl)
         };
 
+        key = $"USA-BMX/tracks/{trackId}/trackInfo.json";
 
         await this.mediator.Send(new PutS3ObjectRequest {
           BucketName = request.BucketName,
-          Key = $"USA-BMX/tracks/{trackId}/trackInfo.json",
+          Key = key,
           Content = JsonSerializer.Serialize(trackInfo)
         });
-
-        //Console.WriteLine($"Track {trackInfo.Name}: {JsonSerializer.Serialize(trackInfo)}");
 
       } catch (Exception ex) {
 
@@ -125,7 +127,8 @@ namespace Holeshot.Crawler.Commands {
       }
 
       return new ProcessTrackResponse {
-        Success = true
+        Success = true,
+        Key = key
       };
     }
 

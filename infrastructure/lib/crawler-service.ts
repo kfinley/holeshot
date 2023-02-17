@@ -69,7 +69,10 @@ export class CrawlerService extends Construct {
       functionName: 'Holeshot-DecodeEmails',
       code: Code.fromAsset('../services/Crawler/src/functions/decode-emails', { exclude: ["**", "!function.py"] }),
       handler: 'function.handler',
-      runtime: Runtime.PYTHON_3_8
+      runtime: Runtime.PYTHON_3_8,
+      environment: {
+        BUCKET_NAME: `${props!.domainName}-crawler`
+      }
     });
 
 

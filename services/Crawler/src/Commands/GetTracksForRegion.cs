@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace Holeshot.Crawler.Commands {
 
@@ -66,6 +67,8 @@ namespace Holeshot.Crawler.Commands {
         BucketName = this.settings.BucketName
       });
 
+      var infoKeys = new List<string>();
+
       if (gets3ObjectResponse.Contents != string.Empty) {
         var urls = base.GetUniqueHrefUrls("/site/tracks/", gets3ObjectResponse.Contents);
 
@@ -76,10 +79,12 @@ namespace Holeshot.Crawler.Commands {
             var content = page.Item2;
             // Process each track on the page
 
-            await base.mediator.Send(new ProcessTrackRequest {
+            var response = await base.mediator.Send(new ProcessTrackRequest {
               Contents = content,
               BucketName = this.settings.BucketName
             });
+
+            infoKeys.Add(response.Key);
 
           } catch (Exception ex) {
             this.logger.LogInformation(ex.Message);
@@ -93,12 +98,11 @@ namespace Holeshot.Crawler.Commands {
 
         await this.mediator.Publish(new PublishMessageRequest {
           Topic = "Holeshot-GetTracksForRegionTopic",
-          Subject = "Tracks/getTrackForRegion",
-          // To avoid dealing with mapping and setting naming option to camel case
-          // just new up the message with camel casing.
+          Subject = "Crawler/getTrackForRegion",
           Message = JsonSerializer.Serialize(new {
             Region = request.Region,
-            Tracks = urls.Count()
+            Tracks = urls.Count(),
+            Keys = infoKeys
           })
         });
 

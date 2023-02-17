@@ -12,7 +12,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
     console.log(`Starting step function ${stateMachineName}`);
 
     if (!stateMachineName) {
-      throw new Error('stateMachineName missing! The name of a step function must be provided in Message in order to start something.');
+      throw new Error('stateMachineName missing! The name of a step function must be provided as the SNS Subject in order to start a step function with that name.');
     }
 
     const cmd = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
