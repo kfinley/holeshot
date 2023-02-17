@@ -77,7 +77,7 @@ export class CrawlerService extends Construct {
       lambdaAssetProps: {
         functionFolderPath: resolve(
           __dirname,
-          "../services/Crawler/src/Functions/Decode-Emails"
+          "../../services/Crawler/src/Functions/Decode-Emails"
         ),
       },
     });
