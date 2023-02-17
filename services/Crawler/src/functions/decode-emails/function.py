@@ -37,7 +37,7 @@ def handler(event, lambda_context):
       print(decoded_email)
 
       for op in trackInfo['Operators']:
-        if (op.split(':')):
+        if (op.__contains__(':')):
           decoded_email = decCFEmail(op.split(':')[1])
           op = decoded_email
           print(decoded_email)
@@ -45,8 +45,7 @@ def handler(event, lambda_context):
       print(trackInfo)
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
-      
-    # obj = s3.Object(event.BucketName, event.Key)
-    # data = json.load(obj.get()['Body'])
+
+
     return 'Success'
 
