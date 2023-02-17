@@ -1,3 +1,4 @@
+using Amazon.Lambda.Core;
 using Amazon.SimpleNotificationService;
 
 using Microsoft.Extensions.Configuration;
