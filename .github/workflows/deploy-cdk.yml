@@ -44,6 +44,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+      - name: Install Amazon.Lambda.Tools
+        run: dotnet tool install -g Amazon.Lambda.Tools
+
       # TODO: switch this to pull config from a file on s3 somewhere...
       # TODO: move config.js file build to user-service cdk construct
       - name: Bootstrap & Build
@@ -61,20 +75,6 @@ jobs:
           echo -e '};' >> config.js
           cd ../..
           pnpm run build:lambdas
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1-node16
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.x
-      - name: Install Amazon.Lambda.Tools
-        run: dotnet tool install -g Amazon.Lambda.Tools
 
       - name: "Bootstrap, Deploy CDK, & sync S3 media "
         working-directory: ./infrastructure
