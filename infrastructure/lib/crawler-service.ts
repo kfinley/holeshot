@@ -88,5 +88,11 @@ export class CrawlerService extends Construct {
     getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
     getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
 
+    const decodeEmailsTopic = new Topic(this, 'Holeshot-DecodeEmailsTopic', {
+      topicName: 'Holeshot-DecodeEmailsTopic',
+      displayName: 'DecodeEmailsTopic'
+    })
+    decodeEmailsTopic.grantPublish(decodeEmailsLambda);
+    
   }
 }

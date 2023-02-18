@@ -10,6 +10,7 @@ import json
 
 bucket = os.environ['BUCKET_NAME']
 s3 = boto3.client("s3")
+sns = boto3.client('sns')
 
 # Source: https://stackoverflow.com/a/58111681
 def decCFEmail(encodedEmail):
@@ -33,6 +34,16 @@ def handler(event, lambda_context):
           trackInfo['Operators'][trackInfo['Operators'].index(op)] = decCFEmail(op.split(':')[1])
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
+
+    snsTopic = sns.Topic("") # "Holeshot-DecodeEmailsTopic"
+
+    snsResponse = sns.publish_message(snsTopic,
+      json.dumps({
+        'Keys': message['Keys']
+      })
+    )
+
+    print(snsResponse)
 
     return {
         'statusCode': 200,
