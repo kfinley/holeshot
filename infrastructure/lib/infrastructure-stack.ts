@@ -83,6 +83,13 @@ export class InfrastructureStack extends Stack {
         region,
         validation: acm.CertificateValidation.fromDns(),
       });
+      
+      //TODO: this fixes the deprecation error
+      // this.certificate = new acm.Certificate(this, "certificate", {
+      //   domainName: domainName,
+      //   subjectAlternativeNames: [`ws.${domainName}`],    // placeholder for getting websocket custom domain working
+      //   validation: acm.CertificateValidation.fromDns(this.hostedZone)
+      // });
 
     }
 
