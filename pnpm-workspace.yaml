@@ -2,5 +2,7 @@ packages:
   - 'packages/*'
   # all packages in subdirs of components/
   - 'services/*'
+  # new multi-language service folder structure
+  - 'services/*/src/node'
   # exclude packages that are inside test directories
   - '!**/test/**'

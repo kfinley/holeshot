@@ -5,15 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crawler", "Crawler", "{CA763B05-C7CB-4F0E-A02E-9C3418F74F3E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6A4D6AFA-78B3-4E8D-B21C-520478FBE7DD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src\dotnet", "src\dotnet", "{6A4D6AFA-78B3-4E8D-B21C-520478FBE7DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Functions", "Crawler\src\Functions\Crawler.Functions.csproj", "{1FEE1F2F-7C43-43BE-8F0F-22A13619F02C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Functions", "Crawler\src\dotnet\functions\Crawler.Functions.csproj", "{1FEE1F2F-7C43-43BE-8F0F-22A13619F02C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Tests", "Crawler\tests\Crawler.Tests.csproj", "{54CD7A44-768A-4A16-8C0C-68C9BA5ADDD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Tests", "Crawler\tests\dotnet\Crawler.Tests.csproj", "{54CD7A44-768A-4A16-8C0C-68C9BA5ADDD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aws.Commands", "Crawler\src\Aws.Commands\Aws.Commands.csproj", "{7A6196F6-EC6E-470D-AFE1-ECF1AAF76072}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aws.Commands", "..\dotnet\Aws.Commands\Aws.Commands.csproj", "{7A6196F6-EC6E-470D-AFE1-ECF1AAF76072}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Commands", "Crawler\src\Commands\Crawler.Commands.csproj", "{7B46BB1A-61AF-4EA0-8B22-F938553BFA6A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Commands", "Crawler\src\dotnet\Commands\Crawler.Commands.csproj", "{7B46BB1A-61AF-4EA0-8B22-F938553BFA6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

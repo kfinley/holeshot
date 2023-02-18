@@ -8,16 +8,24 @@ import { Topic } from 'aws-cdk-lib/aws-sns';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
+import { createLambda } from '.';
 
 export interface CrawlerServiceProps {
-  domainName: string,
-  crawlerBucket: Bucket,
+  domainName: string;
+  crawlerBucket: Bucket;
+  node_env: string;
 }
 
 export class CrawlerService extends Construct {
 
   constructor(scope: Construct, id: string, props?: CrawlerServiceProps) {
     super(scope, id);
+
+    const newLamda = (name: string, handler: string, env?: {
+      [key: string]: string;
+    } | undefined) => {
+      return createLambda(this, name, '../../services/Crawler/src/node/dist', handler, props!.node_env, env);
+    }
 
     // const {
     //   accountId,
@@ -37,15 +45,12 @@ export class CrawlerService extends Construct {
         }
       }
     }
-    writeFileSync(`../services/Crawler/src/functions/appsettings.Production.json`, JSON.stringify(settings), {
+    writeFileSync(`../services/Crawler/src/dotnet/functions/appsettings.Production.json`, JSON.stringify(settings), {
       flag: 'w',
     });
 
-    console.log(__dirname);
-    console.log(process.cwd());
-
     const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
-      projectDir: '../services/Crawler/src/functions',
+      projectDir: '../services/Crawler/src/dotnet/functions',
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',
@@ -74,8 +79,8 @@ export class CrawlerService extends Construct {
 
     const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
-      code: Code.fromAsset('../services/Crawler/src/functions/decode-emails', { exclude: ["**", "!function.py"] }),
-      handler: 'function.handler',
+      code: Code.fromAsset('../services/Crawler/src/python/functions', { exclude: ["**", "!decode-emails.py"] }),
+      handler: 'decode-emails.handler',
       runtime: Runtime.PYTHON_3_8,
       environment: {
         BUCKET_NAME: `${props!.domainName}-crawler`,
@@ -93,6 +98,9 @@ export class CrawlerService extends Construct {
     });
     getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
     getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
+
+    const saveTrackInfo = newLamda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler')
+    decodeEmailsTopic.addSubscription(new LambdaSubscription(saveTrackInfo));
 
   }
 }

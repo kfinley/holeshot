@@ -3,8 +3,9 @@ export interface Entity {
   id: string;
   name?: string;
 }
+
 //TODO: Refactor this up...
-export interface Address extends Entity {
+export interface Address {
   line1: string;
   line2?: string;
   city: string;
@@ -12,16 +13,31 @@ export interface Address extends Entity {
   zip: string;
 }
 
-export interface Track extends Entity {
+export interface GPS { lat: string, long: string }
+export interface Location {
   address: Address;
+  mapLink: string;
+  gps: GPS;
+}
+
+export interface Track extends Entity {
   district: string;
+  contactInfo: Record<string, string>;
+  logoUrl?: string;
+  location: Location;
+  website: string;
+  htmlDescription: string;
+  socials: Record<string, string>;
+  sponsors: Record<string, string>;
+  coaches: Record<string, string>;
+  operators: string[] | Record<string, string>;
+  events: Event[];
 }
 
 export interface Event extends Entity {
   date: Date;
   url: string;
-  details: Array<Array<string>>,
-  track: Track
+  details: Record<string, string>;
 }
 
 //TODO: Refactor this out...
