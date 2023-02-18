@@ -655,6 +655,7 @@ importers:
     specifiers:
       '@aws-sdk/client-dynamodb': ^3.267.0
       '@aws-sdk/util-dynamodb': ^3.267.0
+      '@aws-sdk/util-retry': ^3.267.0
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
       '@holeshot/types': ^1.0.0
@@ -675,6 +676,7 @@ importers:
     dependencies:
       '@aws-sdk/client-dynamodb': 3.267.0
       '@aws-sdk/util-dynamodb': 3.267.0
+      '@aws-sdk/util-retry': 3.267.0
       '@holeshot/aws-commands': link:../../../../packages/aws-commands
       '@holeshot/commands': link:../../../../packages/commands
       '@holeshot/types': link:../../../../packages/holeshot-types
