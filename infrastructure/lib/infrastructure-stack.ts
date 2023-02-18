@@ -45,7 +45,7 @@ export class InfrastructureStack extends Stack {
     const crawlerService = new CrawlerService(this, 'Holeshot-CrawlerService', {
       domainName,
       crawlerBucket: dataStores.crawlerBucket,
-      node_env: props?.node_env
+      node_env: props!.node_env
     });
 
     // // Setup User Service
