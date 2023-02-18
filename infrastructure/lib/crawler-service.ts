@@ -67,19 +67,25 @@ export class CrawlerService extends Construct {
       bucketPolicy,
     );
 
+    const decodeEmailsTopic = new Topic(this, 'Holeshot-DecodeEmailsTopic', {
+      topicName: 'Holeshot-DecodeEmailsTopic',
+      displayName: 'DecodeEmailsTopic'
+    })
+
     const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
       code: Code.fromAsset('../services/Crawler/src/functions/decode-emails', { exclude: ["**", "!function.py"] }),
       handler: 'function.handler',
       runtime: Runtime.PYTHON_3_8,
       environment: {
-        BUCKET_NAME: `${props!.domainName}-crawler`
+        BUCKET_NAME: `${props!.domainName}-crawler`,
+        DECODE_EMAILS_TOPIC_ARN: decodeEmailsTopic.topicArn
       }
     });
-
     decodeEmailsLambda.role?.attachInlinePolicy(
       bucketPolicy,
     );
+    decodeEmailsTopic.grantPublish(decodeEmailsLambda);
 
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
       topicName: 'Holeshot-GetTracksForRegionTopic',
@@ -88,11 +94,5 @@ export class CrawlerService extends Construct {
     getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
     getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
 
-    const decodeEmailsTopic = new Topic(this, 'Holeshot-DecodeEmailsTopic', {
-      topicName: 'Holeshot-DecodeEmailsTopic',
-      displayName: 'DecodeEmailsTopic'
-    })
-    decodeEmailsTopic.grantPublish(decodeEmailsLambda);
-    
   }
 }

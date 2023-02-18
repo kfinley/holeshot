@@ -9,6 +9,8 @@ import os
 import json
 
 bucket = os.environ['BUCKET_NAME']
+topic_arn = os.environ['DECODE_EMAILS_TOPIC_ARN']
+
 s3 = boto3.client("s3")
 sns = boto3.client('sns')
 
@@ -25,7 +27,6 @@ def handler(event, lambda_context):
     message = json.loads(event['Records'][0]['Sns']['Message'])
 
     for key in message['Keys']:
-      print(key)
       trackInfo = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
       trackInfo['ContactInfo']['Email'] = decCFEmail(trackInfo['ContactInfo']['Email'])
 
@@ -35,7 +36,7 @@ def handler(event, lambda_context):
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
 
-    snsTopic = sns.Topic("") # "Holeshot-DecodeEmailsTopic"
+    snsTopic = sns.Topic(topic_arn)
 
     snsResponse = sns.publish_message(snsTopic,
       json.dumps({
