@@ -77,7 +77,7 @@ namespace Holeshot.Crawler.Commands {
 
         var uri = basePath == string.Empty ? url : $"{basePath}{url}";
 
-        Console.WriteLine($"Processing {uri}");
+        // Console.WriteLine($"Processing {uri}");
 
         tasks.Add(RunThen(
           async () => {

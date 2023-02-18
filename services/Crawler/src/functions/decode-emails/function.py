@@ -36,10 +36,10 @@ def handler(event, lambda_context):
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
 
-    snsTopic = sns.Topic(topic_arn)
-
-    snsResponse = sns.publish_message(snsTopic,
-      json.dumps({
+    snsResponse = sns.publish(
+      TopicArn = topic_arn,
+      Subject = 'Crawler/decodeEmails',
+      Message = json.dumps({
         'Keys': message['Keys']
       })
     )
