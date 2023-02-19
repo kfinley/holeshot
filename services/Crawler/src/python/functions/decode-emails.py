@@ -37,7 +37,7 @@ def handler(event, lambda_context):
         if (op.__contains__(':')): # Encoded emails in operators list will be in the format EncodedEmail:xxxxxxxxxxxxxxxxxxxxxxxxxxxx
           trackInfo['Operators'][trackInfo['Operators'].index(op)] = decCFEmail(op.split(':')[1])
 
-      s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
+      s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo, ensure_ascii=False).encode('utf-8'))
 
     snsResponse = sns.publish(
       TopicArn = topic_arn,

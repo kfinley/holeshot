@@ -60,7 +60,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SNSClient>("SNSClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SNSClient({ region: "us-east-1" }) // Prod
+        new SNSClient({}) // Prod
         :
         new SNSClient({ // Local Dev
           region: "us-east-1",

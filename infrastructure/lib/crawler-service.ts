@@ -9,10 +9,12 @@ import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { createLambda } from '.';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 
 export interface CrawlerServiceProps {
   domainName: string;
   crawlerBucket: Bucket;
+  coreTable: Table;
   node_env: string;
 }
 
@@ -99,6 +101,7 @@ export class CrawlerService extends Construct {
 
     const saveTrackInfo = newLamda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
+      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
 
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);

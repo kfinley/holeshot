@@ -45,6 +45,7 @@ export class InfrastructureStack extends Stack {
     const crawlerService = new CrawlerService(this, 'Holeshot-CrawlerService', {
       domainName,
       crawlerBucket: dataStores.crawlerBucket,
+      coreTable: dataStores.coreTable,
       node_env: props!.node_env
     });
 
@@ -83,7 +84,7 @@ export class InfrastructureStack extends Stack {
         region,
         validation: acm.CertificateValidation.fromDns(),
       });
-      
+
       //TODO: this fixes the deprecation error
       // this.certificate = new acm.Certificate(this, "certificate", {
       //   domainName: domainName,
