@@ -54,11 +54,12 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
       console.log('config', await this.s3Client.config.credentials());
       console.log('endpoint', await this.s3Client.config.endpoint?.());
 
-      const command = new GetObjectCommand({
+      const input = {
         Bucket: params.bucket,
         Key: params.key,
-      });
-      const endpoint = await getEndpointFromInstructions(command.input as unknown as Record<string, unknown>, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
+      };
+      const command = new GetObjectCommand(input);
+      const endpoint = await getEndpointFromInstructions(input, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
 
       console.log('getEndpointFromInstructions', endpoint);
 
