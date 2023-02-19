@@ -80,10 +80,17 @@ export default function bootstrapper(container: Container) {
   }
 
   if (!container.isBound("S3Client")) {
+
     container.bind<S3Client>("S3Client")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new S3Client({ }) // Prod
+        new S3Client({
+          region: process.env.AWS_REGION,
+          credentials: {
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string
+          }
+        }) // Prod
         :
         new S3Client({ // Local Dev
           region: "us-east-1",
