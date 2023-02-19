@@ -1,5 +1,5 @@
 import { Inject, injectable } from 'inversify-props';
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3, S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
 import { Readable } from 'stream';
@@ -35,8 +35,6 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
     this.s3Client = params.container.get<S3Client>("S3Client");
 
-    console.log(`s3Client ${await this.s3Client.config.region()}`, await this.s3Client.config.credentials());
-
     // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
     // const streamToString = (stream: any): Promise<string> =>
     //   new Promise((resolve, reject) => {
@@ -48,22 +46,23 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
     // Apparently the stream parameter should be of type Readable|ReadableStream|Blob
     // The latter 2 don't seem to exist anywhere.
 
-
-    this.s3Client = new S3Client({
-      apiVersion: '2006-03-01',
-      region: process.env.AWS_REGION,
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-        sessionToken: process.env.AWS_SESSION_TOKEN as string
-      }
-    });
-
-    console.log(`s3Client ${await this.s3Client.config.region()}`, await this.s3Client.config.credentials());
-
     let body: string | undefined;
 
     try {
+
+      console.log('with config', await new S3({
+        apiVersion: '2006-03-01',
+        region: process.env.AWS_REGION,
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+          sessionToken: process.env.AWS_SESSION_TOKEN as string
+        }
+      }).getObject({
+        Bucket: params.bucket,
+        Key: params.key
+      }));
+
       const data = await this.s3Client.send(new GetObjectCommand({
         Bucket: params.bucket,
         Key: params.key,
