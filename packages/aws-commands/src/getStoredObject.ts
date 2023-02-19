@@ -48,27 +48,32 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
       });
     }
 
-    const data = await this.s3Client.send(new GetObjectCommand({
-      Bucket: params.bucket,
-      Key: params.key
-    }));
-
-    console.log('data', data);
-
     let body: string | undefined;
 
     try {
-      body = await streamToString(data.Body as Readable);
-      console.log('streamToString', body);
-    } catch (e) {
-      console.log('error', e);
-    }
+      const data = await this.s3Client.send(new GetObjectCommand({
+        Bucket: params.bucket,
+        Key: params.key,
+      }));
 
-    try {
-      body = await data.Body?.transformToString();
+      console.log('data', data);
+
+      try {
+        body = await streamToString(data.Body as Readable);
+        console.log('streamToString', body);
+      } catch (e) {
+        console.log('error', e);
+      }
+
+      try {
+        body = await data.Body?.transformToString();
+
+      } catch (e) {
+        console.log('error', e);
+      }
 
     } catch (e) {
-      console.log('error', e);
+      console.log('Error: ', e);
     }
 
     return {
