@@ -3,14 +3,16 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 // import { marshall } from '@aws-sdk/util-dynamodb';
 import { Track } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
+import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
 import { Inject, injectable } from 'inversify-props';
 import { convertTrackToItem } from './ddb-helpers';
 
 //TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
+const bucketName = process.env.BUCKET_NAME as string;
 
 export type SaveTrackInfoCommandRequest = {
-  track: Track
+  keys: string[]
 }
 
 export type SaveTrackInfoCommandResponse = {
@@ -23,24 +25,33 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
   @Inject("DynamoDBClient")
   private ddbClient!: DynamoDBClient;
 
+  @Inject("S3Client")
+  private getStoredObjectCommand!: GetStoredObjectCommand;
+
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
-    //console.log('LoadTrackInfoCommand', TableName)
+    const items: any[] = [];
 
-    const Item = convertTrackToItem('SYSTEM', params.track);
+    params.keys.forEach(async key => {
 
-    // console.log('Item', Item);
-    // console.log('TableName', TableName);
+      var trackInfo = JSON.parse((await this.getStoredObjectCommand.runAsync({
+        bucket: bucketName,
+        key: key
+      })).body) as Track;
+      console.log(trackInfo);
 
-    var response = await this.ddbClient.send(new PutItemCommand({
-      TableName,
-      Item
-    }));
+      const Item = convertTrackToItem('SYSTEM', trackInfo);
+      items.push(Item);
+      // var response = await this.ddbClient.send(new PutItemCommand({
+      //   TableName,
+      //   Item
+      // }));
+      // items.push(response.$metadata.httpStatusCode);
+    })
 
-    if (response.$metadata.httpStatusCode !== 200) {
-      throw new Error("Unexpected response in SaveUserCommand");
-    }
+    console.log('items', JSON.stringify(items));
 
+    
     return {
       success: true
     }

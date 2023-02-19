@@ -87,9 +87,7 @@ export class CrawlerService extends Construct {
         DECODE_EMAILS_TOPIC_ARN: decodeEmailsTopic.topicArn
       }
     });
-    decodeEmailsLambda.role?.attachInlinePolicy(
-      bucketPolicy,
-    );
+    decodeEmailsLambda.role?.attachInlinePolicy(bucketPolicy);
     decodeEmailsTopic.grantPublish(decodeEmailsLambda);
 
     const getTracksForRegionTopic = new Topic(this, 'Holeshot-GetTracksForRegionTopic-sns-topic', {
@@ -99,7 +97,11 @@ export class CrawlerService extends Construct {
     getTracksForRegionTopic.grantPublish(getTracks.role as IRole);
     getTracksForRegionTopic.addSubscription(new LambdaSubscription(decodeEmailsLambda));
 
-    const saveTrackInfo = newLamda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler')
+    const saveTrackInfo = newLamda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
+      BUCKET_NAME: `${props!.domainName}-crawler`,
+    });
+
+    saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
     decodeEmailsTopic.addSubscription(new LambdaSubscription(saveTrackInfo));
 
   }

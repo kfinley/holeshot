@@ -1,27 +1,24 @@
-import { Context, Handler } from 'aws-lambda';
+import { SNSEvent, Context, Handler } from 'aws-lambda';
 import bootstrapper from '../commands/bootstrapper';
-// import { SaveTrackInfoCommand } from './../commands/save-track-info';
+import { SaveTrackInfoCommand } from './../commands/save-track-info';
 import { createResponse } from './create-response';
-// import { Track } from '@holeshot/types/src';
-
 const container = bootstrapper();
 
-export const handler: Handler = async (event: any, context: Context) => {
+export const handler: Handler = async (event: SNSEvent, context: Context) => {
 
   try {
 
     console.log('event', JSON.stringify(event));
 
-    // const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
-    //   track: event as Track
-    // });
+    const { Keys } = JSON.parse(event.Records[0].Sns.Message);
+
+    const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
+      keys: Keys
+    });
+
+    console.log(response);
 
     return createResponse(event, 200, JSON.stringify(event));
-
-    return {
-      ...event,
-      // ...response
-    };
 
   } catch (error) {
     console.log(error);
