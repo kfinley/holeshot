@@ -6,6 +6,7 @@ import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
 import { Inject, injectable } from 'inversify-props';
 import { convertTrackToItem, convertEventToItem } from './ddb-helpers';
+import { container } from './../commands/inversify.config';
 
 //TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
@@ -38,6 +39,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     for (const key in params.keys) {
 
       var trackInfo = JSON.parse((await this.getStoredObjectCommand.runAsync({
+        container,
         bucket: bucketName,
         key: key
       })).body) as Track;
