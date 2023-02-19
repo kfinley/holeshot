@@ -58,7 +58,7 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
         Bucket: params.bucket,
         Key: params.key,
       });
-      const endpoint = await getEndpointFromInstructions(command.input as unknown as Record<string, string>, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
+      const endpoint = await getEndpointFromInstructions(command.input as unknown as Record<string, unknown>, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
 
       console.log('getEndpointFromInstructions', endpoint);
 
