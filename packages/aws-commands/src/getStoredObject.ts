@@ -21,6 +21,8 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
   async runAsync(params: GetStoredObjectRequest): Promise<GetStoredObjectResponse> {
 
+    console.log('GetStoredObjectRequest');
+    
     this.s3Client = params.container.get<S3Client>("S3Client");
 
     // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
