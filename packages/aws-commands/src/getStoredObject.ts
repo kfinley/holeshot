@@ -26,7 +26,7 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
     this.s3Client = params.container.get<S3Client>("S3Client");
 
-    console.log(`s3Client ${this.s3Client.config.region}`, await this.s3Client.config.credentials());
+    console.log(`s3Client ${await this.s3Client.config.region()}`, await this.s3Client.config.credentials());
 
     // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
     // const streamToString = (stream: any): Promise<string> =>
