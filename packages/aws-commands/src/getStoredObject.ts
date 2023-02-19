@@ -49,16 +49,16 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
     // Apparently the stream parameter should be of type Readable|ReadableStream|Blob
     // The latter 2 don't seem to exist anywhere.
 
-    const config = {
-      region: process.env.AWS_REGION,
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-        sessionToken: process.env.AWS_SESSION_TOKEN
-      }
-    }
+    // const config = {
+    //   region: process.env.AWS_REGION,
+    //   credentials: {
+    //     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+    //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+    //     sessionToken: process.env.AWS_SESSION_TOKEN
+    //   }
+    // }
 
-    this.s3Client = new S3Client(config);
+    this.s3Client = new S3Client({});
 
     let body: string | undefined;
 
