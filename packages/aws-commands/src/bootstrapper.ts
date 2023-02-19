@@ -60,7 +60,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SNSClient>("SNSClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SNSClient({}) // Prod
+        new SNSClient({ region: "us-east-1" }) // Prod
         :
         new SNSClient({ // Local Dev
           region: "us-east-1",
@@ -83,7 +83,7 @@ export default function bootstrapper(container: Container) {
     container.bind<S3Client>("S3Client")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new S3Client({ region: "us-east-1" }) // Prod
+        new S3Client({ }) // Prod
         :
         new S3Client({ // Local Dev
           region: "us-east-1",
