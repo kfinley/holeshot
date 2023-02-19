@@ -1,5 +1,5 @@
 import { Inject, injectable } from 'inversify-props';
-import { S3, S3Client, GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
+import { S3, S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
 import { Readable } from 'stream';
@@ -77,7 +77,6 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
       try {
 
         const data = await this.s3Client.send(command);
-
 
         console.log('data', data);
 
