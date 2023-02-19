@@ -34,7 +34,7 @@ def handler(event, lambda_context):
       trackInfo['ContactInfo']['Email'] = decCFEmail(trackInfo['ContactInfo']['Email'])
 
       for op in trackInfo['Operators']:
-        if (op.__contains__(':')):
+        if (op.__contains__(':')): # Encoded emails in operators list will be in the format EncodedEmail:xxxxxxxxxxxxxxxxxxxxxxxxxxxx
           trackInfo['Operators'][trackInfo['Operators'].index(op)] = decCFEmail(op.split(':')[1])
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo))
@@ -50,7 +50,8 @@ def handler(event, lambda_context):
     return {
         'statusCode': 200,
         'body': json.dumps(
-          {'Success': True,
-          'MessageId': snsResponse.MessageId
+          {
+            'Success': True,
+            'MessageId': snsResponse.MessageId
           })
     }
