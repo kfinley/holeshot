@@ -1,8 +1,9 @@
 import { Inject, injectable } from 'inversify-props';
-import { S3, S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3, S3Client, GetObjectCommand, GetObjectCommandOutput } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
 import { Readable } from 'stream';
+import { getEndpointFromInstructions } from '@aws-sdk/middleware-endpoint';
 
 export interface GetStoredObjectRequest {
   bucket: string;
@@ -51,16 +52,33 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
     try {
 
       console.log('config', await this.s3Client.config.credentials());
-      console.log('endpoint', await this.s3Client.config.endpoint);
+      console.log('endpoint', await this.s3Client.config.endpoint?.());
 
-      const data = await this.s3Client.send(new GetObjectCommand({
+      const command = new GetObjectCommand({
         Bucket: params.bucket,
         Key: params.key,
-      }));
+      });
+      const endpoint = await getEndpointFromInstructions(command.input, GetObjectCommand, this.s3Client.config);
 
-      console.log('data', data);
+      console.log('getEndpointFromInstructions', endpoint);
+
+      const s3 = new S3({
+        endpoint
+      });
+      let data: GetObjectCommandOutput;
 
       try {
+        data = await s3.getObject(command.input);
+      } catch (e) {
+        console.log('Error', e);
+      }
+
+      try {
+        this.s3Client.config.endpoint = endpoint;
+        data = await this.s3Client.send(command);
+
+        console.log('data', data);
+
         body = await this.streamToString(data.Body as Readable);
         console.log('streamToString', body);
       } catch (e) {

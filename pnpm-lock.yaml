@@ -84,6 +84,7 @@ importers:
       '@aws-sdk/client-ses': 3.272.0
       '@aws-sdk/client-sfn': 3.272.0
       '@aws-sdk/client-sns': 3.272.0
+      '@aws-sdk/middleware-endpoint': 3.272.0
       '@aws-sdk/util-dynamodb': 3.272.0
       '@holeshot/commands': ^1.0.0
       '@types/node': ^18.11.17
@@ -96,6 +97,7 @@ importers:
       '@aws-sdk/client-ses': 3.272.0
       '@aws-sdk/client-sfn': 3.272.0
       '@aws-sdk/client-sns': 3.272.0
+      '@aws-sdk/middleware-endpoint': 3.272.0
       '@aws-sdk/util-dynamodb': 3.272.0
       '@holeshot/commands': link:../commands
       '@types/node': 18.11.18
