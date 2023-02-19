@@ -1,6 +1,5 @@
 
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { marshall } from '@aws-sdk/util-dynamodb';
 import { Track } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
@@ -31,12 +30,11 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
-    console.log('ddbClient', this.ddbClient);
-    console.log('getStoredObjectCommand', this.getStoredObjectCommand);
-
     const items: any[] = [];
 
     for (const key in params.keys) {
+
+      console.log(`${key} ${bucketName}`);
 
       var trackInfo = JSON.parse((await this.getStoredObjectCommand.runAsync({
         container,
@@ -44,9 +42,10 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
         key: key
       })).body) as Track;
 
-      console.log(trackInfo);
+      console.log('trackInfo', trackInfo);
 
       const trackItem = convertTrackToItem(trackInfo.name, trackInfo);
+
       items.push(trackItem);
 
       // var response = await this.ddbClient.send(new PutItemCommand({

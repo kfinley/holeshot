@@ -2,6 +2,7 @@ import { Inject, injectable } from 'inversify-props';
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
+
 export interface GetStoredObjectRequest {
   bucket: string;
   key: string;
