@@ -10,7 +10,7 @@ export const handler: Handler = async (event: any, context: Context) => {
 
   try {
 
-    console.log('event', event);
+    console.log('event', JSON.stringify(event));
 
     // const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
     //   track: event as Track
