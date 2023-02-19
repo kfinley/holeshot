@@ -50,8 +50,9 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
     try {
 
-      console.log('config', athis.s3Client.config.credentials());
-      console.log('endpoint', )
+      console.log('config', await this.s3Client.config.credentials());
+      console.log('endpoint', await this.s3Client.config.endpoint());
+
       const data = await this.s3Client.send(new GetObjectCommand({
         Bucket: params.bucket,
         Key: params.key,
@@ -68,7 +69,7 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
       try {
         body = await data.Body?.transformToString();
-
+        console.log('transformToString', body);
       } catch (e) {
         console.log('error', e);
       }
