@@ -84,7 +84,10 @@ export default function bootstrapper(container: Container) {
     container.bind<S3Client>("S3Client")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new S3Client({}) // Prod
+        new S3Client({
+          region: process.env.AWS_REGION,
+          endpoint: 'https://s3.us-east-1.amazonaws.com'
+        }) // Prod
         :
         new S3Client({ // Local Dev
           region: "us-east-1",

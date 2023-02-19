@@ -59,27 +59,28 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
         Key: params.key,
       };
       const command = new GetObjectCommand(input);
-      const endpoint = await getEndpointFromInstructions(input, GetObjectCommand, this.s3Client.config);
 
-      console.log('getEndpointFromInstructions', endpoint);
+      // const endpoint = await getEndpointFromInstructions(input, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
 
-      const s3 = new S3({
-        endpoint
-      });
+      // console.log('getEndpointFromInstructions', endpoint);
+
+      // const s3 = new S3({
+      //   endpoint
+      // });
 
 
-      try {
-        const data = await s3.getObject(command.input);
-        console.log(data);
-      } catch (e) {
-        console.log('Error', e);
-      }
+      // try {
+      //   const data = await s3.getObject(command.input);
+      //   console.log(data);
+      // } catch (e) {
+      //   console.log('Error', e);
+      // }
 
       try {
 
         const data = await this.s3Client.send(command);
 
-        console.log('data', data);
+        //console.log('data', data);
 
         body = await this.streamToString(data.Body as Readable);
         console.log('streamToString', body);
