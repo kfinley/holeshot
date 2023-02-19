@@ -8,6 +8,7 @@ export default function bootstrapper() {
 
   awsCommandsBootstrapper(container);
 
+  
   container.bind<SaveTrackInfoCommand>("SaveTrackInfoCommand").to(SaveTrackInfoCommand);
 
   console.log("Bootstrapper Done");

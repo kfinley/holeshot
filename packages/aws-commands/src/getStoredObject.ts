@@ -50,19 +50,8 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
     try {
 
-      console.log('with config', await new S3({
-        apiVersion: '2006-03-01',
-        region: process.env.AWS_REGION,
-        credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-          sessionToken: process.env.AWS_SESSION_TOKEN as string
-        }
-      }).getObject({
-        Bucket: params.bucket,
-        Key: params.key
-      }));
-
+      console.log('config', athis.s3Client.config.credentials());
+      console.log('endpoint', )
       const data = await this.s3Client.send(new GetObjectCommand({
         Bucket: params.bucket,
         Key: params.key,

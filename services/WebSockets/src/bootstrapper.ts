@@ -12,6 +12,7 @@ export default function bootstrapper() {
 
   awsCommandsBootstrapper(container);
 
+  // Is this needed??
   if (!container.isBound("DynamoDBClient")) {
     container.bind<DynamoDBClient>("DynamoDBClient")
       .toDynamicValue(() =>
