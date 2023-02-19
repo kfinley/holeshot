@@ -49,7 +49,7 @@ export default function bootstrapper(container: Container) {
       .toDynamicValue(() =>
         process.env.NODE_ENV === 'production'
           ?
-          new DynamoDBClient({ region: "us-east-1" }) // Prod
+          new DynamoDBClient({ region: process.env.AWS_REGION }) // Prod
           :
           new DynamoDBClient({ // Local Dev
             endpoint: "http://holeshot.dynamodb:8000"
@@ -60,7 +60,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SNSClient>("SNSClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SNSClient({ region: "us-east-1" }) // Prod
+        new SNSClient({ region: process.env.AWS_REGION }) // Prod
         :
         new SNSClient({ // Local Dev
           region: "us-east-1",
@@ -72,7 +72,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SFNClient>("SFNClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SFNClient({ region: "us-east-1" }) // Prod
+        new SFNClient({ region: process.env.AWS_REGION }) // Prod
         :
         new SFNClient({ // Local Dev
           endpoint: "http://holeshot.sfn:8083"
@@ -86,11 +86,6 @@ export default function bootstrapper(container: Container) {
         ?
         new S3Client({  // Prod
           region: process.env.AWS_REGION,
-          // credentials: {
-          //   accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-          //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-          //   sessionToken: process.env.AWS_SESSION_TOKEN
-          // }
         })
         :
         new S3Client({ // Local Dev
@@ -107,7 +102,7 @@ export default function bootstrapper(container: Container) {
     container.bind<SES>("SES")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new SES({ region: "us-east-1" }) // Prod
+        new SES({ region: process.env.AWS_REGION }) // Prod
         :
         new SES({ // Local Dev
           endpoint: 'http://localhost:8005',
