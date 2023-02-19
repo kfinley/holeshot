@@ -25,14 +25,17 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
   @Inject("DynamoDBClient")
   private ddbClient!: DynamoDBClient;
 
-  @Inject("S3Client")
+  @Inject("GetStoredObjectCommand")
   private getStoredObjectCommand!: GetStoredObjectCommand;
 
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
+    console.log('ddbClient', this.ddbClient);
+    console.log('getStoredObjectCommand', this.getStoredObjectCommand);
+
     const items: any[] = [];
 
-    params.keys.forEach(async key => {
+    for (const key in params.keys) {
 
       var trackInfo = JSON.parse((await this.getStoredObjectCommand.runAsync({
         bucket: bucketName,
@@ -43,7 +46,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
       const trackItem = convertTrackToItem(trackInfo.name, trackInfo);
       items.push(trackItem);
-      
+
       // var response = await this.ddbClient.send(new PutItemCommand({
       //   TableName,
       //   trackItem
@@ -61,10 +64,10 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
         // items.push(response.$metadata.httpStatusCode);
       });
 
-    });
+    };
 
     console.log('items', JSON.stringify(items));
-    
+
     return {
       success: true
     }
