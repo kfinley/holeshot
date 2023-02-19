@@ -1,5 +1,5 @@
 import { Inject, injectable } from 'inversify-props';
-import { S3Client, GetObjectCommand, meta } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
 import { Readable } from 'stream';
@@ -46,19 +46,28 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
       });
     }
 
-    // const exists = await this.s3Client.send(new GetObjectMetadataCommand({
-
-    // });
-
     const data = await this.s3Client.send(new GetObjectCommand({
       Bucket: params.bucket,
       Key: params.key
     }));
 
-    //const body = await data.Body?.transformToString();
-    const body = await streamToString(data.Body as Readable);
+    console.log('data', data);
 
-    console.log('body', body);
+    let body: string | undefined;
+
+    try {
+      body = await streamToString(data.Body as Readable);
+      console.log('streamToString', body);
+    } catch (e) {
+      console.log('error', e);
+    }
+
+    try {
+      body = await data.Body?.transformToString();
+
+    } catch (e) {
+      console.log('error', e);
+    }
 
     return {
       body
