@@ -10,7 +10,7 @@ export interface GetStoredObjectRequest {
 }
 
 export interface GetStoredObjectResponse {
-  body: string;
+  body: string | undefined;
 }
 
 @injectable()
@@ -22,25 +22,27 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
   async runAsync(params: GetStoredObjectRequest): Promise<GetStoredObjectResponse> {
 
     console.log('GetStoredObjectRequest');
-    
+
     this.s3Client = params.container.get<S3Client>("S3Client");
 
     // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
-    const streamToString = (stream: any): Promise<string> =>
-      new Promise((resolve, reject) => {
-        const chunks: any[] = [];
-        stream.on("data", (chunk: any) => chunks.push(chunk));
-        stream.on("error", reject);
-        stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-      });
+    // const streamToString = (stream: any): Promise<string> =>
+    //   new Promise((resolve, reject) => {
+    //     const chunks: any[] = [];
+    //     stream.on("data", (chunk: any) => chunks.push(chunk));
+    //     stream.on("error", reject);
+    //     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
+    //   });
 
     const data = await this.s3Client.send(new GetObjectCommand({
       Bucket: params.bucket,
       Key: params.key
     }));
 
+    const body = await data.Body?.transformToString();
+
     return {
-      body: await streamToString(data.Body)
+      body
     };
 
   }
