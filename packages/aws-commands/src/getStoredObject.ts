@@ -5,6 +5,7 @@ import { Command } from '@holeshot/commands/src';
 export interface GetStoredObjectRequest {
   bucket: string;
   key: string;
+  // container: Container;
 }
 
 export interface GetStoredObjectResponse {

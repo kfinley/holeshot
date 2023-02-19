@@ -1,11 +1,11 @@
 
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-// import { marshall } from '@aws-sdk/util-dynamodb';
+import { marshall } from '@aws-sdk/util-dynamodb';
 import { Track } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
 import { Inject, injectable } from 'inversify-props';
-import { convertTrackToItem } from './ddb-helpers';
+import { convertTrackToItem, convertEventToItem } from './ddb-helpers';
 
 //TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
@@ -38,19 +38,32 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
         bucket: bucketName,
         key: key
       })).body) as Track;
+
       console.log(trackInfo);
 
-      const Item = convertTrackToItem('SYSTEM', trackInfo);
-      items.push(Item);
+      const trackItem = convertTrackToItem(trackInfo.name, trackInfo);
+      items.push(trackItem);
+      
       // var response = await this.ddbClient.send(new PutItemCommand({
       //   TableName,
-      //   Item
+      //   trackItem
       // }));
       // items.push(response.$metadata.httpStatusCode);
-    })
+
+      trackInfo.events.forEach(async event => {
+        const eventItem = convertEventToItem(trackInfo.name, event);
+        console.log('event', JSON.stringify(eventItem));
+        items.push(eventItem);
+        // var response = await this.ddbClient.send(new PutItemCommand({
+        //   TableName,
+        //   eventItem
+        // }));
+        // items.push(response.$metadata.httpStatusCode);
+      });
+
+    });
 
     console.log('items', JSON.stringify(items));
-
     
     return {
       success: true

@@ -1,5 +1,6 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
-import { Track, Location, Address } from "@holeshot/types/src";
+import { marshall } from "@aws-sdk/util-dynamodb";
+import { Track, Location, Address, Event } from "@holeshot/types/src";
 
 function addWithKeyIfPropHasValue(attributes: Record<string, AttributeValue>, property: string, value: string | undefined) {
   if (value) {
@@ -154,5 +155,28 @@ export function convertTrackToItem(ownerId: string, track: Track): {
       M: operatorsToMap(track.operators as string[])
     }
     // ...optionalAttributes
+  }
+}
+
+export function convertEventToItem(ownerId: string, event: Event): {
+  [key: string]: AttributeValue;
+} | undefined {
+
+  const created = new Date().toISOString();
+
+  return {
+    PK: {
+      S: `OWNER#${ownerId}`
+    },
+    SK: {
+      S: `EVENT#${event.name}`
+    },
+    GSI1SK: {
+      S: `CREATED_CREATED_DATE#${created}`
+    },
+    type: {
+      S: 'Event'
+    },
+    ...marshall(event)
   }
 }
