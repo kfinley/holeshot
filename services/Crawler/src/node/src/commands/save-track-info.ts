@@ -33,14 +33,14 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     const items: any[] = [];
     console.log('keys', params.keys);
 
-    for (const key in params.keys) {
+    for (const i in params.keys) {
 
-      console.log(`Key: ${key} BucketName: ${bucketName}`);
+      console.log(`Key: ${params.keys[i]} BucketName: ${bucketName}`);
 
       var trackInfo = JSON.parse((await this.getStoredObjectCommand.runAsync({
         container,
         bucket: bucketName,
-        key: key
+        key: params.keys[i]
       })).body) as Track;
 
       console.log('trackInfo', trackInfo);
