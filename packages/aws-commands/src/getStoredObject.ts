@@ -1,9 +1,9 @@
 import { Inject, injectable } from 'inversify-props';
-import { S3, S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3, S3Client, GetObjectCommand  } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
 import { Readable } from 'stream';
-import { getEndpointFromInstructions } from '@aws-sdk/middleware-endpoint';
+import { getEndpointFromInstructions, EndpointParameterInstructionsSupplier } from '@aws-sdk/middleware-endpoint';
 
 export interface GetStoredObjectRequest {
   bucket: string;
@@ -58,7 +58,7 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
         Bucket: params.bucket,
         Key: params.key,
       });
-      const endpoint = await getEndpointFromInstructions(command.input, GetObjectCommand, this.s3Client.config);
+      const endpoint = await getEndpointFromInstructions(command.input as unknown as Record<string, string>, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
 
       console.log('getEndpointFromInstructions', endpoint);
 
