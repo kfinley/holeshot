@@ -21,21 +21,20 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
   private s3Client!: S3Client;
 
   private async streamToString(stream: Readable): Promise<string> {
-  return await new Promise((resolve, reject) => {
-    const chunks: Uint8Array[] = [];
-    stream.on('data', (chunk) => chunks.push(chunk));
-    stream.on('error', reject);
-    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
-  });
-}
+    return await new Promise((resolve, reject) => {
+      const chunks: Uint8Array[] = [];
+      stream.on('data', (chunk) => chunks.push(chunk));
+      stream.on('error', reject);
+      stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+    });
+  }
 
   async runAsync(params: GetStoredObjectRequest): Promise<GetStoredObjectResponse> {
-
 
     console.log('GetStoredObjectRequest', JSON.stringify(params));
 
     this.s3Client = params.container.get<S3Client>("S3Client");
-    
+
     console.log(`s3Client ${await this.s3Client.config.region()}`, await this.s3Client.config.credentials());
 
     // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
@@ -49,16 +48,16 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
     // Apparently the stream parameter should be of type Readable|ReadableStream|Blob
     // The latter 2 don't seem to exist anywhere.
 
-    // const config = {
-    //   region: process.env.AWS_REGION,
-    //   credentials: {
-    //     accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-    //     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-    //     sessionToken: process.env.AWS_SESSION_TOKEN
-    //   }
-    // }
 
-    this.s3Client = new S3Client({});
+    this.s3Client = new S3Client({
+      apiVersion: '2006-03-01',
+      region: process.env.AWS_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+        sessionToken: process.env.AWS_SESSION_TOKEN as string
+      }
+    });
 
     console.log(`s3Client ${await this.s3Client.config.region()}`, await this.s3Client.config.credentials());
 
