@@ -66,7 +66,6 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
         endpoint
       });
 
-      let data: GetObjectCommandOutput;
 
       try {
         const data = await s3.getObject(command.input);
@@ -79,16 +78,17 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
         const data = await this.s3Client.send(command);
 
+
         console.log('data', data);
 
         body = await this.streamToString(data.Body as Readable);
         console.log('streamToString', body);
+
+        body = await data!.Body?.transformToString();
+        console.log('transformToString', body);
       } catch (e) {
         console.log('error', e);
       }
-
-      body = await data!.Body?.transformToString();
-      console.log('transformToString', body);
 
     } catch (e) {
       console.log('Error: ', e);
