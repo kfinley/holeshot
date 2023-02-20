@@ -30,7 +30,8 @@ namespace Holeshot.Crawler.Commands {
 
     public GetTracksForRegionHandler(IMediator mediator,
                                     IOptions<Settings> settings,
-                                    ILogger<GetTracksForRegionHandler> logger) : base(mediator, settings.Value) {
+                                    JsonSerializerOptions jsonOptions,
+                                    ILogger<GetTracksForRegionHandler> logger) : base(mediator, settings.Value, jsonOptions) {
       this.logger = logger;
     }
 
@@ -99,12 +100,13 @@ namespace Holeshot.Crawler.Commands {
         await this.mediator.Publish(new PublishMessageRequest {
           Topic = "Holeshot-GetTracksForRegionTopic",
           Subject = "Crawler/getTrackForRegion",
-          Message = JsonSerializer.Serialize(new {
+          Message = base.Serialize(new {
             Region = request.Region,
             Tracks = urls.Count(),
             Keys = infoKeys
           })
         });
+
 
         return new GetTracksForRegionResponse {
           Success = true

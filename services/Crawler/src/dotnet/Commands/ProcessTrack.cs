@@ -23,7 +23,7 @@ namespace Holeshot.Crawler.Commands {
 
   public class ProcessTrackHandler : Crawly, IRequestHandler<ProcessTrackRequest, ProcessTrackResponse> {
 
-    public ProcessTrackHandler(IMediator mediator, IOptions<Settings> settings) : base(mediator, settings.Value) { }
+    public ProcessTrackHandler(IMediator mediator, IOptions<Settings> settings, JsonSerializerOptions jsonOptions) : base(mediator, settings.Value, jsonOptions) { }
 
     /// <summary>
     /// Processes USA Bikes 'site/tracks' pages. i.e. /site/tracks/568?section_id=1
@@ -113,7 +113,7 @@ namespace Holeshot.Crawler.Commands {
         await this.mediator.Send(new PutS3ObjectRequest {
           BucketName = request.BucketName,
           Key = key,
-          Content = JsonSerializer.Serialize(trackInfo)
+          Content = base.Serialize(trackInfo)
         });
 
       } catch (Exception ex) {

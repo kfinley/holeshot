@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Amazon.Lambda.Core;
 using Amazon.SimpleNotificationService;
 
@@ -24,8 +25,20 @@ namespace Holeshot.Crawler.Functions {
 
     protected override void ConfigureServices(IServiceCollection serviceCollection, IConfiguration configuration) {
 
+      JsonSerializerOptions serializerOptions = new JsonSerializerOptions() {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        // DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        MaxDepth = 10,
+        // ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        WriteIndented = true
+      };
+      // serializerOptions.Converters.Add(new JsonStringEnumConverter());
+
       serviceCollection
         .AddOptions()
+        .AddSingleton(s => serializerOptions)
         .AddDefaultAWSOptions(configuration.GetAWSOptions())
         .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions())
         .AddAWSService<IAmazonS3>(configuration.GetAWSOptions())

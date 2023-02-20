@@ -10,6 +10,7 @@ using System.Linq;
 using System.Diagnostics;
 using MediatR;
 using System.Threading;
+using System.Text.Json;
 
 namespace Holeshot.Crawler.Commands {
 
@@ -24,9 +25,15 @@ namespace Holeshot.Crawler.Commands {
 
     protected readonly Settings settings;
 
-    public Crawly(IMediator mediator, Settings settings) {
+    private readonly JsonSerializerOptions jsonOptions;
+    public Crawly(IMediator mediator, Settings settings, JsonSerializerOptions jsonOptions = null) {
       this.mediator = mediator;
       this.settings = settings;
+      if (jsonOptions is null) {
+        this.jsonOptions = JsonSerializerOptions.Default;
+      } else {
+        this.jsonOptions = jsonOptions;
+      }
     }
 
     //https://freeproxyupdate.com/united-states-us
@@ -455,6 +462,10 @@ namespace Holeshot.Crawler.Commands {
 
     public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default) where TNotification : INotification {
       return this.mediator.Publish(notification, cancellationToken);
+    }
+
+    protected string Serialize<T>(T o) {
+      return JsonSerializer.Serialize(o, this.jsonOptions);
     }
   }
 }
