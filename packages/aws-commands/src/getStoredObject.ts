@@ -1,9 +1,8 @@
 import { Inject, injectable } from 'inversify-props';
-import { S3, S3Client, GetObjectCommand  } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Command } from '@holeshot/commands/src';
 import { Container } from 'inversify-props';
 import { Readable } from 'stream';
-import { getEndpointFromInstructions, EndpointParameterInstructionsSupplier } from '@aws-sdk/middleware-endpoint';
 
 export interface GetStoredObjectRequest {
   bucket: string;
@@ -36,17 +35,6 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
     this.s3Client = params.container.get<S3Client>("S3Client");
 
-    // https://github.com/aws/aws-sdk-js-v3/issues/1877#issuecomment-755387549
-    // const streamToString = (stream: any): Promise<string> =>
-    //   new Promise((resolve, reject) => {
-    //     const chunks: any[] = [];
-    //     stream.on("data", (chunk: any) => chunks.push(chunk));
-    //     stream.on("error", reject);
-    //     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
-    //   });
-    // Apparently the stream parameter should be of type Readable|ReadableStream|Blob
-    // The latter 2 don't seem to exist anywhere.
-
     let body: string | undefined;
 
     try {
@@ -54,39 +42,19 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
       console.log('config', await this.s3Client.config.credentials());
       console.log('endpoint', await this.s3Client.config.endpoint?.());
 
-      const input = {
+      const command = new GetObjectCommand({
         Bucket: params.bucket,
         Key: params.key,
-      };
-      const command = new GetObjectCommand(input);
-
-      // const endpoint = await getEndpointFromInstructions(input, GetObjectCommand as EndpointParameterInstructionsSupplier, this.s3Client.config);
-
-      // console.log('getEndpointFromInstructions', endpoint);
-
-      // const s3 = new S3({
-      //   endpoint
-      // });
-
-
-      // try {
-      //   const data = await s3.getObject(command.input);
-      //   console.log(data);
-      // } catch (e) {
-      //   console.log('Error', e);
-      // }
+      });
 
       try {
 
-        const data = await this.s3Client.send(command);
+        const s3Item = await this.s3Client.send(command);
 
-        //console.log('data', data);
+        body = await this.streamToString(s3Item.Body as Readable);
 
-        body = await this.streamToString(data.Body as Readable);
-        console.log('streamToString', body);
+        console.log('trackInfo.json', body);
 
-        body = await data!.Body?.transformToString();
-        console.log('transformToString', body);
       } catch (e) {
         console.log('error', e);
       }
