@@ -1,3 +1,0 @@
-is_global = true
-build_property.RootNamespace = Aws.Commands
-build_property.ProjectDir = /workspace/dotnet/Aws.Commands/

@@ -29,13 +29,13 @@ def handler(event, lambda_context):
 
     message = json.loads(event['Records'][0]['Sns']['Message'])
 
-    for key in message['Keys']:
+    for key in message['keys']:
       trackInfo = json.loads(s3.get_object(Bucket=bucket, Key=key)["Body"].read())
-      trackInfo['ContactInfo']['Email'] = decCFEmail(trackInfo['ContactInfo']['Email'])
+      trackInfo['contactInfo']['email'] = decCFEmail(trackInfo['contactInfo']['email'])
 
-      for op in trackInfo['Operators']:
+      for op in trackInfo['operators']:
         if (op.__contains__(':')): # Encoded emails in operators list will be in the format EncodedEmail:xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-          trackInfo['Operators'][trackInfo['Operators'].index(op)] = decCFEmail(op.split(':')[1])
+          trackInfo['operators'][trackInfo['operators'].index(op)] = decCFEmail(op.split(':')[1])
 
       s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo, ensure_ascii=False).encode('utf-8'))
 
@@ -43,7 +43,7 @@ def handler(event, lambda_context):
       TopicArn = topic_arn,
       Subject = 'Crawler/decodeEmails',
       Message = json.dumps({
-        'Keys': message['Keys']
+        'keys': message['keys']
       })
     )
 

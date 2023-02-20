@@ -51,7 +51,7 @@ export function addressToMap(address: Address) {
     state: {
       S: address.state
     },
-    zip: {
+    postalcode: {
       S: address.zip
     }
   }
