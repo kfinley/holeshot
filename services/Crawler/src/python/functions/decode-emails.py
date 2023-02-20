@@ -27,6 +27,7 @@ def handler(event, lambda_context):
     # process.
     #
 
+    print(event)
     message = json.loads(event['Records'][0]['Sns']['Message'])
 
     for key in message['keys']:
