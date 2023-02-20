@@ -10,10 +10,10 @@ export const handler: Handler = async (event: SNSEvent, context: Context) => {
 
     console.log('event', JSON.stringify(event));
 
-    const { Keys } = JSON.parse(event.Records[0].Sns.Message);
+    const { keys } = JSON.parse(event.Records[0].Sns.Message);
 
     const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
-      keys: Keys
+      keys
     });
 
     console.log(response);

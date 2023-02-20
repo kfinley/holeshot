@@ -53,6 +53,6 @@ def handler(event, lambda_context):
         'body': json.dumps(
           {
             'Success': True,
-            'MessageId': snsResponse.MessageId
+            'snsResponse': json.dumps(snsResponse)
           })
     }

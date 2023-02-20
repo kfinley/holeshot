@@ -30,6 +30,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
+    console.log('params', params);
     const items: any[] = [];
     console.log('keys', params.keys);
 
@@ -42,7 +43,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
         bucket: bucketName,
         key: params.keys[i]
       });
-      
+
       var trackInfo = JSON.parse(getTrackInfo.body) as Track;
 
       console.log('trackInfo', trackInfo);
