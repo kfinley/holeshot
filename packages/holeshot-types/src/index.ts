@@ -10,7 +10,7 @@ export interface Address {
   line2?: string;
   city: string;
   state: string;
-  postalcode: string;
+  postalCode: string;
 }
 
 export interface GPS { lat: string, long: string }
