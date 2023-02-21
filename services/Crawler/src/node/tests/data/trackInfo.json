@@ -1,0 +1,256 @@
+{
+  "name": "Rock Hill BMX Supercross Track",
+  "district": "SC01",
+  "contactInfo": {
+    "email": "info.bmx@cityofrockhill.com",
+    "trackPhone": "803-329-5620",
+    "primaryContact": "Mike King (803-325-2630)",
+    "secondaryContact": "Matt Beynon (803-326-2436)"
+  },
+  "logoUrl": "//s3.amazonaws.com/bmxwebserverprod/attachments/263042/BMX_BlackLogo_WhiteBkgd-01_mxw200_mxha_e0.jpg",
+  "location": {
+    "address": {
+      "line1": "1307 Riverwalk Parkway",
+      "line2": "",
+      "city": "Rock Hill",
+      "state": "Sc",
+      "postalCode": "29730"
+    },
+    "mapLink": "http://maps.google.com/maps?q=34.9744394,-80.9667001&iwloc=A&iwd=1",
+    "gps": {
+      "lat": "34.9744394",
+      "long": "-80.9667001"
+    }
+  },
+  "website": "https://www.cityofrockhill.com/departments/parks-recreation-tourism/parks-facilities/rock-hill-bmx-supercross-track",
+  "htmlDescription": "<span style=\"color: rgb(20, 24, 35); font-family: Helvetica, Arial, 'lucida grande', tahoma, verdana, arial, sans-serif; font-size: 12px; line-height: 15.359999656677246px; background-color: rgb(255, 255, 255);\">The Rock Hill BMX Supercross Track in Rock Hill, South Carolina, is home to the Carolina Nationals and the <strong>2024 UCI BMX World Championships</strong>, a dual purpose facility with an 8-meter elite supercross start hill and a 5-meter amateur start hill. It was the first Olympic caliber training facility on the East Coast and one of now five&nbsp;in the United States. The site will host local, state, regional, national USA BMX events and UCI international events while providing a safe introduction to local residents and Olympic hopefuls. The track will be accessible to all ages and skill levels through a variety of programs, races, and events.</span>",
+  "socials": {
+    "facebook": "https://www.facebook.com/rockhillbmxsupercrosstrack/",
+    "twitter": "https://www.twitter.com/RockHillBMX",
+    "instagram": "https://www.instagram.com/rockhillbmxsupercrosstrack",
+    "rainedout": "https://www.rainedout.net/team_page.php?a=0b8ef7113e2578fa9d1d"
+  },
+  "sponsors": {
+    "www.hondacarsrockhill.com": "https://www.hondacarsrockhill.com/?utm_source=google&utm_medium=organic&utm_campaign=hendricklocallistings"
+  },
+  "coaches": {
+    "zephin Mann": "https://www.usabmx.com/site/profiles/15141"
+  },
+  "operators": [
+    "Mike King",
+    "803-325-2630",
+    "Matt Beynon",
+    "803-326-2436",
+    "info.bmx@cityofrockhill.com"
+  ],
+  "events": [
+    {
+      "name": "Practice",
+      "date": "2023-02-01T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510893",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-03T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510894",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "8:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-04T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510895",
+      "details": {
+        "registrationStart": "11:00 AM",
+        "registrationEnd": "2:00 PM",
+        "raceTime": "2:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 11 AM-2 PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-07T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510896",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-08T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510897",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Local Race Single",
+      "date": "2023-02-10T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510898",
+      "details": {
+        "registrationStart": "6:00 PM",
+        "registrationEnd": "7:30 PM",
+        "raceTime": "8:00 PM",
+        "type": "Local Race",
+        "description": "$10 Friday Night Single Points Race. Practice &amp; on-site Registration open at 6PM. Online Pre-reg opens on Monday and closes at 5PM Race Day",
+        "fee": "$10.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-11T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510899",
+      "details": {
+        "registrationStart": "11:00 AM",
+        "registrationEnd": "2:00 PM",
+        "raceTime": "2:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 11 AM-2 PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-14T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510900",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-15T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510901",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-17T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510902",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "8:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-18T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510903",
+      "details": {
+        "registrationStart": "11:00 AM",
+        "registrationEnd": "2:00 PM",
+        "raceTime": "2:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 11 AM-2 PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-21T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510904",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-22T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510905",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Local Race Single",
+      "date": "2023-02-24T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510906",
+      "details": {
+        "registrationStart": "6:00 PM",
+        "registrationEnd": "7:30 PM",
+        "raceTime": "8:00 PM",
+        "type": "Local Race",
+        "description": "$10 Friday Night Single Points Race. Practice &amp; on-site Registration open at 6PM. Online Pre-reg opens on Monday and closes at 5PM Race Day",
+        "fee": "$10.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-25T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510907",
+      "details": {
+        "registrationStart": "11:00 AM",
+        "registrationEnd": "2:00 PM",
+        "raceTime": "2:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 11 AM-2 PM",
+        "fee": "$5.00 USD"
+      }
+    },
+    {
+      "name": "Practice",
+      "date": "2023-02-28T00:00:00",
+      "url": "www.usabmx.com/tracks/1971/events/510908",
+      "details": {
+        "registrationStart": "4:00 PM",
+        "registrationEnd": "8:00 PM",
+        "raceTime": "4:00 PM",
+        "type": "Practice",
+        "description": "$5 USA BMX Practice 4-8PM",
+        "fee": "$5.00 USD"
+      }
+    }
+  ]
+}

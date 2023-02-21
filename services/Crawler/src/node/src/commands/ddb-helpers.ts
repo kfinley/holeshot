@@ -1,6 +1,6 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import { Track, Location, Address, Event } from "@holeshot/types/src";
+import { TrackInfo, Location, Address, Event } from "@holeshot/types/src";
 
 function addWithKeyIfPropHasValue(attributes: Record<string, AttributeValue>, property: string, value: string | undefined) {
   if (value) {
@@ -10,7 +10,7 @@ function addWithKeyIfPropHasValue(attributes: Record<string, AttributeValue>, pr
   }
 }
 
-function convertUserOptionalAttributesToItem(track: Track) {
+function convertUserOptionalAttributesToItem(track: TrackInfo) {
   let attributes: Record<string, AttributeValue> = {};
 
   // addWithKeyIfPropHasValue(attributes, 'extendedDetails', user.extendedDetails);
@@ -51,7 +51,7 @@ export function addressToMap(address: Address) {
     state: {
       S: address.state
     },
-    postalCode: {
+    postalcode: {
       S: address.postalCode
     }
   }
@@ -82,14 +82,16 @@ export function operatorsToMap(operators: string[]) {
 
   let result = {}
 
-  for (let op in operators) {
-    if (op.indexOf('@') == -1) {
-      result[op] = {
-        S: operators[operators.indexOf(op) + 1]
+  for (let i = 0; i < operators.length; i++) {
+    if (operators[i].indexOf('@') == -1) {
+      const opKey = 'Operator' + (i == 0 ? '1' : '2'); // Kludge...
+      result[opKey] = {
+        S: `${operators[i]} ${operators[i + 1]}`
       }
+      i += 1;
     } else {
       result['Email'] = {
-        S: op
+        S: operators[i]
       }
     }
   }
@@ -97,7 +99,7 @@ export function operatorsToMap(operators: string[]) {
 
 }
 
-export function convertTrackToItem(ownerId: string, track: Track): {
+export function convertTrackInfoToItem(ownerId: string, track: TrackInfo): {
   [key: string]: AttributeValue;
 } | undefined {
 
@@ -107,7 +109,7 @@ export function convertTrackToItem(ownerId: string, track: Track): {
 
   return {
     PK: {
-      S: `OWNER#${track.name}`
+      S: `OWNER#${ownerId}`
     },
     SK: {
       S: `TRACK#${track.name}`

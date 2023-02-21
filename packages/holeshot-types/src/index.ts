@@ -20,7 +20,7 @@ export interface Location {
   gps: GPS;
 }
 
-export interface Track extends Entity {
+export interface TrackInfo extends Entity {
   district: string;
   contactInfo: Record<string, string>;
   logoUrl?: string;

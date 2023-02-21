@@ -1,10 +1,10 @@
 
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { Track } from '@holeshot/types/src';
+import { TrackInfo } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
 import { Inject, injectable } from 'inversify-props';
-import { convertTrackToItem, convertEventToItem } from './ddb-helpers';
+import { convertTrackInfoToItem, convertEventToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
 
 //TODO: do this smarter
@@ -44,11 +44,11 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
         key: params.keys[i]
       });
 
-      var trackInfo = JSON.parse(getTrackInfo.body) as Track;
+      var trackInfo = JSON.parse(getTrackInfo.body) as TrackInfo;
 
       console.log('trackInfo', trackInfo);
 
-      const trackItem = convertTrackToItem(trackInfo.name, trackInfo);
+      const trackItem = convertTrackInfoToItem(trackInfo.name, trackInfo);
 
       items.push(trackItem);
 

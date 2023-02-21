@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src\dotnet", "src\dotnet", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Functions", "Crawler\src\dotnet\functions\Crawler.Functions.csproj", "{1FEE1F2F-7C43-43BE-8F0F-22A13619F02C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Tests", "Crawler\tests\dotnet\Crawler.Tests.csproj", "{54CD7A44-768A-4A16-8C0C-68C9BA5ADDD8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crawler.Tests", "Crawler\src\dotnet\tests\Crawler.Tests.csproj", "{54CD7A44-768A-4A16-8C0C-68C9BA5ADDD8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aws.Commands", "..\dotnet\Aws.Commands\Aws.Commands.csproj", "{7A6196F6-EC6E-470D-AFE1-ECF1AAF76072}"
 EndProject
