@@ -292,7 +292,7 @@ namespace Holeshot.Crawler.Commands {
           if (e != string.Empty) {
             var eventDetails = e.Split(": ");
             if (eventDetails.Count() > 1)
-              eventsDict.Add(eventDetails[0], eventDetails[1]);
+              eventsDict.Add(eventDetails[0].Replace(" ", string.Empty), eventDetails[1]);
           }
         });
 
@@ -305,20 +305,8 @@ namespace Holeshot.Crawler.Commands {
       });
 
       if (events.Count == 0) {
-
         Console.WriteLine($"No events.");
       }
-      // else {
-
-
-      // events.ForEach(e => {
-      //   Console.WriteLine($"Name: {e.Name}");
-      //   Console.WriteLine($"Date: {e.Date.ToLongDateString()}");
-      //   Console.WriteLine($"Url: {baseUrl}{e.Url}");
-      //   Console.WriteLine($"Details");
-      //   e.Details.ForEach(d => Console.WriteLine($"{d.Key}: {d.Value}"));
-      // });
-      // }
 
       return events;
     }
