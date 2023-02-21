@@ -26,9 +26,9 @@ namespace Holeshot.Crawler.Commands {
         if (val.StartsWith("[email")) {
           var node = e.InnerHtml;
           var encEmail = e.Children[1].Attributes[2].Value;
-          contactInfo.Add(info[0].Trim(), encEmail);
+          contactInfo.Add(info[0].Trim().Replace(" ", string.Empty), encEmail);
         } else {
-          contactInfo.Add(info[0].Trim(), val);
+          contactInfo.Add(info[0].Trim().Replace(" ", string.Empty), val);
         }
       });
 
@@ -273,7 +273,7 @@ namespace Holeshot.Crawler.Commands {
 
         var link = doc.QuerySelector("a");
         var eventUrl = $"{baseUrl}{link.Attributes["href"].Value}";
-        
+
         var eventTitle = link.TextContent;
 
         var eventToolTip = doc.QuerySelector(".tooltip_body");
