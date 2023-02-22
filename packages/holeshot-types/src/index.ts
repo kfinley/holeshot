@@ -1,6 +1,6 @@
 //TODO: Refactor this up...
 export interface Entity {
-  id: string;
+  id?: string;
   name?: string;
 }
 
@@ -35,7 +35,7 @@ export interface TrackInfo extends Entity {
 }
 
 export interface Event extends Entity {
-  date: Date;
+  date: Date | string;
   url: string;
   details: Record<string, string>;
 }

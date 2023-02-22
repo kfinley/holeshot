@@ -15,3 +15,14 @@ public class Event {
   public string Url { get; set; }
   public Dictionary<string, string> Details { get; set; }
 }
+
+public class Coach {
+  public string Name { get; set; }
+  public string ProfileUrl { get; set; }
+}
+
+public class Sponsor {
+  public string Name { get; set; }
+  public string Link { get; set; }
+}
+

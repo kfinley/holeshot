@@ -182,3 +182,9 @@ export function convertEventToItem(ownerId: string, event: Event): {
     ...marshall(event)
   }
 }
+
+export function convert(trackInfo: TrackInfo) {
+  return {
+    ...marshall(trackInfo)
+  }
+}

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using AngleSharp.Dom;
 
 namespace Holeshot.Crawler.Commands {
@@ -135,11 +134,11 @@ namespace Holeshot.Crawler.Commands {
 
     }
 
-    public Dictionary<string, string> GetSponsors(IDocument doc) {
+    public List<Sponsor> GetSponsors(IDocument doc) {
       // Sponsors
       // css: #sponsors-desktop
 
-      var sponsors = new Dictionary<string, string>(); // Name | Url
+      var sponsors = new List<Sponsor>();
 
       var sponsorsList = doc.QuerySelector("#sponsors-desktop");
 
@@ -164,9 +163,10 @@ namespace Holeshot.Crawler.Commands {
             } catch (Exception) {
               name = "Unknown";
             }
-            if (!sponsors.TryAdd(name, el.Attributes["href"].Value.TrimEnd(new[] { '/' }))) {
-              sponsors.Add(name + sponsorIndex, el.Attributes["href"].Value.TrimEnd(new[] { '/' }));
-            }
+            sponsors.Add(new Sponsor {
+              Name = name,
+              Link = el.Attributes["href"].Value.TrimEnd(new[] { '/' })
+            });
             break;
           case "IMG":
             try {
@@ -174,9 +174,10 @@ namespace Holeshot.Crawler.Commands {
             } catch (Exception) {
               name = "Unknown";
             }
-            if (!sponsors.TryAdd(name, el.Attributes["src"].Value)) {
-              sponsors.Add(name + sponsorIndex, el.Attributes["src"].Value);
-            }
+            sponsors.Add(new Sponsor {
+              Name = name,
+              Link = el.Attributes["href"].Value.TrimEnd(new[] { '/' })
+            });
             break;
           default:
             name = el.InnerHtml;
@@ -188,10 +189,10 @@ namespace Holeshot.Crawler.Commands {
       return sponsors;
     }
 
-    public Dictionary<string, string> GetCoaches(IDocument doc, string baseUrl) {
+    public List<Coach> GetCoaches(IDocument doc, string baseUrl) {
       // Coaches:
       // css: #contact-us > p:nth-child(6)
-      var coaches = new Dictionary<string, string>(); // Name | Profile URL
+      var coaches = new List<Coach>(); // Name | Profile URL
 
       var coachesList = doc.QuerySelector("#contact-us > p:nth-child(6)");
 
@@ -204,7 +205,10 @@ namespace Holeshot.Crawler.Commands {
               throw new Exception("COACHES ELEMENT WRONG!!");
             break;
           case "A":
-            coaches.Add(el.TextContent, $"https://{baseUrl}{el.Attributes["href"].Value}");
+            coaches.Add(new Coach {
+              Name = el.TextContent,
+              ProfileUrl = $"https://{baseUrl}{el.Attributes["href"].Value}"
+            });
             break;
           case "BR":
             break;
