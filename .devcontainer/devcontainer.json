@@ -8,15 +8,6 @@
     "docker-compose.yml"
   ],
   "service": "holeshot.dev",
-  // "build": {
-  // 	"dockerfile": "Dockerfile",
-  // 	// Update 'VARIANT' to pick a Node version: 18, 16, 14.
-  // 	// Append -bullseye or -buster to pin to an OS version.
-  // 	// Use -bullseye variants on local on arm64/Apple Silicon.
-  // 	"args": {
-  // 		"VARIANT": "16-bullseye"
-  // 	}
-  // },
 
   "workspaceFolder": "/workspace",
 
@@ -47,18 +38,18 @@
         "joshbolduc.story-explorer",
         "qkk.sfn-preview",
         "cschleiden.vscode-github-actions",
-        "ms-python.python"
+        "ms-python.python",
+        "LittleFoxTeam.vscode-python-test-adapter"
       ],
       "settings": {
-      // "terminal.integrated.shell.linux": "/bin/zsh"
-      "terminal.integrated.defaultProfile.linux": "zsh",
-      "terminal.integrated.profiles.linux": {
-      "zsh": {
-        "path": "/bin/zsh"
+          // "terminal.integrated.shell.linux": "/bin/zsh"
+          "terminal.integrated.defaultProfile.linux": "zsh",
+          "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        }
       }
-    }
-  },
-
     }
   },
 
@@ -68,7 +59,7 @@
   // don't need this atm
   // "initializeCommand": "./.devcontainer/scripts/init-workspace.sh",
 
-  "postCreateCommand": "pip install flake8 pytest",
+  "postCreateCommand": "pip install flake8 pytest boto3",
 
   "postStartCommand": "npm run dev:init",
 

@@ -1,6 +1,4 @@
-import json
 from botocore.stub import ANY
-
 
 def test_decode_emails(s3_stub, sns_stub):
 
@@ -61,9 +59,21 @@ def test_decode_emails(s3_stub, sns_stub):
 
     sns_stub.add_response(
         "publish",
-        expected_params={'Message': '{"keys": ["USA-BMX/tracks/1639/trackInfo.json"]}',
-                         'Subject': 'Crawler/decodeEmails', 'TopicArn': 'topic'},
-        service_response={ }
+        expected_params={
+            'TopicArn': 'topic',
+            'Subject': 'Crawler/decodeEmails',
+            'Message': '{"keys": ["USA-BMX/tracks/1639/trackInfo.json"]}',
+        },
+        service_response={'MessageId': '7eb4e11c-b5ac-5dde-8531-bd76abad69f6',
+                          'ResponseMetadata': {
+                              'RequestId': 'fcebe895-c887-5c3f-934b-b4ffd686f817',
+                              'HTTPStatusCode': 200,
+                              'HTTPHeaders': {
+                                  'x-amzn-requestid': 'fcebe895-c887-5c3f-934b-b4ffd686f817',
+                                  'content-type': 'text/xml', 'content-length': '294',
+                                  'date': 'Sat, 18 Feb 2023 00:28:49 GMT'},
+                              'RetryAttempts': 0}
+                          }
     )
 
     response = handler(event, context)
