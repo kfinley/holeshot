@@ -13,6 +13,7 @@ using Holeshot.Crawler.Tests.Specs;
 using MediatR;
 using Holeshot.Aws.Commands;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Holeshot.Crawler.Tests {
   [Subject("Get Tracks For Region Success")]
@@ -35,6 +36,16 @@ namespace Holeshot.Crawler.Tests {
 
       Sut.Setup<IOptions<Settings>, Settings>(o => o.Value).Returns(new Settings {
         BucketName = "test-bucket"
+      });
+
+      Sut.Use<JsonSerializerOptions>(new JsonSerializerOptions() {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        // DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        MaxDepth = 10,
+        // ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        WriteIndented = true
       });
 
       Sut.SetupAsync<IMediator, S3ObjectExistsResponse>(m => m.Send(Argument.Is<S3ObjectExistsRequest>(r =>
@@ -70,6 +81,15 @@ namespace Holeshot.Crawler.Tests {
         Contents = System.IO.File.ReadAllText("../../../test-files/tracks.1971.events.2.html"),
         Key = "USA-BMX/tracks/1971/events.2"
       });
+
+      Sut.SetupAsync<IMediator, PutS3ObjectResponse>(m => m.Send(Argument.IsAny<PutS3ObjectRequest>(), Argument.IsAny<CancellationToken>()))
+        .ReturnsAsync(new PutS3ObjectResponse {
+          Success = true
+        })
+        .Callback((IRequest<PutS3ObjectResponse> request, CancellationToken token) => {
+          System.IO.File.WriteAllText("../../../../../test-files/trackInfo-encoded.json", ((PutS3ObjectRequest)request).Content);
+          // Console.WriteLine(((PutS3ObjectRequest)request).Content);
+        });
 
     };
 

@@ -48,25 +48,27 @@
         "qkk.sfn-preview",
         "cschleiden.vscode-github-actions",
         "ms-python.python"
-      ]
-    }
-  },
-
-  // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  // "forwardPorts": [],
-
-  "settings": {
-    // "terminal.integrated.shell.linux": "/bin/zsh"
-    "terminal.integrated.defaultProfile.linux": "zsh",
-    "terminal.integrated.profiles.linux": {
+      ],
+      "settings": {
+      // "terminal.integrated.shell.linux": "/bin/zsh"
+      "terminal.integrated.defaultProfile.linux": "zsh",
+      "terminal.integrated.profiles.linux": {
       "zsh": {
         "path": "/bin/zsh"
       }
     }
   },
 
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+
   // don't need this atm
   // "initializeCommand": "./.devcontainer/scripts/init-workspace.sh",
+
+  "postCreateCommand": "pip install flake8 pytest",
 
   "postStartCommand": "npm run dev:init",
 
@@ -74,7 +76,9 @@
   "remoteUser": "vscode",
 
   "features": {
-    "ghcr.io/devcontainers/features/aws-cli:1": {}
-    // "aws-cli": "latest"
+    "ghcr.io/devcontainers/features/aws-cli:1": {},
+    "ghcr.io/devcontainers/features/python:1": {
+	      "version": 3.8
+	    }
   }
 }

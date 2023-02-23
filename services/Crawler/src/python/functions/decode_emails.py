@@ -1,20 +1,15 @@
-import boto3
 import os
 import json
-
-bucket = os.environ['BUCKET_NAME']
-topic_arn = os.environ['DECODE_EMAILS_TOPIC_ARN']
-
-s3 = boto3.client("s3")
-sns = boto3.client('sns')
+from services.Crawler.src.python.functions.aws_resources import s3, sns
 
 # Source: https://stackoverflow.com/a/58111681
 def decCFEmail(encodedEmail):
-    try:
-        email = ''.join([chr(int(encodedEmail[i:i+2], 16) ^ int(encodedEmail[:2],16)) for i in range(2, len(encodedEmail), 2)])
-        return email
-    except (ValueError):
-        pass
+
+  try:
+    email = ''.join([chr(int(encodedEmail[i:i+2], 16) ^ int(encodedEmail[:2],16)) for i in range(2, len(encodedEmail), 2)])
+    return email
+  except (ValueError):
+    pass
 
 def handler(event, lambda_context):
 
@@ -27,7 +22,9 @@ def handler(event, lambda_context):
     # process.
     #
 
-    print(event)
+    bucket = os.environ['BUCKET_NAME']
+    topic_arn = os.environ['DECODE_EMAILS_TOPIC_ARN']
+
     message = json.loads(event['Records'][0]['Sns']['Message'])
 
     for key in message['keys']:
@@ -38,7 +35,14 @@ def handler(event, lambda_context):
         if (op.__contains__(':')): # Encoded emails in operators list will be in the format EncodedEmail:xxxxxxxxxxxxxxxxxxxxxxxxxxxx
           trackInfo['operators'][trackInfo['operators'].index(op)] = decCFEmail(op.split(':')[1])
 
-      s3.put_object(Bucket=bucket, Key=key, Body=json.dumps(trackInfo, ensure_ascii=False).encode('utf-8'))
+      body_content = json.dumps(trackInfo, ensure_ascii=False)
+
+      trackInfo = open(
+          'services/Crawler/src/test-files/trackInfo.json', 'w')
+      trackInfo.write(body_content)
+      trackInfo.close()
+
+      s3.put_object(Bucket=bucket, Key=key, Body=body_content.encode('utf-8'))
 
     snsResponse = sns.publish(
       TopicArn = topic_arn,

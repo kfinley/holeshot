@@ -110,10 +110,12 @@ namespace Holeshot.Crawler.Commands {
 
         key = $"USA-BMX/tracks/{trackId}/trackInfo.json";
 
+        var content = base.Serialize(trackInfo);
+
         await this.mediator.Send(new PutS3ObjectRequest {
           BucketName = request.BucketName,
           Key = key,
-          Content = base.Serialize(trackInfo)
+          Content = content
         });
 
       } catch (Exception ex) {

@@ -81,7 +81,7 @@ export class CrawlerService extends Construct {
 
     const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
-      code: Code.fromAsset('../services/Crawler/src/python/functions', { exclude: ["**", "!decode-emails.py"] }),
+      code: Code.fromAsset('../services/Crawler/src/python/functions', { exclude: ["**", "!decode_emails.py"] }),
       handler: 'decode-emails.handler',
       runtime: Runtime.PYTHON_3_8,
       environment: {

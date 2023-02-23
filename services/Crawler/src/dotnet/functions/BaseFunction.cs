@@ -25,7 +25,7 @@ namespace Holeshot.Crawler.Functions {
 
     protected override void ConfigureServices(IServiceCollection serviceCollection, IConfiguration configuration) {
 
-      JsonSerializerOptions serializerOptions = new JsonSerializerOptions() {
+      var serializerOptions = new JsonSerializerOptions() {
         PropertyNameCaseInsensitive = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,

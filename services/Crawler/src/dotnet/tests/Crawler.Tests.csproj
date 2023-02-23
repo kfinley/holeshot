@@ -18,7 +18,7 @@
     <PackageReference Include="SUT" Version="0.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\dotnet\functions\Crawler.Functions.csproj" />
-    <ProjectReference Include="..\..\src\dotnet\Commands\Crawler.Commands.csproj" />
+    <ProjectReference Include="..\functions\Crawler.Functions.csproj" />
+    <ProjectReference Include="..\Commands\Crawler.Commands.csproj" />
   </ItemGroup>
 </Project>
