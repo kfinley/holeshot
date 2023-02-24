@@ -48,11 +48,6 @@ def process(keys):
 
         body_content = replace_encoded_emails(trackInfo)
 
-        # trackInfo = open(
-        #     'services/Crawler/src/test-files/trackInfo.json', 'w')
-        # trackInfo.write(body_content)
-        # trackInfo.close()
-
         s3.put_object(Bucket=bucket, Key=key,
                       Body=body_content.encode('utf-8'))
 

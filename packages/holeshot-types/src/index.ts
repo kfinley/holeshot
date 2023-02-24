@@ -14,24 +14,34 @@ export interface Address {
 }
 
 export interface GPS { lat: string, long: string }
+
 export interface Location {
   address: Address;
   mapLink: string;
   gps: GPS;
 }
 
+export interface Coach {
+  name: string;
+  link: string;
+}
+
+export interface Sponsor {
+  name: string;
+  link: string;
+}
 export interface TrackInfo extends Entity {
   district: string;
+  trackId: string;
   contactInfo: Record<string, string>;
   logoUrl?: string;
   location: Location;
   website: string;
   htmlDescription: string;
   socials: Record<string, string>;
-  sponsors: Record<string, string>;
-  coaches: Record<string, string>;
-  operators: string[] | Record<string, string>;
-  events: Event[];
+  sponsors: Sponsor[];
+  coaches: Coach[];
+  operators: string[];
 }
 
 export interface Event extends Entity {

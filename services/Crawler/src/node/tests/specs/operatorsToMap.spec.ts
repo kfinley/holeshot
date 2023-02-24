@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import trackInfo from '../data/trackInfo.json';
+import trackInfo from '../../../test-files/trackInfo.json';
 import { operatorsToMap } from '../../src/commands/ddb-helpers';
 
 describe("ddb-helpers.operatorsToMap", () => {

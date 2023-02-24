@@ -134,11 +134,11 @@ namespace Holeshot.Crawler.Commands {
 
     }
 
-    public List<Sponsor> GetSponsors(IDocument doc) {
+    public List<NamedLink> GetSponsors(IDocument doc) {
       // Sponsors
       // css: #sponsors-desktop
 
-      var sponsors = new List<Sponsor>();
+      var sponsors = new List<NamedLink>();
 
       var sponsorsList = doc.QuerySelector("#sponsors-desktop");
 
@@ -163,7 +163,7 @@ namespace Holeshot.Crawler.Commands {
             } catch (Exception) {
               name = "Unknown";
             }
-            sponsors.Add(new Sponsor {
+            sponsors.Add(new NamedLink {
               Name = name,
               Link = el.Attributes["href"].Value.TrimEnd(new[] { '/' })
             });
@@ -174,7 +174,7 @@ namespace Holeshot.Crawler.Commands {
             } catch (Exception) {
               name = "Unknown";
             }
-            sponsors.Add(new Sponsor {
+            sponsors.Add(new NamedLink {
               Name = name,
               Link = el.Attributes["href"].Value.TrimEnd(new[] { '/' })
             });
@@ -189,10 +189,10 @@ namespace Holeshot.Crawler.Commands {
       return sponsors;
     }
 
-    public List<Coach> GetCoaches(IDocument doc, string baseUrl) {
+    public List<NamedLink> GetCoaches(IDocument doc, string baseUrl) {
       // Coaches:
       // css: #contact-us > p:nth-child(6)
-      var coaches = new List<Coach>(); // Name | Profile URL
+      var coaches = new List<NamedLink>(); // Name | Profile URL
 
       var coachesList = doc.QuerySelector("#contact-us > p:nth-child(6)");
 
@@ -205,9 +205,9 @@ namespace Holeshot.Crawler.Commands {
               throw new Exception("COACHES ELEMENT WRONG!!");
             break;
           case "A":
-            coaches.Add(new Coach {
+            coaches.Add(new NamedLink {
               Name = el.TextContent,
-              ProfileUrl = $"https://{baseUrl}{el.Attributes["href"].Value}"
+              Link = $"https://{baseUrl}{el.Attributes["href"].Value}"
             });
             break;
           case "BR":

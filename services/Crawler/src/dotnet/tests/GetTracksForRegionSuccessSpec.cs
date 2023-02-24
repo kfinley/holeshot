@@ -14,6 +14,7 @@ using Holeshot.Crawler.Tests.Specs;
 using MediatR;
 using Holeshot.Aws.Commands;
 using Microsoft.Extensions.Options;
+using System.Text.Json;
 
 namespace Holeshot.Crawler.Tests {
   [Subject("Get Tracks For Region Success")]
@@ -32,6 +33,16 @@ namespace Holeshot.Crawler.Tests {
       Request = new GetTracksForRegionRequest {
         Region = "SC"
       };
+
+      Sut.Use<JsonSerializerOptions>(new JsonSerializerOptions() {
+        PropertyNameCaseInsensitive = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+        // DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        MaxDepth = 10,
+        // ReferenceHandler = ReferenceHandler.IgnoreCycles,
+        WriteIndented = true
+      });
 
       Sut.Setup<IOptions<Settings>, Settings>(o => o.Value).Returns(new Settings {
         BucketName = "test-bucket"

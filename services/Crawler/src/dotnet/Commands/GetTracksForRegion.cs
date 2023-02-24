@@ -80,12 +80,17 @@ namespace Holeshot.Crawler.Commands {
             var content = page.Item2;
             // Process each track on the page
 
-            var response = await base.mediator.Send(new ProcessTrackRequest {
+            var processTrack = await base.mediator.Send(new ProcessTrackRequest {
               Contents = content,
               BucketName = this.settings.BucketName
             });
 
-            infoKeys.Add(response.Key);
+            var processEvents = await base.mediator.Send(new ProcessEventsRequest {
+              TrackId = processTrack.TrackInfo.TrackId,
+              BucketName = this.settings.BucketName
+            });
+
+            infoKeys.Add(processTrack.Key);
 
           } catch (Exception ex) {
             this.logger.LogInformation(ex.Message);

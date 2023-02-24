@@ -39,7 +39,8 @@
         "qkk.sfn-preview",
         "cschleiden.vscode-github-actions",
         "ms-python.python",
-        "LittleFoxTeam.vscode-python-test-adapter"
+        "LittleFoxTeam.vscode-python-test-adapter",
+        // "Cameron.vscode-pytest"
       ],
       "settings": {
           // "terminal.integrated.shell.linux": "/bin/zsh"

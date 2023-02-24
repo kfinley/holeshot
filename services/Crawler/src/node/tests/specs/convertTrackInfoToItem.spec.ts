@@ -1,7 +1,6 @@
 import 'reflect-metadata';
-import trackInfo from '../data/trackInfo.json';
+import trackInfo from '../../../test-files/trackInfo.json';
 import { convertTrackInfoToItem } from '../../src/commands/ddb-helpers';
-import { TrackInfo } from '@holeshot/types/src';
 
 describe("ddb-helpers.convertTrackInfoToItem", () => {
 

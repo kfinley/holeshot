@@ -19,6 +19,7 @@ namespace Holeshot.Crawler.Commands {
   public class ProcessTrackResponse {
     public bool Success { get; set; }
     public string Key { get; set; }
+    public TrackInfo TrackInfo { get; set; }
   }
 
   public class ProcessTrackHandler : Crawly, IRequestHandler<ProcessTrackRequest, ProcessTrackResponse> {
@@ -74,27 +75,28 @@ namespace Holeshot.Crawler.Commands {
 
         var eventsUrl = base.GetUniqueHrefUrls("/events/schedule", request.Contents).First();
 
-        var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, trackId);
+        // var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, trackId);
 
-        if (eventsPageContent == string.Empty) {
-          Console.WriteLine("eventsPageContent was empty");
+        // if (eventsPageContent == string.Empty) {
+        //   Console.WriteLine("eventsPageContent was empty");
 
-          return new ProcessTrackResponse {
-            Success = false
-          };
-        }
+        //   return new ProcessTrackResponse {
+        //     Success = false
+        //   };
+        // }
 
-        var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
+        // var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
 
-        var trackInfo = new {
+        var trackInfo = new TrackInfo {
           Name = helper.GetTrackName(siteTracksDoc),
           District = helper.GetTrackDistrict(siteTracksDoc),
+          TrackId = trackId,
           ContactInfo = helper.GetContactInfo(siteTracksDoc),
           LogoUrl = trackLogoUrl,
-          Location = new {
+          Location = new Location {
             Address = helper.GetAddress(siteTracksDoc, trackLogoUrl.HasValue()),
             MapLink = mapLink,
-            GPS = new {
+            GPS = new GPS {
               Lat = gps.Item1,
               Long = gps.Item2,
             }
@@ -104,8 +106,7 @@ namespace Holeshot.Crawler.Commands {
           Socials = helper.GetSocials(tracksPageDoc),
           Sponsors = helper.GetSponsors(tracksPageDoc),
           Coaches = helper.GetCoaches(tracksPageDoc, this.settings.BaseUrl),
-          Operators = helper.GetOperators(tracksPageDoc),
-          Events = helper.GetEvents(eventsPageDoc, this.settings.BaseUrl)
+          Operators = helper.GetOperators(tracksPageDoc)
         };
 
         key = $"USA-BMX/tracks/{trackId}/trackInfo.json";
@@ -158,31 +159,5 @@ namespace Holeshot.Crawler.Commands {
       return getPage.Contents;
     }
 
-    private async Task<string> GetEventsPage(string baseUrl, string trackId) {
-
-      var url = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
-      var key = $"USA-BMX/tracks/{trackId}/events.{DateTime.Now.Month}";
-
-      var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
-        BucketName = this.settings.BucketName,
-        Key = key
-      });
-
-      if (!fileMeta.Exists) {
-        var downloadToS3Request = await base.mediator.Send(new DownloadToS3Request {
-          BucketName = this.settings.BucketName,
-          Key = key,
-          ContentType = "text/html",
-          Url = url
-        });
-      }
-
-      var getPage = await this.mediator.Send(new GetPageRequest {
-        Url = url,
-        Key = key
-      });
-
-      return getPage.Contents;
-    }
   }
 }

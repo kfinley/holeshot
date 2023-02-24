@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import trackInfo from '../data/trackInfo.json';
+import trackInfo from '../../../test-files/trackInfo.json';
 import { convert } from '../../src/commands/ddb-helpers';
 
 describe("ddb-helpers.convert", () => {
@@ -12,7 +12,7 @@ describe("ddb-helpers.convert", () => {
     });
 
     it("should run", () => {
-      console.log(result);
+      // console.log(result);
       expect(result).not.toBeNull();
     });
 
