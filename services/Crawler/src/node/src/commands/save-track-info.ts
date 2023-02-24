@@ -4,7 +4,7 @@ import { TrackInfo } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
 import { Inject, injectable } from 'inversify-props';
-import { convertTrackInfoToItem, convertEventToItem } from './ddb-helpers';
+import { convertTrackInfoToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
 
 //TODO: do this smarter
@@ -58,16 +58,16 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
       // }));
       // items.push(response.$metadata.httpStatusCode);
 
-      trackInfo.events.forEach(async event => {
-        const eventItem = convertEventToItem(trackInfo.name, event);
-        console.log('event', JSON.stringify(eventItem));
-        items.push(eventItem);
-        // var response = await this.ddbClient.send(new PutItemCommand({
-        //   TableName,
-        //   eventItem
-        // }));
-        // items.push(response.$metadata.httpStatusCode);
-      });
+      // trackInfo.events.forEach(async event => {
+      //   const eventItem = convertEventToItem(trackInfo.name, event);
+      //   console.log('event', JSON.stringify(eventItem));
+      //   items.push(eventItem);
+      //   // var response = await this.ddbClient.send(new PutItemCommand({
+      //   //   TableName,
+      //   //   eventItem
+      //   // }));
+      //   // items.push(response.$metadata.httpStatusCode);
+      // });
 
     };
 
