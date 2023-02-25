@@ -1,5 +1,5 @@
 import json
-from services.Crawler.src.python.commands.decode_emails import process
+from commands.decode_emails import process
 
 def handler(event, lambda_context):
 
