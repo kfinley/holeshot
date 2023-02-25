@@ -28,7 +28,7 @@ def replace_encoded_emails(trackInfo):
     return json.dumps(trackInfo, ensure_ascii=False)
 
 
-def process(keys):
+def process(key):
 
     #
     # This function decodes cloudflare encoded email strings.
@@ -42,21 +42,20 @@ def process(keys):
     topic_arn = os.environ['DECODE_EMAILS_TOPIC_ARN']
     bucket = os.environ['BUCKET_NAME']
 
-    for key in keys:
-        trackInfo = json.loads(s3.get_object(
-            Bucket=bucket, Key=key)["Body"].read())
+    trackInfo = json.loads(s3.get_object(
+        Bucket=bucket, Key=key)["Body"].read())
 
-        body_content = replace_encoded_emails(trackInfo)
+    body_content = replace_encoded_emails(trackInfo)
 
-        s3.put_object(Bucket=bucket, Key=key,
-                      Body=body_content.encode('utf-8'))
+    response = s3.put_object(Bucket=bucket, Key=key,
+                  Body=body_content.encode('utf-8'))
 
-    snsResponse = sns.publish(
-        TopicArn=topic_arn,
-        Subject='Crawler/decodeEmails',
-        Message=json.dumps({
-            'keys': keys
-        })
-    )
+    # snsResponse = sns.publish(
+    #     TopicArn=topic_arn,
+    #     Subject='Crawler/decodeEmails',
+    #     Message=json.dumps({
+    #         'keys': keys
+    #     })
+    # )
 
-    return json.dumps(snsResponse)
+    return json.dumps(response)

@@ -6,6 +6,7 @@ import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObje
 import { Inject, injectable } from 'inversify-props';
 import { convertTrackInfoToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
+import { PublishMessageCommand } from '@holeshot/aws-commands/src';
 
 //TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
@@ -72,6 +73,15 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     };
 
     console.log('items', JSON.stringify(items));
+
+    await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
+      topic: 'Holeshot-TrackSavedTopic',
+      subject: 'Crawler/trackSaved',
+      message: JSON.stringify({
+
+      }),
+      container
+    });
 
     return {
       success: true

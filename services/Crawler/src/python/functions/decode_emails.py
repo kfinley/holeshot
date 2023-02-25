@@ -3,9 +3,10 @@ from services.Crawler.src.python.commands.decode_emails import process
 
 def handler(event, lambda_context):
 
-    message = json.loads(event['Records'][0]['Sns']['Message'])
-    
-    response = process(message['keys'])
+    print(event)
+    message = json.loads(event['Records'][0]['s3']['object'])
+
+    response = process(message['key'])
 
     return {
         'statusCode': 200,

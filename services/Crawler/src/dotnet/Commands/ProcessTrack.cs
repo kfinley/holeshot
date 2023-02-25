@@ -75,17 +75,6 @@ namespace Holeshot.Crawler.Commands {
 
         var eventsUrl = base.GetUniqueHrefUrls("/events/schedule", request.Contents).First();
 
-        // var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, trackId);
-
-        // if (eventsPageContent == string.Empty) {
-        //   Console.WriteLine("eventsPageContent was empty");
-
-        //   return new ProcessTrackResponse {
-        //     Success = false
-        //   };
-        // }
-
-        // var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
 
         var trackInfo = new TrackInfo {
           Name = helper.GetTrackName(siteTracksDoc),
@@ -109,7 +98,7 @@ namespace Holeshot.Crawler.Commands {
           Operators = helper.GetOperators(tracksPageDoc)
         };
 
-        key = $"USA-BMX/tracks/{trackId}/trackInfo.json";
+        key = $"encoded/tracks/{trackId}/trackInfo.json";
 
         var content = base.Serialize(trackInfo);
 
@@ -137,7 +126,7 @@ namespace Holeshot.Crawler.Commands {
 
     private async Task<string> GetTracksPage(string baseUrl, string trackId) {
       var url = $"https://{baseUrl}/tracks/{trackId}";
-      var key = $"USA-BMX/tracks/{trackId}/page";
+      var key = $"sources/USA-BMX/tracks/{trackId}/page";
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,

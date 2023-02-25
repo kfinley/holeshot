@@ -1,6 +1,6 @@
 import { S3CreateEvent, Context, Handler } from 'aws-lambda';
 import bootstrapper from '../commands/bootstrapper';
-import { SaveTrackInfoCommand } from './../commands/save-track-info';
+import { SaveTrackEventsCommand } from './../commands/save-track-events';
 import { createResponse } from './create-response';
 const container = bootstrapper();
 
@@ -12,8 +12,8 @@ export const handler: Handler = async (event: S3CreateEvent, context: Context) =
 
     const { key } = event.Records[0].s3.object;
 
-    // const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
-    //   keys
+    // const response = await container.get<SaveTrackEventsCommand>("SaveTrackEventsCommand").runAsync({
+    //   key
     // });
 
     // console.log(response);

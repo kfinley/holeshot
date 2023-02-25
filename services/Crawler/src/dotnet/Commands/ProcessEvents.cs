@@ -45,7 +45,7 @@ namespace Holeshot.Crawler.Commands {
 
       var events = new HtmlHelper().GetEvents(eventsPageDoc, this.settings.BaseUrl);
 
-      var key = $"USA-BMX/tracks/{request.TrackId}/events.{DateTime.Now.Month}.json";
+      var key = $"events/tracks/{request.TrackId}/{DateTime.Now.Year}.{DateTime.Now.Month}.json";
 
       var content = base.Serialize(events);
 
@@ -65,7 +65,7 @@ namespace Holeshot.Crawler.Commands {
     private async Task<string> GetEventsPage(string baseUrl, string trackId) {
 
       var url = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
-      var key = $"USA-BMX/tracks/{trackId}/events.{DateTime.Now.Month}";
+      var key = $"sources/USA-BMX/tracks/{trackId}/events/{DateTime.Now.Year}.{DateTime.Now.Month}";
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,

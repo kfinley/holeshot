@@ -47,7 +47,7 @@ namespace Holeshot.Crawler.Commands {
         url += $"/tracks/search?location={request.Region.Replace(" ", "%20")}&distance={request.Distance}&commit=Search";
       }
 
-      var key = $"USA-BMX/tracks/search/{request.Region}";
+      var key = $"sources/USA-BMX/tracks/search/{request.Region}";
 
       var file = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,
@@ -85,10 +85,10 @@ namespace Holeshot.Crawler.Commands {
               BucketName = this.settings.BucketName
             });
 
-            var processEvents = await base.mediator.Send(new ProcessEventsRequest {
-              TrackId = processTrack.TrackInfo.TrackId,
-              BucketName = this.settings.BucketName
-            });
+            // var processEvents = await base.mediator.Send(new ProcessEventsRequest {
+            //   TrackId = processTrack.TrackInfo.TrackId,
+            //   BucketName = this.settings.BucketName
+            // });
 
             infoKeys.Add(processTrack.Key);
 
@@ -102,15 +102,15 @@ namespace Holeshot.Crawler.Commands {
           $"https://{this.settings.BaseUrl}"
           );
 
-        await this.mediator.Publish(new PublishMessageRequest {
-          Topic = "Holeshot-GetTracksForRegionTopic",
-          Subject = "Crawler/getTrackForRegion",
-          Message = base.Serialize(new {
-            Region = request.Region,
-            Tracks = urls.Count(),
-            Keys = infoKeys
-          })
-        });
+        // await this.mediator.Publish(new PublishMessageRequest {
+        //   Topic = "Holeshot-GetTracksForRegionTopic",
+        //   Subject = "Crawler/getTrackForRegion",
+        //   Message = base.Serialize(new {
+        //     Region = request.Region,
+        //     Tracks = urls.Count(),
+        //     Keys = infoKeys
+        //   })
+        // });
 
 
         return new GetTracksForRegionResponse {

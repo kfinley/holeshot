@@ -4,9 +4,6 @@ import { WebSocketLambdaAuthorizer } from '@aws-cdk/aws-apigatewayv2-authorizers
 import { WebSocketLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
-import { join } from 'path';
-import { NodejsFunction, NodejsFunctionProps, SourceMapMode } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Runtime, Tracing } from 'aws-cdk-lib/aws-lambda';
 import { Topic } from 'aws-cdk-lib/aws-sns';
 import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 import { Chain, Choice, Condition, Fail, LogLevel, StateMachine } from 'aws-cdk-lib/aws-stepfunctions';
@@ -35,28 +32,28 @@ export class WebSocketsStack extends Construct {
 
     const functionsPath = '../../services/WebSockets/dist';
 
-    const newLamda = (name: string, handler: string, env?: {
+    const newLambda = (name: string, handler: string, env?: {
       [key: string]: string;
     } | undefined) => {
       return createLambda(this, name, functionsPath, handler, props!.node_env, env);
     }
 
     // Lambda Functions....
-    const authorizerHandler = newLamda('AuthorizerHandler', 'functions/auth.handler');
+    const authorizerHandler = newLambda('AuthorizerHandler', 'functions/auth.handler');
 
-    const onConnectHandler = newLamda('OnConnectHandler', 'functions/connect.handler', {
+    const onConnectHandler = newLambda('OnConnectHandler', 'functions/connect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(onConnectHandler);
 
-    const onDisconnectHandler = newLamda('OnDisconnectHandler', 'functions/disconnect.handler', {
+    const onDisconnectHandler = newLambda('OnDisconnectHandler', 'functions/disconnect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(onDisconnectHandler);
 
-    const onMessageHandler = newLamda('OnMessageHandler', 'functions/default.handler');
+    const onMessageHandler = newLambda('OnMessageHandler', 'functions/default.handler');
 
-    const getConnection = newLamda('GetConnection', 'functions/getConnection.handler', {
+    const getConnection = newLambda('GetConnection', 'functions/getConnection.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(getConnection);
@@ -81,14 +78,14 @@ export class WebSocketsStack extends Construct {
 
     const { region } = new ScopedAws(this);
 
-    const sendMessage = newLamda('SendMessage', 'functions/sendMessage.handler', {
+    const sendMessage = newLambda('SendMessage', 'functions/sendMessage.handler', {
       APIGW_ENDPOINT: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1` // `ws.${props!.domainName}/v1`
     });
 
     new CfnOutput(this, 'apigateay-endpoint', {
       value: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1`
     });
-    const startSendMessageNotification = newLamda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
+    const startSendMessageNotification = newLambda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
 
     // Lambda Functions end...
 
