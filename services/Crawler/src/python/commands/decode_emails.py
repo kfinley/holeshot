@@ -1,6 +1,6 @@
 import os
 import json
-from services.Crawler.src.python.functions.aws_resources import s3, sns
+from functions.aws_resources import s3, sns
 
 # Source: https://stackoverflow.com/a/58111681
 
