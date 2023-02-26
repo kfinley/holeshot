@@ -4,9 +4,9 @@ from commands.decode_emails import process
 def handler(event, lambda_context):
 
     print(event)
-    message = json.loads(event['Records'][0]['s3']['object'])
+    key = json.loads(event['Records'][0]['s3']['object']['key'])
 
-    response = process(message['key'])
+    response = process(key)
 
     return {
         'statusCode': 200,
