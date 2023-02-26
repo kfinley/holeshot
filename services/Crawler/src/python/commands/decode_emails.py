@@ -39,7 +39,7 @@ def process(key):
     # process.
     #
 
-    topic_arn = os.environ['DECODE_EMAILS_TOPIC_ARN']
+    # topic_arn = os.environ['DECODE_EMAILS_TOPIC_ARN']
     bucket = os.environ['BUCKET_NAME']
 
     trackInfo = json.loads(s3.get_object(
