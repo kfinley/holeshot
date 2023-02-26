@@ -12,9 +12,9 @@ export const handler: Handler = async (event: S3CreateEvent, context: Context) =
 
     const { key } = event.Records[0].s3.object;
 
-    // const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
-    //   keys
-    // });
+    const response = await container.get<SaveTrackInfoCommand>("SaveTrackInfoCommand").runAsync({
+      key
+    });
 
     // console.log(response);
 

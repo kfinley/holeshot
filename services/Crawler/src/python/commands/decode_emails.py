@@ -47,6 +47,9 @@ def process(key):
 
     body_content = replace_encoded_emails(trackInfo)
 
+    # put the decoded file in tracks/{trackId} in the bucket
+    key = key.replace('encoded/', '')
+    
     response = s3.put_object(Bucket=bucket, Key=key,
                   Body=body_content.encode('utf-8'))
 
