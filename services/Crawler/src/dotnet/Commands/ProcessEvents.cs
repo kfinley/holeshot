@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using System.Text.Json;
 
 using AngleSharp;
-using Holeshot.Aws.Commands;
 using MediatR;
+
+using Holeshot.Aws.Commands;
 
 namespace Holeshot.Crawler.Commands {
 
@@ -21,7 +22,7 @@ namespace Holeshot.Crawler.Commands {
   }
 
   public class ProcessEventsHandler : Crawly, IRequestHandler<ProcessEventsRequest, ProcessEventsResponse> {
-    public ProcessEventsHandler(IMediator mediator, Settings settings, JsonSerializerOptions jsonOptions = null) : base(mediator, settings, jsonOptions) {
+    public ProcessEventsHandler(IMediator mediator, IOptions<Settings> settings, JsonSerializerOptions jsonOptions = null) : base(mediator, settings.Value, jsonOptions) {
     }
 
     public async Task<ProcessEventsResponse> Handle(ProcessEventsRequest request, CancellationToken cancellationToken) {

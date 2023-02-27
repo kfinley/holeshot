@@ -4,10 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-using AngleSharp;
-using Holeshot.Aws.Commands;
-using MediatR;
 using Microsoft.Extensions.Options;
+
+using AngleSharp;
+using MediatR;
+
+using Holeshot.Aws.Commands;
 
 namespace Holeshot.Crawler.Commands {
 
