@@ -66,15 +66,13 @@ namespace Holeshot.Crawler.Commands {
           Console.WriteLine("tracksPageContent was empty");
 
           return new ProcessTrackResponse {
-            Success = false
+            Success = false,
           };
-
         }
 
         var tracksPageDoc = await context.OpenAsync(req => req.Content(tracksPageContent));
 
         var eventsUrl = base.GetUniqueHrefUrls("/events/schedule", request.Contents).First();
-
 
         var trackInfo = new TrackInfo {
           Name = helper.GetTrackName(siteTracksDoc),
@@ -108,19 +106,20 @@ namespace Holeshot.Crawler.Commands {
           Content = content
         });
 
+        return new ProcessTrackResponse {
+          Success = true,
+          Key = key,
+          TrackInfo = trackInfo
+        };
+
       } catch (Exception ex) {
 
         Console.WriteLine("ProcessTrackHandler Failed!");
         Console.WriteLine(ex);
-
-        return new ProcessTrackResponse {
-          Success = false
-        };
       }
 
       return new ProcessTrackResponse {
-        Success = true,
-        Key = key
+        Success = false
       };
     }
 
