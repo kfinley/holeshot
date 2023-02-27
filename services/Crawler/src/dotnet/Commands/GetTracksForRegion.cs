@@ -1,16 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 using MediatR;
 
 using Holeshot.Aws.Commands;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 
 namespace Holeshot.Crawler.Commands {
 
@@ -87,8 +87,6 @@ namespace Holeshot.Crawler.Commands {
                Contents = content,
                BucketName = this.settings.BucketName
              });
-
-             this.logger.LogInformation(processTrack.TrackInfo.TrackId);
 
              var processEvents = await base.mediator.Send(new ProcessEventsRequest {
                TrackId = processTrack.TrackInfo.TrackId,
