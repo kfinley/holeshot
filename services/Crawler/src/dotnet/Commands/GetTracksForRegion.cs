@@ -68,7 +68,7 @@ namespace Holeshot.Crawler.Commands {
         BucketName = this.settings.BucketName
       });
 
-      var infoKeys = new List<string>();
+      // var infoKeys = new List<string>();
 
       if (gets3ObjectResponse.Contents != string.Empty) {
         var urls = base.GetUniqueHrefUrls("/site/tracks/", gets3ObjectResponse.Contents);
@@ -85,12 +85,12 @@ namespace Holeshot.Crawler.Commands {
               BucketName = this.settings.BucketName
             });
 
-            // var processEvents = await base.mediator.Send(new ProcessEventsRequest {
-            //   TrackId = processTrack.TrackInfo.TrackId,
-            //   BucketName = this.settings.BucketName
-            // });
+            var processEvents = await base.mediator.Send(new ProcessEventsRequest {
+              TrackId = processTrack.TrackInfo.TrackId,
+              BucketName = this.settings.BucketName
+            });
 
-            infoKeys.Add(processTrack.Key);
+            // infoKeys.Add(processTrack.Key);
 
           } catch (Exception ex) {
             this.logger.LogInformation(ex.Message);

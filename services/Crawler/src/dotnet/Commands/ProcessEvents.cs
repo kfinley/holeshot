@@ -65,7 +65,7 @@ namespace Holeshot.Crawler.Commands {
     private async Task<string> GetEventsPage(string baseUrl, string trackId) {
 
       var url = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
-      var key = $"sources/USA-BMX/tracks/{trackId}/events/{DateTime.Now.Year}.{DateTime.Now.Month}";
+      var key = $"sources/USA-BMX/events/{trackId}/events/{DateTime.Now.Year}.{DateTime.Now.Month}.html";
 
       var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
         BucketName = this.settings.BucketName,
