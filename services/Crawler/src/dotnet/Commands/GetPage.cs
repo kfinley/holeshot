@@ -37,10 +37,7 @@ namespace Holeshot.Crawler.Commands {
     public async Task<GetPageResponse> Handle(GetPageRequest request, CancellationToken cancellationToken) {
 
       if (request.Key == string.Empty) {
-        var segments = request.Url.Split('?').FirstOrDefault().Split('/');
-
-        request.Key = $"USA-BMX/{segments[segments.Length - 2]}/{segments[segments.Length - 1].Replace("-", string.Empty).Replace("%20", string.Empty)}";
-        //TODO: move ^^^^ to a clean list
+        throw new Exception("Error in GetPage.cs: Key was empty.");
       }
 
       // Console.WriteLine($"Key: {request.Key}");

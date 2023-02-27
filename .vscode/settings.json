@@ -1,7 +1,7 @@
 {
   "storyExplorer.storiesGlobs": "packages/*/src/stories/*.stories.ts",
   "dotnet-test-explorer.enableTelemetry": false,
-  "dotnet-test-explorer.testProjectPath": "services/**/src/dotnet/tests/*Tests.csproj",
+  "dotnet-test-explorer.testProjectPath": "services/**/src/dotnet/tests/*.Tests.csproj",
   "storyExplorer.server.internal.enabled": false,
   "storyExplorer.server.external.url": "http://localhost:6007",
   "jestrunner.debugOptions": {

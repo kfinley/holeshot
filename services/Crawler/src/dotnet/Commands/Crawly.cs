@@ -67,7 +67,7 @@ namespace Holeshot.Crawler.Commands {
       return result;
     }
 
-    protected async Task<List<Tuple<string, string>>> GetPages(IEnumerable<string> urls, Func<Tuple<string, string>, Task<bool>> func,
+    protected async Task<List<Tuple<string, string>>> GetPages(IEnumerable<string> urls, Func<string, string> createKey, Func<Tuple<string, string>, Task<bool>> func,
                                                                 string basePath = "") {
 
       var pages = new List<Tuple<string, string>>();
@@ -92,8 +92,10 @@ namespace Holeshot.Crawler.Commands {
 
         tasks.Add(RunThen(
           async () => {
+            var key = createKey(uri); // same here...
             var response = await this.mediator.Send(new GetPageRequest {
-              Url = uri,
+              Url = uri,  // bad names but we want to pass the full uri as the URL
+              Key = key
             });
             return new Tuple<string, string>(response.Key, response.Contents);
           },

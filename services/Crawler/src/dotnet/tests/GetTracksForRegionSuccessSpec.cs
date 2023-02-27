@@ -26,8 +26,8 @@ namespace Holeshot.Crawler.Tests {
 
     static Sut<GetTracksForRegionHandler> Sut = new Sut<GetTracksForRegionHandler, GetTracksForRegionResponse>();
 
-    static GetTracksForRegionRequest Request;
-    static GetTracksForRegionResponse Result;
+    static GetTracksForRegionRequest? Request;
+    static GetTracksForRegionResponse? Result;
 
     Establish context = () => {
       Request = new GetTracksForRegionRequest {
@@ -50,7 +50,7 @@ namespace Holeshot.Crawler.Tests {
 
       Sut.SetupAsync<IMediator, S3ObjectExistsResponse>(m => m.Send(Argument.Is<S3ObjectExistsRequest>(r =>
          r.BucketName == "test-bucket" &&
-         r.Key == $"USA-BMX/tracks/search/{Request.Region}"
+         r.Key == $"sources/USA-BMX/tracks/search/{Request.Region}"
      ), Argument.IsAny<CancellationToken>()
      )).ReturnsAsync(new S3ObjectExistsResponse {
        Exists = true
@@ -58,10 +58,10 @@ namespace Holeshot.Crawler.Tests {
 
       Sut.SetupAsync<IMediator, GetS3ObjectResponse>(m => m.Send(Argument.Is<GetS3ObjectRequest>(r =>
           r.BucketName == "test-bucket" &&
-          r.Key == $"USA-BMX/tracks/search/{Request.Region}"
+          r.Key == $"sources/USA-BMX/tracks/search/{Request.Region}"
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new GetS3ObjectResponse {
-        Key = $"USA-BMX/tracks/search/{Request.Region}",
+        Key = $"sources/USA-BMX/tracks/search/{Request.Region}",
         Contents = System.IO.File.ReadAllText($"../../../test-files/{Request.Region}.html")
       });
 
@@ -73,24 +73,30 @@ namespace Holeshot.Crawler.Tests {
       };
 
       Sut.SetupAsync<IMediator, GetPageResponse>(m => m.Send(Argument.Is<GetPageRequest>(r =>
-        r.Url == "https://www.usabmx.com/site/tracks/612?section_id=1"
+        r.Url == $"https://www.usabmx.com/site/tracks/{612}?section_id=1" &&
+        r.Key == $"sources/USA-BMX/tracks/{612}.html"
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new GetPageResponse {
-        Contents = content[612]
+        Contents = content[612],
+        Key = $"sources/USA-BMX/tracks/{612}.html"
       });
 
       Sut.SetupAsync<IMediator, GetPageResponse>(m => m.Send(Argument.Is<GetPageRequest>(r =>
-        r.Url == "https://www.usabmx.com/site/tracks/701?section_id=1"
+        r.Url == $"https://www.usabmx.com/site/tracks/{701}?section_id=1" &&
+        r.Key == $"sources/USA-BMX/tracks/{701}.html"
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new GetPageResponse {
-        Contents = content[701]
+        Contents = content[701],
+        Key = $"sources/USA-BMX/tracks/{701}.html"
       });
 
       Sut.SetupAsync<IMediator, GetPageResponse>(m => m.Send(Argument.Is<GetPageRequest>(r =>
-        r.Url == "https://www.usabmx.com/site/tracks/373?section_id=1"
+        r.Url == $"https://www.usabmx.com/site/tracks/{373}?section_id=1" &&
+        r.Key == $"sources/USA-BMX/tracks/{373}.html"
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new GetPageResponse {
-        Contents = content[373]
+        Contents = content[373],
+        Key = $"sources/USA-BMX/tracks/{373}.html"
       });
 
       Sut.SetupAsync<IMediator, ProcessTrackResponse>(m => m.Send(Argument.Is<ProcessTrackRequest>(r =>
@@ -99,7 +105,10 @@ namespace Holeshot.Crawler.Tests {
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new ProcessTrackResponse {
         Success = true,
-        Key = $"USA-BMX/tracks/{373}/trackInfo.json"
+        Key = $"encoded/USA-BMX/tracks/{373}/trackInfo.json",
+        TrackInfo = new TrackInfo {
+          TrackId = $"{373}"
+        }
       });
 
       Sut.SetupAsync<IMediator, ProcessTrackResponse>(m => m.Send(Argument.Is<ProcessTrackRequest>(r =>
@@ -108,7 +117,10 @@ namespace Holeshot.Crawler.Tests {
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new ProcessTrackResponse {
         Success = true,
-        Key = $"USA-BMX/tracks/{701}/trackInfo.json"
+        Key = $"encoded/USA-BMX/tracks/{701}/trackInfo.json",
+        TrackInfo = new TrackInfo {
+          TrackId = $"{701}"
+        }
       });
 
       Sut.SetupAsync<IMediator, ProcessTrackResponse>(m => m.Send(Argument.Is<ProcessTrackRequest>(r =>
@@ -117,7 +129,10 @@ namespace Holeshot.Crawler.Tests {
       ), Argument.IsAny<CancellationToken>()
       )).ReturnsAsync(new ProcessTrackResponse {
         Success = true,
-        Key = $"USA-BMX/tracks/{612}/trackInfo.json"
+        Key = $"encoded/USA-BMX/tracks/{612}/trackInfo.json",
+        TrackInfo = new TrackInfo {
+          TrackId = $"{612}"
+        }
       });
     };
 
@@ -131,7 +146,7 @@ namespace Holeshot.Crawler.Tests {
     public void It_should_return_a_successful_result() => should_return_a_successful_result();
     It should_return_a_successful_result = () => {
       Result.Should().NotBeNull();
-      Result.Success.Should().BeTrue();
+      Result?.Success.Should().BeTrue();
     };
 
     [Fact]

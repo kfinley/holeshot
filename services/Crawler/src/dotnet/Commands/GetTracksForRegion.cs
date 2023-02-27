@@ -68,37 +68,38 @@ namespace Holeshot.Crawler.Commands {
         BucketName = this.settings.BucketName
       });
 
-      // var infoKeys = new List<string>();
-
       if (gets3ObjectResponse.Contents != string.Empty) {
         var urls = base.GetUniqueHrefUrls("/site/tracks/", gets3ObjectResponse.Contents);
 
         this.logger.LogInformation($"Processing {urls.Count()} 🚲 tracks in {request.Region}");
 
-        await base.GetPages(urls, async (page) => {
-          try {
-            var content = page.Item2;
-            // Process each track on the page
-
-            var processTrack = await base.mediator.Send(new ProcessTrackRequest {
-              Contents = content,
-              BucketName = this.settings.BucketName
-            });
-
-            var processEvents = await base.mediator.Send(new ProcessEventsRequest {
-              TrackId = processTrack.TrackInfo.TrackId,
-              BucketName = this.settings.BucketName
-            });
-
-            // infoKeys.Add(processTrack.Key);
-
-          } catch (Exception ex) {
-            this.logger.LogInformation(ex.Message);
-            this.logger.LogInformation(ex.StackTrace);
-
-          }
-          return true; // success
+        await base.GetPages(urls, url => { // Generate s3 bucket key func
+          var segments = url.Split('?').FirstOrDefault().Split('/');
+          var key = $"sources/USA-BMX/{segments[segments.Length - 2]}/{segments[segments.Length - 1].Replace("-", string.Empty).Replace("%20", string.Empty)}.html";
+          return key;
         },
+         async (page) => {
+           try {
+             var content = page.Item2;
+             // Process each track on the page
+
+             var processTrack = await base.mediator.Send(new ProcessTrackRequest {
+               Contents = content,
+               BucketName = this.settings.BucketName
+             });
+
+             var processEvents = await base.mediator.Send(new ProcessEventsRequest {
+               TrackId = processTrack.TrackInfo.TrackId,
+               BucketName = this.settings.BucketName
+             });
+
+           } catch (Exception ex) {
+             this.logger.LogInformation(ex.Message);
+             this.logger.LogInformation(ex.StackTrace);
+
+           }
+           return true; // success
+         },
           $"https://{this.settings.BaseUrl}"
           );
 
@@ -111,7 +112,6 @@ namespace Holeshot.Crawler.Commands {
         //     Keys = infoKeys
         //   })
         // });
-
 
         return new GetTracksForRegionResponse {
           Success = true
