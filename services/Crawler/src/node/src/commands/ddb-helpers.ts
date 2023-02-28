@@ -41,7 +41,7 @@ export function convertEventToItem(ownerId: string, event: Event): {
       S: `EVENT#${event.name}`
     },
     GSI1SK: {
-      S: `CREATED_CREATED_DATE#${created}`
+      S: `DATE#${event.date}`
     },
     type: {
       S: 'Event'

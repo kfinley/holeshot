@@ -1,13 +1,13 @@
 
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { Inject, injectable } from 'inversify-props';
 import { Event } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
-import { Inject, injectable } from 'inversify-props';
+import { convertEventToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
 import { PublishMessageCommand } from '@holeshot/aws-commands/src';
 
-//TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 const bucketName = process.env.BUCKET_NAME as string;
 
@@ -42,13 +42,17 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
       key: params.key
     });
 
-    var trackEvents = JSON.parse(getTrackEvents.body) as Event;
+    var trackEvents = JSON.parse(getTrackEvents.body);
 
-    console.log('trackEvents', trackEvents);
+    trackEvents.forEach(event => {
+      console.log('trackEvent', event);
+      const eventItem = convertEventToItem(trackEvents.name, trackEvents);
 
-    // const trackItem = convertTrackEventsToItem(trackEvents.name, trackEvents);
+      console.log('eventItem', eventItem);
 
-    items.push(trackEvents);
+      items.push(eventItem);
+    });
+
 
     // var response = await this.ddbClient.send(new PutItemCommand({
     //   TableName,
@@ -70,10 +74,10 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
     console.log('items', JSON.stringify(items));
 
     await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
-      topic: 'Holeshot-TrackSavedTopic',
-      subject: 'Crawler/trackSaved',
+      topic: 'Holeshot-TrackEventsSavedTopic',
+      subject: 'Crawler/trackEventsSaved',
       message: JSON.stringify({
-
+        
       }),
       container
     });
