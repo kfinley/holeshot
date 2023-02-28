@@ -90,6 +90,7 @@ namespace Holeshot.Crawler.Commands {
 
              var processEvents = await base.mediator.Send(new ProcessEventsRequest {
                TrackId = processTrack.TrackInfo.TrackId,
+               TrackName = processTrack.TrackInfo.Name,
                BucketName = this.settings.BucketName
              });
 

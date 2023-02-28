@@ -15,6 +15,7 @@ namespace Holeshot.Crawler.Commands {
 
   public class ProcessEventsRequest : IRequest<ProcessEventsResponse> {
     public string TrackId { get; set; }
+    public string TrackName { get; set; }
     public string BucketName { get; set; }
   }
 
@@ -48,7 +49,7 @@ namespace Holeshot.Crawler.Commands {
 
       var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
 
-      var events = new HtmlHelper().GetEvents(eventsPageDoc, this.settings.BaseUrl);
+      var events = new HtmlHelper().GetEvents(eventsPageDoc, this.settings.BaseUrl, request.TrackName);
 
       var key = $"events/tracks/{request.TrackId}/{DateTime.Now.Year}.{DateTime.Now.Month}.json";
 

@@ -262,7 +262,7 @@ namespace Holeshot.Crawler.Commands {
       return trackOperators;
     }
 
-    public List<Event> GetEvents(IDocument doc, string baseUrl) {
+    public List<Event> GetEvents(IDocument doc, string baseUrl, string trackName) {
 
       var eventsElement = doc.QuerySelectorAll("td:has(a)");
 
@@ -301,6 +301,7 @@ namespace Holeshot.Crawler.Commands {
         });
 
         events.Add(new Event {
+          TrackName = trackName,
           Name = eventTitle,
           Date = date,
           Url = eventUrl,
