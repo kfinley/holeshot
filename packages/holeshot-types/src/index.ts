@@ -45,6 +45,7 @@ export interface TrackInfo extends Entity {
 }
 
 export interface Event extends Entity {
+  trackName: string;
   date: Date | string;
   url: string;
   details: Record<string, string>;

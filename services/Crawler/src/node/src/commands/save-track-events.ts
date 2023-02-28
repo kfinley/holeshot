@@ -46,7 +46,7 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
     trackEvents.forEach(event => {
       console.log('trackEvent', event);
-      const eventItem = convertEventToItem(event.name, event);
+      const eventItem = convertEventToItem(event.trackName, event);
 
       console.log('eventItem', eventItem);
 
