@@ -42,11 +42,11 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
       key: params.key
     });
 
-    var trackEvents = JSON.parse(getTrackEvents.body);
+    var trackEvents = JSON.parse(getTrackEvents.body) as Event[];
 
     trackEvents.forEach(event => {
       console.log('trackEvent', event);
-      const eventItem = convertEventToItem(trackEvents.name, event);
+      const eventItem = convertEventToItem(event.name, event);
 
       console.log('eventItem', eventItem);
 
