@@ -30,8 +30,6 @@ namespace Holeshot.Crawler.Commands {
 
     public async Task<ProcessEventsResponse> Handle(ProcessEventsRequest request, CancellationToken cancellationToken) {
 
-      Console.WriteLine($"ProcessEventsHandler: {base.Serialize(request)}");
-
       var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, request.TrackId);
 
       if (eventsPageContent == string.Empty) {
