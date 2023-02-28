@@ -46,7 +46,7 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
     trackEvents.forEach(event => {
       console.log('trackEvent', event);
-      const eventItem = convertEventToItem(trackEvents.name, trackEvents);
+      const eventItem = convertEventToItem(trackEvents.name, event);
 
       console.log('eventItem', eventItem);
 
@@ -77,7 +77,7 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
       topic: 'Holeshot-TrackEventsSavedTopic',
       subject: 'Crawler/trackEventsSaved',
       message: JSON.stringify({
-        
+
       }),
       container
     });
