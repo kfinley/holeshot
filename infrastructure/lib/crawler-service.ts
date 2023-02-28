@@ -50,14 +50,6 @@ export class CrawlerService extends Construct {
       flag: 'w',
     });
 
-    const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
-      projectDir: '../services/Crawler/src/dotnet/functions',
-      handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
-      timeout: Duration.seconds(300),
-      functionName: 'Holeshot-GetTracksForRegion',
-      logRetention: RetentionDays.ONE_WEEK
-    });
-
     var bucketPolicy = new Policy(this, 'Holeshot-list-buckets-policy', {
       statements: [new PolicyStatement({
         actions: [
@@ -69,9 +61,14 @@ export class CrawlerService extends Construct {
       })],
     });
 
-    getTracks.role?.attachInlinePolicy(
-      bucketPolicy,
-    );
+    const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
+      projectDir: '../services/Crawler/src/dotnet/functions',
+      handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
+      timeout: Duration.seconds(300),
+      functionName: 'Holeshot-GetTracksForRegion',
+      logRetention: RetentionDays.ONE_WEEK
+    });
+    getTracks.role?.attachInlinePolicy(bucketPolicy);
 
     const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',
@@ -88,13 +85,13 @@ export class CrawlerService extends Construct {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
-
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
 
     const saveTrackEvents = newLambda('Holeshot-SaveTrackEvents', 'functions/saveTrackEvents.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
+    saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
 
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,
