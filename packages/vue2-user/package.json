@@ -15,7 +15,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@aws-sdk/client-cognito-identity-provider": "3.281.0",
+    "@aws-sdk/client-cognito-identity-provider": "3.197.0",
     "@finley/vue2-components": "workspace:1.0.0",
     "@holeshot/api-client": "workspace:1.0.0",
     "@holeshot/commands": "workspace:1.0.0",
