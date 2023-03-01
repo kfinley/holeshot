@@ -21,7 +21,7 @@ export default function bootstrapper(container: Container) {
     container.bind<CognitoIdentityClient>("CognitoIdentityClient")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new CognitoIdentityClient({ region: "us-east-1" }) // Prod
+        new CognitoIdentityClient({ region: process.env.AWS_REGION }) // Prod
         :
         new CognitoIdentityClient({ // Local Dev
           endpoint: "http://holeshot.cognito:9229"
@@ -32,7 +32,7 @@ export default function bootstrapper(container: Container) {
     container.bind<CognitoIdentityProvider>("CognitoIdentityProvider")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new CognitoIdentityProvider({ region: process.env.AWS_REGION })
+        new CognitoIdentityProvider({ region: process.env.AWS_REGION }) // Prod
         :
         new CognitoIdentityProvider({
           endpoint: "http://holeshot.cognito:9229",

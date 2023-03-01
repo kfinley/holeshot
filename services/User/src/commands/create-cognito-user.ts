@@ -49,10 +49,6 @@ export class CreateCognitoUserCommand implements Command<CreateCognitoUserComman
           {
             Name: "family_name",
             Value: params.lastName
-          },
-          {
-            Name: "sub", // User ID in Cognito
-            Value: params.username
           }
         ]
       });
