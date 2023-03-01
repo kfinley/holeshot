@@ -31,7 +31,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
-    console.log('params', params);
+    // console.log('params', params);
     const items: any[] = [];
 
     console.log(`Key: ${params.key} BucketName: ${bucketName}`);
@@ -44,9 +44,13 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     var trackInfo = JSON.parse(getTrackInfo.body) as TrackInfo;
 
-    console.log('trackInfo', trackInfo);
-
     const trackItem = convertTrackInfoToItem(trackInfo);
+
+    console.log('trackItem', JSON.stringify(trackItem));
+
+
+    console.log('ddbClient endpoint', await this.ddbClient.config.endpoint());
+    console.log('ddbClient region', await this.ddbClient.config.region());
 
     var response = await this.ddbClient.send(new PutItemCommand({
       TableName,
