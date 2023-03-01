@@ -15,6 +15,7 @@ namespace Holeshot.Crawler.Commands {
 
   public class ProcessEventsRequest : IRequest<ProcessEventsResponse> {
     public TrackInfo Track { get; set; }
+    public string BucketName { get; set; }
 
   }
 
@@ -50,9 +51,9 @@ namespace Holeshot.Crawler.Commands {
 
       var key = $"events/tracks/{request.Track.TrackId}/{DateTime.Now.Year}.{DateTime.Now.Month}.json";
 
-      var content = base.Serialize({
-        track: trackInfo,
-        events
+      var content = base.Serialize(new {
+        track = request.Track,
+        events = events
       });
 
       await this.mediator.Send(new PutS3ObjectRequest {

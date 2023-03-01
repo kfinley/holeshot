@@ -25,8 +25,8 @@ namespace Holeshot.Crawler.Tests {
 
     static Sut<ProcessTrackHandler> Sut = new Sut<ProcessTrackHandler, ProcessTrackResponse>();
 
-    static ProcessTrackRequest Request;
-    static ProcessTrackResponse Result;
+    static ProcessTrackRequest? Request;
+    static ProcessTrackResponse? Result;
 
     Establish context = () => {
       Request = new ProcessTrackRequest {
@@ -103,7 +103,7 @@ namespace Holeshot.Crawler.Tests {
     public void It_should_return_a_successful_result() => should_return_a_successful_result();
     It should_return_a_successful_result = () => {
       Result.Should().NotBeNull();
-      Result.Success.Should().BeTrue();
+      Result?.Success.Should().BeTrue();
     };
 
   }
