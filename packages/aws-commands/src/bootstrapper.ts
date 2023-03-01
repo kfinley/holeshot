@@ -32,7 +32,7 @@ export default function bootstrapper(container: Container) {
     container.bind<CognitoIdentityProvider>("CognitoIdentityProvider")
       .toDynamicValue(() => process.env.NODE_ENV === 'production'
         ?
-        new CognitoIdentityProvider({ region: "us-east-1" })
+        new CognitoIdentityProvider({ region: process.env.AWS_REGION })
         :
         new CognitoIdentityProvider({
           endpoint: "http://holeshot.cognito:9229",
@@ -46,17 +46,16 @@ export default function bootstrapper(container: Container) {
 
   if (!container.isBound("DynamoDBClient")) {
     container.bind<DynamoDBClient>("DynamoDBClient")
-      .toDynamicValue(() =>
-        process.env.NODE_ENV === 'production'
-          ?
-          new DynamoDBClient({})
-          //   region: process.env.AWS_REGION,
-          //   endpoint: 'https://dynamodb.us-east-1.amazonaws.com'
-          // }) // Prod
-          :
-          new DynamoDBClient({ // Local Dev
-            endpoint: "http://holeshot.dynamodb:8000"
-          }));
+      .toDynamicValue(() => process.env.NODE_ENV === 'production'
+        ?
+        new DynamoDBClient({ region: process.env.AWS_REGION }) // Prod
+        //   region: process.env.AWS_REGION,
+        //   endpoint: 'https://dynamodb.us-east-1.amazonaws.com'
+        // }) // Prod
+        :
+        new DynamoDBClient({ // Local Dev
+          endpoint: "http://holeshot.dynamodb:8000"
+        }));
   }
 
   if (!container.isBound("SNSClient")) {
