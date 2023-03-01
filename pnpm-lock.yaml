@@ -671,6 +671,7 @@ importers:
       inversify: 5.1.1
       inversify-props: ^2.2.6
       jest: ^27.5.1
+      ngeohash: 0.6.3
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
       strnum: 1.0.5
@@ -692,11 +693,41 @@ importers:
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: 2.2.6
+      ngeohash: 0.6.3
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
       strnum: 1.0.5
       tslib: 2.4.1
       uuid: 8.3.2
+    devDependencies:
+      '@tsconfig/node18': 1.0.1
+      '@types/aws-lambda': 8.10.109
+      '@types/jest': 27.5.2
+      jest: 27.5.1_ts-node@10.9.1
+      ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
+      ts-node: 10.9.1_typescript@4.9.4
+      typescript: 4.9.4
+
+  services/Events:
+    specifiers:
+      '@holeshot/aws-commands': ^1.0.0
+      '@holeshot/commands': ^1.0.0
+      '@tsconfig/node18': ^1.0.0
+      '@types/aws-lambda': ^8.10.72
+      '@types/jest': ^27.0.6
+      inversify-props: ^2.2.6
+      jest: ^27.0.5
+      reflect-metadata: ^0.1.13
+      source-map-support: ^0.5.21
+      ts-jest: ^27.0.5
+      ts-node: ^10.9.1
+      typescript: ^4.1.5
+    dependencies:
+      '@holeshot/aws-commands': link:../../packages/aws-commands
+      '@holeshot/commands': link:../../packages/commands
+      inversify-props: 2.2.6
+      reflect-metadata: 0.1.13
+      source-map-support: 0.5.21
     devDependencies:
       '@tsconfig/node18': 1.0.1
       '@types/aws-lambda': 8.10.109
@@ -22929,6 +22960,11 @@ packages:
   /next-tick/1.1.0:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: true
+
+  /ngeohash/0.6.3:
+    resolution: {integrity: sha512-kltF0cOxgx1AbmVzKxYZaoB0aj7mOxZeHaerEtQV0YaqnkXNq26WWqMmJ6lTqShYxVRWZ/mwvvTrNeOwdslWiw==}
+    engines: {node: '>=v0.2.0'}
+    dev: false
 
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}

@@ -46,38 +46,16 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     console.log('trackInfo', trackInfo);
 
-    const trackItem = convertTrackInfoToItem(trackInfo.name, trackInfo);
+    const trackItem = convertTrackInfoToItem(trackInfo);
 
-    items.push(trackItem);
+    var response = await this.ddbClient.send(new PutItemCommand({
+      TableName,
+      Item: trackItem
+    }));
 
-    // var response = await this.ddbClient.send(new PutItemCommand({
-    //   TableName,
-    //   trackItem
-    // }));
-    // items.push(response.$metadata.httpStatusCode);
-
-    // trackInfo.events.forEach(async event => {
-    //   const eventItem = convertEventToItem(trackInfo.name, event);
-    //   console.log('event', JSON.stringify(eventItem));
-    //   items.push(eventItem);
-    //   // var response = await this.ddbClient.send(new PutItemCommand({
-    //   //   TableName,
-    //   //   eventItem
-    //   // }));
-    //   // items.push(response.$metadata.httpStatusCode);
-    // });
-
+    items.push(response.$metadata.httpStatusCode);
 
     console.log('items', JSON.stringify(items));
-
-    // await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
-    //   topic: 'Holeshot-TrackSavedTopic',
-    //   subject: 'Crawler/trackSaved',
-    //   message: JSON.stringify({
-
-    //   }),
-    //   container
-    // });
 
     return {
       success: true

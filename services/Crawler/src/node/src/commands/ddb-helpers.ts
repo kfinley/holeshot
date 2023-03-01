@@ -1,8 +1,9 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { TrackInfo, Event } from "@holeshot/types/src";
+import geohash from 'ngeohash';
 
-export function convertTrackInfoToItem(ownerId: string, track: TrackInfo): {
+export function convertTrackInfoToItem(track: TrackInfo): {
   [key: string]: AttributeValue;
 } | undefined {
 
@@ -12,22 +13,22 @@ export function convertTrackInfoToItem(ownerId: string, track: TrackInfo): {
 
   return {
     PK: {
-      S: `OWNER#${ownerId}`
+      S: `TRACK#${track.name}`
     },
     SK: {
       S: `TRACK#${track.name}`
     },
-    GSI1SK: {
-      S: `CREATED_CREATED_DATE#${created}`
-    },
     type: {
       S: 'Track'
+    },
+    created: {
+      S: created
     },
     ...marshall(track)
   }
 }
 
-export function convertEventToItem(ownerId: string, event: Event): {
+export function convertEventToItem(event: Event, track: TrackInfo): {
   [key: string]: AttributeValue;
 } | undefined {
 
@@ -35,16 +36,22 @@ export function convertEventToItem(ownerId: string, event: Event): {
 
   return {
     PK: {
-      S: `OWNER#${ownerId}`
+      S: `TRACK#${track.name}`
     },
     SK: {
-      S: `EVENT#${event.name}`
+      S: `${event.date}`
+    },
+    GSI1PK: {
+      S: geohash.encode(track.location.gps.lat, track.location.gps.long)
     },
     GSI1SK: {
-      S: `DATE#${event.date}`
+      S: `${event.date}`
     },
     type: {
       S: 'Event'
+    },
+    created: {
+      S: created
     },
     ...marshall(event)
   }

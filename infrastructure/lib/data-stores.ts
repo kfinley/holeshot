@@ -33,7 +33,7 @@ export class DataStores extends Construct {
 
     this.coreTable.addGlobalSecondaryIndex({
       indexName: 'GSI1',
-      partitionKey: { name: 'PK', type: AttributeType.STRING },
+      partitionKey: { name: 'GSI1PK', type: AttributeType.STRING },
       sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
       readCapacity: 1,
       writeCapacity: 1,

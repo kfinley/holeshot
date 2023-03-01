@@ -14,9 +14,8 @@ using Holeshot.Aws.Commands;
 namespace Holeshot.Crawler.Commands {
 
   public class ProcessEventsRequest : IRequest<ProcessEventsResponse> {
-    public string TrackId { get; set; }
-    public string TrackName { get; set; }
-    public string BucketName { get; set; }
+    public TrackInfo Track { get; set; }
+
   }
 
   public class ProcessEventsResponse {
@@ -30,7 +29,7 @@ namespace Holeshot.Crawler.Commands {
 
     public async Task<ProcessEventsResponse> Handle(ProcessEventsRequest request, CancellationToken cancellationToken) {
 
-      var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, request.TrackId);
+      var eventsPageContent = await GetEventsPage(this.settings.BaseUrl, request.Track.TrackId);
 
       if (eventsPageContent == string.Empty) {
         Console.WriteLine("eventsPageContent was empty");
@@ -47,11 +46,14 @@ namespace Holeshot.Crawler.Commands {
 
       var eventsPageDoc = await context.OpenAsync(req => req.Content(eventsPageContent));
 
-      var events = new HtmlHelper().GetEvents(eventsPageDoc, this.settings.BaseUrl, request.TrackName);
+      var events = new HtmlHelper().GetEvents(eventsPageDoc, this.settings.BaseUrl, request.Track.Name);
 
-      var key = $"events/tracks/{request.TrackId}/{DateTime.Now.Year}.{DateTime.Now.Month}.json";
+      var key = $"events/tracks/{request.Track.TrackId}/{DateTime.Now.Year}.{DateTime.Now.Month}.json";
 
-      var content = base.Serialize(events);
+      var content = base.Serialize({
+        track: trackInfo,
+        events
+      });
 
       await this.mediator.Send(new PutS3ObjectRequest {
         BucketName = request.BucketName,

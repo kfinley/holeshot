@@ -1,10 +1,8 @@
-
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
 
-//TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
 export type GetUserCommandRequest = {
