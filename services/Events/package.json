@@ -12,7 +12,7 @@
     "email": "kyle@kylefinley.net"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.272.0",
+    "@aws-sdk/client-dynamodb": "^3.282.0",
     "@holeshot/aws-commands": "^1.0.0",
     "@holeshot/commands": "^1.0.0",
     "inversify-props": "^2.2.6",
