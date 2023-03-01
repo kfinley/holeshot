@@ -45,9 +45,6 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     const trackItem = convertTrackInfoToItem(trackInfo);
 
     console.log('trackItem', JSON.stringify(trackItem));
-    // console.log('ddbClient endpoint', await this.ddbClient.config.credentials());
-    // console.log('ddbClient endpoint', await this.ddbClient.config.endpoint?.());
-    // console.log('ddbClient region', await this.ddbClient.config.region());
 
     var response = await this.ddbClient.send(new PutItemCommand({
       TableName,

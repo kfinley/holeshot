@@ -44,7 +44,7 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
     var trackEvents = JSON.parse(getTrackEvents.body) as { track: TrackInfo, events: Event[] };
 
     trackEvents.events.forEach(async event => {
-      console.log('trackEvent', event);
+      //console.log('trackEvent', event);
       const eventItem = convertEventToItem(event, trackEvents.track);
 
       console.log('eventItem', eventItem);
@@ -54,20 +54,12 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
         Item: eventItem
       }));
 
+      console.log('response', JSON.stringify(response));
       items.push(response.$metadata.httpStatusCode);
 
     });
 
     console.log('items', JSON.stringify(items));
-
-    // await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
-    //   topic: 'Holeshot-TrackEventsSavedTopic',
-    //   subject: 'Crawler/trackEventsSaved',
-    //   message: JSON.stringify({
-
-    //   }),
-    //   container
-    // });
 
     return {
       success: true
