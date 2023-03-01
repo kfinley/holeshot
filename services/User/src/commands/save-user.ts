@@ -31,8 +31,8 @@ export class SaveUserCommand implements Command<SaveUserRequest, SaveUserRespons
     }
 
     // console.log('params', params);
-    
-    const Item = convertUserToItem(params.email, {
+
+    const Item = convertUserToItem({
       ...params,
       id: params.email
     });

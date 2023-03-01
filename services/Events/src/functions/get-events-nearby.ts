@@ -22,7 +22,7 @@ export const handler = async (params: any, context: Context) => {
     // console.log('response', response);
 
     return {
-      status_code: response.statusCode
+      // status_code: response.statusCode
     };
 
   } catch (error) {

@@ -31,14 +31,14 @@ export class DataStores extends Construct {
       pointInTimeRecovery: false // set to "true" to enable PITR
     });
 
-    // this.coreTable.addGlobalSecondaryIndex({
-    //   indexName: 'GSI1',
-    //   partitionKey: { name: 'GSI1PK', type: AttributeType.STRING },
-    //   sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
-    //   readCapacity: 1,
-    //   writeCapacity: 1,
-    //   projectionType: ProjectionType.ALL,
-    // })
+    this.coreTable.addGlobalSecondaryIndex({
+      indexName: 'GSI1',
+      partitionKey: { name: 'GSI1PK', type: AttributeType.STRING },
+      sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
+      readCapacity: 1,
+      writeCapacity: 1,
+      projectionType: ProjectionType.ALL,
+    })
 
     // WebSockets Service
     this.connectionsTable = new Table(this, 'WebSockets-Connections', {

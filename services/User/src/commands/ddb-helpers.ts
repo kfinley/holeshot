@@ -1,4 +1,5 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
+import { marshall } from "@aws-sdk/util-dynamodb";
 import { User } from "@holeshot/types/src/user";
 
 function addWithKeyIfPropHasValue(attributes: Record<string, AttributeValue>, property: string, value: string | undefined) {
@@ -25,7 +26,7 @@ function convertUserOptionalAttributesToItem(user: User) {
   return attributes;
 }
 
-export function convertUserToItem(ownerId: string, user: User): {
+export function convertUserToItem(user: User): {
   [key: string]: AttributeValue;
 } | undefined {
 
@@ -35,32 +36,14 @@ export function convertUserToItem(ownerId: string, user: User): {
 
   return {
     PK: {
-      S: `OWNER#${ownerId}`
+      S: `USER#${user.email}`
     },
     SK: {
       S: `USER#${user.email}`
     },
-    GSI1SK: {
-      S: `CREATED_CREATED_DATE#${created}`
-    },
     type: {
       S: 'User'
     },
-    id: {
-      S: user.id as string
-    },
-    email: {
-      S: user.email
-    },
-    dateCreated: {
-      S: created
-    },
-    firstName: {
-      S: user.firstName
-    },
-    lastName: {
-      S: user.lastName
-    },
-    // ...optionalAttributes
+    ...marshall(user)
   }
 }
