@@ -5,7 +5,7 @@ import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
 import { Inject, injectable } from 'inversify-props';
 import { convertTrackInfoToItem } from './ddb-helpers';
-import { container } from './../commands/inversify.config';
+import { container } from './inversify.config';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 const bucketName = process.env.BUCKET_NAME as string;

@@ -2,6 +2,7 @@ import { S3CreateEvent, Context, Handler } from 'aws-lambda';
 import bootstrapper from '../commands/bootstrapper';
 import { SaveTrackInfoCommand } from './../commands/save-track-info';
 import { createResponse } from './create-response';
+
 const container = bootstrapper();
 
 export const handler: Handler = async (event: S3CreateEvent, context: Context) => {

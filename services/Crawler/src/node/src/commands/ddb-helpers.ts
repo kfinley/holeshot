@@ -57,8 +57,3 @@ export function convertEventToItem(event: Event, track: TrackInfo): {
   }
 }
 
-export function convert(trackInfo: TrackInfo) {
-  return {
-    ...marshall(trackInfo)
-  }
-}
