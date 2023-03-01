@@ -20,7 +20,7 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
     handler,
     code: new lambda.AssetCode(join(__dirname, functionsPath)),
     environment: {
-      REGION: Stack.of(scope).region,
+      AWS_REGION: Stack.of(scope).region,
       AVAILABILITY_ZONES: JSON.stringify(
         Stack.of(scope).availabilityZones,
       ),

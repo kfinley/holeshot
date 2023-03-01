@@ -50,8 +50,7 @@ export default function bootstrapper(container: Container) {
         process.env.NODE_ENV === 'production'
           ?
           new DynamoDBClient({
-            region: process.env.AWS_REGION,
-            endpoint: 'https://dynamodb.us-east-1.amazonaws.com'
+            region: process.env.AWS_REGION
           }) // Prod
           :
           new DynamoDBClient({ // Local Dev
