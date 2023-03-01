@@ -7,8 +7,6 @@ export function convertTrackInfoToItem(track: TrackInfo): {
   [key: string]: AttributeValue;
 } | undefined {
 
-  // const optionalAttributes = convertUserOptionalAttributesToItem(user);
-
   const created = new Date().toISOString();
 
   return {
