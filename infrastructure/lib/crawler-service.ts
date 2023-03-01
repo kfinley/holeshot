@@ -86,12 +86,14 @@ export class CrawlerService extends Construct {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
+    props?.coreTable.grantReadWriteData(saveTrackInfo);
 
     const saveTrackEvents = newLambda('Holeshot-SaveTrackEvents', 'functions/saveTrackEvents.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
     saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
+    props?.coreTable.grantReadWriteData(saveTrackEvents);
 
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,
