@@ -6,9 +6,7 @@ import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObje
 import { Inject, injectable } from 'inversify-props';
 import { convertTrackInfoToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
-// import { PublishMessageCommand } from '@holeshot/aws-commands/src';
 
-//TODO: do this smarter
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 const bucketName = process.env.BUCKET_NAME as string;
 
@@ -47,9 +45,8 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     const trackItem = convertTrackInfoToItem(trackInfo);
 
     console.log('trackItem', JSON.stringify(trackItem));
-
-
-    console.log('ddbClient endpoint', await this.ddbClient.config.endpoint());
+    console.log('ddbClient endpoint', await this.ddbClient.config.credentials());
+    console.log('ddbClient endpoint', await this.ddbClient.config.endpoint?.());
     console.log('ddbClient region', await this.ddbClient.config.region());
 
     var response = await this.ddbClient.send(new PutItemCommand({
