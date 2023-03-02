@@ -3,8 +3,6 @@ import json
 from functions.aws_resources import s3, sns
 
 # Source: https://stackoverflow.com/a/58111681
-
-
 def decCFEmail(encodedEmail):
 
     try:
@@ -13,7 +11,6 @@ def decCFEmail(encodedEmail):
         return email
     except (ValueError):
         pass
-
 
 def replace_encoded_emails(trackInfo):
 
@@ -26,7 +23,6 @@ def replace_encoded_emails(trackInfo):
                 op)] = decCFEmail(op.split(':')[1])
 
     return json.dumps(trackInfo, ensure_ascii=False)
-
 
 def process(key):
 
@@ -49,16 +45,8 @@ def process(key):
 
     # put the decoded file in tracks/{trackId} in the bucket
     key = key.replace('encoded/', '')
-    
+
     response = s3.put_object(Bucket=bucket, Key=key,
                   Body=body_content.encode('utf-8'))
-
-    # snsResponse = sns.publish(
-    #     TopicArn=topic_arn,
-    #     Subject='Crawler/decodeEmails',
-    #     Message=json.dumps({
-    #         'keys': keys
-    #     })
-    # )
 
     return json.dumps(response)

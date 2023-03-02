@@ -3,6 +3,7 @@ import { Inject, injectable } from 'inversify-props';
 import { DynamoDB, DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { GeoDataManagerConfiguration, GeoDataManager } from 'dynamodb-geo-v3';
+import { Event } from '@holeshot/types/src';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
@@ -14,7 +15,7 @@ export type GetEventsNearbyRequest = {
 }
 
 export type GetEventsNearbyResponse = {
-  events: Event[];
+  events: Event[] | Record<string, any>;
 }
 
 @injectable()
@@ -29,9 +30,9 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
     const myGeoTableManager = new GeoDataManager(config);
 
-    const radius = 1609.344 * params.distance ?? 500; // default to 500 miles. converted to meters. 
+    const radius = 1609.344 * params.distance ?? 500; // default to 500 miles. converted to meters.
 
-    const items = await myGeoTableManager
+    const trackInRange = await myGeoTableManager
       .queryRadius({
         RadiusInMeter: radius,
         CenterPoint: {
@@ -40,9 +41,9 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
         },
       });
 
-    const events: Event[] = [];
+    const events: Record<string, any>[] = [];
 
-    items.map(async item => {
+    const promises = trackInRange.map(async item => {
       console.log('item', item);
 
       const query = {
@@ -58,7 +59,9 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
       console.log('items', data.Items);
 
       events.push(...data.Items.map(i => unmarshall(i)));
-    })
+    });
+
+    await Promise.all(promises);
 
     console.log('Events', events)
 

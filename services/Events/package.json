@@ -16,6 +16,7 @@
     "@aws-sdk/util-dynamodb": "^3.282.0",
     "@holeshot/aws-commands": "^1.0.0",
     "@holeshot/commands": "^1.0.0",
+    "@holeshot/types": "^1.0.0",
     "dynamodb-geo-v3": "1.0.0",
     "nodes2ts": "2.0.0",
     "long": "^4.0.0",
