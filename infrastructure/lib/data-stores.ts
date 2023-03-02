@@ -25,6 +25,7 @@ export class DataStores extends Construct {
     config.hashKeyLength = 3
 
     const createTableInput = GeoTableUtil.getCreateTableRequest(config);
+    try {
     ddb
       .createTable(createTableInput)
       // Wait for it to become ready
@@ -32,6 +33,9 @@ export class DataStores extends Construct {
       .then(() => {
         console.log("Table created and ready!");
       });
+    } catch (e) {
+      console.log('talbe exists?', e)
+    }
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {
