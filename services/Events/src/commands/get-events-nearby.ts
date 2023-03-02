@@ -10,7 +10,7 @@ export type GetEventsNearbyRequest = {
   lat: number;
   long: number;
   date: string;
-  distance: number;
+  distance?: number;
 }
 
 export type GetEventsNearbyResponse = {
@@ -29,10 +29,11 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
     const myGeoTableManager = new GeoDataManager(config);
 
+    const radius = 1609.344 * params.distance ?? 500; // default to 500 miles. converted to meters. 
+
     const items = await myGeoTableManager
       .queryRadius({
-
-        RadiusInMeter: 1609.344 * 500, // 500 miles converted to meters. 
+        RadiusInMeter: radius,
         CenterPoint: {
           latitude: params.lat,
           longitude: params.long,
@@ -59,27 +60,10 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
       events.push(...data.Items.map(i => unmarshall(i)));
     })
 
-    // for (const hash of hashes) {
-
-    //   const query = {
-    //     TableName,
-    //     IndexName: "GSI1",
-    //     ExpressionAttributeValues: marshall({
-    //       ":GSI1PK": `${hash}`,
-    //       ":GSI1SK": `${params.date}`
-    //     }),
-    //     KeyConditionExpression: "GSI1PK = :GSI1PK and GSI1SK >= :GSI1SK)",
-    //   };
-
-    //   const data = await this.ddbClient.send(new QueryCommand(query));
-
-
-    // data.Items
-    // }
-
+    console.log('Events', events)
 
     return {
-      events: []
+      events
     }
   }
 }

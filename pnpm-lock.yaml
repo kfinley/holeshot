@@ -668,6 +668,7 @@ importers:
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
+      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
@@ -693,6 +694,7 @@ importers:
       '@holeshot/aws-commands': link:../../../../packages/aws-commands
       '@holeshot/commands': link:../../../../packages/commands
       '@holeshot/types': link:../../../../packages/holeshot-types
+      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
@@ -721,9 +723,11 @@ importers:
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.0.6
+      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0
       inversify-props: ^2.2.6
       jest: ^27.0.5
+      nodes2ts: 2.0.0
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
       ts-jest: ^27.0.5
@@ -734,8 +738,10 @@ importers:
       '@aws-sdk/util-dynamodb': 3.282.0
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
+      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       inversify-props: 2.2.6
+      nodes2ts: 2.0.0
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
     devDependencies:
@@ -11707,14 +11713,14 @@ packages:
   /axios/0.24.0:
     resolution: {integrity: sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
     transitivePeerDependencies:
       - debug
 
   /axios/1.2.1:
     resolution: {integrity: sha512-I88cFiGu9ryt/tfVEi4kX2SITsvDddTajXTOFmt2uK1ZVA8LytjtdeyefdQWEf5PU8w+4SSJDoYnggflB5tW4A==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -11724,7 +11730,7 @@ packages:
   /axios/1.2.2:
     resolution: {integrity: sha512-bz/J4gS2S3I7mpN/YZfGFTqhXTYzRho8Ay38w2otuuDR322KzFIWm/4W2K6gIwvWaws5n+mnb7D1lN9uD+QH6Q==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
       form-data: 4.0.0
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
@@ -17179,7 +17185,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: true
 
   /follow-redirects/1.15.2_debug@4.3.4:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
@@ -18579,7 +18584,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
