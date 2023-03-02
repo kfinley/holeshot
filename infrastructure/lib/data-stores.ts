@@ -20,22 +20,22 @@ export class DataStores extends Construct {
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
     super(scope, id);
 
-    const ddb = new DynamoDB({ region: 'us-east-1'});
+    const ddb = new DynamoDB({ region: 'us-east-1' });
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
     config.hashKeyLength = 3
 
     const createTableInput = GeoTableUtil.getCreateTableRequest(config);
-    try {
+
     ddb
       .createTable(createTableInput)
       // Wait for it to become ready
       .then((o) => console.log('createTable Output', o))
       .then(() => {
         console.log("Table created and ready!");
+      })
+      .catch(e => {
+        console.log('createTable error: ', e);
       });
-    } catch (e) {
-      console.log('talbe exists?', e)
-    }
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {
