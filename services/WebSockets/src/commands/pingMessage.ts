@@ -2,11 +2,12 @@ import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
 import { SendMessageCommand } from './sendMessage';
 import { Container } from 'inversify-props';
+import { MessageCommandProps } from './messageCommand';
 
 export type PingMessageRequest = {
   connectionId: string,
   container: Container
-};
+} extends MessageCommandProps;
 
 export type PingMessageResponse = {
   success: boolean;

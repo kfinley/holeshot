@@ -26,25 +26,30 @@ export class DataStores extends Construct {
       region,
     } = new ScopedAws(this);
 
-    const ddb = new DynamoDB({ region: 'us-east-1' });
-    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-    config.hashKeyLength = 3
+    (async (table) => {
 
-    // Table has to exist or things will fail...
-    const createTableInput = GeoTableUtil.getCreateTableRequest(config);
+      const ddb = new DynamoDB({ region: 'us-east-1' });
+      const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+      config.hashKeyLength = 3
 
-    ddb
-      .createTable(createTableInput)
-      // Wait for it to become ready
-      .then((o) => console.log('createTable Output', o))
-      .then(() => {
-        console.log("Table created and ready!");
-      })
-      .catch(e => {
+      // Table has to exist or things will fail...
+      const createTableInput = GeoTableUtil.getCreateTableRequest(config);
+
+      try{
+
+      const output = await ddb
+        .createTable(createTableInput);
+
+      console.log('createTable Output', JSON.stringify(output));
+
+      } catch (e) {
         console.log('createTable error: ', e);
-      });
+      }
 
-    this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+      table = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+
+    })(this.geoTable);
+
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {

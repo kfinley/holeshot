@@ -15,6 +15,7 @@ import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
 import { Certificate, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { CrawlerService } from './crawler-service';
+import { EventService } from './event-service';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -272,6 +273,14 @@ export class InfrastructureStack extends Stack {
       domainName,
       zone: this.hostedZone,
       certificate: this.certificate
+    });
+
+    const eventService = new EventService(this, 'Holeshot-EventService', {
+      domainName,
+      coreTable: dataStores?.coreTable,
+      geoTable: dataStores?.geoTable,
+      node_env: props!.node_env,
+      onMessageHandler: webSocketsApi.onMessageHandler,
     });
 
     // new CfnOutput(this, 'apiEndpoint', {

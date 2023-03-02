@@ -7,24 +7,24 @@ import { Event } from '@holeshot/types/src';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
-export type GetEventsNearbyRequest = {
+export type GetNearbyEventsRequest = {
   lat: number;
   long: number;
   date: string;
   distance?: number;
 }
 
-export type GetEventsNearbyResponse = {
+export type GetNearbyEventsResponse = {
   events: Event[] | Record<string, any>;
 }
 
 @injectable()
-export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEventsNearbyResponse> {
+export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, GetNearbyEventsResponse> {
 
   @Inject("DynamoDBClient")
   private ddbClient!: DynamoDBClient;
 
-  async runAsync(params: GetEventsNearbyRequest): Promise<GetEventsNearbyResponse> {
+  async runAsync(params: GetNearbyEventsRequest): Promise<GetNearbyEventsResponse> {
     const ddb = new DynamoDB({ region: 'us-east-1' });
 
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
@@ -43,7 +43,7 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
 
     const events: Record<string, any>[] = [];
 
-    const promises = trackInRange.map(async item => {
+    await Promise.all(trackInRange.map(async item => {
       console.log('item', item);
 
       const query = {
@@ -59,9 +59,7 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
       console.log('items', data.Items);
 
       events.push(...data.Items.map(i => unmarshall(i)));
-    });
-
-    await Promise.all(promises);
+    }));
 
     console.log('Events', events)
 

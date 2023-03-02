@@ -11,6 +11,7 @@ import { Construct } from "constructs";
 import { createLambda, addCorsOptions } from '.';
 import { CfnTemplate } from "aws-cdk-lib/aws-ses";
 import { VerifySesEmailAddress } from "@seeebiii/ses-verify-identities";
+import { BaseServiceConstruct } from "./base-service-construct";
 
 export interface UserServiceStackProps {
   coreTable: Table;
@@ -20,7 +21,7 @@ export interface UserServiceStackProps {
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
 
-export class UserServiceStack extends Construct {
+export class UserServiceStack extends BaseServiceConstruct {
 
   readonly client: UserPoolClient;
   readonly userPool: UserPool;
@@ -28,19 +29,11 @@ export class UserServiceStack extends Construct {
 
   constructor(scope: Construct, id: string, props?: UserServiceStackProps) {
 
-    super(scope, id);
-
-    const functionsPath = '../../services/User/dist';
-
-    const newLamda = (name: string, handler: string, env?: {
-      [key: string]: string;
-    } | undefined) => {
-      return createLambda(this, name, functionsPath, handler, props!.node_env, env);
-    }
+    super(scope, id, '../../services/User/dist', props!.node_env);
 
     // Create PostAuthentication Lambda
     //
-    const postAuthentication = newLamda('PostAuthentication', 'functions/postAuthentication.handler');
+    const postAuthentication = super.newLambda('PostAuthentication', 'functions/postAuthentication.handler');
 
     // Cognito User Pool and Client
     //
@@ -96,14 +89,14 @@ export class UserServiceStack extends Construct {
 
     // Create the rest of the Lambdas
     //
-    const register = newLamda('RegisterHandler', 'functions/register.handler');
+    const register = super.newLambda('RegisterHandler', 'functions/register.handler');
 
-    const getUser = newLamda('GetUserHandler', 'functions/getUser.handler', {
+    const getUser = super.newLambda('GetUserHandler', 'functions/getUser.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName!
     });
     props?.coreTable.grantReadData(getUser);
 
-    const createUser = newLamda('CreateUserHandler', 'functions/createUser.handler', {
+    const createUser = super.newLambda('CreateUserHandler', 'functions/createUser.handler', {
       USER_POOL_ID: this.userPool.userPoolId
     });
 
@@ -120,12 +113,12 @@ export class UserServiceStack extends Construct {
     )
     createUser.role?.attachInlinePolicy(lambdaCognitoAdmintCreateUserPolicy);
 
-    const saveUser = newLamda('SaveUserHandler', 'functions/saveUser.handler', {
+    const saveUser = super.newLambda('SaveUserHandler', 'functions/saveUser.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName!
     });
     props?.coreTable.grantReadWriteData(saveUser);
 
-    const sendConfirmation = newLamda('SendConfirmation', 'functions/sendConfirmation.handler', {
+    const sendConfirmation = super.newLambda('SendConfirmation', 'functions/sendConfirmation.handler', {
       HOLESHOT_SITE_URL: props?.siteUrl!,
       HOLESHOT_SENDER_EMAIL: props?.senderEmail!,
       HOLESHOT_CONFIRMATION_EMAIL_TEMPLATE: 'ConfirmRegistration'

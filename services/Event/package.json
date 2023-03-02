@@ -1,5 +1,5 @@
 {
-  "name": "@holeshot/events-service",
+  "name": "@holeshot/event-service",
   "version": "1.0.0",
   "description": "Events service",
   "main": "index.js",

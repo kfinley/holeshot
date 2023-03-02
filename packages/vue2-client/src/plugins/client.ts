@@ -2,7 +2,7 @@ import bootstrapper from './../bootstrapper';
 import Vue from 'vue';
 import { Store } from 'vuex';
 import { ArticlesModule } from '../store/articles-module';
-import { WebSockets, getWSModule } from '../store/ws-module';
+import { WebSocketsModule } from '../store/ws-module';
 import { extend } from 'vee-validate';
 import { ClientPlugin } from '@finley/vue2-components/src/types';
 import ComponentLibraryPlugin, {
@@ -14,6 +14,7 @@ import { RouteNames } from './../router/RouteNames';
 import { NotificationState } from '@finley/vue2-components/src/store/state';
 import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/src/store';
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
+import { initializeModules } from '../store/initialize-modules';
 
 //Move these maybe??
 import 'bootstrap/dist/css/bootstrap.css';
@@ -21,7 +22,9 @@ import '../styles/styles.scss';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
-  store.registerModule('WebSockets', WebSockets);
+  store.registerModule('WebSockets', WebSocketsModule);
+
+  initializeModules(store);
 };
 
 const plugin: ClientPlugin = {

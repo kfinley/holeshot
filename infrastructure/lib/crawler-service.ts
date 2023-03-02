@@ -9,7 +9,7 @@ import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambd
 import { createLambda } from '.';
 import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
-
+import { BaseServiceConstruct } from './base-service-construct';
 export interface CrawlerServiceProps {
   domainName: string;
   crawlerBucket: Bucket;
@@ -18,16 +18,10 @@ export interface CrawlerServiceProps {
   node_env: string;
 }
 
-export class CrawlerService extends Construct {
+export class CrawlerService extends BaseServiceConstruct {
 
   constructor(scope: Construct, id: string, props?: CrawlerServiceProps) {
-    super(scope, id);
-
-    const newLambda = (name: string, handler: string, env?: {
-      [key: string]: string;
-    } | undefined) => {
-      return createLambda(this, name, '../../services/Crawler/src/node/dist', handler, props!.node_env, env);
-    }
+    super(scope, id, '../../services/Crawler/src/node/dist', props!.node_env);
 
     // const {
     //   accountId,
@@ -82,21 +76,21 @@ export class CrawlerService extends Construct {
     });
     decodeEmailsLambda.role?.attachInlinePolicy(bucketPolicy);
 
-    const saveTrackInfo = newLambda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
+    const saveTrackInfo = super.newLambda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackInfo);
 
-    const saveTrackEvents = newLambda('Holeshot-SaveTrackEvents', 'functions/saveTrackEvents.handler', {
+    const saveTrackEvents = super.newLambda('Holeshot-SaveTrackEvents', 'functions/saveTrackEvents.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     });
     saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackEvents);
     props?.geoTable.grantReadWriteData(saveTrackInfo);
-    
+
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,
       new LambdaDestination(decodeEmailsLambda),

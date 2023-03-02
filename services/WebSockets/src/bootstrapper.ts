@@ -5,6 +5,7 @@ import { bootstrapper as awsCommandsBootstrapper } from '@holeshot/aws-commands/
 import { AuthorizeConnectionCommand, DeleteConnectionByUserIdCommand, DeleteConnectionCommand, GetConnectionByUserIdCommand, SaveConnectionCommand, SendMessageCommand } from './commands';
 import { IMessageCommand } from './commands/messageCommand';
 import { PingMessageCommand } from './commands/pingMessage';
+import { RunLambdaCommand } from './commands/run-lambda';
 
 export default function bootstrapper() {
 
@@ -76,6 +77,7 @@ export default function bootstrapper() {
   container.bind<SendMessageCommand>("SendMessageCommand").to(SendMessageCommand);
   container.bind<SaveConnectionCommand>("SaveConnectionCommand").to(SaveConnectionCommand);
   container.bind<IMessageCommand>("PingMessageCommand").to(PingMessageCommand);
+  container.bind<IMessageCommand>("RunLambdaCommand").to(RunLambdaCommand);
 
   console.log("Bootstrapper Done");
 

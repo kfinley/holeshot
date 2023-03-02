@@ -13,6 +13,8 @@ import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { createLambda } from '.';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { BaseServiceConstruct } from './base-service-construct';
+import { Function } from 'aws-cdk-lib/aws-lambda';
 
 export interface WebSocketsStackProps {
   domainName: string;
@@ -23,37 +25,31 @@ export interface WebSocketsStackProps {
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
 }
 
-export class WebSocketsStack extends Construct {
+
+export class WebSocketsStack extends BaseServiceConstruct {
 
   public webSocketApi: WebSocketApi;
+  public onMessageHandler: Function;
 
   constructor(scope: Construct, id: string, props?: WebSocketsStackProps) {
-    super(scope, id);
-
-    const functionsPath = '../../services/WebSockets/dist';
-
-    const newLambda = (name: string, handler: string, env?: {
-      [key: string]: string;
-    } | undefined) => {
-      return createLambda(this, name, functionsPath, handler, props!.node_env, env);
-    }
+    super(scope, id, '../../services/WebSockets/dist', props!.node_env);
 
     // Lambda Functions....
-    const authorizerHandler = newLambda('AuthorizerHandler', 'functions/auth.handler');
+    const authorizerHandler = super.newLambda('AuthorizerHandler', 'functions/auth.handler');
 
-    const onConnectHandler = newLambda('OnConnectHandler', 'functions/connect.handler', {
+    const onConnectHandler = super.newLambda('OnConnectHandler', 'functions/connect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(onConnectHandler);
 
-    const onDisconnectHandler = newLambda('OnDisconnectHandler', 'functions/disconnect.handler', {
+    const onDisconnectHandler = super.newLambda('OnDisconnectHandler', 'functions/disconnect.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(onDisconnectHandler);
 
-    const onMessageHandler = newLambda('OnMessageHandler', 'functions/default.handler');
+    this.onMessageHandler = super.newLambda('OnMessageHandler', 'functions/default.handler');
 
-    const getConnection = newLambda('GetConnection', 'functions/getConnection.handler', {
+    const getConnection = super.newLambda('GetConnection', 'functions/getConnection.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
     });
     props?.connectionsTable.grantReadWriteData(getConnection);
@@ -67,7 +63,7 @@ export class WebSocketsStack extends Construct {
       apiName: 'Holeshot Websocket API',
       connectRouteOptions: { integration: new WebSocketLambdaIntegration("ConnectIntegration", onConnectHandler), authorizer },
       disconnectRouteOptions: { integration: new WebSocketLambdaIntegration("DisconnectIntegration", onDisconnectHandler) },
-      defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", onMessageHandler) },
+      defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", this.onMessageHandler) },
     });
 
     const stage = new WebSocketStage(this, 'Prod', {
@@ -78,14 +74,14 @@ export class WebSocketsStack extends Construct {
 
     const { region } = new ScopedAws(this);
 
-    const sendMessage = newLambda('SendMessage', 'functions/sendMessage.handler', {
+    const sendMessage = super.newLambda('SendMessage', 'functions/sendMessage.handler', {
       APIGW_ENDPOINT: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1` // `ws.${props!.domainName}/v1`
     });
 
     new CfnOutput(this, 'apigateay-endpoint', {
       value: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1`
     });
-    const startSendMessageNotification = newLambda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
+    const startSendMessageNotification = super.newLambda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
 
     // Lambda Functions end...
 
@@ -186,7 +182,7 @@ export class WebSocketsStack extends Construct {
 
     // Configure WebSockets...
 
-    this.webSocketApi.grantManageConnections(onMessageHandler);
+    this.webSocketApi.grantManageConnections(this.onMessageHandler);
     this.webSocketApi.grantManageConnections(sendMessage);
 
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {

@@ -7,7 +7,7 @@ import { Store } from 'vuex';
 import { config } from '@holeshot/web-core/src/config';
 
 @Module({ name: 'WebSockets', namespaced: true })
-export class WebSockets extends BaseModule implements WebSocketsState {
+export class WebSocketsModule extends BaseModule implements WebSocketsState {
   status: WebSocketsStatus = WebSocketsStatus.None;
   socket!: Socket;
 
@@ -17,6 +17,18 @@ export class WebSockets extends BaseModule implements WebSocketsState {
   handleSocketMessage(ev: MessageEvent) {
     const { subject, message } = JSON.parse(ev.data);
     this.context.dispatch(subject, message, { root: true });
+  }
+
+  @Action
+  sendCommand(params: { command: string, data: unknown }) {
+    console.log('sendSocketMessage', params);
+
+    this.socket.send(
+      JSON.stringify({
+        command: params.command,
+        data: params.data,
+      })
+    );
   }
 
   @Action
