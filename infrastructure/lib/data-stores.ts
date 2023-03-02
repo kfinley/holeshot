@@ -2,6 +2,8 @@ import { RemovalPolicy } from 'aws-cdk-lib'
 import { AttributeType, BillingMode, ProjectionType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
 import { BlockPublicAccess, Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
+import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { GeoDataManagerConfiguration, GeoTableUtil } from 'dynamodb-geo-v3';
 
 export interface DataStoresProps {
   domainName: string,
@@ -17,6 +19,19 @@ export class DataStores extends Construct {
 
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
     super(scope, id);
+
+    const ddb = new DynamoDB({ region: 'us-east-1'});
+    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+    config.hashKeyLength = 3
+
+    const createTableInput = GeoTableUtil.getCreateTableRequest(config);
+    ddb
+      .createTable(createTableInput)
+      // Wait for it to become ready
+      .then((o) => console.log('createTable Output', o))
+      .then(() => {
+        console.log("Table created and ready!");
+      });
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {
