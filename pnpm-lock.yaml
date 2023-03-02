@@ -668,12 +668,12 @@ importers:
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
-      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: ^2.2.6
       jest: ^27.5.1
+      long: ^4.0.0
       nodes2ts: 2.0.0
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
@@ -694,11 +694,11 @@ importers:
       '@holeshot/aws-commands': link:../../../../packages/aws-commands
       '@holeshot/commands': link:../../../../packages/commands
       '@holeshot/types': link:../../../../packages/holeshot-types
-      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: 2.2.6
+      long: 4.0.0
       nodes2ts: 2.0.0
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
@@ -723,10 +723,10 @@ importers:
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.0.6
-      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0
       inversify-props: ^2.2.6
       jest: ^27.0.5
+      long: ^4.0.0
       nodes2ts: 2.0.0
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
@@ -738,9 +738,9 @@ importers:
       '@aws-sdk/util-dynamodb': 3.282.0
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
-      '@types/long': 4.0.2
       dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       inversify-props: 2.2.6
+      long: 4.0.0
       nodes2ts: 2.0.0
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21

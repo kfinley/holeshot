@@ -18,7 +18,7 @@
     "@holeshot/commands": "^1.0.0",
     "dynamodb-geo-v3": "1.0.0",
     "nodes2ts": "2.0.0",
-    "@types/long": "4.0.2",
+    "long": "^4.0.0",
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21"
