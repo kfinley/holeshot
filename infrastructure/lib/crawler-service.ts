@@ -7,13 +7,14 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
 import { createLambda } from '.';
-import { Table } from 'aws-cdk-lib/aws-dynamodb';
+import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
 
 export interface CrawlerServiceProps {
   domainName: string;
   crawlerBucket: Bucket;
   coreTable: Table;
+  geoTable: ITable;
   node_env: string;
 }
 
@@ -94,7 +95,8 @@ export class CrawlerService extends Construct {
     });
     saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackEvents);
-
+    props?.geoTable.grantReadWriteData(saveTrackInfo);
+    
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,
       new LambdaDestination(decodeEmailsLambda),

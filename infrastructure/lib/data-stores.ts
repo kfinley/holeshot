@@ -1,5 +1,5 @@
-import { RemovalPolicy } from 'aws-cdk-lib'
-import { AttributeType, BillingMode, ProjectionType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
+import { RemovalPolicy, ScopedAws } from 'aws-cdk-lib'
+import { AttributeType, BillingMode, ITable, ProjectionType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
 import { BlockPublicAccess, Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
@@ -15,15 +15,22 @@ export class DataStores extends Construct {
   readonly frontEndBucket: Bucket;
   readonly mediaBucket: Bucket;
   readonly coreTable: Table;
+  readonly geoTable: ITable;
   readonly crawlerBucket: Bucket;
 
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
     super(scope, id);
 
+    const {
+      accountId,
+      region,
+    } = new ScopedAws(this);
+
     const ddb = new DynamoDB({ region: 'us-east-1' });
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
     config.hashKeyLength = 3
 
+    // Table has to exist or things will fail...
     const createTableInput = GeoTableUtil.getCreateTableRequest(config);
 
     ddb
@@ -36,6 +43,8 @@ export class DataStores extends Construct {
       .catch(e => {
         console.log('createTable error: ', e);
       });
+
+    this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {

@@ -46,6 +46,7 @@ export class InfrastructureStack extends Stack {
       domainName,
       crawlerBucket: dataStores.crawlerBucket,
       coreTable: dataStores.coreTable,
+      geoTable: dataStores.geoTable,
       node_env: props!.node_env
     });
 
