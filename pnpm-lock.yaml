@@ -668,11 +668,11 @@ importers:
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.5.2
+      dynamodb-geo-v3: 1.0.0
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: ^2.2.6
       jest: ^27.5.1
-      ngeohash: 0.6.3
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
       strnum: 1.0.5
@@ -692,10 +692,10 @@ importers:
       '@holeshot/aws-commands': link:../../../../packages/aws-commands
       '@holeshot/commands': link:../../../../packages/commands
       '@holeshot/types': link:../../../../packages/holeshot-types
+      dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: 2.2.6
-      ngeohash: 0.6.3
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
       strnum: 1.0.5
@@ -713,11 +713,13 @@ importers:
   services/Events:
     specifiers:
       '@aws-sdk/client-dynamodb': ^3.282.0
+      '@aws-sdk/util-dynamodb': ^3.282.0
       '@holeshot/aws-commands': ^1.0.0
       '@holeshot/commands': ^1.0.0
       '@tsconfig/node18': ^1.0.0
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.0.6
+      dynamodb-geo-v3: 1.0.0
       inversify-props: ^2.2.6
       jest: ^27.0.5
       reflect-metadata: ^0.1.13
@@ -727,8 +729,10 @@ importers:
       typescript: ^4.1.5
     dependencies:
       '@aws-sdk/client-dynamodb': 3.282.0
+      '@aws-sdk/util-dynamodb': 3.282.0
       '@holeshot/aws-commands': link:../../packages/aws-commands
       '@holeshot/commands': link:../../packages/commands
+      dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
@@ -9501,7 +9505,6 @@ packages:
 
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
-    dev: true
 
   /@types/mailparser/3.4.0:
     resolution: {integrity: sha512-MotFinA1sT2nPFtQw1WpaF3X6I1OdbEloaixMmk924BOYqwHmlZkoi7XcVUXHI+7i0to8JguHqYj5k/E6c9Chw==}
@@ -15173,6 +15176,16 @@ packages:
       d: 1.0.1
       es5-ext: 0.10.62
     dev: true
+
+  /dynamodb-geo-v3/1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4:
+    resolution: {integrity: sha512-JTLmj8HFbUJXrJR4hrp6yJCyMUrsLzXEoP+UvjnzCzruCzUinn85rvSu6Q2hOCIny5WQuOHVZGkY5pefra5AEA==}
+    peerDependencies:
+      '@aws-sdk/client-dynamodb': ^3.34.0
+    dependencies:
+      '@aws-sdk/client-dynamodb': 3.282.0
+      '@types/long': 4.0.2
+      nodes2ts: 2.0.0
+    dev: false
 
   /dynamodb-localhost/0.0.9:
     resolution: {integrity: sha512-Dug29xrAGGiZwyRwYLL+RcDfKAk+QW9k0imbG0DhqthJ8i9eVoTl18+6sv59B1JXFQfoBCfunYSAknbUUH2ozQ==}
@@ -22093,7 +22106,6 @@ packages:
 
   /long/4.0.0:
     resolution: {integrity: sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==}
-    dev: true
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -22983,11 +22995,6 @@ packages:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: true
 
-  /ngeohash/0.6.3:
-    resolution: {integrity: sha512-kltF0cOxgx1AbmVzKxYZaoB0aj7mOxZeHaerEtQV0YaqnkXNq26WWqMmJ6lTqShYxVRWZ/mwvvTrNeOwdslWiw==}
-    engines: {node: '>=v0.2.0'}
-    dev: false
-
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
     dev: true
@@ -23172,6 +23179,12 @@ packages:
   /nodemailer/6.8.0:
     resolution: {integrity: sha512-EjYvSmHzekz6VNkNd12aUqAco+bOkRe3Of5jVhltqKhEsjw/y0PYPJfp83+s9Wzh1dspYAkUW/YNQ350NATbSQ==}
     engines: {node: '>=6.0.0'}
+    dev: false
+
+  /nodes2ts/2.0.0:
+    resolution: {integrity: sha512-847uDvD2P19xsN7BNPbeUqaZCxA3OBmlHCIqpAsy/JCnGI90XZeZTFtHueK6GZjn/CNaBG2sA42aI0qQvLAJig==}
+    dependencies:
+      long: 4.0.0
     dev: false
 
   /noop-logger/0.1.1:

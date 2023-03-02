@@ -1,7 +1,6 @@
 import { AttributeValue } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { TrackInfo, Event } from "@holeshot/types/src";
-import geohash from 'ngeohash';
 
 export function convertTrackInfoToItem(track: TrackInfo): {
   [key: string]: AttributeValue;
@@ -40,7 +39,7 @@ export function convertEventToItem(event: Event, track: TrackInfo): {
       S: `${event.date}`
     },
     GSI1PK: {
-      S: geohash.encode(track.location.gps.lat, track.location.gps.long)
+      S: `TRACK#${track.name}`
     },
     GSI1SK: {
       S: `${event.date}`

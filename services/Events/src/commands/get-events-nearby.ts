@@ -1,5 +1,8 @@
+import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
-import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDB, DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import { GeoDataManagerConfiguration, GeoDataManager } from 'dynamodb-geo-v3';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
@@ -68,11 +71,11 @@ export type GetEventsNearbyRequest = {
   lat: string;
   long: string;
   date: string;
-  distance: string = "500" // Default to 500 miles
+  distance: number;
 }
 
 export type GetEventsNearbyResponse = {
-
+  events: Event[];
 }
 
 
@@ -83,25 +86,38 @@ export class GetEventsNearby implements Command<GetEventsNearbyRequest, GetEvent
   private ddbClient!: DynamoDBClient;
 
   async runAsync(params: GetEventsNearbyRequest): Promise<GetEventsNearbyResponse> {
+    const ddb = new DynamoDB({ region: 'us-east-1' });
+    
+    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+    const myGeoTableManager = new GeoDataManager(config);
 
     const bbox = getBoundingBox(params.lat, params.long, params.distance * 1.6) // getBoundingBox expects kilometer so convert miles to km
 
-    const hashes = geohash.bboxes(bbox[0], bbox[1], bbox[2], bbox[3], 5);
+    // const hashes = geohash.bboxes(bbox[0], bbox[1], bbox[2], bbox[3], 5) as string[];
 
-    const query = {
-      TableName,
-      IndexName: "GSI1",
-      ExpressionAttributeValues: marshall({
-        ":GSI1PK": `${params.ownerId}`,
-        ":GSI1SK": `${params.date}`
-      }),
-      KeyConditionExpression: "begins_with(GSI1PK, :GSI1PK) and GSI1SK >= :GSI1SK)",
-    };
+    const event: Event[] = [];
 
-    const data = await this.ddbClient.send(new QueryCommand(query));
+    // for (const hash of hashes) {
+
+    //   const query = {
+    //     TableName,
+    //     IndexName: "GSI1",
+    //     ExpressionAttributeValues: marshall({
+    //       ":GSI1PK": `${hash}`,
+    //       ":GSI1SK": `${params.date}`
+    //     }),
+    //     KeyConditionExpression: "GSI1PK = :GSI1PK and GSI1SK >= :GSI1SK)",
+    //   };
+
+    //   const data = await this.ddbClient.send(new QueryCommand(query));
+
+
+      // data.Items
+    // }
+
 
     return {
-      
+      events: []
     }
   }
 }

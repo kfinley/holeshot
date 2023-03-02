@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.282.0",
+    "@aws-sdk/util-dynamodb": "^3.282.0",
     "@holeshot/aws-commands": "^1.0.0",
     "@holeshot/commands": "^1.0.0",
+    "dynamodb-geo-v3": "1.0.0",
     "inversify-props": "^2.2.6",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21"
