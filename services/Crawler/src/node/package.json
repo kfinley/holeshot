@@ -26,6 +26,7 @@
     "inversify": "5.1.1",
     "inversify-props": "^2.2.6",
     "fast-xml-parser": "4.0.11",
+    "nodes2ts": "2.0.0",
     "source-map-support": "^0.5.21",
     "reflect-metadata": "^0.1.13",
     "strnum": "1.0.5",
