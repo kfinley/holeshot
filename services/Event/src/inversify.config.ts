@@ -7,4 +7,7 @@ const container = new Container({
   skipBaseClassChecks: true,
 });
 
+// Required to make @Inject() properties work
+defaultContainer.parent = container;
+
 export { container };

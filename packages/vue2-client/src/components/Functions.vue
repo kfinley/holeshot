@@ -3,7 +3,11 @@
     <h1>Run Lambda Function</h1>
     <form @submit.prevent="onSubmit" autocomplete="off" role="form text-left">
       <div>
-        <input name="functionName" v-model="functionName" />
+        <input
+          name="functionName"
+          v-model="functionName"
+          text="Holeshot-Infrastructure-GetNearbyEvents"
+        />
       </div>
       <div>
         <textarea name="functionPayload" v-model="functionPayload" />
@@ -43,5 +47,6 @@ export default class Functions extends Vue {
 textarea,
 input {
   width: 100%;
+  height: 350px;
 }
 </style>
