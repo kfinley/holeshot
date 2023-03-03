@@ -734,6 +734,7 @@ importers:
       source-map-support: ^0.5.21
       ts-jest: ^27.0.5
       ts-node: ^10.9.1
+      tslib: ^2.4.1
       typescript: ^4.1.5
     dependencies:
       '@aws-sdk/client-dynamodb': 3.282.0
@@ -748,6 +749,7 @@ importers:
       nodes2ts: 2.0.0
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
+      tslib: 2.4.1
     devDependencies:
       '@tsconfig/node18': 1.0.1
       '@types/aws-lambda': 8.10.109
