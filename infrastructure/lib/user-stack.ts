@@ -28,7 +28,6 @@ export class UserServiceStack extends BaseServiceConstruct {
   readonly restApi: RestApi;
 
   constructor(scope: Construct, id: string, props?: UserServiceStackProps) {
-
     super(scope, id, '../../services/User/dist', props!.node_env);
 
     // Create PostAuthentication Lambda

@@ -78,7 +78,7 @@ export class CrawlerService extends BaseServiceConstruct {
 
     const saveTrackInfo = super.newLambda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
-      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
+      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string
     });
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackInfo);
