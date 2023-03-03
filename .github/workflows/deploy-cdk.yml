@@ -60,7 +60,7 @@ jobs:
 
       # TODO: switch this to pull config from a file on s3 somewhere...
       # TODO: move config.js file build to user-service cdk construct
-      - name: Bootstrap & Build
+      - name: Build
         run: |
           pnpm i && cd ./packages/vue2-client/dist
           rm config.js
@@ -74,9 +74,10 @@ jobs:
           echo -e 'Agent: "holeshot-web/0.0.1",' >> config.js
           echo -e '};' >> config.js
           cd ../..
+          pnpm run build:client
           pnpm run build:lambdas
 
-      - name: "Bootstrap, Deploy CDK, & sync S3 media "
+      - name: "CDK Bootstrap, Deploy, & sync S3 media"
         working-directory: ./infrastructure
         env:
           AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
