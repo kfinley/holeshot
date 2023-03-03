@@ -47,9 +47,12 @@ export default class Functions extends Vue {
 </script>
 
 <style lang="scss" scoped>
+textarea {
+  height: 350px;
+}
+
 textarea,
 input {
   width: 100%;
-  height: 350px;
 }
 </style>
