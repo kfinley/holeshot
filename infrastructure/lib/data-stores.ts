@@ -7,15 +7,15 @@ import { GeoDataManagerConfiguration, GeoTableUtil } from 'dynamodb-geo-v3';
 
 export interface DataStoresProps {
   domainName: string,
-
 }
+
 export class DataStores extends Construct {
 
   readonly connectionsTable: Table;
   readonly frontEndBucket: Bucket;
   readonly mediaBucket: Bucket;
   readonly coreTable: Table;
-  readonly geoTable: ITable;
+  geoTable: ITable;
   readonly crawlerBucket: Bucket;
 
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
@@ -26,30 +26,28 @@ export class DataStores extends Construct {
       region,
     } = new ScopedAws(this);
 
-    (async (table) => {
+    (async () => {
 
-      const ddb = new DynamoDB({ region: 'us-east-1' });
-      const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-      config.hashKeyLength = 3
+      this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
-      // Table has to exist or things will fail...
-      const createTableInput = GeoTableUtil.getCreateTableRequest(config);
+      if (this.geoTable == undefined) {
+        try {
+          const ddb = new DynamoDB({ region });
+          const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+          config.hashKeyLength = 3
 
-      try{
+          const output = await ddb.createTable(GeoTableUtil.getCreateTableRequest(config));
 
-      const output = await ddb
-        .createTable(createTableInput);
+          console.log('createTable Output', JSON.stringify(output));
 
-      console.log('createTable Output', JSON.stringify(output));
+          this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
-      } catch (e) {
-        console.log('createTable error: ', e);
+        } catch (e) {
+          // If the table exists we expect an error here. Logging output to catch anything unexpected but continuing on since we know the table has been created as of 3/3
+          console.log('createTable error: ', e);
+        }
       }
-
-      table = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
-
-    })(this.geoTable);
-
+    })();
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {

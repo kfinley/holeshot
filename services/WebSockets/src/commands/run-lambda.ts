@@ -11,6 +11,8 @@ export type RunLambdaResponse = {
   statusCode?: number
 };
 
+const AWS_REGION = process.env.AWS_REGION;
+
 @injectable()
 export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResponse> {
 
@@ -23,11 +25,12 @@ export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResp
     try {
       //TODO: fix this...
       this.client = new Lambda({
-        region: 'us-east-1'
+        region: AWS_REGION
       });
 
       const command = {
         FunctionName: params.name,
+        InvocationType: "Event",  // ??
         Payload: new TextEncoder().encode(JSON.stringify(params.payload))
       };
 

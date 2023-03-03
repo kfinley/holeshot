@@ -4,7 +4,7 @@
   "description": "Events service",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build --clean && tsc --build && cp -LRv node_modules dist > /dev/null 2>&1 && echo 'Events build complete!'",
+    "build": "tsc --build --clean && tsc --build && cp -LRv node_modules dist > /dev/null 2>&1 && echo 'Event build complete!'",
     "test:unit": "jest"
   },
   "author": {

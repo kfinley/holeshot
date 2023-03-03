@@ -13,7 +13,6 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
 } | undefined) => {
 
   const path = join(__dirname, functionsPath);
-  console.log('lambda path', path);
 
   return new lambda.Function(scope, name, {
     runtime: lambda.Runtime.NODEJS_18_X,
