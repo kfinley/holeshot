@@ -735,6 +735,7 @@ importers:
       inversify-props: ^2.2.6
       jest: ^27.0.5
       long: ^4.0.0
+      math-float64-exponent: ^1.0.0
       nodes2ts: 3.0.0
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
@@ -760,6 +761,7 @@ importers:
       inversify: 5.1.1
       inversify-props: 2.2.6
       long: 4.0.0
+      math-float64-exponent: 1.0.0
       nodes2ts: 3.0.0
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
@@ -11566,7 +11568,7 @@ packages:
   /axios/0.21.4_debug@4.3.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
     transitivePeerDependencies:
       - debug
 
@@ -17105,6 +17107,7 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4
+    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
