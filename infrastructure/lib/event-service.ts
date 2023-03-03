@@ -39,7 +39,7 @@ export class EventService extends BaseServiceConstruct {
         ],
         effect: Effect.ALLOW,
         resources: [`${getEventsNearby.functionArn}:$LATEST`],
-        sid: "getEventsNearby-LambdaInvokePolicy"
+        sid: "HoleshotGetEventsNearbyLambdaInvokePolicy"
       })
     )
     props!.onMessageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
