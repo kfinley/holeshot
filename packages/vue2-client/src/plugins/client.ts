@@ -15,6 +15,7 @@ import { NotificationState } from '@finley/vue2-components/src/store/state';
 import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/src/store';
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
 import { initializeModules } from '../store/initialize-modules';
+import { webSocketsModule } from '../store';
 
 //Move these maybe??
 import 'bootstrap/dist/css/bootstrap.css';
@@ -64,7 +65,7 @@ const plugin: ClientPlugin = {
           userState.authStatus == AuthStatus.LoggedIn &&
           userState.authTokens?.accessToken
         ) {
-          getWSModule(options.store).connect(userState.authTokens?.accessToken);
+          webSocketsModule(options.store).connect(userState.authTokens?.accessToken);
         }
         next();
       });
