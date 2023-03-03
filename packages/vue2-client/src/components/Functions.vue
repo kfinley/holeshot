@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator';
-import { webSocketsModule } from '../store';
+import { getWSModule } from '../store/ws-module';
 
 @Component({})
 export default class Functions extends Vue {
@@ -22,7 +22,7 @@ export default class Functions extends Vue {
   functionPayload = '';
 
   onSubmit() {
-    webSocketsModule.sendCommand({
+    getWSModule(this.$store).sendCommand({
       command: 'RunLambda',
       data: {
         name: this.functionName,

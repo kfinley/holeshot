@@ -14,7 +14,6 @@ import { RouteNames } from './../router/RouteNames';
 import { NotificationState } from '@finley/vue2-components/src/store/state';
 import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/src/store';
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
-import { initializeModules } from '../store/initialize-modules';
 
 //Move these maybe??
 import 'bootstrap/dist/css/bootstrap.css';
@@ -23,8 +22,6 @@ import '../styles/styles.scss';
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
   store.registerModule('WebSockets', WebSocketsModule);
-
-  initializeModules(store);
 };
 
 const plugin: ClientPlugin = {
