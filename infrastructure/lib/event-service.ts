@@ -1,11 +1,6 @@
-import { writeFileSync } from 'fs';
-import { Bucket, EventType } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
-import { Duration } from 'aws-cdk-lib';
-import { RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function, Code, Runtime } from "aws-cdk-lib/aws-lambda";
-import { createLambda } from '.';
 import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
 import { BaseServiceConstruct } from './base-service-construct';
@@ -38,11 +33,9 @@ export class EventService extends BaseServiceConstruct {
           "lambda:InvokeFunction"
         ],
         effect: Effect.ALLOW,
-        resources: [`${getEventsNearby.functionArn}:$LATEST`],
-        sid: "HoleshotGetEventsNearbyLambdaInvokePolicy"
+        resources: [ getEventsNearby.functionArn ]
       })
     )
     props?.onMessageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
-
   }
 }
