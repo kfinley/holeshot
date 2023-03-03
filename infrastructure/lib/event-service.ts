@@ -23,15 +23,15 @@ export class EventService extends BaseServiceConstruct {
   constructor(scope: Construct, id: string, props?: EventServiceProps) {
     super(scope, id, '../../services/Event/dist', props!.node_env);
 
-    const getEventsNearby = super.newLambda('Holeshot-GetNearbyEvents', 'functions/get-nearby-events.handler', {
+    const getEventsNearby = super.newLambda('GetNearbyEvents', 'functions/get-nearby-events.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
       HOLESHOT_GEO_TABLE: props?.geoTable.tableName as string
     });
 
-    props!.coreTable.grantReadData(getEventsNearby);
-    props!.geoTable.grantFullAccess(getEventsNearby);
+    props?.coreTable.grantReadData(getEventsNearby);
+    props?.geoTable.grantFullAccess(getEventsNearby);
 
-     const lambdaInvokePolicy = new Policy(this, 'Holeshot-GetEventsNearby-LambdaInvokePolicy');
+    const lambdaInvokePolicy = new Policy(this, 'Holeshot-GetNearbyEvents-LambdaInvokePolicy');
     lambdaInvokePolicy.addStatements(
       new PolicyStatement({
         actions: [
@@ -42,7 +42,7 @@ export class EventService extends BaseServiceConstruct {
         sid: "HoleshotGetEventsNearbyLambdaInvokePolicy"
       })
     )
-    props!.onMessageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
+    props?.onMessageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
 
   }
 }

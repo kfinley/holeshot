@@ -39,4 +39,9 @@ export default class Functions extends Vue {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+textarea,
+input {
+  width: 100%;
+}
+</style>
