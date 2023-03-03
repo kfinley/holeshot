@@ -1,5 +1,11 @@
 <template>
-  <card header-text="Set Password" :show-close="false" style="height: 90vh" max-width="600px" padding="2">
+  <card
+    header-text="Set Password"
+    :show-close="false"
+    style="height: 90vh"
+    max-width="600px"
+    padding="2"
+  >
     <ValidationObserver ref="formObserver">
       <form @submit.prevent="onSubmit" autocomplete="off" role="form text-left">
         <div class="mb-3">
@@ -65,12 +71,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Ref, Prop } from "vue-property-decorator";
-import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { userModule, UserState, AuthStatus } from "../store";
-import Card from "@finley/vue2-components/src/components/card.vue";
-import { State } from "vuex-class";
-import { messages } from "../resources/messages";
+import { Component, Vue, Ref, Prop } from 'vue-property-decorator';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import { userModule, UserState, AuthStatus } from '../store';
+import Card from '@finley/vue2-components/src/components/card.vue';
+import { State } from 'vuex-class';
+import { messages } from '../resources/messages';
 
 @Component({
   components: {
@@ -88,14 +94,14 @@ export default class SetPassword extends Vue {
 
   username!: string;
   previousPassword!: string;
-  password1 = "";
-  password2 = "";
+  password1 = '';
+  password2 = '';
 
-  @State("User") state!: UserState;
+  @State('User') state!: UserState;
 
   mounted() {
     this.password1Element?.focus();
-    const [userId, password] = this.regCode.split("|");
+    const [userId, password] = this.regCode.split('|');
 
     this.username = userId;
     this.previousPassword = password;
@@ -129,5 +135,4 @@ export default class SetPassword extends Vue {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

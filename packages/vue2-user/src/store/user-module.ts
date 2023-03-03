@@ -56,13 +56,9 @@ export default class UserModule extends VuexModule implements UserState {
 
         if (this.postAuthFunction) {
           console.log('running postAuthFunction', this.postAuthFunction);
-          this.context.dispatch(
-            this.postAuthFunction,
-            this.authTokens.accessToken,
-            {
-              root: true,
-            }
-          );
+          this.context.dispatch(this.postAuthFunction, this.authTokens.accessToken, {
+            root: true,
+          });
         }
       }
 
