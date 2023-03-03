@@ -31,6 +31,8 @@
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.21",
     "math-float64-exponent": "^1.0.0",
+    "math-float64-get-high-word": "^1.0.0",
+    "utils-is-little-endian": "^1.0.0",
     "tslib": "^2.4.1",
     "strnum": "1.0.5",
     "uuid": "8.3.2"
