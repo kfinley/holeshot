@@ -10,7 +10,6 @@ import { Chain, Choice, Condition, Fail, LogLevel, StateMachine } from 'aws-cdk-
 import { LambdaInvoke } from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Effect, IRole, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
-import { createLambda } from '.';
 import { HostedZone } from 'aws-cdk-lib/aws-route53';
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { BaseServiceConstruct } from './base-service-construct';

@@ -1,5 +1,5 @@
 import { CfnOutput, Duration, RemovalPolicy } from "aws-cdk-lib";
-import { LambdaIntegration, RestApi, LambdaRestApi, ApiKeySourceType } from "aws-cdk-lib/aws-apigateway";
+import { RestApi, LambdaRestApi, ApiKeySourceType } from "aws-cdk-lib/aws-apigateway";
 import { AccountRecovery, StringAttribute, UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Effect, IRole, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
@@ -8,10 +8,10 @@ import { Topic } from "aws-cdk-lib/aws-sns";
 import { Chain, Choice, Condition, Fail, LogLevel, Pass, Result, StateMachine, Succeed } from "aws-cdk-lib/aws-stepfunctions";
 import { LambdaInvoke } from "aws-cdk-lib/aws-stepfunctions-tasks";
 import { Construct } from "constructs";
-import { createLambda, addCorsOptions } from '.';
 import { CfnTemplate } from "aws-cdk-lib/aws-ses";
 import { VerifySesEmailAddress } from "@seeebiii/ses-verify-identities";
 import { BaseServiceConstruct } from "./base-service-construct";
+import { addCorsOptions } from ".";
 
 export interface UserServiceStackProps {
   coreTable: Table;

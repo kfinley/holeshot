@@ -1,8 +1,7 @@
 import { Construct } from 'constructs';
 import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Function, Code, Runtime } from "aws-cdk-lib/aws-lambda";
+import { Function } from "aws-cdk-lib/aws-lambda";
 import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
-import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
 import { BaseServiceConstruct } from './base-service-construct';
 
 export interface EventServiceProps {
