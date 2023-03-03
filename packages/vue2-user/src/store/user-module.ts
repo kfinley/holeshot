@@ -12,7 +12,7 @@ import { Inject } from 'inversify-props';
 @Module({ namespaced: true, name: 'User' })
 export default class UserModule extends VuexModule implements UserState {
   authStatus = AuthStatus.LoggedOut;
-  authSession = undefined;
+  authSession!: string;
   currentUser!: User;
   authTokens: AuthenticationResult = {}; // AuthenticationResult;
   postAuthFunction = ''; //: string | undefined = undefined; // !: string; // look into this... shouldn't have to do this but if we don't then the prop isn't on the obj in plugin
@@ -67,6 +67,8 @@ export default class UserModule extends VuexModule implements UserState {
         state.authSession = login.session;
       });
 
+      console.log(this.authSession);
+
       if (login.error) {
         throw new Error(login.error);
       }
@@ -94,7 +96,7 @@ export default class UserModule extends VuexModule implements UserState {
 
       console.log('user-module: session', session);
       console.log('user-module: authSession', this.authSession);
-      
+
       const response = await this.setPasswordCommand.runAsync({
         previousPassword: params.previousPassword,
         proposedPassword: params.proposedPassword,

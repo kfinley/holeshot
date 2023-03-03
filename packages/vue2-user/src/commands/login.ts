@@ -22,7 +22,7 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
 
     try {
       const result = await this.provider.initiateAuth(request);
-      
+
       console.log('initiateAuth', result);
 
       if (result.AuthenticationResult) {
