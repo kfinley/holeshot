@@ -23,12 +23,14 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   sendCommand(params: { command: string, data: unknown }) {
     console.log('sendSocketMessage', params);
 
-    this.socket.send(
-      JSON.stringify({
-        command: params.command,
-        data: params.data,
-      })
-    );
+    this.context.commit('mutate', (state: WebSocketsState) => {
+        state.socket?.send(
+        JSON.stringify({
+          command: params.command,
+          data: params.data,
+        })
+      );
+    });
   }
 
   @Action
