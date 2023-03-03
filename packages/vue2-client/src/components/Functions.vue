@@ -6,7 +6,6 @@
         <input
           name="functionName"
           v-model="functionName"
-          text="Holeshot-Infrastructure-GetNearbyEvents"
         />
       </div>
       <div>
@@ -28,8 +27,12 @@ export default class Functions extends Vue {
   @Ref() readonly functionNameElement!: HTMLInputElement;
   @Ref() readonly functionPayloadElement!: HTMLInputElement;
 
-  functionName = '';
-  functionPayload = '';
+  functionName = 'Holeshot-Infrastructure-GetNearbyEvents';
+  functionPayload = `{
+    "lat": "34.9744394",
+    "long": "-80.9667001",
+    "date": "2023-03-01T00:00:00"
+  }"`;
 
   onSubmit() {
     getWSModule(this.$store).sendCommand({
