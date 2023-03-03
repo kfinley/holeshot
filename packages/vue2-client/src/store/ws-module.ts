@@ -66,4 +66,4 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   }
 }
 
-export const getWSModule = (store: Store<any>) => getModule(WebSockets, store);
+export const getWSModule = (store: Store<any>) => getModule(WebSocketsModule, store);
