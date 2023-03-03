@@ -12,13 +12,16 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
   [key: string]: string;
 } | undefined) => {
 
+  const path = join(__dirname, functionsPath);
+  console.log('lambda path', path);
+
   return new lambda.Function(scope, name, {
     runtime: lambda.Runtime.NODEJS_18_X,
     memorySize: 1024,
     timeout: Duration.seconds(5),
     functionName: `Holeshot-Infrastructure-${name}`,
     handler,
-    code: new lambda.AssetCode(join(__dirname, functionsPath)),
+    code: new lambda.AssetCode(path),
     environment: {
       AVAILABILITY_ZONES: JSON.stringify(
         Stack.of(scope).availabilityZones,

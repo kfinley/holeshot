@@ -8,7 +8,7 @@ export class BaseServiceConstruct extends Construct {
 
   constructor(scope: Construct, id: string, nodeCodepath: string, node_env: string) {
     super(scope, id);
-    this.nodeCodePath = this.nodeCodePath;
+    this.nodeCodePath = nodeCodepath;
     this.node_env = node_env;
   }
 
