@@ -26,7 +26,7 @@ export class GetUserCommand implements Command<GetUserCommandRequest, GetUserCom
     const query = {
       TableName,
       ExpressionAttributeValues: marshall({
-        ":PK": `OWNER#${params.email}`
+        ":PK": `USER#${params.email}`
       }),
       KeyConditionExpression: "PK = :PK"
     };

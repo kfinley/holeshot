@@ -100,8 +100,8 @@ export default class SetPassword extends Vue {
     this.username = userId;
     this.previousPassword = password;
 
-    console.log(`${userId} : ${password}` )
-    
+    console.log(`${userId} : ${password}`);
+
     userModule.login({
       email: this.username,
       password: this.previousPassword,
