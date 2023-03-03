@@ -23,7 +23,7 @@
     "@holeshot/commands": "^1.0.0",
     "@holeshot/types": "^1.0.0",
     "dynamodb-geo-v3": "1.0.0",
-    "nodes2ts": "2.0.0",
+    "nodes2ts": "3.0.0",
     "long": "^4.0.0",
     "fast-xml-parser": "4.0.11",
     "inversify": "5.1.1",
