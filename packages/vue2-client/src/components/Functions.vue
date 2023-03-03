@@ -1,10 +1,16 @@
 <template>
   <div>
-    <h1>Functions</h1>
+    <h1>Run Lambda Function</h1>
     <form @submit.prevent="onSubmit" autocomplete="off" role="form text-left">
-      <input name="functionName" v-model="functionName" />
-      <textarea name="functionPayload" v-model="functionPayload" />
-      <button type="submit" class="btn primary-gradient w-100 my-4 mb-2">Log in</button>
+      <div>
+        <input name="functionName" v-model="functionName" />
+      </div>
+      <div>
+        <textarea name="functionPayload" v-model="functionPayload" />
+      </div>
+      <button type="submit" class="btn primary-gradient w-100 my-4 mb-2">
+        Send Run Function Command
+      </button>
     </form>
   </div>
 </template>
