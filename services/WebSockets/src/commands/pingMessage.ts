@@ -7,7 +7,7 @@ import { MessageCommandProps } from './messageCommand';
 export type PingMessageRequest = {
   connectionId: string,
   container: Container
-} extends MessageCommandProps;
+};
 
 export type PingMessageResponse = {
   success: boolean;

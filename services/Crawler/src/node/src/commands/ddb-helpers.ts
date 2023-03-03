@@ -38,12 +38,6 @@ export function convertEventToItem(event: Event, track: TrackInfo): {
     SK: {
       S: `${event.date}`
     },
-    GSI1PK: {
-      S: `TRACK#${track.name}`
-    },
-    GSI1SK: {
-      S: `${event.date}`
-    },
     type: {
       S: 'Event'
     },
