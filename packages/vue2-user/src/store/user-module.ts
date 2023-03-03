@@ -93,7 +93,8 @@ export default class UserModule extends VuexModule implements UserState {
       const session = params.session ?? this.authSession;
 
       console.log('user-module: session', session);
-
+      console.log('user-module: authSession', this.authSession);
+      
       const response = await this.setPasswordCommand.runAsync({
         previousPassword: params.previousPassword,
         proposedPassword: params.proposedPassword,
