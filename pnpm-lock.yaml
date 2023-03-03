@@ -725,6 +725,7 @@ importers:
       '@types/aws-lambda': ^8.10.72
       '@types/jest': ^27.0.6
       dynamodb-geo-v3: 1.0.0
+      fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: ^2.2.6
       jest: ^27.0.5
@@ -732,6 +733,7 @@ importers:
       nodes2ts: 2.0.0
       reflect-metadata: ^0.1.13
       source-map-support: ^0.5.21
+      strnum: 1.0.5
       ts-jest: ^27.0.5
       ts-node: ^10.9.1
       tslib: ^2.4.1
@@ -743,12 +745,14 @@ importers:
       '@holeshot/commands': link:../../packages/commands
       '@holeshot/types': link:../../packages/holeshot-types
       dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
+      fast-xml-parser: 4.0.11
       inversify: 5.1.1
       inversify-props: 2.2.6
       long: 4.0.0
       nodes2ts: 2.0.0
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
+      strnum: 1.0.5
       tslib: 2.4.1
     devDependencies:
       '@tsconfig/node18': 1.0.1
