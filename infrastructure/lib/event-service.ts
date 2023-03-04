@@ -12,7 +12,7 @@ export interface EventServiceProps {
 
 export class EventService extends BaseServiceConstruct {
 
-  readonly getEventsNearby: Function;
+  readonly getNearbyEvents: Function;
 
   constructor(scope: Construct, id: string, props?: EventServiceProps) {
     super(scope, id, '../../services/Event/dist', props!.node_env);
@@ -24,13 +24,13 @@ export class EventService extends BaseServiceConstruct {
 
     const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
-    this.getEventsNearby = super.newLambda('GetNearbyEvents', 'functions/get-nearby-events.handler', {
+    this.getNearbyEvents = super.newLambda('GetNearbyEvents', 'functions/get-nearby-events.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
       HOLESHOT_GEO_TABLE: geoTable.tableName as string
     });
 
-    props?.coreTable.grantReadData(this.getEventsNearby);
-    geoTable.grantReadData(this.getEventsNearby);
+    props?.coreTable.grantReadData(this.getNearbyEvents);
+    geoTable.grantFullAccess(this.getNearbyEvents);
 
   }
 }

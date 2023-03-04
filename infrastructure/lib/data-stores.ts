@@ -38,8 +38,9 @@ export class DataStores extends Construct {
         const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
       } catch (e) {
-        // If the table exists we expect an error here. Logging output to catch anything unexpected but continuing on since we know the table has been created as of 3/3
-        console.log('createTable error: ', e);
+        // If the table exists we'll get an error. Move along...
+        // Uncomment to log output to check for anything unexpected
+        // console.log('createTable error: ', e);
       }
     })();
 
