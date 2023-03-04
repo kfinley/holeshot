@@ -55,6 +55,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     const ddb = new DynamoDB({ region: 'us-east-1' });
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+    config.hashKeyLength = 5
 
     const myGeoTableManager = new GeoDataManager(config);
     const geoResponse = await myGeoTableManager.putPoint({
