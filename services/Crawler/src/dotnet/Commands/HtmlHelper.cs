@@ -9,8 +9,13 @@ namespace Holeshot.Crawler.Commands {
     public string GetTrackName(IDocument doc) =>
       doc.QuerySelector("#main_content > h1").FirstChild.TextContent.Trim();
 
-    public string GetTrackDistrict(IDocument doc) =>
-      doc.QuerySelector("#track_district").TextContent.Split(':')[1].Trim();
+    public string GetTrackDistrict(IDocument doc) {
+      try {
+        return doc.QuerySelector("#track_district").TextContent.Split(':')[1].Trim();
+      } catch (Exception) {
+        return "None";
+      }
+    }
 
     public Dictionary<string, string> GetContactInfo(IDocument doc) {
 
@@ -178,7 +183,7 @@ namespace Holeshot.Crawler.Commands {
             try {
               link = el.Attributes["href"].Value.TrimEnd(new[] { '/' });
             } catch (Exception) {
-              Console.WriteLine("Failed to get link", el);
+              Console.WriteLine("Failed to get link", el.OuterHtml);
               link = "Unknown";
             }
             sponsors.Add(new NamedLink {
