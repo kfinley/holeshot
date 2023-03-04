@@ -29,7 +29,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     const ddb = new DynamoDB({ region: 'us-east-1' });
 
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-    config.hashKeyLength = 3
+    config.hashKeyLength = 5
 
     const myGeoTableManager = new GeoDataManager(config);
 

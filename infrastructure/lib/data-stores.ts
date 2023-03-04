@@ -34,7 +34,7 @@ export class DataStores extends Construct {
         try {
           const ddb = new DynamoDB({ region });
           const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-          config.hashKeyLength = 3
+          config.hashKeyLength = 5
 
           const output = await ddb.createTable(GeoTableUtil.getCreateTableRequest(config));
 
