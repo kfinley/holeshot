@@ -29,8 +29,8 @@ export default class Functions extends Vue {
 
   functionName = 'Holeshot-Infrastructure-GetNearbyEvents';
   functionPayload = `{
-    "lat": "34.9744394",
-    "long": "-80.9667001",
+    "lat": 34.9744394,
+    "long": -80.9667001,
     "date": "2023-03-01T00:00:00"
   }"`;
 
