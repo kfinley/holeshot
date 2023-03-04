@@ -91,7 +91,10 @@ importers:
       dynamodb-geo-v3: 1.0.0
       inversify-props: ^2.2.6
       long: ^4.0.0
+      math-float64-exponent: ^1.0.0
+      math-float64-get-high-word: ^1.0.0
       nodes2ts: 3.0.0
+      utils-is-little-endian: ^1.0.0
     dependencies:
       '@aws-sdk/client-cognito-identity': 3.282.0
       '@aws-sdk/client-cognito-identity-provider': 3.282.0
@@ -107,7 +110,10 @@ importers:
       dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       inversify-props: 2.2.6
       long: 4.0.0
+      math-float64-exponent: 1.0.0
+      math-float64-get-high-word: 1.0.0
       nodes2ts: 3.0.0
+      utils-is-little-endian: 1.0.0
 
   packages/aws-ses-v2-local:
     specifiers:
