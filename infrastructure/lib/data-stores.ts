@@ -11,12 +11,12 @@ export interface DataStoresProps {
 
 export class DataStores extends Construct {
 
-  readonly connectionsTable: Table;
-  readonly frontEndBucket: Bucket;
-  readonly mediaBucket: Bucket;
-  readonly coreTable: Table;
+  connectionsTable: Table;
+  frontEndBucket: Bucket;
+  mediaBucket: Bucket;
+  coreTable: Table;
   geoTable: ITable;
-  readonly crawlerBucket: Bucket;
+  crawlerBucket: Bucket;
 
   constructor(scope: Construct, id: string, props?: DataStoresProps) {
     super(scope, id);
@@ -42,76 +42,76 @@ export class DataStores extends Construct {
         // If the table exists we expect an error here. Logging output to catch anything unexpected but continuing on since we know the table has been created as of 3/3
         console.log('createTable error: ', e);
       }
-      
+
       this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
+      // Core Service
+      this.coreTable = new Table(this, 'Core', {
+        tableName: `Holeshot-Core`,
+        partitionKey: { name: 'PK', type: AttributeType.STRING },
+        sortKey: { name: 'SK', type: AttributeType.STRING },
+        billingMode: BillingMode.PROVISIONED,
+        readCapacity: 1,
+        writeCapacity: 1,
+        removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+        encryption: TableEncryption.AWS_MANAGED,
+        pointInTimeRecovery: false // set to "true" to enable PITR
+      });
+
+      this.coreTable.addGlobalSecondaryIndex({
+        indexName: 'GSI1',
+        partitionKey: { name: 'GSI1PK', type: AttributeType.STRING },
+        sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
+        readCapacity: 1,
+        writeCapacity: 1,
+        projectionType: ProjectionType.ALL,
+      })
+
+      // WebSockets Service
+      this.connectionsTable = new Table(this, 'WebSockets-Connections', {
+        tableName: `Holeshot-WebSockets-Connections`,
+        partitionKey: { name: 'userId', type: AttributeType.STRING },
+        sortKey: { name: 'connectionId', type: AttributeType.STRING },
+        billingMode: BillingMode.PROVISIONED,
+        readCapacity: 1,
+        writeCapacity: 1,
+        removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
+        encryption: TableEncryption.AWS_MANAGED,
+        pointInTimeRecovery: false // set to "true" to enable PITR
+      });
+
+      // Media S3 Bucket
+      this.mediaBucket = new Bucket(this, 'mediaBucket', {
+        bucketName: `images.${props?.domainName}`,
+        blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+        removalPolicy: RemovalPolicy.DESTROY,
+        autoDeleteObjects: true,
+      });
+
+      // Web Front-End Bucket
+      this.frontEndBucket = new Bucket(this, 'S3Bucket', {
+        bucketName: props?.domainName,
+        blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+        removalPolicy: RemovalPolicy.DESTROY,
+        autoDeleteObjects: true,
+        cors: [
+          {
+            allowedMethods: [
+              HttpMethods.GET,
+            ],
+            allowedOrigins: ['*'], // TODO: fix this..
+            allowedHeaders: ['*'],
+          },
+        ],
+      });
+
+      this.crawlerBucket = new Bucket(this, 'crawlerBucket', {
+        bucketName: `${props?.domainName}-crawler`,
+        blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+        removalPolicy: RemovalPolicy.DESTROY,
+        autoDeleteObjects: true,
+      })
     })();
 
-    // Core Service
-    this.coreTable = new Table(this, 'Core', {
-      tableName: `Holeshot-Core`,
-      partitionKey: { name: 'PK', type: AttributeType.STRING },
-      sortKey: { name: 'SK', type: AttributeType.STRING },
-      billingMode: BillingMode.PROVISIONED,
-      readCapacity: 1,
-      writeCapacity: 1,
-      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-      encryption: TableEncryption.AWS_MANAGED,
-      pointInTimeRecovery: false // set to "true" to enable PITR
-    });
-
-    this.coreTable.addGlobalSecondaryIndex({
-      indexName: 'GSI1',
-      partitionKey: { name: 'GSI1PK', type: AttributeType.STRING },
-      sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
-      readCapacity: 1,
-      writeCapacity: 1,
-      projectionType: ProjectionType.ALL,
-    })
-
-    // WebSockets Service
-    this.connectionsTable = new Table(this, 'WebSockets-Connections', {
-      tableName: `Holeshot-WebSockets-Connections`,
-      partitionKey: { name: 'userId', type: AttributeType.STRING },
-      sortKey: { name: 'connectionId', type: AttributeType.STRING },
-      billingMode: BillingMode.PROVISIONED,
-      readCapacity: 1,
-      writeCapacity: 1,
-      removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
-      encryption: TableEncryption.AWS_MANAGED,
-      pointInTimeRecovery: false // set to "true" to enable PITR
-    });
-
-    // Media S3 Bucket
-    this.mediaBucket = new Bucket(this, 'mediaBucket', {
-      bucketName: `images.${props?.domainName}`,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-    });
-
-    // Web Front-End Bucket
-    this.frontEndBucket = new Bucket(this, 'S3Bucket', {
-      bucketName: props?.domainName,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-      cors: [
-        {
-          allowedMethods: [
-            HttpMethods.GET,
-          ],
-          allowedOrigins: ['*'], // TODO: fix this..
-          allowedHeaders: ['*'],
-        },
-      ],
-    });
-
-    this.crawlerBucket = new Bucket(this, 'crawlerBucket', {
-      bucketName: `${props?.domainName}-crawler`,
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      removalPolicy: RemovalPolicy.DESTROY,
-      autoDeleteObjects: true,
-    })
   }
 }
