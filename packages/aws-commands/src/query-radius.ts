@@ -2,7 +2,7 @@ import { DynamoDB, QueryInput } from '@aws-sdk/client-dynamodb';
 import { Command } from '@holeshot/commands/src';
 import { GeoDataManager, GeoDataManagerConfiguration } from 'dynamodb-geo-v3';
 import { GeoPoint, ItemList } from 'dynamodb-geo-v3/dist/types';
-import { Container } from 'inversify-props';
+import { injectable, Container } from 'inversify-props';
 
 export interface QueryRadiusRequest {
   container: Container;
@@ -16,6 +16,7 @@ export interface QueryRadiusResponse {
   items: ItemList;
 }
 
+@injectable()
 export class QueryRadiusCommand implements Command<QueryRadiusRequest, QueryRadiusResponse> {
 
   private dynamoDB!: DynamoDB;
