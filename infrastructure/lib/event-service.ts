@@ -27,7 +27,7 @@ export class EventService extends BaseServiceConstruct {
 
     this.getNearbyEvents = super.newLambda('GetNearbyEvents', 'functions/get-nearby-events.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
-      HOLESHOT_GEO_TABLE: geoTable.tableName as string
+      HOLESHOT_GEO_TABLE: geoTable.tableName.includes('/') ? geoTable.tableName.split('/')[1] : geoTable.tableName // stupid... for some reason ITable.tableName is returning {accountId}:table/{tableName}
     });
 
     // Holeshot-Infrastructure-GetNearbyEvents is not authorized to perform: dynamodb:Query on resource:

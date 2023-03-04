@@ -83,11 +83,7 @@ export class CrawlerService extends BaseServiceConstruct {
     const saveTrackInfo = super.newLambda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
-      HOLESHOT_GEO_TABLE: geoTable.tableName
-    });
-
-    new CfnOutput(this, 'stage.url', {
-      value: `HOLESHOT_GEO_TABLE: ${geoTable.tableName}`
+      HOLESHOT_GEO_TABLE: geoTable.tableName.includes('/') ? geoTable.tableName.split('/')[1] : geoTable.tableName // stupid... for some reason ITable.tableName is returning {accountId}:table/{tableName}
     });
 
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
