@@ -48,7 +48,6 @@ export class InfrastructureStack extends Stack {
       domainName,
       crawlerBucket: dataStores.crawlerBucket,
       coreTable: dataStores.coreTable,
-      geoTable: dataStores.geoTable,
       node_env: props!.node_env,
     });
 
@@ -279,7 +278,6 @@ export class InfrastructureStack extends Stack {
     const eventService = new EventService(this, 'Holeshot-EventService', {
       domainName,
       coreTable: dataStores?.coreTable,
-      geoTable: dataStores?.geoTable,
       node_env: props!.node_env
     });
 

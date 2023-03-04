@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { Bucket, EventType } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DotNetFunction } from '@xaaskit-cdk/aws-lambda-dotnet'
-import { Duration } from 'aws-cdk-lib';
+import { Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -15,7 +15,6 @@ export interface CrawlerServiceProps {
   domainName: string;
   crawlerBucket: Bucket;
   coreTable: Table;
-  geoTable: ITable;
   node_env: string;
 }
 
@@ -26,10 +25,10 @@ export class CrawlerService extends BaseServiceConstruct {
   constructor(scope: Construct, id: string, props?: CrawlerServiceProps) {
     super(scope, id, '../../services/Crawler/src/node/dist', props!.node_env);
 
-    // const {
-    //   accountId,
-    //   region,
-    // } = new ScopedAws(this);
+    const {
+      accountId,
+      region,
+    } = new ScopedAws(this);
 
     const settings = {
       Logging: {
@@ -92,7 +91,10 @@ export class CrawlerService extends BaseServiceConstruct {
     });
     saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackEvents);
-    props?.geoTable.grantReadWriteData(saveTrackInfo);
+
+    const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+
+    geoTable.grantReadWriteData(saveTrackInfo);
 
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,
