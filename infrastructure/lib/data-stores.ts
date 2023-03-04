@@ -25,11 +25,8 @@ export class DataStores extends Construct {
       accountId,
       region,
     } = new ScopedAws(this);
-
     (async () => {
-
       this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
-
       if (this.geoTable == undefined) {
         try {
           const ddb = new DynamoDB({ region });
