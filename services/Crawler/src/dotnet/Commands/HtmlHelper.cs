@@ -146,6 +146,7 @@ namespace Holeshot.Crawler.Commands {
 
       sponsorsList?.Children?.ForEach(el => {
         var name = string.Empty;
+        var link = string.Empty;
 
         switch (el.TagName) {
           case "H2":
@@ -174,9 +175,15 @@ namespace Holeshot.Crawler.Commands {
             } catch (Exception) {
               name = "Unknown";
             }
+            try {
+              link = el.Attributes["href"].Value.TrimEnd(new[] { '/' });
+            } catch (Exception) {
+              Console.WriteLine("Failed to get link", el);
+              link = "Unknown";
+            }
             sponsors.Add(new NamedLink {
               Name = name,
-              Link = el.Attributes["href"].Value.TrimEnd(new[] { '/' })
+              Link = link
             });
             break;
           default:
