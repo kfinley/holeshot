@@ -32,7 +32,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
     const radius = 1609.344 * params.distance ?? 500; // default to 500 miles. converted to meters.
 
-    const trackInRange = await myGeoTableManager
+    const tracksInRange = await myGeoTableManager
       .queryRadius({
         RadiusInMeter: radius,
         CenterPoint: {
@@ -41,9 +41,11 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         },
       });
 
+    console.log('tracks', JSON.stringify(tracksInRange));
+
     const events: Record<string, any>[] = [];
 
-    await Promise.all(trackInRange.map(async item => {
+    await Promise.all(tracksInRange.map(async item => {
       console.log('item', item);
 
       const query = {
@@ -55,6 +57,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         KeyConditionExpression: "PK = :PK and SK >= :SK)",
       };
 
+      console.log('query', JSON.stringify(query));
+      
       const data = await this.ddbClient.send(new QueryCommand(query));
       console.log('items', data.Items);
 
