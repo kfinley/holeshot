@@ -29,7 +29,7 @@ export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResp
       const command = {
         FunctionName: params.name,
         InvocationType: "Event",  // Run as Event will kick off lambda and receive a 202 response.
-        Payload: new TextEncoder().encode(JSON.stringify(params.payload))
+        Payload: new TextEncoder().encode(params.payload)
       };
 
       const response = await this.client.invoke(command);
