@@ -28,16 +28,17 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
     const ddb = new DynamoDB({ region: 'us-east-1' });
 
-    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-    config.hashKeyLength = 5
+    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Core");
+    config.hashKeyLength = 5;
+    config.geohashIndexName = 'geohash-index';
 
     const myGeoTableManager = new GeoDataManager(config);
 
-    const radius = 1609.344 * (params.distance ?? 800); // default to 800 miles. converted to meters.
+    const radius = 1609.344 * (params.distance ?? 500); // default to 500 miles. converted to meters.
 
     console.log('radius', radius);
 
-    const tracksInRange = await myGeoTableManager
+    const itemsInRange = await myGeoTableManager
       .queryRadius({
         RadiusInMeter: radius,
         CenterPoint: {
@@ -46,29 +47,32 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         },
       });
 
-    console.log('tracks', JSON.stringify(tracksInRange));
-
+    console.log('tracks', JSON.stringify(itemsInRange));
     const events: Record<string, any>[] = [];
 
-    await Promise.all(tracksInRange.map(async item => {
-      console.log('item', item);
+    itemsInRange.map(i => {
+      events.push(unmarshall(i));
+    })
 
-      const query = {
-        TableName,
-        ExpressionAttributeValues: marshall({
-          ":PK": `${item['name'].S}`,
-          ":SK": `${params.date}`
-        }),
-        KeyConditionExpression: "PK = :PK and SK >= :SK)",
-      };
+    // await Promise.all(tracksInRange.map(async item => {
+    //   console.log('item', item);
 
-      console.log('query', JSON.stringify(query));
+    //   const query = {
+    //     TableName,
+    //     ExpressionAttributeValues: marshall({
+    //       ":PK": `${item['name'].S}`,
+    //       ":SK": `${params.date}`
+    //     }),
+    //     KeyConditionExpression: "PK = :PK and SK >= :SK)",
+    //   };
 
-      const data = await this.ddbClient.send(new QueryCommand(query));
-      console.log('items', data.Items);
+    //   console.log('query', JSON.stringify(query));
 
-      events.push(...data.Items.map(i => unmarshall(i)));
-    }));
+    //   const data = await this.ddbClient.send(new QueryCommand(query));
+    //   console.log('items', data.Items);
+
+    //   events.push(...data.Items.map(i => unmarshall(i)));
+    // }));
 
     console.log('Events', events)
 

@@ -25,24 +25,24 @@ export class DataStores extends Construct {
       region,
     } = new ScopedAws(this);
 
-    (async () => {
-      try {
-        const ddb = new DynamoDB({ region: 'us-east-1' });
-        const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-        config.hashKeyLength = 5
+    // (async () => {
+    //   try {
+    //     const ddb = new DynamoDB({ region: 'us-east-1' });
+    //     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+    //     config.hashKeyLength = 5
 
-        const output = await ddb.createTable(GeoTableUtil.getCreateTableRequest(config));
+    //     const output = await ddb.createTable(GeoTableUtil.getCreateTableRequest(config));
 
-        console.log('createTable Output', JSON.stringify(output));
+    //     console.log('createTable Output', JSON.stringify(output));
 
-        const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+    //     const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
-      } catch (e) {
-        // If the table exists we'll get an error. Move along...
-        // Uncomment to log output to check for anything unexpected
-        // console.log('createTable error: ', e);
-      }
-    })();
+    //   } catch (e) {
+    //     // If the table exists we'll get an error. Move along...
+    //     // Uncomment to log output to check for anything unexpected
+    //     // console.log('createTable error: ', e);
+    //   }
+    // })();
 
     // Core Service
     this.coreTable = new Table(this, 'Core', {
@@ -65,6 +65,15 @@ export class DataStores extends Construct {
       writeCapacity: 1,
       projectionType: ProjectionType.ALL,
     })
+
+    this.coreTable.addGlobalSecondaryIndex({
+      indexName: 'geohash-index',
+      partitionKey: { name: 'hashKey', type: AttributeType.NUMBER },
+      sortKey: { name: 'rangeKey', type: AttributeType.NUMBER },
+      readCapacity: 1,
+      writeCapacity: 1,
+      projectionType: ProjectionType.ALL
+    });
 
     // WebSockets Service
     this.connectionsTable = new Table(this, 'WebSockets-Connections', {

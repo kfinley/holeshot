@@ -48,17 +48,18 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     console.log('trackItem', JSON.stringify(trackItem));
 
-    var coreResponse = await this.ddbClient.send(new PutItemCommand({
-      TableName,
-      Item: trackItem
-    }));
+    // var coreResponse = await this.ddbClient.send(new PutItemCommand({
+    //   TableName,
+    //   Item: trackItem
+    // }));
 
     const ddb = new DynamoDB({ region: 'us-east-1' });
-    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Core");
+    config.geohashIndexName = 'geohash-index';
     config.hashKeyLength = 5
 
     const myGeoTableManager = new GeoDataManager(config);
-    const geoResponse = await myGeoTableManager.putPoint({
+    const response = await myGeoTableManager.putPoint({
       RangeKeyValue: { S: trackInfo.name },
       GeoPoint: {
         latitude: +trackInfo.location.gps.lat,
@@ -69,7 +70,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
       }
     })
 
-    items.push({ core: coreResponse.$metadata.httpStatusCode, geo: geoResponse.$metadata.httpStatusCode });
+    items.push(response.$metadata.httpStatusCode);
 
     console.log('items', JSON.stringify(items));
 
