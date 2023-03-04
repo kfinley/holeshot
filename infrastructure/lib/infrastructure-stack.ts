@@ -289,7 +289,7 @@ export class InfrastructureStack extends Stack {
         ],
         effect: Effect.ALLOW,
         resources: [
-          // eventService.getNearbyEvents.functionArn,
+          eventService.getNearbyEvents.functionArn,
           crawlerService.getTracksForRegion.functionArn
         ]
       })
