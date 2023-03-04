@@ -25,25 +25,26 @@ export class DataStores extends Construct {
       accountId,
       region,
     } = new ScopedAws(this);
+
     (async () => {
-      this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
-      if (this.geoTable == undefined) {
-        try {
-          const ddb = new DynamoDB({ region });
-          const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
-          config.hashKeyLength = 5
+      try {
+        const ddb = new DynamoDB({ region });
+        const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
+        config.hashKeyLength = 5
 
-          const output = await ddb.createTable(GeoTableUtil.getCreateTableRequest(config));
+        const output = await ddb.createTable(GeoTableUtil.getCreateTableRequest(config));
 
-          console.log('createTable Output', JSON.stringify(output));
+        console.log('createTable Output', JSON.stringify(output));
 
-          this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+        this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
-        } catch (e) {
-          // If the table exists we expect an error here. Logging output to catch anything unexpected but continuing on since we know the table has been created as of 3/3
-          console.log('createTable error: ', e);
-        }
+      } catch (e) {
+        // If the table exists we expect an error here. Logging output to catch anything unexpected but continuing on since we know the table has been created as of 3/3
+        console.log('createTable error: ', e);
       }
+      
+      this.geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+
     })();
 
     // Core Service
