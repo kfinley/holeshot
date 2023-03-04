@@ -25,14 +25,16 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
   private ddbClient!: DynamoDBClient;
 
   async runAsync(params: GetNearbyEventsRequest): Promise<GetNearbyEventsResponse> {
-    
+
     const ddb = new DynamoDB({ region: 'us-east-1' });
 
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
     const myGeoTableManager = new GeoDataManager(config);
 
-    const radius = 1609.344 * params.distance ?? 500; // default to 500 miles. converted to meters.
+    const radius = 1609.344 * (params.distance ?? 800); // default to 800 miles. converted to meters.
 
+    console.log('radius', radius);
+    
     const tracksInRange = await myGeoTableManager
       .queryRadius({
         RadiusInMeter: radius,
