@@ -44,7 +44,8 @@ export class EventService extends BaseServiceConstruct {
         ],
         effect: Effect.ALLOW,
         resources: [
-          'arn:aws:dynamodb:us-east-1:146665891952:table/146665891952:table/Holeshot-Geo/*'
+          `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo/*`,
+          `arn:aws:dynamodb:${region}:${accountId}:table/${accountId}:table/Holeshot-Geo/*` // <-- wtf? This is what was in the logs....
         ]
       })
     );
