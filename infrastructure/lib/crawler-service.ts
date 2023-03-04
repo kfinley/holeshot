@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { Bucket, EventType } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DotNetFunction } from '@xaaskit-cdk/aws-lambda-dotnet'
-import { Duration, ScopedAws } from 'aws-cdk-lib';
+import { CfnOutput, Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
@@ -83,7 +83,7 @@ export class CrawlerService extends BaseServiceConstruct {
     const saveTrackInfo = super.newLambda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
-      HOLESHOT_GEO_TABLE: geoTable.tableName as string
+      HOLESHOT_GEO_TABLE: geoTable.tableName
     });
 
     new CfnOutput(this, 'stage.url', {
