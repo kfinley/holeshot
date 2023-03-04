@@ -25,6 +25,7 @@
     "@types/node": "^18.11.17",
     "inversify-props": "^2.2.6",
     "dynamodb-geo-v3": "1.0.0",
-     "long": "^4.0.0"
+    "nodes2ts": "3.0.0",
+    "long": "^4.0.0"
   }
 }

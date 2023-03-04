@@ -6,7 +6,7 @@ import { Event } from '@holeshot/types/src';
 import { QueryRadiusCommand } from '@holeshot/aws-commands/src';
 import { container } from '../inversify.config';
 
-const TableName = process.env.HOLESHOT_CORE_TABLE as string;
+const CoreTable = process.env.HOLESHOT_CORE_TABLE as string;
 const GeoTable = process.env.HOLESHOT_GEO_TABLE as string;
 
 export type GetNearbyEventsRequest = {
@@ -46,8 +46,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     await Promise.all(tracksInRange.items.map(async item => {
       console.log('item', item);
 
-      const query = {
-        TableName,
+      const eventsQuery = {
+        TableName: CoreTable,
         ExpressionAttributeValues: marshall({
           ":PK": `${item['name'].S}`,
           ":SK": `${params.date}`
@@ -55,12 +55,12 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         KeyConditionExpression: "PK = :PK and SK >= :SK",
       };
 
-      console.log('query', JSON.stringify(query));
+      console.log('query', JSON.stringify(eventsQuery));
 
-      const data = await this.ddbClient.send(new QueryCommand(query));
-      console.log('items', data.Items);
+      const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
+      console.log('items', eventItems.Items);
 
-      events.push(...data.Items.map(i => unmarshall(i)));
+      events.push(...eventItems.Items.map(i => unmarshall(i)));
     }));
 
     console.log('Events', events)
