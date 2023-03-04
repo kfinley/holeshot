@@ -9,6 +9,7 @@ import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambd
 import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
 import { BaseServiceConstruct } from './base-service-construct';
+import { Function } from 'aws-cdk-lib/aws-lambda';
 
 export interface CrawlerServiceProps {
   domainName: string;
@@ -19,6 +20,8 @@ export interface CrawlerServiceProps {
 }
 
 export class CrawlerService extends BaseServiceConstruct {
+
+  public getTracksForRegion: Function;
 
   constructor(scope: Construct, id: string, props?: CrawlerServiceProps) {
     super(scope, id, '../../services/Crawler/src/node/dist', props!.node_env);
@@ -56,14 +59,14 @@ export class CrawlerService extends BaseServiceConstruct {
       })],
     });
 
-    const getTracks = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
+    this.getTracksForRegion = new DotNetFunction(this, 'Holeshot-GetTracksForRegion', {
       projectDir: '../services/Crawler/src/dotnet/functions',
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',
       logRetention: RetentionDays.ONE_WEEK
     });
-    getTracks.role?.attachInlinePolicy(bucketPolicy);
+    this.getTracksForRegion.role?.attachInlinePolicy(bucketPolicy);
 
     const decodeEmailsLambda = new LambdaFunction(this, 'Holeshot-DecodeEmailsFunction', {
       functionName: 'Holeshot-DecodeEmails',

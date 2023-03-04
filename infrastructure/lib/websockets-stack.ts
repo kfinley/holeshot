@@ -28,7 +28,7 @@ export interface WebSocketsStackProps {
 export class WebSocketsStack extends BaseServiceConstruct {
 
   public webSocketApi: WebSocketApi;
-  public onMessageHandler: Function;
+  public messageHandler: Function;
 
   constructor(scope: Construct, id: string, props?: WebSocketsStackProps) {
     super(scope, id, '../../services/WebSockets/dist', props!.node_env);
@@ -46,7 +46,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
     });
     props?.connectionsTable.grantReadWriteData(onDisconnectHandler);
 
-    this.onMessageHandler = super.newLambda('OnMessageHandler', 'functions/default.handler');
+    this.messageHandler = super.newLambda('OnMessageHandler', 'functions/default.handler');
 
     const getConnection = super.newLambda('GetConnection', 'functions/getConnection.handler', {
       WEBSOCKETS_CONNECTION_TABLE: props!.connectionsTable.tableName
@@ -62,7 +62,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
       apiName: 'Holeshot Websocket API',
       connectRouteOptions: { integration: new WebSocketLambdaIntegration("ConnectIntegration", onConnectHandler), authorizer },
       disconnectRouteOptions: { integration: new WebSocketLambdaIntegration("DisconnectIntegration", onDisconnectHandler) },
-      defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", this.onMessageHandler) },
+      defaultRouteOptions: { integration: new WebSocketLambdaIntegration("DefaultIntegration", this.messageHandler) },
     });
 
     const stage = new WebSocketStage(this, 'Prod', {
@@ -181,7 +181,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
 
     // Configure WebSockets...
 
-    this.webSocketApi.grantManageConnections(this.onMessageHandler);
+    this.webSocketApi.grantManageConnections(this.messageHandler);
     this.webSocketApi.grantManageConnections(sendMessage);
 
     new CfnOutput(this, 'webSocketApi.apiEndpoint', {

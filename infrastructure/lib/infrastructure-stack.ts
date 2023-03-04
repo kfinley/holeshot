@@ -16,6 +16,7 @@ import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
 import { Certificate, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { CrawlerService } from './crawler-service';
 import { EventService } from './event-service';
+import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -48,7 +49,7 @@ export class InfrastructureStack extends Stack {
       crawlerBucket: dataStores.crawlerBucket,
       coreTable: dataStores.coreTable,
       geoTable: dataStores.geoTable,
-      node_env: props!.node_env
+      node_env: props!.node_env,
     });
 
     // // Setup User Service
@@ -279,9 +280,24 @@ export class InfrastructureStack extends Stack {
       domainName,
       coreTable: dataStores?.coreTable,
       geoTable: dataStores?.geoTable,
-      node_env: props!.node_env,
-      onMessageHandler: webSocketsApi.onMessageHandler,
+      node_env: props!.node_env
     });
+
+    const lambdaInvokePolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
+    lambdaInvokePolicy.addStatements(
+      new PolicyStatement({
+        actions: [
+          "lambda:InvokeFunction"
+        ],
+        effect: Effect.ALLOW,
+        resources: [
+          eventService.getEventsNearby.functionArn,
+          crawlerService.getTracksForRegion.functionArn
+        ]
+      })
+    );
+
+    webSocketsApi.messageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
 
     // new CfnOutput(this, 'apiEndpoint', {
     //   value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
