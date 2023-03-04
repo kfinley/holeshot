@@ -32,7 +32,7 @@ export default class Functions extends Vue {
     "lat": 34.9744394,
     "long": -80.9667001,
     "date": "2023-03-01T00:00:00"
-  }"`;
+  }`;
 
   onSubmit() {
     getWSModule(this.$store).sendCommand({
