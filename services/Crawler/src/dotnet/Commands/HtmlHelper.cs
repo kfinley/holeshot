@@ -184,19 +184,15 @@ namespace Holeshot.Crawler.Commands {
           case "IMG":
             try {
               name = el.Attributes["alt"].Value != string.Empty ? el.Attributes["alt"].Value : el.Attributes["src"].Value.Split('/')[5];
-            } catch (Exception) {
-              name = "Unknown";
-            }
-            try {
               link = el.Attributes["href"].Value.TrimEnd(new[] { '/' });
+              sponsors.Add(new NamedLink {
+                Name = name,
+                Link = link
+              });
             } catch (Exception) {
-              Console.WriteLine("Failed to get link. Attributes", el.Attributes);
-              link = "Unknown";
+              // This happens when there are no sponsors on the page.
             }
-            sponsors.Add(new NamedLink {
-              Name = name,
-              Link = link
-            });
+
             break;
           default:
             name = el.InnerHtml;
