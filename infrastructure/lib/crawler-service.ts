@@ -63,7 +63,8 @@ export class CrawlerService extends BaseServiceConstruct {
       handler: 'Crawler.Functions::Holeshot.Crawler.Functions.GetTracksForState::Handler',
       timeout: Duration.seconds(300),
       functionName: 'Holeshot-GetTracksForRegion',
-      logRetention: RetentionDays.ONE_WEEK
+      logRetention: RetentionDays.ONE_WEEK,
+      memorySize: 1024,
     });
     this.getTracksForRegion.role?.attachInlinePolicy(bucketPolicy);
 
