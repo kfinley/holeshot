@@ -12,8 +12,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   try {
 
-    console.log(event);
-    console.log(event.body);
     const { command, data } = JSON.parse(event.body);
 
     await container

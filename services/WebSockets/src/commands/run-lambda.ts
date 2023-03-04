@@ -20,8 +20,6 @@ export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResp
 
   async runAsync(params: RunLambdaRequest): Promise<RunLambdaResponse> {
 
-    console.log('run-lambda params', params);
-
     try {
       //TODO: fix this...
       this.client = new Lambda({
@@ -30,12 +28,11 @@ export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResp
 
       const command = {
         FunctionName: params.name,
-        InvocationType: "Event",  // ??
+        InvocationType: "Event",  // Run as Event will kick off lambda and receive a 202 response.
         Payload: new TextEncoder().encode(JSON.stringify(params.payload))
       };
 
       const response = await this.client.invoke(command);
-      console.log('response', JSON.stringify(response));
 
       return {
         statusCode: 200
