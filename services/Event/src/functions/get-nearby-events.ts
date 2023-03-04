@@ -9,6 +9,7 @@ const cmd = container.get<GetNearbyEventsCommand>("GetNearbyEventsCommand");
 
 export const handler = async (params: any, context: Context) => {
 
+  console.log('params', params);
   try {
 
     const response = await cmd.runAsync(params);

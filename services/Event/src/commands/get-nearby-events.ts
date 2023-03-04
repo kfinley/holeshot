@@ -25,6 +25,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
   private ddbClient!: DynamoDBClient;
 
   async runAsync(params: GetNearbyEventsRequest): Promise<GetNearbyEventsResponse> {
+    
     const ddb = new DynamoDB({ region: 'us-east-1' });
 
     const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
@@ -58,7 +59,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       };
 
       console.log('query', JSON.stringify(query));
-      
+
       const data = await this.ddbClient.send(new QueryCommand(query));
       console.log('items', data.Items);
 
