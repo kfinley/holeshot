@@ -36,21 +36,21 @@ export class EventService extends BaseServiceConstruct {
     props?.coreTable.grantReadData(this.getNearbyEvents);
     geoTable.grantReadData(this.getNearbyEvents);
 
-    const dynamodbQueryPolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
-    dynamodbQueryPolicy.addStatements(
-      new PolicyStatement({
-        actions: [
-          "dynamodb:Query"
-        ],
-        effect: Effect.ALLOW,
-        resources: [
-          `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo/*`,
-          `arn:aws:dynamodb:${region}:${accountId}:table/${accountId}:table/Holeshot-Geo/*` // <-- wtf? This is what was in the logs....
-        ]
-      })
-    );
+    // const dynamodbQueryPolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
+    // dynamodbQueryPolicy.addStatements(
+    //   new PolicyStatement({
+    //     actions: [
+    //       "dynamodb:Query"
+    //     ],
+    //     effect: Effect.ALLOW,
+    //     resources: [
+    //       `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo/*`,
+    //       `arn:aws:dynamodb:${region}:${accountId}:table/${accountId}:table/Holeshot-Geo/*` // <-- wtf? This is what was in the logs....
+    //     ]
+    //   })
+    // );
 
-    this.getNearbyEvents.role?.attachInlinePolicy(dynamodbQueryPolicy);
+    // this.getNearbyEvents.role?.attachInlinePolicy(dynamodbQueryPolicy);
 
   }
 }
