@@ -6,7 +6,8 @@ import {
   PublishMessageCommand,
   StartStepFunctionCommand,
   GetStoredObjectCommand,
-  AuthorizeCommand
+  AuthorizeCommand,
+  PutPointCommand
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
@@ -118,7 +119,7 @@ export default function bootstrapper(container: Container) {
   container.bind<GetStoredObjectCommand>("GetStoredObjectCommand").to(GetStoredObjectCommand);
   container.bind<PublishMessageCommand>("PublishMessageCommand").to(PublishMessageCommand);
   container.bind<StartStepFunctionCommand>("StartStepFunctionCommand").to(StartStepFunctionCommand);
-
+  container.bind<PutPointCommand>("PutPointCommand").to(PutPointCommand);
   // console.log('aws-commands bootstrapper done');
 
 }

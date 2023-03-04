@@ -88,7 +88,9 @@ importers:
       '@aws-sdk/util-dynamodb': 3.282.0
       '@holeshot/commands': ^1.0.0
       '@types/node': ^18.11.17
+      dynamodb-geo-v3: 1.0.0
       inversify-props: ^2.2.6
+      long: ^4.0.0
     dependencies:
       '@aws-sdk/client-cognito-identity': 3.282.0
       '@aws-sdk/client-cognito-identity-provider': 3.282.0
@@ -101,7 +103,9 @@ importers:
       '@aws-sdk/util-dynamodb': 3.282.0
       '@holeshot/commands': link:../commands
       '@types/node': 18.11.18
+      dynamodb-geo-v3: 1.0.0_lcb7aqdgmlb7prwn2qzvgx37n4
       inversify-props: 2.2.6
+      long: 4.0.0
 
   packages/aws-ses-v2-local:
     specifiers:
@@ -11578,7 +11582,7 @@ packages:
   /axios/0.21.4_debug@4.3.4:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2
+      follow-redirects: 1.15.2_debug@4.3.4
     transitivePeerDependencies:
       - debug
 
@@ -17117,7 +17121,6 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4
-    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}

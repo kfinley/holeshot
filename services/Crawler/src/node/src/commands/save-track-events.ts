@@ -3,10 +3,9 @@ import { DynamoDB, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamo
 import { Inject, injectable } from 'inversify-props';
 import { Event, TrackInfo } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
-import { GetStoredObjectCommand } from '@holeshot/aws-commands/src/getStoredObject'
+import { GetStoredObjectCommand, PutPointCommand } from '@holeshot/aws-commands/src'
 import { convertEventToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
-import { GeoDataManager, GeoDataManagerConfiguration } from 'dynamodb-geo-v3';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 const bucketName = process.env.BUCKET_NAME as string;
@@ -27,6 +26,9 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
   @Inject("GetStoredObjectCommand")
   private getStoredObjectCommand!: GetStoredObjectCommand;
+
+  @Inject("PutPointCommand")
+  private putPointCommand!: PutPointCommand;
 
   async runAsync(params: SaveTrackEventsCommandRequest): Promise<SaveTrackEventsCommandResponse> {
 
@@ -50,27 +52,17 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
       console.log('eventItem', eventItem);
 
-      const ddb = new DynamoDB({ region: 'us-east-1' });
-      const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Core");
-      config.geohashIndexName = 'geohash-index';
-      config.hashKeyLength = 5
-
-      const myGeoTableManager = new GeoDataManager(config);
-      const response = await myGeoTableManager.putPoint({
-        RangeKeyValue: { S: event.date.toString() },
-        GeoPoint: {
+      const response = await this.putPointCommand({
+        tableName: TableName,
+        indexName: 'geohash-index',
+        hashKeyLength: 5,
+        rangeKeyValue: { S: event.date.toString() },
+        geoPoint: {
           latitude: +trackEvents.track.location.gps.lat,
           longitude: +trackEvents.track.location.gps.long
         },
-        PutItemInput: {
-          Item: eventItem
-        }
-      })
-      
-      // var response = await this.ddbClient.send(new PutItemCommand({
-      //   TableName,
-      //   Item: eventItem
-      // }));
+        item: eventItem
+      });
 
       console.log('response', JSON.stringify(response));
       items.push(response.$metadata.httpStatusCode);

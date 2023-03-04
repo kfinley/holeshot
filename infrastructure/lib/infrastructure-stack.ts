@@ -24,7 +24,6 @@ export interface InfraStackProps extends StackProps {
   senderEmail: string;
   logLevel: "DEBUG" | "INFO" | "WARN" | "ERROR";
   node_env: string;
-
 }
 
 export class InfrastructureStack extends Stack {
@@ -265,6 +264,7 @@ export class InfrastructureStack extends Stack {
 
     step2();
 
+    
     // Setup WebSockets
     const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
       connectionsTable: dataStores?.connectionsTable!,
