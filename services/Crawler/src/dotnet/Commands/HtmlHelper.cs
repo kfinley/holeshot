@@ -19,23 +19,26 @@ namespace Holeshot.Crawler.Commands {
 
     public Dictionary<string, string> GetContactInfo(IDocument doc) {
 
-      var contactInfoElements = doc.QuerySelector("div#track_contact ul.no-style").Children;
-
       var contactInfo = new Dictionary<string, string>();
 
-      contactInfoElements.ForEach(e => {
-        var info = e.TextContent.Split(':');
-        var val = info[1].Trim();
+      try {
+        var contactInfoElements = doc.QuerySelector("div#track_contact ul.no-style")?.Children;
 
-        if (val.StartsWith("[email")) {
-          var node = e.InnerHtml;
-          var encEmail = e.Children[1].Attributes[2].Value;
-          contactInfo.Add(info[0].Trim().Replace(" ", string.Empty), encEmail);
-        } else {
-          contactInfo.Add(info[0].Trim().Replace(" ", string.Empty), val);
-        }
-      });
+        contactInfoElements.ForEach(e => {
+          var info = e.TextContent.Split(':');
+          var val = info[1].Trim();
 
+          if (val.StartsWith("[email")) {
+            var node = e.InnerHtml;
+            var encEmail = e.Children[1].Attributes[2].Value;
+            contactInfo.Add(info[0].Trim().Replace(" ", string.Empty), encEmail);
+          } else {
+            contactInfo.Add(info[0].Trim().Replace(" ", string.Empty), val);
+          }
+        });
+      } catch (Exception) {
+        Console.WriteLine("Failed to get ContactInfo");
+      }
       return contactInfo;
     }
 
@@ -114,10 +117,14 @@ namespace Holeshot.Crawler.Commands {
 
       var trackContactSection = doc.QuerySelector("#track_contact");
       var descriptionList = new List<string>();
-
-      for (int i = 2; i < trackContactSection.Children.Count(); i++) {
-        descriptionList.Add(trackContactSection.Children[i].InnerHtml);
+      try {
+        for (int i = 2; i < trackContactSection.Children.Count(); i++) {
+          descriptionList.Add(trackContactSection.Children[i].InnerHtml);
+        }
+      } catch (Exception) {
+        Console.WriteLine("Failed to get Description");
       }
+
       return string.Join(" ", descriptionList);
 
     }
@@ -183,7 +190,7 @@ namespace Holeshot.Crawler.Commands {
             try {
               link = el.Attributes["href"].Value.TrimEnd(new[] { '/' });
             } catch (Exception) {
-              Console.WriteLine("Failed to get link", el.OuterHtml);
+              Console.WriteLine("Failed to get link. Attributes", el.Attributes);
               link = "Unknown";
             }
             sponsors.Add(new NamedLink {
