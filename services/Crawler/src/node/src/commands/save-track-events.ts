@@ -1,5 +1,5 @@
 
-import { DynamoDB, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { Inject, injectable } from 'inversify-props';
 import { Event, TrackInfo } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
@@ -32,42 +32,48 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
   async runAsync(params: SaveTrackEventsCommandRequest): Promise<SaveTrackEventsCommandResponse> {
 
-    console.log('params', params);
+    // console.log('params', params);
     const items: any[] = [];
-    console.log('key', params.key);
+    // console.log('key', params.key);
 
-    console.log(`Key: ${params.key} BucketName: ${bucketName}`);
+    // console.log(`Key: ${params.key} BucketName: ${bucketName}`);
 
-    var getTrackEvents = await this.getStoredObjectCommand.runAsync({
+    const getTrackEvents = await this.getStoredObjectCommand.runAsync({
       container,
       bucket: bucketName,
       key: params.key
     });
 
-    var trackEvents = JSON.parse(getTrackEvents.body) as { track: TrackInfo, events: Event[] };
+    const trackEvents = JSON.parse(getTrackEvents.body) as { track: TrackInfo, events: Event[] };
 
-    for await (const event of trackEvents.events) {
+     await Promise.all(trackEvents.events.map(async event => {
 
-      const eventItem = convertEventToItem(event, trackEvents.track);
+       const eventItem = convertEventToItem(event, trackEvents.track);
 
-      console.log('eventItem', eventItem);
+       console.log('eventItem', eventItem);
 
-      const response = await this.putPointCommand({
-        tableName: TableName,
-        indexName: 'geohash-index',
-        hashKeyLength: 5,
-        rangeKeyValue: { S: event.date.toString() },
-        geoPoint: {
-          latitude: +trackEvents.track.location.gps.lat,
-          longitude: +trackEvents.track.location.gps.long
-        },
-        item: eventItem
-      });
+       var response = await this.ddbClient.send(new PutItemCommand({
+         TableName,
+         Item: eventItem
+       }));
 
-      console.log('response', JSON.stringify(response));
-      items.push(response.$metadata.httpStatusCode);
+      //  const response = await this.putPointCommand.runAsync({
+      //    container,
+      //    tableName: TableName,
+      //    indexName: 'geohash-index',
+      //    hashKeyLength: 5,
+      //    rangeKeyValue: { S: event.date.toString() },
+      //    geoPoint: {
+      //      latitude: +trackEvents.track.location.gps.lat,
+      //      longitude: +trackEvents.track.location.gps.long
+      //    },
+      //    item: eventItem
+      //  });
 
-    };
+       console.log('response', JSON.stringify(response));
+       items.push(response.$metadata.httpStatusCode);
+
+    }));
 
     console.log('items', JSON.stringify(items));
 

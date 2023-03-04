@@ -23,17 +23,17 @@ export class EventService extends BaseServiceConstruct {
       region,
     } = new ScopedAws(this);
 
-    // const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+    const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
     this.getNearbyEvents = super.newLambda('GetNearbyEvents', 'functions/get-nearby-events.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
-      // HOLESHOT_GEO_TABLE: geoTable.tableName as string
+      HOLESHOT_GEO_TABLE: geoTable.tableName as string
     });
 
-    // Holeshot-Infrastructure-GetNearbyEvents is not authorized to perform: dynamodb:Query on resource: 
+    // Holeshot-Infrastructure-GetNearbyEvents is not authorized to perform: dynamodb:Query on resource:
     // arn:aws:dynamodb:us-east-1:146665891952:table/Holeshot-Geo/index/geohash-index because no identity-based policy allows the dynamodb:Query action
     props?.coreTable.grantReadData(this.getNearbyEvents);
-    //geoTable.grantReadData(this.getNearbyEvents);
+    geoTable.grantReadData(this.getNearbyEvents);
 
     const dynamodbQueryPolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
     dynamodbQueryPolicy.addStatements(

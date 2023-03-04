@@ -33,7 +33,6 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
     // console.log('params', params);
-    const items: any[] = [];
 
     console.log(`Key: ${params.key} BucketName: ${bucketName}`);
 
@@ -49,7 +48,13 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     console.log('trackItem', JSON.stringify(trackItem));
 
-    const response = await this.putPointCommand({
+    var coreResponse = await this.ddbClient.send(new PutItemCommand({
+      TableName,
+      Item: trackItem
+    }));
+
+    const geoResponse = await this.putPointCommand.runAsync({
+      container,
       tableName: TableName,
       indexName: 'geohash-index',
       hashKeyLength: 5,
@@ -61,9 +66,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
       item: trackItem
     });
 
-    items.push(response.$metadata.httpStatusCode);
-
-    console.log('items', JSON.stringify(items));
+    console.log('items', { core: coreResponse.$metadata.httpStatusCode, geo: geoResponse.$metadata.httpStatusCode });
 
     return {
       success: true

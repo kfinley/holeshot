@@ -4,8 +4,11 @@ import { DynamoDB, DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { GeoDataManagerConfiguration, GeoDataManager } from 'dynamodb-geo-v3';
 import { Event } from '@holeshot/types/src';
+import { QueryRadiusCommand } from '@holeshot/aws-commands/src';
+import { container } from '../inversify.config';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
+const GeoTable = process.env.HOLESHOT_GEO_TABLE as string;
 
 export type GetNearbyEventsRequest = {
   lat: number;
@@ -24,55 +27,46 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
   @Inject("DynamoDBClient")
   private ddbClient!: DynamoDBClient;
 
+  @Inject("QueryRadiusCommand")
+  private queryRadius!: QueryRadiusCommand;
+
   async runAsync(params: GetNearbyEventsRequest): Promise<GetNearbyEventsResponse> {
 
-    const ddb = new DynamoDB({ region: 'us-east-1' });
+    const tracksInRange = await this.queryRadius.runAsync({
+      container,
+      tableName: GeoTable,
+      centerPoint: {
+        latitude: params.lat,
+        longitude: params.long
+      }
+    });
 
-    const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Core");
-    config.hashKeyLength = 5;
-    config.geohashIndexName = 'geohash-index';
-
-    const myGeoTableManager = new GeoDataManager(config);
-
-    const radius = 1609.344 * (params.distance ?? 500); // default to 500 miles. converted to meters.
-
-    console.log('radius', radius);
-
-    const itemsInRange = await myGeoTableManager
-      .queryRadius({
-        RadiusInMeter: radius,
-        CenterPoint: {
-          latitude: params.lat,
-          longitude: params.long,
-        },
-      });
-
-    console.log('tracks', JSON.stringify(itemsInRange));
+    console.log('tracks', JSON.stringify(tracksInRange));
     const events: Record<string, any>[] = [];
 
-    itemsInRange.map(i => {
-      events.push(unmarshall(i));
-    })
+    // itemsInRange.items.map(i => {
+    //   events.push(unmarshall(i));
+    // })
 
-    // await Promise.all(tracksInRange.map(async item => {
-    //   console.log('item', item);
+    await Promise.all(tracksInRange.items.map(async item => {
+      console.log('item', item);
 
-    //   const query = {
-    //     TableName,
-    //     ExpressionAttributeValues: marshall({
-    //       ":PK": `${item['name'].S}`,
-    //       ":SK": `${params.date}`
-    //     }),
-    //     KeyConditionExpression: "PK = :PK and SK >= :SK)",
-    //   };
+      const query = {
+        TableName,
+        ExpressionAttributeValues: marshall({
+          ":PK": `${item['name'].S}`,
+          ":SK": `${params.date}`
+        }),
+        KeyConditionExpression: "PK = :PK and SK >= :SK",
+      };
 
-    //   console.log('query', JSON.stringify(query));
+      console.log('query', JSON.stringify(query));
 
-    //   const data = await this.ddbClient.send(new QueryCommand(query));
-    //   console.log('items', data.Items);
+      const data = await this.ddbClient.send(new QueryCommand(query));
+      console.log('items', data.Items);
 
-    //   events.push(...data.Items.map(i => unmarshall(i)));
-    // }));
+      events.push(...data.Items.map(i => unmarshall(i)));
+    }));
 
     console.log('Events', events)
 

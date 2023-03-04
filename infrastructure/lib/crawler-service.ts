@@ -92,9 +92,8 @@ export class CrawlerService extends BaseServiceConstruct {
     saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackEvents);
 
-    // const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
-
-    // geoTable.grantReadWriteData(saveTrackInfo);
+    const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+    geoTable.grantReadWriteData(saveTrackInfo);
 
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,

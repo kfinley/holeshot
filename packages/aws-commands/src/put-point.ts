@@ -1,19 +1,19 @@
-import { Inject, injectable } from 'inversify-props';
+import { injectable, Container } from 'inversify-props';
 import { Command } from '@holeshot/commands/src';
 import {
-  AttributeValue
+  AttributeValue,
+  DynamoDB
 } from "@aws-sdk/client-dynamodb";
-import { GeoPoint, GeoDataManager, GeoDataManagerConfiguration } from 'dynamodb-geo-v3';
-
-const AWS_REGION = process.env.AWS_REGION;
+import { GeoDataManager, GeoDataManagerConfiguration } from 'dynamodb-geo-v3';
+import { GeoPoint } from 'dynamodb-geo-v3/dist/types';
 
 export interface PutPointRequest {
   tableName: string;
-  indexName: string;
-  hashKeyLength?: Number;
+  hashKeyLength?: number;
   rangeKeyValue: AttributeValue;
   geoPoint: GeoPoint;
   item: Record<string, AttributeValue> | undefined;
+  container: Container;
 }
 
 export interface PutPointResponse {
@@ -23,14 +23,14 @@ export interface PutPointResponse {
 @injectable()
 export class PutPointCommand implements Command<PutPointRequest, PutPointResponse> {
 
+  private dynamoDB!: DynamoDB;
+
   async runAsync(params: PutPointRequest): Promise<PutPointResponse> {
 
-    const ddb = new DynamoDB({ region: AWS_REGION });
+    const ddb = params.container.get<DynamoDB>("DynamoDB");
 
-    const config = new GeoDataManagerConfiguration(ddb, request.tableName);
-
-    config.geohashIndexName = request.indexName;
-    config.hashKeyLength = request.hashKeyLength ?? 5;
+    const config = new GeoDataManagerConfiguration(ddb, params.tableName);
+    config.hashKeyLength = params.hashKeyLength ?? 5;
 
     const myGeoTableManager = new GeoDataManager(config);
 

@@ -7,12 +7,13 @@ import {
   StartStepFunctionCommand,
   GetStoredObjectCommand,
   AuthorizeCommand,
-  PutPointCommand
+  PutPointCommand,
+  QueryRadiusCommand
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { SES } from '@aws-sdk/client-ses';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 export default function bootstrapper(container: Container) {
 
@@ -115,11 +116,24 @@ export default function bootstrapper(container: Container) {
         }));
   }
 
+  if (!container.isBound("DynamoDB")) {
+    container.bind<DynamoDB>("DynamoDB")
+      .toDynamicValue(() => process.env.NODE_ENV === 'production'
+        ?
+        new DynamoDB({ region: process.env.AWS_REGION }) // Prod
+        :
+        new DynamoDB({ // Local Dev
+          endpoint: "http://holeshot.dynamodb:8000"
+        }));
+  }
+
   container.bind<AuthorizeCommand>("AuthorizeCommand").to(AuthorizeCommand);
   container.bind<GetStoredObjectCommand>("GetStoredObjectCommand").to(GetStoredObjectCommand);
   container.bind<PublishMessageCommand>("PublishMessageCommand").to(PublishMessageCommand);
   container.bind<StartStepFunctionCommand>("StartStepFunctionCommand").to(StartStepFunctionCommand);
   container.bind<PutPointCommand>("PutPointCommand").to(PutPointCommand);
+  container.bind<QueryRadiusCommand>("QueryRadiusCommand").to(QueryRadiusCommand);
+
   // console.log('aws-commands bootstrapper done');
 
 }
