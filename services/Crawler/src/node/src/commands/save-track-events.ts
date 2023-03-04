@@ -47,14 +47,14 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
        const eventItem = convertEventToItem(event, trackEvents.track);
 
-       console.log('eventItem', eventItem);
+      //  console.log('eventItem', eventItem);
 
        var response = await this.ddbClient.send(new PutItemCommand({
          TableName,
          Item: eventItem
        }));
 
-       console.log('response', JSON.stringify(response));
+      //  console.log('response', JSON.stringify(response));
        items.push(response.$metadata.httpStatusCode);
 
     }));

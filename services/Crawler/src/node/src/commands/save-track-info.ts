@@ -34,7 +34,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     // console.log('params', params);
 
-    console.log(`Key: ${params.key} BucketName: ${bucketName}`);
+    // console.log(`Key: ${params.key} BucketName: ${bucketName}`);
 
     var getTrackInfo = await this.getStoredObjectCommand.runAsync({
       container,
@@ -46,9 +46,9 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     const trackItem = convertTrackInfoToItem(trackInfo);
 
-    console.log('trackItem', JSON.stringify(trackItem));
-    console.log('GeoTable', GeoTable);
-    
+    // console.log('trackItem', JSON.stringify(trackItem));
+    // console.log('GeoTable', GeoTable);
+
     var coreResponse = await this.ddbClient.send(new PutItemCommand({
       TableName,
       Item: trackItem

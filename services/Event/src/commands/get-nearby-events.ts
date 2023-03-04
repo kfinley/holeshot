@@ -41,6 +41,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     });
 
     console.log('tracks', JSON.stringify(tracksInRange));
+    
     const events: Record<string, any>[] = [];
 
     await Promise.all(tracksInRange.items.map(async item => {
