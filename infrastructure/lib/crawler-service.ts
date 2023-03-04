@@ -78,12 +78,16 @@ export class CrawlerService extends BaseServiceConstruct {
     });
     decodeEmailsLambda.role?.attachInlinePolicy(bucketPolicy);
 
+    const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
+
     const saveTrackInfo = super.newLambda('Holeshot-SaveTrackInfo', 'functions/saveTrackInfo.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
-      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string
+      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
+      HOLESHOT_GEO_TABLE: geoTable.tableName
     });
     saveTrackInfo.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackInfo);
+    geoTable.grantReadWriteData(saveTrackInfo);
 
     const saveTrackEvents = super.newLambda('Holeshot-SaveTrackEvents', 'functions/saveTrackEvents.handler', {
       BUCKET_NAME: `${props!.domainName}-crawler`,
@@ -91,9 +95,6 @@ export class CrawlerService extends BaseServiceConstruct {
     });
     saveTrackEvents.role?.attachInlinePolicy(bucketPolicy);
     props?.coreTable.grantReadWriteData(saveTrackEvents);
-
-    const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
-    geoTable.grantReadWriteData(saveTrackInfo);
 
     props?.crawlerBucket.addEventNotification(
       EventType.OBJECT_CREATED,

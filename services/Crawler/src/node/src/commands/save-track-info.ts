@@ -7,6 +7,7 @@ import { convertTrackInfoToItem } from './ddb-helpers';
 import { container } from './inversify.config';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
+const GeoTable = process.env.HOLESHOT_GEO_TABLE as string;
 const bucketName = process.env.BUCKET_NAME as string;
 
 export type SaveTrackInfoCommandRequest = {
@@ -54,8 +55,7 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
     const geoResponse = await this.putPointCommand.runAsync({
       container,
-      tableName: TableName,
-      hashKeyLength: 5,
+      tableName: GeoTable,
       rangeKeyValue: { S: trackInfo.name },
       geoPoint: {
         latitude: +trackInfo.location.gps.lat,
