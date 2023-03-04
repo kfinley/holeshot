@@ -27,9 +27,9 @@ export class PutPointCommand implements Command<PutPointRequest, PutPointRespons
 
   async runAsync(params: PutPointRequest): Promise<PutPointResponse> {
 
-    const ddb = params.container.get<DynamoDB>("DynamoDB");
+    this.dynamoDB = params.container.get<DynamoDB>("DynamoDB");
 
-    const config = new GeoDataManagerConfiguration(ddb, params.tableName);
+    const config = new GeoDataManagerConfiguration(this.dynamoDB, params.tableName);
     config.hashKeyLength = params.hashKeyLength ?? 5;
 
     const myGeoTableManager = new GeoDataManager(config);

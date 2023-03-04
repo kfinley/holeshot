@@ -1,5 +1,5 @@
 
-import { DynamoDB, DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { TrackInfo } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
 import { GetStoredObjectCommand, PutPointCommand } from '@holeshot/aws-commands/src'
@@ -56,7 +56,6 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     const geoResponse = await this.putPointCommand.runAsync({
       container,
       tableName: TableName,
-      indexName: 'geohash-index',
       hashKeyLength: 5,
       rangeKeyValue: { S: trackInfo.name },
       geoPoint: {

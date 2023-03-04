@@ -3,7 +3,7 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { Inject, injectable } from 'inversify-props';
 import { Event, TrackInfo } from '@holeshot/types/src';
 import { Command } from '@holeshot/commands/src';
-import { GetStoredObjectCommand, PutPointCommand } from '@holeshot/aws-commands/src'
+import { GetStoredObjectCommand } from '@holeshot/aws-commands/src'
 import { convertEventToItem } from './ddb-helpers';
 import { container } from './../commands/inversify.config';
 
@@ -26,9 +26,6 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
   @Inject("GetStoredObjectCommand")
   private getStoredObjectCommand!: GetStoredObjectCommand;
-
-  @Inject("PutPointCommand")
-  private putPointCommand!: PutPointCommand;
 
   async runAsync(params: SaveTrackEventsCommandRequest): Promise<SaveTrackEventsCommandResponse> {
 
@@ -56,19 +53,6 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
          TableName,
          Item: eventItem
        }));
-
-      //  const response = await this.putPointCommand.runAsync({
-      //    container,
-      //    tableName: TableName,
-      //    indexName: 'geohash-index',
-      //    hashKeyLength: 5,
-      //    rangeKeyValue: { S: event.date.toString() },
-      //    geoPoint: {
-      //      latitude: +trackEvents.track.location.gps.lat,
-      //      longitude: +trackEvents.track.location.gps.long
-      //    },
-      //    item: eventItem
-      //  });
 
        console.log('response', JSON.stringify(response));
        items.push(response.$metadata.httpStatusCode);

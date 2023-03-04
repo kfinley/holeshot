@@ -1,8 +1,7 @@
 import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
-import { DynamoDB, DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { GeoDataManagerConfiguration, GeoDataManager } from 'dynamodb-geo-v3';
 import { Event } from '@holeshot/types/src';
 import { QueryRadiusCommand } from '@holeshot/aws-commands/src';
 import { container } from '../inversify.config';
@@ -43,10 +42,6 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
     console.log('tracks', JSON.stringify(tracksInRange));
     const events: Record<string, any>[] = [];
-
-    // itemsInRange.items.map(i => {
-    //   events.push(unmarshall(i));
-    // })
 
     await Promise.all(tracksInRange.items.map(async item => {
       console.log('item', item);
