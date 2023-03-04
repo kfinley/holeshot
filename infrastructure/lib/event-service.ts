@@ -3,6 +3,7 @@ import { Function } from "aws-cdk-lib/aws-lambda";
 import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { BaseServiceConstruct } from './base-service-construct';
 import { ScopedAws } from 'aws-cdk-lib';
+import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export interface EventServiceProps {
   domainName: string;
@@ -29,8 +30,25 @@ export class EventService extends BaseServiceConstruct {
       HOLESHOT_GEO_TABLE: geoTable.tableName as string
     });
 
+    // Holeshot-Infrastructure-GetNearbyEvents is not authorized to perform: dynamodb:Query on resource: 
+    // arn:aws:dynamodb:us-east-1:146665891952:table/Holeshot-Geo/index/geohash-index because no identity-based policy allows the dynamodb:Query action
     props?.coreTable.grantReadData(this.getNearbyEvents);
-    geoTable.grantFullAccess(this.getNearbyEvents);
+    geoTable.grantReadData(this.getNearbyEvents);
+
+    const dynamodbQueryPolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
+    dynamodbQueryPolicy.addStatements(
+      new PolicyStatement({
+        actions: [
+          "dynamodb:Query"
+        ],
+        effect: Effect.ALLOW,
+        resources: [
+          'arn:aws:dynamodb:us-east-1:146665891952:table/Holeshot-Geo/*'
+        ]
+      })
+    );
+
+    this.getNearbyEvents.role?.attachInlinePolicy(dynamodbQueryPolicy);
 
   }
 }
