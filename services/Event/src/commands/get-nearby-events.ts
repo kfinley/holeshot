@@ -49,7 +49,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const eventsQuery = {
         TableName: CoreTable,
         ExpressionAttributeValues: marshall({
-          ":PK": `${item['name'].S}`,
+          ":PK": `TRACK#${item['name'].S}`,
           ":SK": `${params.date}`
         }),
         KeyConditionExpression: "PK = :PK and SK >= :SK",
