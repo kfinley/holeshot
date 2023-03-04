@@ -47,7 +47,8 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     const trackItem = convertTrackInfoToItem(trackInfo);
 
     console.log('trackItem', JSON.stringify(trackItem));
-
+    console.log('GeoTable', GeoTable);
+    
     var coreResponse = await this.ddbClient.send(new PutItemCommand({
       TableName,
       Item: trackItem

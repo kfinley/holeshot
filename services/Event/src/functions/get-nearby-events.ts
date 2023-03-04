@@ -16,8 +16,6 @@ export const handler = async (params: any, context: Context) => {
 
     console.log('response', response);
 
-    
-
     return response;
 
   } catch (error) {
