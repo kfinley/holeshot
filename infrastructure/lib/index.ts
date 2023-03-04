@@ -17,7 +17,7 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
   return new lambda.Function(scope, name, {
     runtime: lambda.Runtime.NODEJS_18_X,
     memorySize: 1024,
-    timeout: Duration.seconds(5),
+    timeout: Duration.seconds(20),
     functionName: `Holeshot-Infrastructure-${name}`,
     handler,
     code: new lambda.AssetCode(path),
