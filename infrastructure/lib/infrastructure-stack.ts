@@ -264,7 +264,7 @@ export class InfrastructureStack extends Stack {
 
     step2();
 
-    
+
     // Setup WebSockets
     const webSocketsApi = new WebSocketsStack(this, 'Holeshot-WebSocketsStack', {
       connectionsTable: dataStores?.connectionsTable!,
@@ -289,7 +289,7 @@ export class InfrastructureStack extends Stack {
         ],
         effect: Effect.ALLOW,
         resources: [
-          eventService.getNearbyEvents.functionArn,
+          // eventService.getNearbyEvents.functionArn,
           crawlerService.getTracksForRegion.functionArn
         ]
       })
