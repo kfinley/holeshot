@@ -6,7 +6,7 @@ import { Duration, ScopedAws } from 'aws-cdk-lib';
 import { RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Function as LambdaFunction, Code, Runtime } from "aws-cdk-lib/aws-lambda";
-import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { LambdaDestination } from 'aws-cdk-lib/aws-s3-notifications';
 import { BaseServiceConstruct } from './base-service-construct';
 import { Function } from 'aws-cdk-lib/aws-lambda';

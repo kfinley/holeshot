@@ -1,6 +1,6 @@
 import { Construct } from 'constructs';
 import { Function } from "aws-cdk-lib/aws-lambda";
-import { ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { BaseServiceConstruct } from './base-service-construct';
 import { ScopedAws } from 'aws-cdk-lib';
 
@@ -30,7 +30,7 @@ export class EventService extends BaseServiceConstruct {
     });
 
     props?.coreTable.grantReadData(this.getEventsNearby);
-    geoTable.grantFullAccess(this.getEventsNearby);
+    geoTable.grantReadData(this.getEventsNearby);
 
   }
 }

@@ -27,7 +27,7 @@ export class DataStores extends Construct {
 
     (async () => {
       try {
-        const ddb = new DynamoDB({ region });
+        const ddb = new DynamoDB({ region: 'us-east-1' });
         const config = new GeoDataManagerConfiguration(ddb, "Holeshot-Geo");
         config.hashKeyLength = 5
 
