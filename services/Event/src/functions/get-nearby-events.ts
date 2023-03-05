@@ -6,21 +6,23 @@ import bootstrapper from './bootstrapper';
 
 const container = bootstrapper();
 
-const cmd = container.get<GetNearbyEventsCommand>("GetNearbyEventsCommand");
+const getNearbyEvents = container.get<GetNearbyEventsCommand>("GetNearbyEventsCommand");
+
+const startStepFunction = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
 
 export interface GetNearbyEventsParams extends GetNearbyEventsRequest {
-  connectionId: string; // websocket connection ID
+  connectionId: string; // websocket connection ID added by run-lambda command
 }
 
 export const handler = async (params: GetNearbyEventsParams, context: Context) => {
 
-  console.log('params', params);
+  //console.log('params', params);
 
   try {
 
-    const response = await cmd.runAsync(params);
+    const response = await getNearbyEvents.runAsync(params);
 
-    const startStepFunctionResponse = await container.get<StartStepFunctionCommand>("StartStepFunctionCommand").runAsync({
+    const startStepFunctionResponse = await startStepFunction.runAsync({
       input: JSON.stringify({
         subject: 'RunLambda/response',
         message: JSON.stringify({
@@ -32,10 +34,11 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
       container
     });
 
-    console.log('Responses:', JSON.stringify({ startStepFunctionResponse }));
+    // console.log('Responses:', JSON.stringify({ startStepFunctionResponse }));
 
     return {
-      status_code: 200
+      status_code: startStepFunctionResponse.statusCode,
+      executionArn: startStepFunctionResponse.executionArn
     };
 
   } catch (error) {

@@ -36,7 +36,7 @@ export function convertEventToItem(event: Event, track: TrackInfo): {
       S: `TRACK#${track.name}`
     },
     SK: {
-      S: `${event.date}`
+      S: `${event.date}#${event.details['type']}`
     },
     type: {
       S: 'Event'

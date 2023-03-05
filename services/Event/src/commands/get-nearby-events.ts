@@ -1,6 +1,6 @@
 import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
-import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, QueryCommand, QueryCommandInput } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { Event, TrackInfo } from '@holeshot/types/src';
 import { QueryRadiusCommand } from '@holeshot/aws-commands/src';
@@ -14,6 +14,7 @@ export type GetNearbyEventsRequest = {
   long: number;
   date: string;
   distance?: number;
+  type?: string;
 }
 
 export type GetNearbyEventsResponse = {
@@ -49,13 +50,19 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
     await Promise.all(tracksInRange.items.map(async item => {
 
-      const eventsQuery = {
+      const expressionAttributeValues = {
+        ":PK": `TRACK#${item['name'].S}`,
+        ":SK": `${params.date}`
+      };
+
+      if (params.type) {
+        expressionAttributeValues[':type'] = params.type
+      }
+
+      const eventsQuery: QueryCommandInput = {
         TableName: CoreTable,
-        ExpressionAttributeValues: marshall({
-          ":PK": `TRACK#${item['name'].S}`,
-          ":SK": `${params.date}`
-        }),
-        KeyConditionExpression: "PK = :PK and SK >= :SK",
+        ExpressionAttributeValues: marshall(expressionAttributeValues),
+        KeyConditionExpression: params.type ? "PK = :PK and SK >= :SK and contains(SK, :type)" : "PK = :PK and SK >= :SK"
       };
 
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));

@@ -29,11 +29,7 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
   async runAsync(params: SaveTrackEventsCommandRequest): Promise<SaveTrackEventsCommandResponse> {
 
-    // console.log('params', params);
     const items: any[] = [];
-    // console.log('key', params.key);
-
-    // console.log(`Key: ${params.key} BucketName: ${bucketName}`);
 
     const getTrackEvents = await this.getStoredObjectCommand.runAsync({
       container,
@@ -46,8 +42,6 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
      await Promise.all(trackEvents.events.map(async event => {
 
        const eventItem = convertEventToItem(event, trackEvents.track);
-
-      //  console.log('eventItem', eventItem);
 
        var response = await this.ddbClient.send(new PutItemCommand({
          TableName,
