@@ -50,8 +50,8 @@ export class DataStores extends Construct {
       partitionKey: { name: 'PK', type: AttributeType.STRING },
       sortKey: { name: 'SK', type: AttributeType.STRING },
       billingMode: BillingMode.PROVISIONED,
-      readCapacity: 1,
-      writeCapacity: 1,
+      readCapacity: 10,
+      writeCapacity: 5,
       removalPolicy: RemovalPolicy.DESTROY, // NOT recommended for production code
       encryption: TableEncryption.AWS_MANAGED,
       pointInTimeRecovery: false // set to "true" to enable PITR
@@ -61,8 +61,8 @@ export class DataStores extends Construct {
       indexName: 'GSI1',
       partitionKey: { name: 'GSI1PK', type: AttributeType.STRING },
       sortKey: { name: 'GSI1SK', type: AttributeType.STRING },
-      readCapacity: 1,
-      writeCapacity: 1,
+      readCapacity: 10,
+      writeCapacity: 5,
       projectionType: ProjectionType.ALL,
     })
 
