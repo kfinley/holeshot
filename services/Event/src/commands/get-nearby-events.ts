@@ -66,7 +66,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       };
 
       if (params.type) {
-        eventsQuery.FilterExpression = "contains(SK, :type)";
+        eventsQuery.FilterExpression = "contains(eventType, :type)";
       }
 
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
