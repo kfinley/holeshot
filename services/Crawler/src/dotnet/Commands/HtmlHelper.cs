@@ -314,7 +314,7 @@ namespace Holeshot.Crawler.Commands {
             var eventDetails = e.Split(": ");
             if (eventDetails.Count() > 1) {
               if (eventsDict.TryAdd(eventDetails[0].Replace(" ", string.Empty), eventDetails[1]) == false) {
-                eventsDict.Add(eventDetails[0].Replace(" ", string.Empty) + "1", eventDetails[1]);              // Lame hack... redo the way we pull event details
+                eventsDict.Add(eventDetails[0].Replace(" ", string.Empty) + "1", eventDetails[1]);              // Lame hack... redo the way we pull event details This happens when multi day races have the same details on each days events
               }
             }
           }

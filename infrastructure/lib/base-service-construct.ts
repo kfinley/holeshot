@@ -14,8 +14,8 @@ export class BaseServiceConstruct extends Construct {
 
   protected newLambda(name: string, handler: string, env?: {
     [key: string]: string;
-  } | undefined) {
-    return createLambda(this, name, this.nodeCodePath, handler, this.node_env, env);
+  } | undefined, timeout: number = 20) {
+    return createLambda(this, name, this.nodeCodePath, handler, this.node_env, env, timeout);
   }
 
 }
