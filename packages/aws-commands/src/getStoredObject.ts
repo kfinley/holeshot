@@ -31,7 +31,7 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
   async runAsync(params: GetStoredObjectRequest): Promise<GetStoredObjectResponse> {
 
-    console.log('GetStoredObjectRequest', JSON.stringify(params));
+    // console.log('GetStoredObjectRequest', JSON.stringify(params));
 
     this.s3Client = params.container.get<S3Client>("S3Client");
 
@@ -53,7 +53,7 @@ export class GetStoredObjectCommand implements Command<GetStoredObjectRequest, G
 
         body = await this.streamToString(s3Item.Body as Readable);
 
-        console.log('trackInfo.json', body);
+        // console.log('trackInfo.json', body);
 
       } catch (e) {
         console.log('error', e);
