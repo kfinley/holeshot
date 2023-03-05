@@ -9,7 +9,7 @@ const container = bootstrapper();
 const cmd = container.get<GetNearbyEventsCommand>("GetNearbyEventsCommand");
 
 export interface GetNearbyEventsParams extends GetNearbyEventsRequest {
-  userId: string; // email
+  connectionId: string; // websocket connection ID
 }
 
 export const handler = async (params: GetNearbyEventsParams, context: Context) => {
@@ -24,14 +24,15 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
       input: JSON.stringify({
         subject: 'RunLambda/response',
         message: JSON.stringify({
-          userId: params.userId
+          connectionId: params.connectionId,
+          data: response
         })
       }),
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
       container
     });
 
-    console.log('Responses:', { response, startStepFunctionResponse });
+    console.log('Responses:', JSON.stringify({ response, startStepFunctionResponse }));
 
     return {
       status_code: 200

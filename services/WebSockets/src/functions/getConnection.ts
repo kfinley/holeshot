@@ -10,16 +10,23 @@ export const handler: Handler = async (event: any, context: Context) => {
 
   console.log(`getConnection`, event);
 
-  const { userId } = JSON.parse(event.message);
+  const { userId, connectionId } = JSON.parse(event.message);
 
-  const response = await getConnectionCmd().runAsync({
-    userId
-  });
+  if (connectionId === undefined) {
+    const response = await getConnectionCmd().runAsync({
+      userId
+    });
 
-  if (response && response.success) {
-    return {
-      ...event,
-      connectionId: response.connectionId
-    };
-  } return event;
+    if (response && response.success) {
+      return {
+        ...event,
+        connectionId: response.connectionId
+      };
+    }
+  }
+
+  return {
+    ...event,
+    connectionId
+  };
 };

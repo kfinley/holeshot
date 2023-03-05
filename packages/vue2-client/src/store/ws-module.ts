@@ -11,7 +11,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   status: WebSocketsStatus = WebSocketsStatus.None;
   socket!: Socket;
 
-  wsUrl = `${process.env.NODE_ENV === 'production' ? 'wss' : 'ws'}://${config.WebSocket}`
+  wsUrl = `${process.env.NODE_ENV === 'production' ? 'wss' : 'ws'}://${config.WebSocket}`;
 
   @Action
   handleSocketMessage(ev: MessageEvent) {
@@ -20,11 +20,11 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   }
 
   @Action
-  sendCommand(params: { command: string, data: unknown }) {
+  sendCommand(params: { command: string; data: unknown }) {
     console.log('sendSocketMessage', params);
 
     this.context.commit('mutate', (state: WebSocketsState) => {
-        state.socket?.send(
+      state.socket?.send(
         JSON.stringify({
           command: params.command,
           data: params.data,
