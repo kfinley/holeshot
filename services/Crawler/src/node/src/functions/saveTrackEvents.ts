@@ -5,15 +5,17 @@ import { createResponse } from './create-response';
 
 const container = bootstrapper();
 
+const saveTrackEvents = container.get<SaveTrackEventsCommand>("SaveTrackEventsCommand");
+
 export const handler: Handler = async (event: S3CreateEvent, context: Context) => {
 
   try {
 
-    console.log('event', JSON.stringify(event));
+    // console.log('event', JSON.stringify(event));
 
     const { key } = event.Records[0].s3.object;
 
-    const response = await container.get<SaveTrackEventsCommand>("SaveTrackEventsCommand").runAsync({
+    const response = await saveTrackEvents.runAsync({
       key
     });
 

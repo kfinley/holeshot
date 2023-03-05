@@ -5,6 +5,7 @@ import { GetStoredObjectCommand, PutPointCommand } from '@holeshot/aws-commands/
 import { Inject, injectable } from 'inversify-props';
 import { convertTrackInfoToItem } from './ddb-helpers';
 import { container } from './inversify.config';
+import { marshall } from '@aws-sdk/util-dynamodb';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 const GeoTable = process.env.HOLESHOT_GEO_TABLE as string;
@@ -32,10 +33,6 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
 
   async runAsync(params: SaveTrackInfoCommandRequest): Promise<SaveTrackInfoCommandResponse> {
 
-    // console.log('params', params);
-
-    // console.log(`Key: ${params.key} BucketName: ${bucketName}`);
-
     var getTrackInfo = await this.getStoredObjectCommand.runAsync({
       container,
       bucket: bucketName,
@@ -45,9 +42,6 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
     var trackInfo = JSON.parse(getTrackInfo.body) as TrackInfo;
 
     const trackItem = convertTrackInfoToItem(trackInfo);
-
-    // console.log('trackItem', JSON.stringify(trackItem));
-    // console.log('GeoTable', GeoTable);
 
     var coreResponse = await this.ddbClient.send(new PutItemCommand({
       TableName,
@@ -62,7 +56,13 @@ export class SaveTrackInfoCommand implements Command<SaveTrackInfoCommandRequest
         latitude: +trackInfo.location.gps.lat,
         longitude: +trackInfo.location.gps.long
       },
-      item: trackItem
+      item: marshall({
+        name: trackInfo.name,
+        location: trackInfo.location,
+        contactInfo: trackInfo.contactInfo,
+        district: trackInfo.district,
+        website: trackInfo.website
+      })
     });
 
     console.log('items', { core: coreResponse.$metadata.httpStatusCode, geo: geoResponse.$metadata.httpStatusCode });

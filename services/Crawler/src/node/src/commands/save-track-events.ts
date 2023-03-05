@@ -39,17 +39,14 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
     const trackEvents = JSON.parse(getTrackEvents.body) as { track: TrackInfo, events: Event[] };
 
-     await Promise.all(trackEvents.events.map(async event => {
+    await Promise.all(trackEvents.events.map(async event => {
 
-       const eventItem = convertEventToItem(event, trackEvents.track);
+      var response = await this.ddbClient.send(new PutItemCommand({
+        TableName,
+        Item: convertEventToItem(event, trackEvents.track)
+      }));
 
-       var response = await this.ddbClient.send(new PutItemCommand({
-         TableName,
-         Item: eventItem
-       }));
-
-      //  console.log('response', JSON.stringify(response));
-       items.push(response.$metadata.httpStatusCode);
+      items.push(response.$metadata.httpStatusCode);
 
     }));
 
