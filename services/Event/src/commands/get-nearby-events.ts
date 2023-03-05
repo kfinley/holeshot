@@ -38,7 +38,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       centerPoint: {
         latitude: params.lat,
         longitude: params.long
-      }
+      },
+      distance: params.distance
     });
 
     // console.log('tracks', JSON.stringify(tracksInRange));
