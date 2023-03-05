@@ -32,13 +32,10 @@ export class EventService extends BaseServiceConstruct {
       HOLESHOT_GEO_TABLE: geoTable.tableName.includes('/') ? geoTable.tableName.split('/')[1] : geoTable.tableName // stupid... for some reason ITable.tableName is returning {accountId}:table/{tableName}
     });
 
-    // Holeshot-Infrastructure-GetNearbyEvents is not authorized to perform: dynamodb:Query on resource:
-    // arn:aws:dynamodb:us-east-1:146665891952:table/Holeshot-Geo/index/geohash-index because no identity-based policy allows the dynamodb:Query action
-    // arn:aws:dynamodb:us-east-1:146665891952:table/146665891952:table/Holeshot-Geo/index/geohash-index
     props?.coreTable.grantReadData(this.getNearbyEvents);
     geoTable.grantReadData(this.getNearbyEvents);
 
-    const dynamodbQueryPolicy = new Policy(this, 'Holeshot-GetNearbyEvents-Inline-LambdaInvokePolicy');
+    const dynamodbQueryPolicy = new Policy(this, 'Holeshot-GetNearbyEvents-DynamoDBQueryPolicy');
     dynamodbQueryPolicy.addStatements(
       new PolicyStatement({
         actions: [
@@ -53,7 +50,7 @@ export class EventService extends BaseServiceConstruct {
 
     this.getNearbyEvents.role?.attachInlinePolicy(dynamodbQueryPolicy);
 
-    const lambdaSfnStatusUpdatePolicy = new Policy(this, 'Holeshot-GetNearbyEvents-lambdaSfnStatusUpdatePolicy');
+    const lambdaSfnStatusUpdatePolicy = new Policy(this, 'Holeshot-GetNearbyEvents-LambdaSfnPolicy');
     lambdaSfnStatusUpdatePolicy.addStatements(
       new PolicyStatement({
         actions: [
@@ -63,7 +60,9 @@ export class EventService extends BaseServiceConstruct {
           "states:StartExecution"
         ],
         effect: Effect.ALLOW,
-        resources: [`${props?.sendMessageStateMachine.stateMachineArn}`]
+        resources: [
+          `arn:aws:states:${region}:${accountId}:stateMachine:*`
+        ]
       })
     );
 
