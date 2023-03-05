@@ -29,6 +29,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
 
   public webSocketApi: WebSocketApi;
   public messageHandler: Function;
+  public sendMessageStateMachine: StateMachine;
 
   constructor(scope: Construct, id: string, props?: WebSocketsStackProps) {
     super(scope, id, '../../services/WebSockets/dist', props!.node_env);
@@ -133,7 +134,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
     })
 
     // replace this with https://github.com/mbonig/state-machine or something similar
-    const stateMachine = new StateMachine(this, 'Holeshot-WebSockets-SendMessage', {
+    this.sendMessageStateMachine = new StateMachine(this, 'Holeshot-WebSockets-SendMessage', {
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
       definition: chain,
       logs: {
@@ -144,7 +145,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
     });
 
     new CfnOutput(this, 'StateMachineArn', {
-      value: `SendMessage StateMachine arn: ${stateMachine.stateMachineArn}`
+      value: `SendMessage StateMachine arn: ${this.sendMessageStateMachine.stateMachineArn}`
     });
 
     const sfnLambdaInvokePolicy = new Policy(this, 'sfnLambdaInvokePolicy');
@@ -158,7 +159,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
         sid: "sfnLambdaInvokePolicy"
       })
     )
-    stateMachine.role.attachInlinePolicy(sfnLambdaInvokePolicy)
+    this.sendMessageStateMachine.role.attachInlinePolicy(sfnLambdaInvokePolicy)
 
     const lambdaSfnStatusUpdatePolicy = new Policy(this, 'lambdaSfnStatusUpdatePolicy');
     lambdaSfnStatusUpdatePolicy.addStatements(

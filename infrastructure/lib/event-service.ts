@@ -4,11 +4,13 @@ import { Table } from 'aws-cdk-lib/aws-dynamodb';
 import { BaseServiceConstruct } from './base-service-construct';
 import { ScopedAws } from 'aws-cdk-lib';
 import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { StateMachine } from 'aws-cdk-lib/aws-stepfunctions';
 
 export interface EventServiceProps {
   domainName: string;
   coreTable: Table;
   node_env: string;
+  sendMessageStateMachine: StateMachine;
 }
 
 export class EventService extends BaseServiceConstruct {
@@ -51,5 +53,20 @@ export class EventService extends BaseServiceConstruct {
 
     this.getNearbyEvents.role?.attachInlinePolicy(dynamodbQueryPolicy);
 
+    const lambdaSfnStatusUpdatePolicy = new Policy(this, 'Holeshot-GetNearbyEvents-lambdaSfnStatusUpdatePolicy');
+    lambdaSfnStatusUpdatePolicy.addStatements(
+      new PolicyStatement({
+        actions: [
+          "states:SendTaskSuccess",
+          "states:SendTaskFailure",
+          "states:ListStateMachines",
+          "states:StartExecution"
+        ],
+        effect: Effect.ALLOW,
+        resources: [`${props?.sendMessageStateMachine.stateMachineArn}`]
+      })
+    );
+
+    this.getNearbyEvents.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
   }
 }

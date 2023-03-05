@@ -278,7 +278,8 @@ export class InfrastructureStack extends Stack {
     const eventService = new EventService(this, 'Holeshot-EventService', {
       domainName,
       coreTable: dataStores?.coreTable,
-      node_env: props!.node_env
+      node_env: props!.node_env,
+      sendMessageStateMachine: webSocketsApi.sendMessageStateMachine
     });
 
     const lambdaInvokePolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
