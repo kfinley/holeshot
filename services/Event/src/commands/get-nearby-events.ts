@@ -42,7 +42,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       distance: params.distance
     });
 
-    // console.log('tracks', JSON.stringify(tracksInRange));
+    console.log('tracks', tracksInRange.items.length);
 
     const events: Record<string, any>[] = [];
     // const tracks: Record<string, any>[] = [];
