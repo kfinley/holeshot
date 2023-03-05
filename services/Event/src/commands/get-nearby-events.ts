@@ -62,8 +62,12 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const eventsQuery: QueryCommandInput = {
         TableName: CoreTable,
         ExpressionAttributeValues: marshall(expressionAttributeValues),
-        KeyConditionExpression: params.type ? "PK = :PK and SK >= :SK and contains(SK, :type)" : "PK = :PK and SK >= :SK"
+        KeyConditionExpression: "PK = :PK and SK >= :SK"
       };
+
+      if (params.type) {
+        eventsQuery.FilterExpression = "contains(SK, :type)";
+      }
 
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
 
