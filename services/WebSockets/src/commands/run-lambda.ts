@@ -3,12 +3,12 @@ import { injectable } from 'inversify-props';
 import { Lambda } from "@aws-sdk/client-lambda";
 
 export type RunLambdaRequest = {
-  name: string,
-  payload: string,
+  name: string;
+  payload: string;
 };
 
 export type RunLambdaResponse = {
-  statusCode?: number
+  statusCode?: number;
 };
 
 const AWS_REGION = process.env.AWS_REGION;
