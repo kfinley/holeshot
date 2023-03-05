@@ -2,7 +2,7 @@ import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
 import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Event } from '@holeshot/types/src';
+import { Event, TrackInfo } from '@holeshot/types/src';
 import { QueryRadiusCommand } from '@holeshot/aws-commands/src';
 import { container } from '../inversify.config';
 
@@ -17,6 +17,7 @@ export type GetNearbyEventsRequest = {
 }
 
 export type GetNearbyEventsResponse = {
+  tracks: TrackInfo[] | Record<string, any>;
   events: Event[] | Record<string, any>;
 }
 
@@ -40,9 +41,10 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       }
     });
 
-    console.log('tracks', JSON.stringify(tracksInRange));
-    
+    // console.log('tracks', JSON.stringify(tracksInRange));
+
     const events: Record<string, any>[] = [];
+    const tracks: Record<string, any>[] = [];
 
     await Promise.all(tracksInRange.items.map(async item => {
       console.log('item', item);
@@ -56,19 +58,32 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         KeyConditionExpression: "PK = :PK and SK >= :SK",
       };
 
-      console.log('query', JSON.stringify(eventsQuery));
-
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
-      console.log('items', eventItems.Items);
 
-      events.push(...eventItems.Items.map(i => unmarshall(i)));
+      eventItems.Items.map(i => {
+
+        switch (i['type'].S) {
+          case 'Track':
+            tracks.push(unmarshall(i));
+            break;
+          case 'Event':
+            events.push(unmarshall(i))
+            break;
+          default:
+            console.log('Unknown type', unmarshall(i));
+            break;
+        }
+
+        return item;
+      });
     }));
 
-    console.log('Events', events)
+    console.log('Tracks', tracks);
+    console.log('Events', events);
 
     return {
+      tracks,
       events
     }
   }
 }
-
