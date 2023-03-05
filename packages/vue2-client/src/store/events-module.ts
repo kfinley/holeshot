@@ -11,7 +11,7 @@ export class EventsModule extends BaseModule implements EventsState {
   searchResult: Event[] = [];
 
   @Action
-  searchResponse(params: { events: Event[] }) {
+  searchResponse(params: { connectionId: string, events: Event[] }) {
     console.log('Events.searchEvents', JSON.stringify(params.events));
     this.context.commit('mutate', (state: EventsState) => {
       state.searchResult = params.events;
