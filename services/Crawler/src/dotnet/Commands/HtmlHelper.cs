@@ -279,8 +279,8 @@ namespace Holeshot.Crawler.Commands {
 
     public List<Event> GetEvents(IDocument doc, string baseUrl, string trackName) {
 
-      Console.WriteLine("GetEvents", trackName);
-      
+      Console.WriteLine($"GetEvents {trackName}");
+
       var eventsElement = doc.QuerySelectorAll("td:has(a)");
 
       var events = new List<Event>();
@@ -312,8 +312,11 @@ namespace Holeshot.Crawler.Commands {
         eventsList.ForEach(e => {
           if (e != string.Empty) {
             var eventDetails = e.Split(": ");
-            if (eventDetails.Count() > 1)
-              eventsDict.Add(eventDetails[0].Replace(" ", string.Empty), eventDetails[1]);
+            if (eventDetails.Count() > 1) {
+              if (eventsDict.TryAdd(eventDetails[0].Replace(" ", string.Empty), eventDetails[1]) == false) {
+                eventsDict.Add(eventDetails[0].Replace(" ", string.Empty) + "1", eventDetails[1]);              // Lame hack... redo the way we pull event details
+              }
+            }
           }
         });
 
