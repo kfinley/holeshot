@@ -279,6 +279,8 @@ namespace Holeshot.Crawler.Commands {
 
     public List<Event> GetEvents(IDocument doc, string baseUrl, string trackName) {
 
+      Console.WriteLine("GetEvents", trackName);
+      
       var eventsElement = doc.QuerySelectorAll("td:has(a)");
 
       var events = new List<Event>();
