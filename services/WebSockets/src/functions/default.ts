@@ -16,8 +16,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     const { command, data } = JSON.parse(event.body);
 
-    data['connectionId'] = event.requestContext.connectionId;
+    data['connectionId'] = event['requestContext']['connectionId'];
 
+    console.log('data', data);
+    
     await container
       .get<IMessageCommand>(`${command}Command`)
       .runAsync(data);

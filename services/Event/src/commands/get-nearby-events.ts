@@ -47,7 +47,6 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     const tracks: Record<string, any>[] = [];
 
     await Promise.all(tracksInRange.items.map(async item => {
-      console.log('item', item);
 
       const eventsQuery = {
         TableName: CoreTable,
