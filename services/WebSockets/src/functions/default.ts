@@ -16,7 +16,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     const { command, data } = JSON.parse(event.body);
 
-    data['payload']['connectionId'] = event['requestContext']['connectionId'];
+    const payload = JSON.parse(data['payload']);
+    payload['connectionId'] = event['requestContext']['connectionId'];
+    
+    data['payload'] = JSON.stringify(payload);
 
     console.log('data', JSON.stringify(data));
 

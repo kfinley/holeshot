@@ -77,8 +77,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       });
     }));
 
-    console.log('Tracks', tracks);
-    console.log('Events', events);
+    // console.log('Tracks', tracks);
+    // console.log('Events', events);
 
     return {
       tracks,
