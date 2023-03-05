@@ -20,7 +20,7 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
 
     const response = await cmd.runAsync(params);
 
-    const startStepFunctionResponse = container.get<StartStepFunctionCommand>("StartStepFunctionCommand").runAsync({
+    const startStepFunctionResponse = await container.get<StartStepFunctionCommand>("StartStepFunctionCommand").runAsync({
       input: JSON.stringify({
         subject: 'RunLambda/response',
         message: JSON.stringify({
@@ -32,7 +32,7 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
       container
     });
 
-    console.log('Responses:', JSON.stringify({ response, startStepFunctionResponse }));
+    console.log('Responses:', JSON.stringify({ startStepFunctionResponse }));
 
     return {
       status_code: 200
