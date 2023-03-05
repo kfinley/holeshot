@@ -1,4 +1,5 @@
 import { Socket } from '../types'
+import { Event } from '@holeshot/types/src';
 
 export enum Status {
   'None',
@@ -8,8 +9,8 @@ export enum Status {
 }
 
 export interface ArticlesState {
-  articles: Record<string, string>
-  status: Status
+  articles: Record<string, string>;
+  status: Status;
 }
 
 export enum WebSocketsStatus {
@@ -20,6 +21,12 @@ export enum WebSocketsStatus {
 }
 
 export interface WebSocketsState {
-  status: WebSocketsStatus
-  socket?: Socket
+  status: WebSocketsStatus;
+  socket?: Socket;
+}
+
+export interface EventsState {
+  status: Status;
+  myEvents: Event[];
+  searchResult: Event[];
 }

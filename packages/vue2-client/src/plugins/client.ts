@@ -2,6 +2,7 @@ import bootstrapper from './../bootstrapper';
 import Vue from 'vue';
 import { Store } from 'vuex';
 import { ArticlesModule } from '../store/articles-module';
+import { EventsModule } from '../store/events-module';
 import { WebSocketsModule, getWSModule } from '../store/ws-module';
 import { extend } from 'vee-validate';
 import { ClientPlugin } from '@finley/vue2-components/src/types';
@@ -22,6 +23,7 @@ import '../styles/styles.scss';
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
   store.registerModule('WebSockets', WebSocketsModule);
+  store.registerModule('Events', EventsModule);
 };
 
 const plugin: ClientPlugin = {

@@ -1,16 +1,18 @@
 <template>
  <div class="p-4">
     <h1>Dashboard</h1>
+    <Events />
     <Functions />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Functions } from '../components/';
+import { Events, Functions } from '../components/';
 
 @Component({
   components: {
+    Events,
     Functions,
   },
 })

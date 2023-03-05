@@ -35,6 +35,7 @@ export default class LayoutDefault extends Vue {}
   }
 
   &__main {
+    padding-top: 2em;
     padding-bottom: 4em;
   }
 

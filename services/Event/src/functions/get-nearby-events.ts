@@ -24,10 +24,10 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
 
     const startStepFunctionResponse = await startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: 'RunLambda/response',
+        subject: 'Events/searchResponse',
         message: JSON.stringify({
           connectionId: params.connectionId,
-          data: response
+          ...response
         })
       }),
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
