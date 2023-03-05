@@ -16,12 +16,13 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   @Action
   handleSocketMessage(ev: MessageEvent) {
     const { subject, message } = JSON.parse(ev.data);
+    console.log('handleSocketMessage', ev.data);
     this.context.dispatch(subject, message, { root: true });
   }
 
   @Action
   sendCommand(params: { command: string; data: unknown }) {
-    console.log('sendSocketMessage', params);
+    console.log('sendCommand', params);
 
     this.context.commit('mutate', (state: WebSocketsState) => {
       state.socket?.send(

@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { ArticlesState, Status } from '../store/state'
-import { State } from 'vuex-class'
-import { getArticlesModule } from '../store/articles-module'
-import { Hero } from '../components'
+import { Component, Vue } from 'vue-property-decorator';
+import { ArticlesState, Status } from '../store/state';
+import { State } from 'vuex-class';
+import { getArticlesModule } from '../store/articles-module';
+import { Hero } from '../components';
 
 @Component({
   components: {
@@ -26,14 +26,14 @@ import { Hero } from '../components'
   },
 })
 export default class Articles extends Vue {
-  @State('Articles') articlesState!: ArticlesState
+  @State('Articles') articlesState!: ArticlesState;
 
   async created() {
-    await getArticlesModule(this.$store).loadArticles()
+    await getArticlesModule(this.$store).loadArticles();
   }
 
   loading() {
-    return this.articlesState.status === Status.Loading
+    return this.articlesState.status === Status.Loading;
   }
 }
 </script>
