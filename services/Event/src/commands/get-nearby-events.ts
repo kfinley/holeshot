@@ -17,7 +17,7 @@ export type GetNearbyEventsRequest = {
 }
 
 export type GetNearbyEventsResponse = {
-  tracks: TrackInfo[] | Record<string, any>;
+  // tracks: TrackInfo[] | Record<string, any>;
   events: Event[] | Record<string, any>;
 }
 
@@ -44,7 +44,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     // console.log('tracks', JSON.stringify(tracksInRange));
 
     const events: Record<string, any>[] = [];
-    const tracks: Record<string, any>[] = [];
+    // const tracks: Record<string, any>[] = [];
 
     await Promise.all(tracksInRange.items.map(async item => {
 
@@ -63,7 +63,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
         switch (i['type'].S) {
           case 'Track':
-            tracks.push(unmarshall(i));
+            // tracks.push(unmarshall(i));
             break;
           case 'Event':
             events.push(unmarshall(i))
@@ -81,7 +81,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     // console.log('Events', events);
 
     return {
-      tracks,
+      // tracks,
       events
     }
   }
