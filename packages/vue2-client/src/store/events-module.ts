@@ -8,10 +8,10 @@ import { EventsState, Status } from './state';
 export class EventsModule extends BaseModule implements EventsState {
   myEvents: Event[] = [];
   status: Status = Status.None;
-  searchResult: Event[] = [];
+  searchResult: any[] = [];
 
   @Action
-  searchResponse(params: { connectionId: string, events: Event[] }) {
+  searchResponse(params: { connectionId: string, events: any[] }) {
     console.log('Events.searchEvents', JSON.stringify(params.events));
     this.context.commit('mutate', (state: EventsState) => {
       state.searchResult = params.events;

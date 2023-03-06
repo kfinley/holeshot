@@ -28,5 +28,5 @@ export interface WebSocketsState {
 export interface EventsState {
   status: Status;
   myEvents: Event[];
-  searchResult: Event[];
+  searchResult: any[];
 }
