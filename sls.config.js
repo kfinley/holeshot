@@ -4,5 +4,5 @@ module.exports = {
     context: __dirname,
     mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
     servicesPath: `./services`,
-    services: ['Core', 'User', 'WebSockets'],
+    services: ['Core', 'Event', 'User', 'WebSockets'],
 };

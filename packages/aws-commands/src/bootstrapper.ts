@@ -14,6 +14,7 @@ import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { SES } from '@aws-sdk/client-ses';
 import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Lambda } from "@aws-sdk/client-lambda";
 
 export default function bootstrapper(container: Container) {
 
@@ -124,6 +125,17 @@ export default function bootstrapper(container: Container) {
         :
         new DynamoDB({ // Local Dev
           endpoint: "http://holeshot.dynamodb:8000"
+        }));
+  }
+
+  if (!container.isBound("Lambda")) {
+    container.bind<Lambda>("Lambda")
+      .toDynamicValue(() => process.env.NODE_ENV === 'production'
+        ?
+        new Lambda({ region: process.env.AWS_REGION }) // Prod
+        :
+        new Lambda({ // Local Dev
+          endpoint: "http://holeshot.sls:3002"
         }));
   }
 

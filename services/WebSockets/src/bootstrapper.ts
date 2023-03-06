@@ -13,19 +13,6 @@ export default function bootstrapper() {
 
   awsCommandsBootstrapper(container);
 
-  // Is this needed??
-  if (!container.isBound("DynamoDBClient")) {
-    container.bind<DynamoDBClient>("DynamoDBClient")
-      .toDynamicValue(() =>
-        process.env.NODE_ENV === 'production'
-          ?
-          new DynamoDBClient({}) // Prod
-          :
-          new DynamoDBClient({ // Local Dev
-            endpoint: "http://Holeshot.dynamodb:8000"
-          }));
-  }
-
   if (!container.isBound("ApiGatewayManagementApiClient")) {
     container.bind<ApiGatewayManagementApiClient>("ApiGatewayManagementApiClient")
       .toDynamicValue(() => {
@@ -39,7 +26,7 @@ export default function bootstrapper() {
           }) // Prod
           :
           new ApiGatewayManagementApiClient({ // Local Dev
-            endpoint: "http://kylefinley.sls:3001"
+            endpoint: "http://holeshot.sls:3001"
           });
 
         //HACK: For some reason the hostname and path values are changing.

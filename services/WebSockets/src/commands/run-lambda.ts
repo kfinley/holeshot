@@ -1,5 +1,5 @@
 import { Command } from '@holeshot/commands/src';
-import { injectable } from 'inversify-props';
+import { injectable, Inject } from 'inversify-props';
 import { Lambda } from "@aws-sdk/client-lambda";
 
 export type RunLambdaRequest = {
@@ -16,15 +16,12 @@ const AWS_REGION = process.env.AWS_REGION;
 @injectable()
 export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResponse> {
 
+  @Inject("Lambda")
   private client!: Lambda;
 
   async runAsync(params: RunLambdaRequest): Promise<RunLambdaResponse> {
 
     try {
-      //TODO: fix this...
-      this.client = new Lambda({
-        region: AWS_REGION
-      });
 
       const command = {
         FunctionName: params.name,

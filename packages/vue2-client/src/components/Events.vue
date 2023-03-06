@@ -21,7 +21,6 @@ export default class Events extends Vue {
 
 @media (max-width: 768px) {
   .events {
-    padding-top: 10.8em !important;
   }
 }
 </style>
