@@ -17,7 +17,6 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   handleSocketMessage(ev: MessageEvent) {
     try {
       const { subject, message } = JSON.parse(ev.data);
-      console.log(ev.data);
       this.context.dispatch(subject, message, { root: true });
     } catch (e) {
       console.log(e);
