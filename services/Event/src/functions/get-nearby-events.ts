@@ -7,7 +7,6 @@ import bootstrapper from './bootstrapper';
 const container = bootstrapper();
 
 const getNearbyEvents = container.get<GetNearbyEventsCommand>("GetNearbyEventsCommand");
-
 const startStepFunction = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
 
 export interface GetNearbyEventsParams extends GetNearbyEventsRequest {
@@ -16,15 +15,13 @@ export interface GetNearbyEventsParams extends GetNearbyEventsRequest {
 
 export const handler = async (params: GetNearbyEventsParams, context: Context) => {
 
-  //console.log('params', params);
-
   try {
 
     const response = await getNearbyEvents.runAsync(params);
 
     const startStepFunctionResponse = await startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: 'Events/searchResponse',
+        subject: 'Events/nearby',
         message: JSON.stringify({
           connectionId: params.connectionId,
           ...response
@@ -33,8 +30,6 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
       container
     });
-
-    // console.log('Responses:', JSON.stringify({ startStepFunctionResponse }));
 
     return {
       status_code: startStepFunctionResponse.statusCode,

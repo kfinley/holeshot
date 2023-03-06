@@ -1,0 +1,28 @@
+GeoTable:
+  Type: AWS::DynamoDB::Table
+  Properties:
+    TableName: Holeshot-Geo-Table
+    KeySchema:
+      - AttributeName: hashKey
+        KeyType: HASH
+      - AttributeName: rangeKey
+        KeyType: RANGE
+    AttributeDefinitions:
+      - AttributeName: hashKey
+        AttributeType: N
+      - AttributeName: rangeKey
+        AttributeType: S
+      - AttributeName: geohash
+        AttributeType: N
+    LocalSecondaryIndexes:
+      - IndexName: geohash-index
+        KeySchema:
+          - AttributeName: hashKey
+            KeyType: HASH
+          - AttributeName: geohash
+            KeyType: RANGE
+        Projection:
+          ProjectionType: ALL
+    ProvisionedThroughput:
+      ReadCapacityUnits: 10
+      WriteCapacityUnits: 5

@@ -1,13 +1,13 @@
-
-
 GetTracksCompleteTopic:
   Type: "AWS::SNS::Topic"
   Properties:
     DisplayName: ${self:service}-GetTracksCompleteTopic
 
-# GetTracksCompleteSubscription:
-#   Type: "AWS::SNS::Subscription"
-#   Properties:
-#     Endpoint: arn:aws:sns:us-east-1:146665891952:{{Send message to connected clients}}
-#     Protocol: lambda
-#     TopicArn: arn:aws:sns:us-east-1:146665891952:${self:service}-GetTracksCompleteTopic
+${self:service}Bucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: holeshot-bmx.com-crawler
+    BucketEncryption:
+      ServerSideEncryptionConfiguration:
+        - ServerSideEncryptionByDefault:
+            SSEAlgorithm: AES256

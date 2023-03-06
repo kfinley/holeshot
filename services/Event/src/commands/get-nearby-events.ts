@@ -33,6 +33,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
   async runAsync(params: GetNearbyEventsRequest): Promise<GetNearbyEventsResponse> {
 
+    console.log('parms', JSON.stringify(params));
+
     const tracksInRange = await this.queryRadius.runAsync({
       container,
       tableName: GeoTable,

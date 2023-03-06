@@ -25,7 +25,7 @@ export class GetConnectionByUserIdCommand implements Command<GetConnectionReques
 
     this.ddbClient = container.get<DynamoDBClient>("DynamoDBClient");
 
-    console.log(`Getting connection for ${params.userId} from ${CONNECTION_TABLE}`);
+    // console.log(`Getting connection for ${params.userId} from ${CONNECTION_TABLE}`);
 
     const query = {
       TableName: CONNECTION_TABLE,
@@ -44,7 +44,7 @@ export class GetConnectionByUserIdCommand implements Command<GetConnectionReques
       }
     }
 
-    console.log('No connection found...');
+    // console.log('No connection found...');
 
     return {
       success: false

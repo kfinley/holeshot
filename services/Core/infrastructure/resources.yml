@@ -12,6 +12,8 @@ ${self:service}Table:
         AttributeType: S
       - AttributeName: SK
         AttributeType: S
+      - AttributeName: GSI1PK
+        AttributeType: S
       - AttributeName: GSI1SK
         AttributeType: S
     ProvisionedThroughput:
@@ -20,7 +22,7 @@ ${self:service}Table:
     GlobalSecondaryIndexes:
       - IndexName: GSI1
         KeySchema:
-          - AttributeName: PK
+          - AttributeName: GSI1PK
             KeyType: HASH
           - AttributeName: GSI1SK
             KeyType: RANGE

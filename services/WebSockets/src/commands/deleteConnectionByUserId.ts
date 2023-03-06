@@ -24,8 +24,8 @@ export class DeleteConnectionByUserIdCommand implements Command<DeleteConnection
     // console.log('ddbClient', this.ddbClient);
     // console.log('ddbClient.endpoint', (await this.ddbClient.config.endpoint()).hostname);
 
-    console.log('DeleteConnectionByUserId', params);
-    console.log('CONNECTION_TABLE', CONNECTION_TABLE);
+    // console.log('DeleteConnectionByUserId', params);
+    // console.log('CONNECTION_TABLE', CONNECTION_TABLE);
 
     let { userId } = params;
 
@@ -46,11 +46,11 @@ export class DeleteConnectionByUserIdCommand implements Command<DeleteConnection
             }
           }
         }));
-        console.log('response', response);
+        // console.log('response', response);
         if (response.$metadata.httpStatusCode !== 200) {
           throw new Error("Unexpected response in DeleteConnection");
         }
-        console.log('deleted websocket connection');
+        // console.log('deleted websocket connection');
       }
     }
     return {

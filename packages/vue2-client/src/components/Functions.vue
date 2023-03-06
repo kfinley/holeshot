@@ -18,19 +18,28 @@
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator';
 import { getWSModule } from '../store/ws-module';
+import { getEventsModule } from '../store/events-module';
 
 @Component({})
 export default class Functions extends Vue {
   @Ref() readonly functionNameElement!: HTMLInputElement;
   @Ref() readonly functionPayloadElement!: HTMLInputElement;
 
-  functionName = 'Holeshot-Infrastructure-GetNearbyEvents';
+  functionName =
+    process.env.NODE_ENV === 'production'
+      ? 'Holeshot-Infrastructure-GetNearbyEvents'
+      : 'holeshot-Dev-Event-GetNearbyEvents';
+
   functionPayload = `{
     "lat": 34.9744394,
     "long": -80.9667001,
     "date": "2023-03-01T00:00:00"
   }`;
 
+  mounted() {
+    getEventsModule(this.$store);
+  }
+  
   onSubmit() {
     getWSModule(this.$store).sendCommand({
       command: 'RunLambda',
