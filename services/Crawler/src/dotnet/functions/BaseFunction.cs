@@ -11,6 +11,7 @@ using Amazon.S3;
 using ServiceProviderFunctions;
 
 using Holeshot.Crawler.Commands;
+using Amazon;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.CamelCaseLambdaJsonSerializer))]
@@ -40,8 +41,19 @@ namespace Holeshot.Crawler.Functions {
         .AddOptions()
         .AddSingleton(s => serializerOptions)
         .AddDefaultAWSOptions(configuration.GetAWSOptions())
-        .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions())
-        .AddAWSService<IAmazonS3>(configuration.GetAWSOptions())
+        .AddAWSService<IAmazonSimpleNotificationService>(configuration.GetAWSOptions("SNS"))
+        .AddSingleton<IAmazonS3>(p => {
+          var config = new AmazonS3Config {
+            RegionEndpoint = RegionEndpoint.USEast1         //TODO:  fix this..
+          };
+          if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development") {
+            config.ForcePathStyle = true;
+            var url = configuration.GetSection("S3:ServiceURL").Value;
+            config.ServiceURL = url;
+          }
+          return new AmazonS3Client(config);
+        })
+        // .AddAWSService<IAmazonS3>(configuration.GetAWSOptions("S3"))
         .Configure<Settings>(configuration.GetSection("Services:Crawler"))
         .AddMediatR(Aws.Commands.CommandsAssembly.Value)
         .AddMediatR(Crawler.Commands.CommandsAssembly.Value);
