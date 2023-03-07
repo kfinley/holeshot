@@ -41,13 +41,16 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
 
     await Promise.all(trackEvents.events.map(async event => {
 
-      var response = await this.ddbClient.send(new PutItemCommand({
-        TableName,
-        Item: convertEventToItem(event, trackEvents.track)
-      }));
+      try {
+        var response = await this.ddbClient.send(new PutItemCommand({
+          TableName,
+          Item: convertEventToItem(event, trackEvents.track)
+        }));
 
-      items.push(response.$metadata.httpStatusCode);
-
+        items.push(response.$metadata.httpStatusCode);
+      } catch (e) {
+        console.log('Error saving event', JSON.stringify({ e, event}));
+      }
     }));
 
     console.log('items', JSON.stringify(items));
