@@ -51,7 +51,6 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
       } catch (e) {
         console.log('Error saving event', JSON.stringify({ error: e, event}));
         items.push(500);
-        throw e;
       }
     }));
 
