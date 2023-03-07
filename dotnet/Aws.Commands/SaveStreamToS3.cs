@@ -32,22 +32,18 @@ namespace Holeshot.Aws.Commands {
 
     public async Task<SaveStreamToS3Response> Handle(SaveStreamToS3Request request, CancellationToken cancellationToken) {
 
-      // Console.WriteLine($"SaveStreamToS3 BucketName: {request.BucketName}");
-
-      //var fileUploader = new FileUploader(null, this.s3Client);
-
       var uploadId = await this.fileUploader.UploadFileAsync(request.Stream, request.BucketName, request.Key, null);
 
-      using (var transferUtility = new TransferUtility(s3Client)) {
-        try {
-          await transferUtility.UploadAsync(request.Stream, request.BucketName, request.Key);
-        } catch (Exception ex) {
-          Console.WriteLine($"Exception in SaveStreamToS3. {ex}");
-          Console.WriteLine(ex.Message);
-          Console.WriteLine(ex.InnerException?.Message);
-          throw ex;
-        }
-      }
+      // using (var transferUtility = new TransferUtility(s3Client)) {
+      //   try {
+      //     await transferUtility.UploadAsync(request.Stream, request.BucketName, request.Key);
+      //   } catch (Exception ex) {
+      //     Console.WriteLine($"Exception in SaveStreamToS3. {ex}");
+      //     Console.WriteLine(ex.Message);
+      //     Console.WriteLine(ex.InnerException?.Message);
+      //     throw ex;
+      //   }
+      // }
 
       return new SaveStreamToS3Response {
         UploadId = uploadId,

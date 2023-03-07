@@ -1,24 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Net.Http.Headers;
 using System.Net;
 using System.Linq;
-using System.Diagnostics;
-using MediatR;
-using System.Threading;
 using System.Text.Json;
+using System.Threading;
+using MediatR;
 
 namespace Holeshot.Crawler.Commands {
 
   public abstract class Crawly {
 
     protected IList<Task> Tasks;
-    // protected readonly string ExePath = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
-    // protected readonly string ExePath = "/Users/rkf/projects/Crawly";
     protected string AccessToken = "";
 
     protected readonly IMediator mediator;
@@ -339,12 +335,12 @@ namespace Holeshot.Crawler.Commands {
       }
     }
 
-
     protected IEnumerable<string> GetUniqueHrefUrls(string urlFrag, string content) {
       var urls = this.GetHrefUrls(urlFrag, content);
 
       return urls.Distinct();
     }
+
     protected IEnumerable<string> GetHrefUrls(string urlFrag, string content, bool unique = false) {
       string hrefPattern = @$"href\s*=\s*(?:[""'](?<1>[^""']*)[""']|(?<1>[^>\s]+))";
 
@@ -372,83 +368,21 @@ namespace Holeshot.Crawler.Commands {
       }
     }
 
-    // internal async Task<string> SavePageAndReturnContent(string root, string fileName, string url, bool useExistingFileIfPresent = true, bool useProxy = true) {
+    // protected string RunShellCmd(string cmd, string args) {
+    //   var start = new ProcessStartInfo();
 
-    //   var content = string.Empty;
-    //   var contentType = string.Empty;
-    //   var file = $"{ExePath}/Results/{root}/{fileName}.html";
-
-    //   if (File.Exists(file) && useExistingFileIfPresent) {
-    //     Console.log($"Using existing file {file}");
-    //     content = File.ReadAllText(file);
-    //   } else {
-
-    //     using (var client = this.CreateClient(useProxy))
-    //       try {
-    //         using (var response = await client.GetAsync(url)) {
-    //           if (response.StatusCode == HttpStatusCode.MovedPermanently
-    //               || response.StatusCode == HttpStatusCode.Moved) {
-    //             Console.WriteLine($"Moved || MovedPermanently");
-    //             return content;
-    //           } else if (response.StatusCode == HttpStatusCode.NotFound
-    //                 || response.StatusCode == HttpStatusCode.Forbidden) {
-    //             Console.WriteLine($"{response.StatusCode}");
-    //             return content;
-    //           }
-
-    //           contentType = response.Content.Headers.ContentType?.CharSet;
-
-    //           content = await response.Content.ReadAsStringAsync();
-    //         }
-
-    //       } catch (Exception ex) when (ex.Message == "The character set provided in ContentType is invalid. Cannot read content as string using an invalid character set.") {
-
-    //         //TODO: make a command for handling exceptions...
-    //         Console.WriteLine(ex.Message);
-    //         Console.WriteLine(ex.StackTrace);
-
-    //         if (ex.InnerException != null) {
-    //           Console.WriteLine("Inner Exception");
-    //           Console.WriteLine(ex.InnerException.Message);
-    //           Console.WriteLine(ex.InnerException.StackTrace);
-    //         }
-
-    //         var response = await client.GetByteArrayAsync(url);
-
-    //         if (contentType == "ISO-8859-15") {
-    //           contentType = "ISO-8859-1";
-    //         }
-
-    //         content = Encoding
-    //             .GetEncoding(contentType)
-    //             .GetString(response, 0, response.Length);
-    //       } catch (Exception ex) {
-    //         Console.WriteLine(ex.Message);
-    //         Console.WriteLine(ex.StackTrace);
-    //       }
-
-    //     if (content != string.Empty)
-    //       await File.WriteAllTextAsync(file, $"<!-- {url} -->\n{content}");
+    //   start.FileName = "/usr/local/opt/python/libexec/bin/python";
+    //   start.Arguments = string.Format("{0} {1}", cmd, args);
+    //   start.UseShellExecute = false;
+    //   start.RedirectStandardOutput = true;
+    //   using (Process process = Process.Start(start)) {
+    //     using (StreamReader reader = process.StandardOutput) {
+    //       string result = reader.ReadToEnd();
+    //       System.Console.Write(result);
+    //       return result;
+    //     }
     //   }
-
-    //   return content;
     // }
-
-    protected string RunShellCmd(string cmd, string args) {
-      var start = new ProcessStartInfo();
-
-      start.FileName = "/usr/local/opt/python/libexec/bin/python";
-      start.Arguments = string.Format("{0} {1}", cmd, args);
-      start.UseShellExecute = false;
-      start.RedirectStandardOutput = true;
-      using (Process process = Process.Start(start)) {
-        using (StreamReader reader = process.StandardOutput) {
-          string result = reader.ReadToEnd();
-          System.Console.Write(result);
-          return result;
-        }
-      }
-    }
 
     public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default) {
       return this.mediator.Send(request, cancellationToken);
@@ -468,6 +402,10 @@ namespace Holeshot.Crawler.Commands {
 
     protected string Serialize<T>(T o) {
       return JsonSerializer.Serialize(o, this.jsonOptions);
+    }
+
+    protected T DeSerialize<T>(string o) {
+      return JsonSerializer.Deserialize<T>(o, this.jsonOptions);
     }
   }
 }

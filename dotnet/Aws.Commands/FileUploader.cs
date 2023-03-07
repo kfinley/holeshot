@@ -28,14 +28,14 @@ namespace Holeshot.Aws.Commands {
 
     public async Task<string> UploadFileAsync(Stream inputStream, string bucketName, string key, Action<UploadEvent> callback) {
 
-      this.logger?.LogInformation($"Start uploading to {key}");
+      //this.logger?.LogInformation($"Start uploading to {key}");
 
       var initiateResponse = await s3Client.InitiateMultipartUploadAsync(new InitiateMultipartUploadRequest {
         BucketName = bucketName,
         Key = key
       });
 
-      this.logger?.LogInformation($"Initiated multipart upload with id {initiateResponse.UploadId}");
+      //this.logger?.LogInformation($"Initiated multipart upload with id {initiateResponse.UploadId}");
 
       try {
 
@@ -71,7 +71,7 @@ namespace Holeshot.Aws.Commands {
                 IsLastPart = isLastPart
               });
 
-              this.logger?.LogInformation($"Uploaded part {partNumber}. (Last part = {isLastPart}, Part size = {partSize}, Upload Id: {initiateResponse.UploadId}");
+              //this.logger?.LogInformation($"Uploaded part {partNumber}. (Last part = {isLastPart}, Part size = {partSize}, Upload Id: {initiateResponse.UploadId}");
 
               partETags.Add(new PartETag { PartNumber = partResponse.PartNumber, ETag = partResponse.ETag });
               partNumber++;
@@ -99,7 +99,7 @@ namespace Holeshot.Aws.Commands {
               IsLastPart = true
             });
 
-            this.logger?.LogInformation($"Uploaded final part. (Part size = {partSize}, Upload Id: {initiateResponse.UploadId})");
+            //this.logger?.LogInformation($"Uploaded final part. (Part size = {partSize}, Upload Id: {initiateResponse.UploadId})");
 
             partETags.Add(new PartETag { PartNumber = partResponse.PartNumber, ETag = partResponse.ETag });
 
@@ -118,7 +118,7 @@ namespace Holeshot.Aws.Commands {
           PartETags = partETags
         });
 
-        this.logger?.LogInformation($"Completed multipart upload. (Part count: {partETags.Count}, Upload Id: {initiateResponse.UploadId})");
+        //this.logger?.LogInformation($"Completed multipart upload. (Part count: {partETags.Count}, Upload Id: {initiateResponse.UploadId})");
 
       } catch (Exception ex) {
 
