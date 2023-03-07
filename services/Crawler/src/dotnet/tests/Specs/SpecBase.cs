@@ -26,7 +26,7 @@ namespace Holeshot.Crawler.Tests.Specs {
         Fixture.Setup(spec, context, of);
     }
 
-    public static T Deserialize<T>(string o) {
+    public static T? Deserialize<T>(string o) {
       return JsonSerializer.Deserialize<T>(o, JsonOptions);
     }
 
