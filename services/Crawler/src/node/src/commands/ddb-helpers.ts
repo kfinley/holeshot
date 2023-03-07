@@ -42,7 +42,7 @@ export function convertEventToItem(event: Event, track: TrackInfo): {
       S: 'Event'
     },
     eventType: {
-      S: event.details['type']
+      S: event.details['type'] ?? event.name // When no Type is in Details we use the name. Not ideal... sort this out.
     },
     created: {
       S: created
