@@ -77,25 +77,11 @@ namespace Holeshot.Crawler.Commands {
     }
 
     private async Task<string> GetEventsPage(string baseUrl, string trackId, int year, int month) {
-      
+
       // https://www.usabmx.com/tracks/1720/events/schedule?mode=calendar&month=4&year=2023#content-wrap
       // var url = $"https://{baseUrl}/tracks/{trackId}/events/schedule";
       var url = $"https://{baseUrl}/tracks/{trackId}/events/schedule?mode=calendar&month={month}&year={year}#content-wrap";
       var key = $"sources/USA-BMX/events/{trackId}/events/{year}.{month}.html";
-
-      // var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
-      //   BucketName = this.settings.BucketName,
-      //   Key = key
-      // });
-
-      // if (fileMeta != null && !fileMeta.Exists) {
-      //   var downloadToS3Request = await base.mediator.Send(new DownloadToS3Request {
-      //     BucketName = this.settings.BucketName,
-      //     Key = key,
-      //     ContentType = "text/html",
-      //     Url = url
-      //   });
-      // }
 
       var getPage = await this.mediator.Send(new GetPageRequest {
         Url = url,

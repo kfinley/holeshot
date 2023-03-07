@@ -129,19 +129,6 @@ namespace Holeshot.Crawler.Commands {
       var url = $"https://{baseUrl}/tracks/{trackId}";
       var key = $"sources/USA-BMX/tracks/{trackId}/page.html";
 
-      var fileMeta = await base.mediator.Send(new S3ObjectExistsRequest {
-        BucketName = this.settings.BucketName,
-        Key = key
-      });
-
-      if (!fileMeta.Exists) {
-        var downloadToS3Request = await base.mediator.Send(new DownloadToS3Request {
-          BucketName = this.settings.BucketName,
-          Key = key,
-          ContentType = "text/html",
-          Url = url
-        });
-      }
       var getPage = await this.mediator.Send(new GetPageRequest {
         Url = url,
         Key = key
