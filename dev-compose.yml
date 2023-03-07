@@ -78,7 +78,7 @@ services:
       - "3001:3001" # For api gateway based websockets
       - "3002:3002"
       - "4002:4002"
-      - "4569:4569"
+      - "4569:4569" # S3
       - "8005:8005" # for serverless-offline-ses-v2
       - "9228:9228" # node debugger
     environment:

@@ -23,17 +23,20 @@ namespace Holeshot.Aws.Commands {
 
     private readonly IAmazonS3 s3Client;
 
-    public SaveStreamToS3(IAmazonS3 s3Client) {
+    private readonly IFileUploader fileUploader;
+
+    public SaveStreamToS3(IAmazonS3 s3Client, IFileUploader fileUploader) {
       this.s3Client = s3Client;
+      this.fileUploader = fileUploader;
     }
 
     public async Task<SaveStreamToS3Response> Handle(SaveStreamToS3Request request, CancellationToken cancellationToken) {
 
       // Console.WriteLine($"SaveStreamToS3 BucketName: {request.BucketName}");
 
-      var fileUploader = new FileUploader(null, this.s3Client);
+      //var fileUploader = new FileUploader(null, this.s3Client);
 
-      var uploadId = await fileUploader.UploadFileAsync(request.Stream, request.BucketName, request.Key, null);
+      var uploadId = await this.fileUploader.UploadFileAsync(request.Stream, request.BucketName, request.Key, null);
 
       using (var transferUtility = new TransferUtility(s3Client)) {
         try {

@@ -12,6 +12,8 @@ using ServiceProviderFunctions;
 
 using Holeshot.Crawler.Commands;
 using Amazon;
+using Holeshot.Aws.Commands;
+using Microsoft.Extensions.Logging;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.CamelCaseLambdaJsonSerializer))]
@@ -48,13 +50,15 @@ namespace Holeshot.Crawler.Functions {
           };
           if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development") {
             config.ForcePathStyle = true;
-            var url = configuration.GetSection("S3:ServiceURL").Value;
-            config.ServiceURL = url;
+            config.ServiceURL = configuration.GetSection("S3:ServiceURL").Value;
           }
           return new AmazonS3Client(config);
         })
         // .AddAWSService<IAmazonS3>(configuration.GetAWSOptions("S3"))
         .Configure<Settings>(configuration.GetSection("Services:Crawler"))
+        .AddTransient<IFileUploader>(p => {
+          return new FileUploader(p.GetService<ILogger<FileUploader>>(), p.GetService<IAmazonS3>());
+        })
         .AddMediatR(Aws.Commands.CommandsAssembly.Value)
         .AddMediatR(Crawler.Commands.CommandsAssembly.Value);
     }

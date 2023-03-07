@@ -19,6 +19,7 @@ export type GetNearbyEventsRequest = {
 
 export type GetNearbyEventsResponse = {
   // tracks: TrackInfo[] | Record<string, any>;
+  trackCount: number;
   events: Event[] | Record<string, any>;
 }
 
@@ -74,28 +75,26 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
 
       eventItems.Items.map(i => {
-
         switch (i['type'].S) {
           case 'Track':
             // tracks.push(unmarshall(i));
             break;
           case 'Event':
-            events.push(unmarshall(i))
+            const event = unmarshall(i);
+            delete event.PK;
+            delete event.SK;
+
+            events.push(event)
             break;
           default:
             console.log('Unknown type', unmarshall(i));
             break;
         }
-
-        return item;
       });
     }));
 
-    // console.log('Tracks', tracks);
-    // console.log('Events', events);
-
     return {
-      // tracks,
+      trackCount: tracksInRange.items.length,
       events
     }
   }

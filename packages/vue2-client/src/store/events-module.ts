@@ -12,7 +12,6 @@ export class EventsModule extends BaseModule implements EventsState {
 
   @Action
   nearby(params: { connectionId: string; events: [] }) {
-    console.log('Events nearby', params);
 
     this.context.commit('mutate', (state: EventsState) => {
       state.searchResult = params.events;

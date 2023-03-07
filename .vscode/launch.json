@@ -30,5 +30,24 @@
         "<node_internals>/**"
       ]
     },
+    {
+      "name": "GetTracksForRegion Lambda",
+      "type": "coreclr",
+      "request": "launch",
+      // "preLaunchTask": "build",
+      "program": "/home/vscode/.dotnet/tools/dotnet-lambda-test-tool-6.0",
+      "args": [],
+      "cwd": "${workspaceFolder}/services/Crawler/src/dotnet/functions",
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "HOLESHOT_CORE_TABLE": "Holeshot_Core_Table",
+        "HOLESHOT_GEO_TABLE": "Holeshot_Geo_Table",
+        "AWS_ACCESS_KEY_ID": "S3RVER",
+        "AWS_SECRET_ACCESS_KEY": "S3RVER"
+      }
+    }
   ]
 }

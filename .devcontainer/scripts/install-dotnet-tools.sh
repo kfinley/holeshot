@@ -6,6 +6,7 @@ dotnet new -i "Amazon.Lambda.Templates::*"
 dotnet tool install -g dotnet-ef
 dotnet tool install -g dotnet-outdated-tool
 dotnet tool install -g dotnet-format
+dotnet tool install -g Amazon.Lambda.TestTool-6.0
 
 export PATH="$PATH:/home/vscode/.dotnet/tools"
 

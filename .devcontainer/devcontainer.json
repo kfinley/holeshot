@@ -58,8 +58,7 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
 
-  // don't need this atm
-  // "initializeCommand": "./.devcontainer/scripts/init-workspace.sh",
+  "initializeCommand": "./.devcontainer/scripts/init-workspace.sh",
 
   "postCreateCommand": "pip install flake8 pytest boto3",
 

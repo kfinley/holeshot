@@ -1,7 +1,7 @@
-GetTracksCompleteTopic:
-  Type: "AWS::SNS::Topic"
-  Properties:
-    DisplayName: ${self:service}-GetTracksCompleteTopic
+# GetTracksCompleteTopic:
+#   Type: "AWS::SNS::Topic"
+#   Properties:
+#     DisplayName: ${self:service}-GetTracksCompleteTopic
 
 ${self:service}Bucket:
   Type: AWS::S3::Bucket
