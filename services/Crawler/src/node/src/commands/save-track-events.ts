@@ -50,6 +50,7 @@ export class SaveTrackEventsCommand implements Command<SaveTrackEventsCommandReq
         items.push(response.$metadata.httpStatusCode);
       } catch (e) {
         console.log('Error saving event', JSON.stringify({ error: e, event}));
+        console.log(e);
         items.push(500);
       }
     }));
