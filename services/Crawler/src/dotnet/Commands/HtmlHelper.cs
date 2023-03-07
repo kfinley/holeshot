@@ -329,10 +329,6 @@ namespace Holeshot.Crawler.Commands {
         });
       });
 
-      if (events.Count == 0) {
-        Console.WriteLine($"No events.");
-      }
-
       return events;
     }
   }
