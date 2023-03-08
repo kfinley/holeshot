@@ -10,13 +10,13 @@ import * as apigateway from "aws-cdk-lib/aws-apigateway";
 
 export const createLambda = (scope: Construct, name: string, functionsPath: string, handler: string, node_env: string, env?: {
   [key: string]: string;
-} | undefined, timeout = 20) => {
+} | undefined, timeout = 20, memorySize = 512) => {
 
   const path = join(__dirname, functionsPath);
 
   return new lambda.Function(scope, name, {
     runtime: lambda.Runtime.NODEJS_18_X,
-    memorySize: 1024,
+    memorySize,
     timeout: Duration.seconds(timeout),
     functionName: `Holeshot-Infrastructure-${name}`,
     handler,
