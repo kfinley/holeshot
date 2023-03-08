@@ -41,7 +41,7 @@ There are 4 Lambda functions that do the work
 * SaveTrackInfo (node 18 / TypeScript)
 * SaveTrackEvents (node 18 / TypeScript)
 
-The GetTracksForRegion Lambda kicks off the process and does the work of downloading the raw HTML pages into S3, processing these pages, and saving trackInfo.json and event json files. Events are downloaded and saved by month. This Lambda Function does the bulk of the work and runs in roughly 2-3 seconds.
+The GetTracksForRegion Lambda kicks off the process and does the work of downloading the raw HTML pages into S3, processing these pages, and saving trackInfo.json and event json files. Events are downloaded and saved by month.
 
 Email addresses are encodedd using webscrapping protection 😏... so we decode these email addressses using a one liner python call. An S3 trigger is in place to fire when any file hits the `encoded/` path in our S3 bucket. The DecodeEmails Lambda Function saves the trackInfo.json file in the `tracks/` path in the S3 bucket.
 
