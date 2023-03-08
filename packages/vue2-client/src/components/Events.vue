@@ -1,23 +1,30 @@
 <template>
   <div class="events">
-    <ul>
-      <li v-for="(event, index) in eventsState.searchResult" :key="index">
-          {{ event.name }}
+    <ul v-if="loaded">
+      <li v-for="(event, index) in state.searchResult" :key="index">
+        {{ event.name }}
       </li>
     </ul>
-
-    {{ articlesState.searchResult }}
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { State } from 'vuex-class';
-import { EventsState } from '../store/state';
+import { getEventsModule } from '../store/events-module';
+import { EventsState, Status } from '../store/state';
 
 @Component({})
 export default class Events extends Vue {
-  @State('Articles') eventsState!: EventsState;
+  @State('Events') state!: EventsState;
+
+  created() {
+    getEventsModule(this.$store);
+  }
+
+  loaded() {
+    return this.state.status === Status.Loaded;
+  }
 }
 </script>
 

@@ -15,6 +15,7 @@ export class EventsModule extends BaseModule implements EventsState {
 
     this.context.commit('mutate', (state: EventsState) => {
       state.searchResult = params.events;
+      state.status = Status.Loaded;
     });
   }
 }
