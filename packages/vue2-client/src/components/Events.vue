@@ -1,5 +1,11 @@
 <template>
   <div class="events">
+    <ul>
+      <li v-for="(event, index) in eventsState.searchResult" :key="index">
+          {{ event.name }}
+      </li>
+    </ul>
+
     {{ articlesState.searchResult }}
   </div>
 </template>
@@ -11,7 +17,7 @@ import { EventsState } from '../store/state';
 
 @Component({})
 export default class Events extends Vue {
-  @State('Articles') articlesState!: EventsState;
+  @State('Articles') eventsState!: EventsState;
 }
 </script>
 
