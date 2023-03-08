@@ -41,7 +41,8 @@
         "ms-python.python",
         "LittleFoxTeam.vscode-python-test-adapter",
         // "Cameron.vscode-pytest",
-        "bierner.markdown-mermaid"
+        "bierner.markdown-mermaid",
+        "streetsidesoftware.code-spell-checker"
       ],
       "settings": {
           // "terminal.integrated.shell.linux": "/bin/zsh"
