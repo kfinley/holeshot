@@ -168,8 +168,12 @@ export class UserServiceStack extends BaseServiceConstruct {
     });
 
     //TODO: update this as soon as we have domain email working
-    new VerifySesEmailAddress(this, 'SesEmailVerification', {
+    new VerifySesEmailAddress(this, 'SesEmailVerification-kyle', {
       emailAddress: 'kyle@kylefinley.net'
+    });
+
+    new VerifySesEmailAddress(this, 'SesEmailVerification-jeff', {
+      emailAddress: 'jeff.madlock@gmail.com'
     });
 
     // SNS Topics & Subs
