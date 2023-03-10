@@ -172,9 +172,10 @@ export class UserServiceStack extends BaseServiceConstruct {
       emailAddress: 'kyle@kylefinley.net'
     });
 
-    new VerifySesEmailAddress(this, 'SesEmailVerification-jeff', {
-      emailAddress: 'jeff.madlock@gmail.com'
-    });
+    // will add once there's more stuff working...
+    // new VerifySesEmailAddress(this, 'SesEmailVerification-jeff', {
+    //   emailAddress: 'jeff.madlock@gmail.com'
+    // });
 
     // SNS Topics & Subs
     //
@@ -184,7 +185,7 @@ export class UserServiceStack extends BaseServiceConstruct {
     });
     authProcessedTopic.grantPublish(postAuthentication.role as IRole);
 
-    // Create API Gateway REST api and endpiont for /registration
+    // Create API Gateway REST api and endpoint for /registration
     //
 
     this.restApi = new LambdaRestApi(this, 'HoleshotApi', {

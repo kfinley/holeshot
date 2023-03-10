@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { Track } from "@holeshot/types/src";
+import { TrackInfo } from "@holeshot/types/src";
 import Entity from "@finley/vue2-components/src/components/entity.vue";
 import Card from "@finley/vue2-components/src/components/card.vue";
 
@@ -24,7 +24,7 @@ import Card from "@finley/vue2-components/src/components/card.vue";
 })
 export default class TrackList extends Vue {
   @Prop()
-  tracks!: Array<Track>;
+  tracks!: Array<TrackInfo>;
 
   get hasTracks() {
     return this.tracks?.length > 0;
