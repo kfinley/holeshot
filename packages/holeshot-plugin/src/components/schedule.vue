@@ -3,10 +3,11 @@
 </template>
 
 <script>
-import { Component, Vue } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
+import BaseControl from "./base-control";
 
 @Component({})
-export default class Schedule extends Vue {
+export default class Schedule extends BaseControl {
 
   get hasEvents() {
     return false;

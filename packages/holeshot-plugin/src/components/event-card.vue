@@ -24,22 +24,20 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 import Card from "@finley/vue2-components/src/components/card.vue";
 import { TrackInfo, Event } from "@holeshot/types/src";
+import BaseControl from "./base-control";
 
 @Component({
   components: { Card },
 })
-export default class EventCard extends Vue {
+export default class EventCard extends BaseControl {
   @Prop()
   track!: TrackInfo;
 
   @Prop()
   event!: Event;
-  getDay = (d: Date) => d.getDay();
-  monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
-  weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
 
   mounted() {}
 
@@ -48,7 +46,7 @@ export default class EventCard extends Vue {
 
     includes.forEach((i) => {
       if (detail[0].toLowerCase().includes(i)) {
-        val = `${detail[0]}: ${detail[1]}`;
+        val = `${this.sentenceCase(detail[0])}: ${detail[1]}`;
       }
     });
 
@@ -61,7 +59,7 @@ export default class EventCard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card-body {
   padding: 10px;
 }
@@ -72,6 +70,14 @@ export default class EventCard extends Vue {
   padding: 5px;
 }
 
+@media screen and (max-width: $bp--sm-min) {
+  .col {
+    padding: 2px;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
 @media screen and (max-width: $bp--sm-min) {
   .col {
     padding: 2px;

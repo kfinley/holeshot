@@ -19,28 +19,7 @@
       @doubleClicked="doubleClicked"
     >
       <template v-slot:card="{ entity }">
-        <div class="event-card">
-          <div>
-            <card
-              class="date"
-              :showClose="false"
-              :headerText="monthName(entity.date)"
-            >
-              <div class="day">{{ entity.date.getDay() }}</div>
-              <div>{{ weekdayName(entity.date) }}</div>
-            </card>
-          </div>
-          <div class="event">
-            <div>{{ entity.name }}</div>
-            <div>{{ entity.track.name }}</div>
-            <div>
-              {{ entity.track.address.city }}, {{ entity.track.address.state }}
-            </div>
-            <div v-for="(detail, index) in entity.details" :key="index">
-              {{ printIfDetailIncludes(detail, ["start", "end"]) }}
-            </div>
-          </div>
-        </div>
+       <event-card :track="entity.track" :event="entity" />
       </template>
     </swipeable-list>
 
@@ -62,6 +41,7 @@ import SwipeableEntity from "@finley/vue2-components/src/components/swipeable.vu
 import Modal from "@finley/vue2-components/src/components/modal.vue";
 import EventDetailsModal from "./event-details-modal.vue";
 import Notification from "@finley/vue2-components/src/components/notification.vue";
+import EventCard from "./event-card.vue";
 
 @Component({
   components: {
@@ -71,6 +51,7 @@ import Notification from "@finley/vue2-components/src/components/notification.vu
     SwipeableList,
     Modal,
     Notification,
+    EventCard,
   },
 })
 export default class EventList extends Vue {
@@ -81,22 +62,6 @@ export default class EventList extends Vue {
   showEventDetails = false;
   showNotification = false;
   notificationMessage = "";
-
-  //TODO: localize....
-  monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
-  weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
-
-  printIfDetailIncludes(detail: Array<string>, includes: Array<string>) {
-    let val = "";
-
-    includes.forEach((i) => {
-      if (detail[0].toLowerCase().includes(i)) {
-        val = `${detail[0]}: ${detail[1]}`;
-      }
-    });
-
-    return val;
-  }
 
   doubleClicked(event: Event) {
     console.log(`doubleClicked event ${event.name}`);
@@ -154,25 +119,6 @@ export default class EventList extends Vue {
 
 }
 </script>
-
-
-<style lang="scss">
-.card-body {
-  padding: 10px;
-}
-.card-header {
-  background: $color--dark-red;
-  color: $color--grey80;
-  font-weight: bold;
-  padding: 5px;
-}
-
-@media screen and (max-width: $bp--sm-min) {
-  .col {
-    padding: 2px;
-  }
-}
-</style>
 
 <style lang="scss" scoped>
 .container {

@@ -1,0 +1,13 @@
+import { Vue } from "vue-property-decorator";
+
+export default class BaseControl extends Vue {
+  getDay = (d: Date) => d.getDay();
+  monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
+  weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
+  sentenceCase = (s: string) =>
+    s.charAt(0).toUpperCase() +
+    s
+      .slice(1)
+      .replace(/([A-Z]+)/g, " $1")
+      .replace(/([A-Z][a-z])/g, " $1");
+}
