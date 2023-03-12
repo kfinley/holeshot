@@ -1,0 +1,176 @@
+<template>
+  <div class="row event-search">
+    <div v-if="state.showCriteriaPanel">
+      <div>
+        <label for="type">What type of event? </label>
+        <select
+          name="type"
+          id="type"
+          v-model="state.searchInput.type"
+          class="form-control"
+        >
+          <option value="Practice">Practice</option>
+          <option value="Race">Race</option>
+          <option value="Gold Cup">Gold Cup</option>
+          <option value="National">National</option>
+          <option value="Clinic">Clinic</option>
+        </select>
+      </div>
+      <div>
+        <label for="distance">Distance?</label>
+        <select
+          name="distance"
+          id="distance"
+          v-model="state.searchInput.distance"
+          class="form-control"
+        >
+          <option value="50">50 miles</option>
+          <option value="100">100 miles</option>
+          <option value="250">250 miles</option>
+          <option value="500">500 miles</option>
+        </select>
+      </div>
+      <input
+        id="location"
+        name="location"
+        placeholder="(Optional) if left black home track is used"
+        class="form-control"
+      />
+      <type-ahead
+        placeholder="(Optional) refine search by event name"
+        :items="items"
+        :onSelect="onSelect"
+        v-model="query"
+        v-on:focusin="searchFocusIn"
+        v-on:focusout="searchFocusOut"
+        @reset="reset"
+        @update="searchUpdate"
+      />
+      <div>
+        <label for="startDate">Start Date:</label>
+        <date-picker
+          id="startDate"
+          v-model="state.searchInput.startDate"
+        ></date-picker>
+      </div>
+      <div>
+        <label for="endDate">End Date:</label>
+        <date-picker
+          id="endDate"
+          v-model="state.searchInput.endDate"
+        ></date-picker>
+      </div>
+    </div>
+    <div v-else class="event text-center" @click.prevent="openCriteriaPanel">
+      Type: {{ state.searchInput.type }} {{ state.searchInput.name }}
+    </div>
+    <div class="align-self-center action-controls" align="center">
+      <div v-if="state.status == 'Loaded'">
+        <div class="text-center">
+          <button
+            type="submit"
+            class="btn primary-gradient w-100 my-4 mb-2"
+            :disabled="searching"
+            @click.prevent="search"
+          >
+            <span
+              v-if="searching"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            Search
+          </button>
+        </div>
+      </div>
+      <span
+        v-else
+        class="spinner-border spinner-border-md"
+        role="status"
+        aria-hidden="true"
+      ></span>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Prop } from "vue-property-decorator";
+import SearchControl from "./search-control";
+import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
+import { Event } from "@holeshot/types/src";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+import { searchModule } from "../store";
+
+@Component({
+  components: {
+    TypeAhead,
+    DatePicker,
+  },
+})
+export default class EventSearch extends SearchControl<Event> {
+  showSelector = false;
+
+  @Prop({ default: false })
+  disabled: boolean;
+
+  _item!: Event; // Backing prop. Test if we still actually need this...
+
+  created() {
+
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(startDate.getMonth() + 1);
+
+    // Set the initial state
+    this.state.searchInput = {
+      startDate,
+      endDate,
+      type: "Gold Cup",
+      distance: 250,
+    };
+    console.log(this.state.searchInput);
+  }
+
+  search = searchModule.search;
+  openCriteriaPanel = searchModule.openCriteriaPanel;
+
+  edit() {
+    if (!this.disabled) {
+      this.previousItem = this.item;
+      this.item = undefined;
+      this.showSelector = true;
+    }
+  }
+
+  reset(vue: { query: string }) {
+    if (this.previousItem && vue.query !== "") {
+      this.query = this.previousItem.name;
+      this.item = this._item;
+      this.showSelector = false;
+      this.previousItem = undefined;
+    }
+  }
+  
+}
+</script>
+
+<style scoped>
+.event-search > div > * {
+  display: block;
+}
+
+.event-search {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 300px;
+  max-width: 375px;
+}
+
+.event {
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  min-width: 90%;
+}
+</style>

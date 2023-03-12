@@ -23,6 +23,7 @@
     "@holeshot/types": "workspace:1.0.0",
     "@holeshot/vue2-user": "workspace:1.0.0",
     "@holeshot/web-core": "workspace:1.0.0",
+    "@holeshot/plugin": "workspace:1.0.0",
     "bootstrap": "^5.0.2",
     "bootstrap-icons": "^1.5.0",
     "core-js": "^3.6.5",

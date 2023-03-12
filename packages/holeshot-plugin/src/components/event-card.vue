@@ -39,8 +39,6 @@ export default class EventCard extends BaseControl {
   @Prop()
   event!: Event;
 
-  mounted() {}
-
   printIfDetailIncludes(detail: Array<string>, includes: Array<string>) {
     let val = "";
 
@@ -78,17 +76,13 @@ export default class EventCard extends BaseControl {
 </style>
 
 <style lang="scss" scoped>
-@media screen and (max-width: $bp--sm-min) {
-  .col {
-    padding: 2px;
-  }
-}
 .container {
   padding: 0;
 }
 
+
 .event-card > div:nth-child(1) {
-  width: 20%;
+  width: 30%;
   float: left;
   padding: 10px;
   display: table-cell;
@@ -96,7 +90,7 @@ export default class EventCard extends BaseControl {
 }
 
 .event-card > div:nth-child(2) {
-  width: 80%;
+  width: 70%;
   float: right;
   display: block;
 }
@@ -124,19 +118,5 @@ export default class EventCard extends BaseControl {
 .event > div:nth-child(2),
 .event > div:nth-child(3) {
   font-style: italic;
-}
-
-@media screen and (max-width: $bp--sm-min) {
-  .event-card > div:nth-child(1) {
-    padding: 5px;
-    width: 30%;
-  }
-
-  .event-card > div:nth-child(2) {
-    width: 70%;
-  }
-  .date {
-    padding-right: 12px;
-  }
 }
 </style>

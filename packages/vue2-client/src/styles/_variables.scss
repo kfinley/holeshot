@@ -1,18 +1,2 @@
-@import "@finley/vue2-components/src/styles/variables";
-
-$body-color: #555c69;
-$body-background: #fff;
-
-$header-background: rgb(86, 28, 28);
-$footer-background: rgb(204, 185, 150);
-$footer-color: rgb(86, 28, 28);
-
-$light: #fff;
-$dark: #000;
-$stripe-color: #eff0fa;
-$header-border: #dee2e6;
-
-$primary-gradient-start: #DB2A3A;
-$primary-gradient-end: #9B1D35;
-
-$primary-button-background: linear-gradient(170deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+@import "../../../vue2-components/src/styles/variables";
+@import "../../../holeshot-plugin/src/styles/variables";

@@ -1,4 +1,4 @@
-import { Vue } from "vue-property-decorator";
+import { Vue, Prop } from "vue-property-decorator";
 
 export default class BaseControl extends Vue {
   getDay = (d: Date) => d.getDay();
@@ -10,4 +10,8 @@ export default class BaseControl extends Vue {
       .slice(1)
       .replace(/([A-Z]+)/g, " $1")
       .replace(/([A-Z][a-z])/g, " $1");
+
+
+  @Prop({ default: "85%" })
+  maxWidth!: string;
 }

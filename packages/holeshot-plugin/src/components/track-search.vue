@@ -19,7 +19,7 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
 import TrackList from "./track-list.vue";
-import { Track } from "@holeshot/types/src";
+import { TrackInfo } from "@holeshot/types/src";
 
 @Component({
   components: {
@@ -28,14 +28,13 @@ import { Track } from "@holeshot/types/src";
   },
 })
 export default class TrackSearch extends Vue {
-
   @Prop()
-  items!: Array<Track>;
+  items!: Array<TrackInfo>;
 
   @Prop({ default: "85%" })
   maxWidth!: string;
 
-  searchResults: Array<Track> = [];
+  searchResults: Array<TrackInfo> = [];
   query = "";
   previousQuery = "";
 
@@ -44,7 +43,7 @@ export default class TrackSearch extends Vue {
     this.setItemWidth();
   }
 
-  onSelect(track: Track) {
+  onSelect(track: TrackInfo) {
     console.log("onSelect");
     console.log(track);
     this.query = track.name;

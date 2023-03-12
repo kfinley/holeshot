@@ -39,7 +39,7 @@ export default class Functions extends Vue {
   mounted() {
     getEventsModule(this.$store);
   }
-  
+
   onSubmit() {
     getWSModule(this.$store).sendCommand({
       command: 'RunLambda',

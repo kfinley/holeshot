@@ -12,7 +12,8 @@ const GeoTable = process.env.HOLESHOT_GEO_TABLE as string;
 export type GetNearbyEventsRequest = {
   lat: number;
   long: number;
-  date: string;
+  startDate: string;
+  endDate: string;
   distance?: number;
   type?: string;
 }
@@ -55,7 +56,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
       const expressionAttributeValues = {
         ":PK": `TRACK#${item['name'].S}`,
-        ":SK": `${params.date}`
+        ":startDate": `${params.startDate}`,
+        ":endDate:": `${params.endDate}`
       };
 
       if (params.type) {
@@ -65,7 +67,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const eventsQuery: QueryCommandInput = {
         TableName: CoreTable,
         ExpressionAttributeValues: marshall(expressionAttributeValues),
-        KeyConditionExpression: "PK = :PK and SK >= :SK"
+        KeyConditionExpression: "PK = :PK and between(SK BETWEEN :startDate AND :endDate"
       };
 
       if (params.type) {

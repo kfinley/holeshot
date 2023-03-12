@@ -15,6 +15,7 @@ import { RouteNames } from './../router/RouteNames';
 import { NotificationState } from '@finley/vue2-components/src/store/state';
 import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/src/store';
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
+import HoleshotPlugin from '@holeshot/plugin/src/plugin';
 
 //Move these maybe??
 import 'bootstrap/dist/css/bootstrap.css';
@@ -56,6 +57,12 @@ const plugin: ClientPlugin = {
         store: options.store,
         loginRedirectRouteName: RouteNames.Dashboard,
         defaultRoute: RouteNames.Home,
+        container: options.container,
+      });
+
+      vue.use(HoleshotPlugin, {
+        router: options.router,
+        store: options.store,
         container: options.container,
       });
 
