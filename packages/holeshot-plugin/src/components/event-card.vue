@@ -14,7 +14,9 @@
       <div class="event">
         <div>{{ event.name }}</div>
         <div>{{ track.name }}</div>
-        <div>{{ track.address.city }}, {{ track.address.state }}</div>
+        <div>
+          {{ track.location.address.city }}, {{ track.location.address.state }}
+        </div>
         <div v-for="(detail, index) in event.details" :key="index">
           {{ printIfDetailIncludes(detail, ["start", "end"]) }}
         </div>
@@ -26,7 +28,7 @@
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
 import Card from "@finley/vue2-components/src/components/card.vue";
-import { TrackInfo, Event } from "@holeshot/types/src";
+import { Track, Event } from "@holeshot/types/src";
 import BaseControl from "./base-control";
 
 @Component({
@@ -34,7 +36,7 @@ import BaseControl from "./base-control";
 })
 export default class EventCard extends BaseControl {
   @Prop()
-  track!: TrackInfo;
+  track!: Track;
 
   @Prop()
   event!: Event;
@@ -44,7 +46,7 @@ export default class EventCard extends BaseControl {
 
     includes.forEach((i) => {
       if (detail[0].toLowerCase().includes(i)) {
-        val = `${this.sentenceCase(detail[0])}: ${detail[1]}`;
+        val = `${this.toSentence(detail[0])}: ${detail[1]}`;
       }
     });
 

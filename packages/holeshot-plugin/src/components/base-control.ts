@@ -4,7 +4,7 @@ export default class BaseControl extends Vue {
   getDay = (d: Date) => d.getDay();
   monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
   weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
-  sentenceCase = (s: string) =>
+  toSentence = (s: string) =>
     s.charAt(0).toUpperCase() +
     s
       .slice(1)
