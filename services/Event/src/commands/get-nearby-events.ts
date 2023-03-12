@@ -111,7 +111,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
               });
             }
             break;
-          default:
+          default:  
             console.log('Unhandled type', unmarshall(i));
             break;
         }

@@ -17,8 +17,8 @@
         <div>
           {{ track.location.address.city }}, {{ track.location.address.state }}
         </div>
-        <div v-for="(detail, index) in event.details" :key="index">
-          {{ printIfDetailIncludes(detail, ["start", "end"]) }}
+        <div v-for="(detail, key, index) in event.details" :key="index">
+          {{ printIfDetailIncludes(key, detail, ["start", "end"]) }}
         </div>
       </div>
     </div>
@@ -41,13 +41,15 @@ export default class EventCard extends BaseControl {
   @Prop()
   event!: Event;
 
-  printIfDetailIncludes(detail: any, includes: Array<string>) {
+  printIfDetailIncludes(key: string, detail: string, includes: Array<string>) {
     console.log(detail);
+    console.log(key);
+
     let val = "";
 
     includes.forEach((i) => {
-      if (detail[0].toLowerCase().includes(i)) {
-        val = `${this.toSentence(detail[0])}: ${detail[1]}`;
+      if (key.toLowerCase().includes(i)) {
+        val = `${this.toSentence(key)}: ${detail}`;
       }
     });
 
