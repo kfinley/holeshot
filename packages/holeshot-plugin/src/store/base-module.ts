@@ -7,12 +7,16 @@ const functionNamePrefix =
 
 export class HoleshotModule extends BaseModule {
   sendCommand(params: { name: string; payload: any }) {
-    this.context.dispatch("WebSockets/sendCommand", {
-      command: "RunLambda",
-      data: {
-        name: `${functionNamePrefix}-${params.name}`,
-        payload: params.payload,
+    this.context.dispatch(
+      "WebSockets/sendCommand",
+      {
+        command: "RunLambda",
+        data: {
+          name: `${functionNamePrefix}-${params.name}`,
+          payload: params.payload,
+        },
       },
-    });
+      { root: true }
+    );
   }
 }

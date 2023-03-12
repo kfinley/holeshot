@@ -19,10 +19,12 @@ export class SearchModule extends HoleshotModule implements SearchState {
   @Action
   search() {
     console.log("search", this.searchInput);
+
     this.context.commit("mutate", (state: SearchState) => {
       state.showCriteriaPanel = false;
     });
-    this.sendCommand({
+
+    super.sendCommand({
       name: "GetNearbyEvents",
       payload: {
         lat: this.defaultLocation.lat,
