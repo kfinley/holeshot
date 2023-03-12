@@ -43,5 +43,3 @@ export class SearchModule extends HoleshotModule implements SearchState {
     });
   }
 }
-
-// export const getSearchModule = (store: Store<any>) => getModule(SearchModule, store);
