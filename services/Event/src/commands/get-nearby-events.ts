@@ -2,7 +2,7 @@ import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
 import { DynamoDBClient, QueryCommand, QueryCommandInput } from '@aws-sdk/client-dynamodb';
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { Event, TrackInfo } from '@holeshot/types/src';
+import { Event, Track } from '@holeshot/types/src';
 import { QueryRadiusCommand } from '@holeshot/aws-commands/src';
 import { container } from '../inversify.config';
 
@@ -21,7 +21,8 @@ export type GetNearbyEventsRequest = {
 
 export type GetNearbyEventsResponse = {
   // tracks: TrackInfo[] | Record<string, any>;
-  trackCount: number;
+  searched: number;
+  tracks: Track[] | Record<string, any>;
   events: Event[] | Record<string, any>;
 }
 
@@ -51,6 +52,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     console.log('tracks', tracksInRange.items.length);
 
     const events: Record<string, any>[] = [];
+    const tracks: Record<string, any>[] = [];
+
     // const tracks: Record<string, any>[] = [];
 
     await Promise.all(tracksInRange.items.map(async item => {
@@ -92,7 +95,12 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       eventItems.Items.map(i => {
         switch (i['type'].S) {
           case 'Track':
-            // tracks.push(unmarshall(i));
+            const track = unmarshall(i);
+            
+            tracks.push({
+              name: track.name,
+              location: track.location
+            });
             break;
           case 'Event':
             const event = unmarshall(i);
@@ -109,7 +117,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     }));
 
     return {
-      trackCount: tracksInRange.items.length,
+      searched: tracksInRange.items.length,
+      tracks,
       events
     }
   }

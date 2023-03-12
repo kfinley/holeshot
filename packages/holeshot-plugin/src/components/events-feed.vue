@@ -19,7 +19,7 @@
       @doubleClicked="doubleClicked"
     >
       <template v-slot:card="{ entity }">
-       <event-card :track="entity.track" :event="entity" />
+        <event-card :track="entity.track" :event="entity" />
       </template>
     </swipeable-list>
 
@@ -75,7 +75,7 @@ export default class EventList extends Vue {
   }
 
   notificationClosed() {
-    this.notificationMessage = '';
+    this.notificationMessage = "";
     this.showNotification = false;
   }
 
@@ -116,7 +116,6 @@ export default class EventList extends Vue {
   }) {
     return args;
   }
-
 }
 </script>
 

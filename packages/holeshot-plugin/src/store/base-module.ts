@@ -19,4 +19,7 @@ export class HoleshotModule extends BaseModule {
       { root: true }
     );
   }
+  mutate<T>(mutation: (state: T) => void) {
+    this.context.commit("mutate", mutation);
+  }
 }

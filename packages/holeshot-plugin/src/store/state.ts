@@ -10,6 +10,7 @@ export interface SearchState {
   status: SearchStatus;
   searchInput: SearchEventsInput | null;
   showCriteriaPanel: boolean;
+  searchResults: Record<string, any> | null;
 }
 
 export interface SearchEventsInput {

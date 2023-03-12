@@ -85,6 +85,15 @@
         aria-hidden="true"
       ></span>
     </div>
+    <div class="search-results" v-if="state.searchResults !== null">
+      <div>
+        Found {{ state.searchResults.events.length }} at
+        {{ state.searchResults.searched }} tracks.
+      </div>
+      <div v-for="(event, index) in state.searchResults.events" :key="index">
+        <event-card :track="trackFor(event)" :event="event" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -92,16 +101,18 @@
 import { Component, Prop } from "vue-property-decorator";
 import BaseControl from "./base-control";
 import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
-import { Event } from "@holeshot/types/src";
+import { Event, Track } from "@holeshot/types/src";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import { searchModule, SearchState, SearchStatus } from "../store";
 import { State } from "vuex-class";
+import EventCard from "./event-card.vue";
 
 @Component({
   components: {
     TypeAhead,
     DatePicker,
+    EventCard,
   },
 })
 export default class EventSearch extends BaseControl {
@@ -121,9 +132,13 @@ export default class EventSearch extends BaseControl {
     this.state.searchInput = {
       startDate,
       endDate,
-      type: "Gold Cup",
-      distance: 250,
+      type: "Race",
+      distance: 100,
     };
+  }
+
+  mounted() {
+    this.state.searchResults = null;
   }
 
   search = searchModule.search;
@@ -131,6 +146,12 @@ export default class EventSearch extends BaseControl {
 
   get searching() {
     return this.state.status == SearchStatus.Searching;
+  }
+
+  trackFor(event: Event) {
+    return this.state.searchResults.events.find(
+      (t: Track) => t.name == event.trackName
+    )[0];
   }
 }
 </script>

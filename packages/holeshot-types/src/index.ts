@@ -30,12 +30,11 @@ export interface Sponsor {
   name: string;
   link: string;
 }
-export interface TrackInfo extends Entity {
+export interface TrackInfo extends Track {
   district: string;
   trackId: string;
   contactInfo: Record<string, string>;
   logoUrl?: string;
-  location: Location;
   website: string;
   htmlDescription: string;
   socials: Record<string, string>;
@@ -54,4 +53,8 @@ export interface Event extends Entity {
 //TODO: Refactor this out...
 export interface SwipeableEvent extends Event {
   visible: boolean;
+}
+
+export interface Track extends Entity {
+  location: Location,
 }

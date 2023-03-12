@@ -6,6 +6,7 @@ import { SearchEventsInput, SearchState, SearchStatus } from "./state";
 export class SearchModule extends HoleshotModule implements SearchState {
   status: SearchStatus = SearchStatus.Loaded;
   searchInput: SearchEventsInput | null = null;
+  searchResults: Record<string, any> | null = null;
   showCriteriaPanel: boolean = false;
 
   //todo: pull from profile and allow input.
@@ -14,14 +15,14 @@ export class SearchModule extends HoleshotModule implements SearchState {
     long: -80.9667001,
   };
 
-  // searchResult: [] = [];
-
   @Action
   search() {
     console.log("search", this.searchInput);
 
-    this.context.commit("mutate", (state: SearchState) => {
+    super.mutate((state: SearchState) => {
       state.showCriteriaPanel = false;
+      state.status = SearchStatus.Searching;
+      state.searchResults = null;
     });
 
     super.sendCommand({
@@ -39,13 +40,25 @@ export class SearchModule extends HoleshotModule implements SearchState {
   }
 
   @Action
-  getNearbyEventsResponse(params: { events: [] }) {
-    console.log("handleResponse", params);
+  getNearbyEventsResponse(params: {
+    searched: number;
+    events: [];
+    tracks: [];
+  }) {
+    console.log("getNearbyEventsResponse", params);
+    super.mutate((state: SearchState) => {
+      state.status = SearchStatus.Loaded;
+      state.searchResults = {
+        searched: params.searched,
+        events: params.events,
+        tracks: params.tracks,
+      };
+    });
   }
 
   @Action
   openCriteriaPanel() {
-    this.context.commit("mutate", (state: SearchState) => {
+    super.mutate((state: SearchState) => {
       state.showCriteriaPanel = true;
     });
   }
