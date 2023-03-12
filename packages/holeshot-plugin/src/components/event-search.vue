@@ -151,9 +151,11 @@ export default class EventSearch extends BaseControl {
   }
 
   trackFor(event: Event) {
-    return this.state.searchResults.tracks.filter(
+    const track = this.state.searchResults.tracks.filter(
       (t: Track) => t.name == event.trackName
     );
+    console.log('track', track);
+    return track;
   }
 }
 </script>
