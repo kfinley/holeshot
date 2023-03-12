@@ -119,7 +119,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     }));
 
     return {
-      searched: tracksInRange.items.length,
+      searched: tracks.length,
       tracks,
       events
     }

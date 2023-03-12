@@ -17,12 +17,12 @@ import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/sr
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
 import HoleshotPlugin from '@holeshot/plugin/src/plugin';
 import { getModule } from 'vuex-module-decorators';
+import UserModule from '@holeshot/vue2-user/src/store/user-module';
+import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 
 //Move these maybe??
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/styles.scss';
-import UserModule from '@holeshot/vue2-user/src/store/user-module';
-import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);

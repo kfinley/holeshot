@@ -87,8 +87,8 @@
     </div>
     <div class="search-results" v-if="state.searchResults !== null">
       <div>
-        Found {{ state.searchResults.events.length }} at
-        {{ state.searchResults.searched }} tracks.
+        Searched {{ state.searchResults.searched }} tracks and found
+        {{ state.searchResults.events.length }}
       </div>
       <div v-for="(event, index) in state.searchResults.events" :key="index">
         <event-card :track="trackFor(event)" :event="event" />
@@ -154,7 +154,6 @@ export default class EventSearch extends BaseControl {
     const track = this.state.searchResults.tracks.find(
       (t: Track) => t.name == event.trackName
     );
-    console.log('track', track);
     return track;
   }
 }
