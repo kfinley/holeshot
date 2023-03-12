@@ -33,6 +33,7 @@
       <input
         id="location"
         name="location"
+        v-model="state.searchInput.name"
         placeholder="(Optional) if left black home track is used"
         class="form-control"
       />
@@ -88,7 +89,7 @@
     <div class="search-results" v-if="state.searchResults !== null">
       <div>
         Searched {{ state.searchResults.searched }} tracks and found
-        {{ state.searchResults.events.length }}
+        {{ state.searchResults.events.length }} results.
       </div>
       <div v-for="(event, index) in state.searchResults.events" :key="index">
         <event-card :track="trackFor(event)" :event="event" />

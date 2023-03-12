@@ -41,7 +41,8 @@ export default class EventCard extends BaseControl {
   @Prop()
   event!: Event;
 
-  printIfDetailIncludes(detail: Array<string>, includes: Array<string>) {
+  printIfDetailIncludes(detail: any, includes: Array<string>) {
+    console.log(detail);
     let val = "";
 
     includes.forEach((i) => {
