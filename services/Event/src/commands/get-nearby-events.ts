@@ -76,7 +76,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const eventsQuery: QueryCommandInput = {
         TableName: CoreTable,
         ExpressionAttributeValues: marshall(expressionAttributeValues),
-        KeyConditionExpression: "PK = :PK AND (SK = :PK OR SK BETWEEN :startDate AND :endDate)"
+        KeyConditionExpression: "PK = :PK AND SK BETWEEN :startDate AND :endDate"
       };
 
       if (params.type) {
@@ -88,29 +88,29 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         eventsQuery.FilterExpression = eventsQuery.FilterExpression + "contains(name, :name)";
       }
 
+
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
 
       console.log('eventItems', eventItems);
-      
+
       eventItems.Items.map(i => {
         switch (i['type'].S) {
-          case 'Track':
-            const track = unmarshall(i);
-            
-            tracks.push({
-              name: track.name,
-              location: track.location
-            });
-            break;
           case 'Event':
             const event = unmarshall(i);
             delete event.PK;
             delete event.SK;
 
-            events.push(event)
+            events.push(event);
+
+            const track = tracksInRange.items.find(t => unmarshall(t));
+            tracks.push({
+              name: track.name,
+              location: track.location
+            });
+            
             break;
           default:
-            console.log('Unknown type', unmarshall(i));
+            console.log('Unhandled type', unmarshall(i));
             break;
         }
       });
