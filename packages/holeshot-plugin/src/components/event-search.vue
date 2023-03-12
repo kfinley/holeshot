@@ -36,15 +36,10 @@
         placeholder="(Optional) if left black home track is used"
         class="form-control"
       />
-      <type-ahead
+      <input
+        id="name"
         placeholder="(Optional) refine search by event name"
-        :items="items"
-        :onSelect="onSelect"
-        v-model="query"
-        v-on:focusin="searchFocusIn"
-        v-on:focusout="searchFocusOut"
-        @reset="reset"
-        @update="searchUpdate"
+        class="form-control"
       />
       <div>
         <label for="startDate">Start Date:</label>
@@ -95,12 +90,13 @@
 
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";
-import SearchControl from "./search-control";
+import BaseControl from "./base-control";
 import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
 import { Event } from "@holeshot/types/src";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-import { searchModule } from "../store";
+import { searchModule, SearchState, SearchStatus } from "../store";
+import { State } from "vuex-class";
 
 @Component({
   components: {
@@ -108,8 +104,8 @@ import { searchModule } from "../store";
     DatePicker,
   },
 })
-export default class EventSearch extends SearchControl<Event> {
-  showSelector = false;
+export default class EventSearch extends BaseControl {
+  @State("Search") state!: SearchState;
 
   @Prop({ default: false })
   disabled: boolean;
@@ -117,7 +113,6 @@ export default class EventSearch extends SearchControl<Event> {
   _item!: Event; // Backing prop. Test if we still actually need this...
 
   created() {
-
     const startDate = new Date();
     const endDate = new Date();
     endDate.setMonth(startDate.getMonth() + 1);
@@ -135,23 +130,9 @@ export default class EventSearch extends SearchControl<Event> {
   search = searchModule.search;
   openCriteriaPanel = searchModule.openCriteriaPanel;
 
-  edit() {
-    if (!this.disabled) {
-      this.previousItem = this.item;
-      this.item = undefined;
-      this.showSelector = true;
-    }
+  get searching() {
+    return this.state.status == SearchStatus.Searching;
   }
-
-  reset(vue: { query: string }) {
-    if (this.previousItem && vue.query !== "") {
-      this.query = this.previousItem.name;
-      this.item = this._item;
-      this.showSelector = false;
-      this.previousItem = undefined;
-    }
-  }
-  
 }
 </script>
 

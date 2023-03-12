@@ -43,8 +43,6 @@ const plugin: ClientPlugin = {
       setupValidation(extend);
       setupModules(options.store);
 
-      // getEventsModule(options.store);
-
       vue.use(ComponentLibraryPlugin, {
         appName: options.appName,
         router: options.router,

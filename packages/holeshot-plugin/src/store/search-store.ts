@@ -19,7 +19,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
   @Action
   search() {
     console.log("search", this.searchInput);
-    this.context.commit('mutate', (state: SearchState) => {
+    this.context.commit("mutate", (state: SearchState) => {
       state.showCriteriaPanel = false;
     });
     this.sendCommand({
@@ -38,11 +38,10 @@ export class SearchModule extends HoleshotModule implements SearchState {
 
   @Action
   openCriteriaPanel() {
-    this.context.commit('mutate', (state: SearchState) => {
+    this.context.commit("mutate", (state: SearchState) => {
       state.showCriteriaPanel = true;
     });
   }
-
 }
 
 // export const getSearchModule = (store: Store<any>) => getModule(SearchModule, store);
