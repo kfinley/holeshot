@@ -88,7 +88,6 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         eventsQuery.FilterExpression = eventsQuery.FilterExpression + "contains(name, :name)";
       }
 
-
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
 
       console.log('eventItems', eventItems);
@@ -102,14 +101,14 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
             events.push(event);
 
-            let track = tracks.filter(t => t.name == event.trackName);
+            let track = tracks.find(t => t.name == event.trackName);
             if (track == null) {
-              track = tracksInRange.items.filter(t => unmarshall(t).name == event.trackName);
+              track = unmarshall(tracksInRange.items.find(t => unmarshall(t).name == event.trackName));
             }
             
             tracks.push({
-              name: track["name"],
-              location: track["location"]
+              name: track.name,
+              location: track.location
             });
 
             break;
