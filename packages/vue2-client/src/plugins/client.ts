@@ -16,20 +16,30 @@ import { NotificationState } from '@finley/vue2-components/src/store/state';
 import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/src/store';
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
 import HoleshotPlugin from '@holeshot/plugin/src/plugin';
+import { getModule } from 'vuex-module-decorators';
 
 //Move these maybe??
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/styles.scss';
+import UserModule from '@holeshot/vue2-user/src/store/user-module';
+import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
   store.registerModule('WebSockets', WebSocketsModule);
   store.registerModule('Events', EventsModule);
 
+  //HACK: Calls to Vuex.registerModule inside plugins will wipe out the store getters.
+  //      so we must call getModule for any module that got wiped out.
+  //      https://github.com/vuejs/vuex/blob/d65d14276e87aca17cfbd3fbf4af9e8dbb808f24/src/store.js#L265
+  //      https://github.com/championswimmer/vuex-module-decorators/issues/250
+  //
   // load up the modules so they are in the store root.
   // WebSockets is loaded below
   getEventsModule(store);
   getArticlesModule(store);
+  getModule(UserModule, store);
+  getModule(SearchModule, store);
 
 };
 
@@ -41,7 +51,6 @@ const plugin: ClientPlugin = {
       bootstrapper(options.store);
 
       setupValidation(extend);
-      setupModules(options.store);
 
       vue.use(ComponentLibraryPlugin, {
         appName: options.appName,
@@ -63,6 +72,8 @@ const plugin: ClientPlugin = {
         store: options.store,
         container: options.container,
       });
+
+      setupModules(options.store);
 
       // router provided to add any plugin routes.
       // i.e. options.router.addRoutes(routes);
