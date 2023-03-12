@@ -39,6 +39,11 @@ export class SearchModule extends HoleshotModule implements SearchState {
   }
 
   @Action
+  getNearbyEventsResponse(params: { events: [] }) {
+    console.log("handleResponse", params);
+  }
+
+  @Action
   openCriteriaPanel() {
     this.context.commit("mutate", (state: SearchState) => {
       state.showCriteriaPanel = true;

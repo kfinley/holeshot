@@ -42,7 +42,8 @@
         "LittleFoxTeam.vscode-python-test-adapter",
         // "Cameron.vscode-pytest",
         "bierner.markdown-mermaid",
-        "streetsidesoftware.code-spell-checker"
+        "streetsidesoftware.code-spell-checker",
+        "unional.vscode-sort-package-json"
       ],
       "settings": {
           // "terminal.integrated.shell.linux": "/bin/zsh"

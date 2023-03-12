@@ -21,7 +21,7 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
 
     const startStepFunctionResponse = await startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: 'Events/nearby',
+        subject: 'Search/getNearbyEventsResponse',
         message: JSON.stringify({
           connectionId: params.connectionId,
           ...response

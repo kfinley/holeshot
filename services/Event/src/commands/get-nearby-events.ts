@@ -16,6 +16,7 @@ export type GetNearbyEventsRequest = {
   endDate: string;
   distance?: number;
   type?: string;
+  name?: string
 }
 
 export type GetNearbyEventsResponse = {
@@ -65,6 +66,10 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         expressionAttributeValues[':type'] = params.type
       }
 
+      if (params.name) {
+        expressionAttributeValues[':name'] = params.name
+      }
+
       const eventsQuery: QueryCommandInput = {
         TableName: CoreTable,
         ExpressionAttributeValues: marshall(expressionAttributeValues),
@@ -73,6 +78,11 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
       if (params.type) {
         eventsQuery.FilterExpression = "contains(eventType, :type)";
+      }
+
+      if (params.name) {
+        eventsQuery.FilterExpression = eventsQuery.FilterExpression !== undefined ? eventsQuery.FilterExpression + ' AND ' : eventsQuery.FilterExpression;
+        eventsQuery.FilterExpression = eventsQuery.FilterExpression + "contains(name, :name)";
       }
 
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
