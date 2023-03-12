@@ -124,7 +124,6 @@ export default class EventSearch extends BaseControl {
       type: "Gold Cup",
       distance: 250,
     };
-    console.log(this.state.searchInput);
   }
 
   search = searchModule.search;
