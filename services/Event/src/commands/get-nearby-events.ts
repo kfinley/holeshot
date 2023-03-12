@@ -57,7 +57,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const expressionAttributeValues = {
         ":PK": `TRACK#${item['name'].S}`,
         ":startDate": `${params.startDate}`,
-        ":endDate:": `${params.endDate}`
+        ":endDate": `${params.endDate}`
       };
 
       if (params.type) {
