@@ -13,7 +13,7 @@ export class HoleshotModule extends BaseModule {
         command: "RunLambda",
         data: {
           name: `${functionNamePrefix}-${params.name}`,
-          payload: params.payload,
+          payload: JSON.stringify(params.payload),
         },
       },
       { root: true }
