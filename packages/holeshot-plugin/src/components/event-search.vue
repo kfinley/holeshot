@@ -123,12 +123,16 @@ export default class EventSearch extends BaseControl {
 
   _item!: Event; // Backing prop. Test if we still actually need this...
 
+  // setup any calls into our vuex store module
+  search = searchModule.search;
+  openCriteriaPanel = searchModule.openCriteriaPanel;
+
   created() {
     const startDate = new Date();
     const endDate = new Date();
     endDate.setMonth(startDate.getMonth() + 1);
 
-    // Set the initial state
+    // Set the initial state when created to prevent issue rendering default UI
     this.state.searchInput = {
       startDate,
       endDate,
@@ -138,11 +142,9 @@ export default class EventSearch extends BaseControl {
   }
 
   mounted() {
+    // Null out any previous search results
     this.state.searchResults = null;
   }
-
-  search = searchModule.search;
-  openCriteriaPanel = searchModule.openCriteriaPanel;
 
   get searching() {
     return this.state.status == SearchStatus.Searching;

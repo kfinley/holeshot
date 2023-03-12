@@ -102,15 +102,14 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
             events.push(event);
 
             let track = tracks.find(t => t.name == event.trackName);
-            if (track == null) {
+            if (track === undefined) {
               track = unmarshall(tracksInRange.items.find(t => unmarshall(t).name == event.trackName));
+              console.log('track', track);
+              tracks.push({
+                name: track.name,
+                location: track.location
+              });
             }
-            
-            tracks.push({
-              name: track.name,
-              location: track.location
-            });
-
             break;
           default:
             console.log('Unhandled type', unmarshall(i));
