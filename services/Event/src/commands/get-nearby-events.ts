@@ -76,7 +76,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       const eventsQuery: QueryCommandInput = {
         TableName: CoreTable,
         ExpressionAttributeValues: marshall(expressionAttributeValues),
-        KeyConditionExpression: "PK = :PK and SK BETWEEN :startDate AND :endDate"
+        KeyConditionExpression: "PK = :PK AND (SK = :PK OR SK BETWEEN :startDate AND :endDate)"
       };
 
       if (params.type) {
