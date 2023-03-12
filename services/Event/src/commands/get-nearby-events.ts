@@ -60,6 +60,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         ":endDate": `${params.endDate}`
       };
 
+      console.log('expressionAttributeValues', expressionAttributeValues)
       if (params.type) {
         expressionAttributeValues[':type'] = params.type
       }
@@ -76,6 +77,8 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
       const eventItems = await this.ddbClient.send(new QueryCommand(eventsQuery));
 
+      console.log('eventItems', eventItems);
+      
       eventItems.Items.map(i => {
         switch (i['type'].S) {
           case 'Track':
