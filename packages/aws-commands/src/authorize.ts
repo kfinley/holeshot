@@ -49,7 +49,8 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
           }
         }
       } catch (e: any) {
-        if (e.indexOf('NotAuthorizedException: Access Token has expired') == -1) {
+        console.log(e);
+        if (e.message.indexOf('NotAuthorizedException: Access Token has expired') == -1) {
           console.log('authorize error: ', e);
         }
       }
