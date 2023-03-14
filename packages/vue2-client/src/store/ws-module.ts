@@ -66,7 +66,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
             reject(ev);
           },
           timeout: 60000,
-          maxAttempts: -1, // -1 for testing b/c it turns of the auto-reconnect features of sockette
+          maxAttempts: 3, // -1 for testing b/c it turns of the auto-reconnect features of sockette
         });
         context.commit('mutate', (state: WebSocketsState) => (state.socket = socket));
       }).catch((err) => {

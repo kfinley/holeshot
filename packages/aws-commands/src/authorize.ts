@@ -29,8 +29,6 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
     this.provider = params.container.get<CognitoIdentityProvider>("CognitoIdentityProvider");
 
     if (params.authHeader) {
-
-      // 'Basic dGVzdDpwYXNzd29yZA=='
       const idAndToken = Buffer.from(params.authHeader.split(' ')[1], 'base64').toString()
       const [, accessToken] = idAndToken.split(':');
       token = accessToken;
@@ -52,7 +50,7 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
         }
       } catch (e: any) {
         if (e.message.indexOf('Access Token has expired') > -1) {
-          console.log(e);
+          console.log('AUTHORIZE: ', e);
           return {
             statusCode: 400,
             body: "Access Token has expired",
