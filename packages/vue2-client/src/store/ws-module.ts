@@ -53,17 +53,24 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
 
     if (this.socket == undefined) {
       console.log(`connecting to socket: ${this.wsUrl}`);
-      const socket = new Sockette(this.wsUrl, {
-        protocols: token,
-        onmessage: this.handleSocketMessage,
-        // onreconnect?: (this: Sockette, ev: Event | CloseEvent) => any;
-        // onmaximum?: (this: Sockette, ev: CloseEvent) => any;
-        onclose: this.handleSocketClose,
-        onerror: this.handleSocketError,
-        timeout: 60000,
-        maxAttempts: -1, // -1 for testing b/c it turns of the auto-reconnect features of sockette
-      });
-      this.context.commit('mutate', (state: WebSocketsState) => (state.socket = socket));
+      try {
+        const socket = new Sockette(this.wsUrl, {
+          protocols: token,
+          onmessage: this.handleSocketMessage,
+          // onreconnect?: (this: Sockette, ev: Event | CloseEvent) => any;
+          // onmaximum?: (this: Sockette, ev: CloseEvent) => any;
+          onclose: this.handleSocketClose,
+          onerror: this.handleSocketError,
+          timeout: 60000,
+          maxAttempts: -1, // -1 for testing b/c it turns of the auto-reconnect features of sockette
+        });
+        this.context.commit(
+          'mutate',
+          (state: WebSocketsState) => (state.socket = socket)
+        );
+      } catch (e) {
+        console.log('connect error', e);
+      }
     }
   }
 
