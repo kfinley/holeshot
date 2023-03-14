@@ -1,4 +1,4 @@
-import { Action, Module } from "vuex-module-decorators";
+import { Action, Module,  } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SearchEventsInput, SearchState, SearchStatus } from "./state";
 

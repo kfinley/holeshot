@@ -66,7 +66,7 @@
           <button
             type="submit"
             class="btn primary-gradient w-100 my-4 mb-2"
-            :disabled="searching"
+            :disabled="disabled"
             @click.prevent="search"
           >
             <span
@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop } from "vue-property-decorator";
+import { Component } from "vue-property-decorator";
 import BaseControl from "./base-control";
 import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
 import { Event, Track } from "@holeshot/types/src";
@@ -120,9 +120,6 @@ import EventCard from "./event-card.vue";
 })
 export default class EventSearch extends BaseControl {
   @State("Search") state!: SearchState;
-
-  @Prop({ default: false })
-  disabled: boolean;
 
   _item!: Event; // Backing prop. Test if we still actually need this...
 
@@ -151,6 +148,10 @@ export default class EventSearch extends BaseControl {
 
   get searching() {
     return this.state.status == SearchStatus.Searching;
+  }
+
+  get disabled() {
+    return super.disconnected || this.searching;
   }
 
   trackFor(event: Event) {

@@ -14,10 +14,10 @@ export interface ArticlesState {
 }
 
 export enum WebSocketsStatus {
-  'None',
-  'Connected',
-  'Disconnected',
-  'Failed',
+  None = 'None',
+  Connected = 'Connected',
+  Disconnected = 'Disconnected',
+  Failed = 'Failed',
 }
 
 export interface WebSocketsState {

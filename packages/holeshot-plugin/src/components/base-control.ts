@@ -14,4 +14,8 @@ export default class BaseControl extends Vue {
 
   @Prop({ default: "85%" })
   maxWidth!: string;
+
+  get disconnected() {
+    return (this.$store as any).state.WebSockets?.status != "Connected";
+  }
 }
