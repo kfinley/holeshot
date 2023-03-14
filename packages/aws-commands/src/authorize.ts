@@ -13,6 +13,8 @@ export interface AuthorizeResponse {
   username?: string;
   attributes?: Record<string, string>;
   authorized: boolean;
+  statusCode?: number;
+  body?: string;
 }
 
 @injectable()
@@ -49,11 +51,17 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
           }
         }
       } catch (e: any) {
-        if (e.message.indexOf('Access Token has expired') == -1) {
-          console.log('authorize error: ', e);
+        if (e.message.indexOf('Access Token has expired') > -1) {
+          console.log(e);
+          return {
+            statusCode: 403,
+            body: "Access Token has expired",
+            authorized: false
+          };
         }
       }
     }
+
 
     return {
       authorized: false
@@ -75,3 +83,7 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
     );
   }
 }
+function createResponse(event: Event | undefined, arg1: number, arg2: string): AuthorizeResponse | PromiseLike<AuthorizeResponse> {
+  throw new Error('Function not implemented.');
+}
+
