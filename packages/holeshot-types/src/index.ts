@@ -31,8 +31,6 @@ export interface Sponsor {
   link: string;
 }
 export interface TrackInfo extends Track {
-  district: string;
-  trackId: string;
   contactInfo: Record<string, string>;
   logoUrl?: string;
   website: string;
@@ -56,5 +54,7 @@ export interface SwipeableEvent extends Event {
 }
 
 export interface Track extends Entity {
+  district: string;
+  trackId: string;
   location: Location,
 }

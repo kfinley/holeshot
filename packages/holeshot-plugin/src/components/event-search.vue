@@ -88,8 +88,10 @@
     </div>
     <div class="search-results" v-if="state.searchResults !== null">
       <div>
-        Searched {{ state.searchResults.searched }} tracks and found
-        {{ state.searchResults.events.length }} results.
+        Searched {{ state.searchResults.searched }} track{{
+          state.searchResults.searched > 1 ? "s" : ""
+        }}
+        and found {{ state.searchResults.events.length }} results.
       </div>
       <div v-for="(event, index) in state.searchResults.events" :key="index">
         <event-card :track="trackFor(event)" :event="event" />
