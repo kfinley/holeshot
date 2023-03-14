@@ -43,6 +43,11 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   }
 
   @Action
+  handleSocketError(this: Sockette, ev: Event) {
+    console.log('WebSocket Error', ev);
+  }
+
+  @Action
   connect(token: string) {
     console.log('connect');
 
@@ -54,7 +59,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
         // onreconnect?: (this: Sockette, ev: Event | CloseEvent) => any;
         // onmaximum?: (this: Sockette, ev: CloseEvent) => any;
         onclose: this.handleSocketClose,
-        //  onerror?: (this: Sockette, ev: Event) => any;
+        onerror: this.handleSocketError,
         timeout: 60000,
         maxAttempts: -1, // -1 for testing b/c it turns of the auto-reconnect features of sockette
       });
