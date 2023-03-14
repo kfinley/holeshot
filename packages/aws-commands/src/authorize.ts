@@ -54,14 +54,13 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
         if (e.message.indexOf('Access Token has expired') > -1) {
           console.log(e);
           return {
-            statusCode: 403,
+            statusCode: 400,
             body: "Access Token has expired",
             authorized: false
           };
         }
       }
     }
-
 
     return {
       authorized: false

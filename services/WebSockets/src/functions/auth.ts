@@ -17,9 +17,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     token
   });
 
-  if (response && response.success) {
+  if (response) {
     return response.authResponse;
   } else {
-    return createResponse(event, 401, 'Unauthorized');
+    return createResponse(event, 401, 'Unauthorized'); //TODO: this is wrong....
   }
 };
