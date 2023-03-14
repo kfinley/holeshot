@@ -39,9 +39,13 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
 
   @Action
   handleSocketClose(ev: CloseEvent) {
-    console.log('handleSocketClose', ev);
+    if (ev.code == 1000) {
+      console.log('closed normally', ev);
+    } else {
+      console.log('WebSocket close: ', ev);
+      this.context.dispatch('User/logout', null, { root: true });
+    }
   }
-
 
   @Action
   connect(token: string) {

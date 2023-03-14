@@ -83,6 +83,16 @@ export default class UserModule extends VuexModule implements UserState {
   }
 
   @Action
+  async logout() {
+    this.context.commit('mutate', (state: UserState) => {
+      state.authStatus = AuthStatus.LoggedOut;
+      state.authTokens = undefined;
+      state.currentUser = undefined;
+      state.authSession = undefined;
+    });
+  }
+
+  @Action
   async changePassword(params: SetPasswordRequest) {
     notificationModule.dismissAll();
 

@@ -103,8 +103,7 @@ const plugin: ClientPlugin = {
             case AuthStatus.LoggedIn:
               break;
             default:
-              console.log('TODO: logout..');
-              //options.router.push({ name: RouteNames.Login });
+              // Can hook in commands to run at logout here
               break;
           }
         }
