@@ -33,10 +33,9 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: `@import "src/styles/_variables.scss"; 
-        @import "../vue2-components/src/styles/_variables.scss"; 
-        @import "../holeshot-plugin/src/styles/_variables.scss"; 
         @import "src/styles/_breakpoint.scss";
-        @import "../vue2-components/src/styles/_bootstrap.scss";`,
+        @import "src/styles/_bootstrap.scss";
+        @import "src/styles/_global.scss";`,
       },
     },
   },
