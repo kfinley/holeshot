@@ -16,3 +16,13 @@ $primary-gradient-start: #DB2A3A;
 $primary-gradient-end: #9B1D35;
 
 $primary-button-background: linear-gradient(170deg, $primary-gradient-start 0%, $primary-gradient-end 100%);
+
+// Primary
+$color--primary: $primary-button-background;
+$color--cancel: $color--grey;
+$color--delete: $color--dark-red;
+
+// Active
+$color--active: $color--active-blue;
+$color--active-text: $primary-gradient-end;
+$color--active--hover: $color--active-blue;

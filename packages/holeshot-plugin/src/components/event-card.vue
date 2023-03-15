@@ -21,6 +21,12 @@
         <div v-for="(detail, key, index) in event.details" :key="index">
           {{ printIfIncludes(key, ["start", "end"], detail) }}
         </div>
+        <Button
+          label="Add to Calendar"
+          :classes="['btn--grey-hover-fill']"
+          @clicked="addToCalendar"
+          >Add to Calendar</Button
+        >
       </div>
     </div>
   </card>
@@ -59,6 +65,10 @@ export default class EventCard extends BaseControl {
 
   get hasEvent() {
     return this.event !== undefined && this.track !== undefined;
+  }
+
+  addToCalendar() {
+    console.log('add to calendar clicked');
   }
 }
 </script>
