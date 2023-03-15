@@ -97,7 +97,7 @@ export default class BurgerNav extends Vue {
     font-family: var(--font-primary);
     font-size: 16px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.6); //TODO: move this to style... it's in UserMenu too.
     white-space: nowrap;
     transition: 0.3s;
   }

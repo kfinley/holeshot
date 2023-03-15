@@ -10,46 +10,49 @@
       <burger-nav>
         <burger-nav-item :route="routes.Home">Home</burger-nav-item>
         <burger-nav-item :route="routes.Articles">Articles</burger-nav-item>
+        <burger-nav-item><user-menu></user-menu></burger-nav-item>
       </burger-nav>
     </div>
   </header>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import BurgerNav from './BurgerNav.vue'
-import BurgerNavItem from './BurgerNavItem.vue'
-import { RouteNames } from '../router/RouteNames'
+import { Component, Vue } from 'vue-property-decorator';
+import BurgerNav from './BurgerNav.vue';
+import BurgerNavItem from './BurgerNavItem.vue';
+import { RouteNames } from '../router/RouteNames';
+import UserMenu from '@holeshot/vue2-user/src/components/UserMenu.vue';
 
 @Component({
   components: {
     BurgerNav,
     BurgerNavItem,
+    UserMenu,
   },
 })
 export default class Header extends Vue {
-  headerOffsetTop: number = 0
-  header: element
-  routes = RouteNames
-  site = 'Holeshot-BMX'
+  headerOffsetTop: number = 0;
+  header: element;
+  routes = RouteNames;
+  site = 'Holeshot-BMX';
 
   mounted() {
-    window.addEventListener('scroll', this.handleScroll)
+    window.addEventListener('scroll', this.handleScroll);
 
     // Get the header
-    this.header = document.getElementById('header')
+    this.header = document.getElementById('header');
 
     // Get the offset position of the navbar
-    this.headerOffsetTop = this.header.offsetTop
+    this.headerOffsetTop = this.header.offsetTop;
   }
 
   // Add the stickey class to the header when you reach its scroll position.
   // Remove "sticky" when you leave the scroll position
   handleScroll(e) {
     if (window.pageYOffset > this.headerOffsetTop) {
-      this.header.classList.add('stickey')
+      this.header.classList.add('stickey');
     } else {
-      this.header.classList.remove('stickey')
+      this.header.classList.remove('stickey');
     }
   }
 }

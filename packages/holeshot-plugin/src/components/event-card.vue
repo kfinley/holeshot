@@ -63,16 +63,6 @@ export default class EventCard extends BaseControl {
 </script>
 
 <style lang="scss">
-.card-body {
-  padding: 10px;
-}
-.card-header {
-  background: $color--dark-red;
-  color: $color--grey80;
-  font-weight: bold;
-  padding: 5px;
-}
-
 @media screen and (max-width: $bp--sm-min) {
   .col {
     padding: 2px;
@@ -81,10 +71,21 @@ export default class EventCard extends BaseControl {
 </style>
 
 <style lang="scss" scoped>
+
+.card-body {
+  padding: 10px;
+}
+
+.card-header {
+  background: $color--dark-red;
+  color: $color--grey80;
+  font-weight: bold;
+  padding: 5px;
+}
+
 .container {
   padding: 0;
 }
-
 
 .event-card > div:nth-child(1) {
   width: 30%;

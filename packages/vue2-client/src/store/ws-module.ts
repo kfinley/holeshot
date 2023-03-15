@@ -49,9 +49,11 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
 
   @Action
   connect(token: string) {
-    console.log('connect');
-
     if (this.socket == undefined) {
+      this.context.commit(
+        'mutate',
+        (state: WebSocketsState) => (state.status = WebSocketsStatus.Connecting)
+      );
       console.log(`connecting to socket: ${this.wsUrl}`);
 
       const wsUrl = this.wsUrl;

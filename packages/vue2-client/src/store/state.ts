@@ -16,6 +16,7 @@ export interface ArticlesState {
 export enum WebSocketsStatus {
   None = 'None',
   Connected = 'Connected',
+  Connecting = 'Connecting',
   Disconnected = 'Disconnected',
   Failed = 'Failed',
 }

@@ -6,5 +6,16 @@ import BurgerNavItem from './BurgerNavItem.vue';
 import Functions from './Functions.vue';
 import Events from './Events.vue';
 import EventSearch from '@holeshot/plugin/src/components/event-search.vue';
+import UserMenu from '@holeshot/vue2-user/src/components/UserMenu.vue';
 
-export { BurgerNav, BurgerNavItem, Events, EventSearch, Footer, Functions, Header, Hero };
+export {
+  BurgerNav,
+  BurgerNavItem,
+  Events,
+  EventSearch,
+  Footer,
+  Functions,
+  Header,
+  Hero,
+  UserMenu,
+};
