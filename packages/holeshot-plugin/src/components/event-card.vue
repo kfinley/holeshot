@@ -5,6 +5,7 @@
         <card
           class="date"
           :showClose="false"
+          padding="0"
           :headerText="monthName(new Date(event.date))"
         >
           <div class="day">{{ getDay(new Date(event.date)) }}</div>
@@ -73,8 +74,8 @@ export default class EventCard extends BaseControl {
   padding: 5px;
 }
 
-.container {
-  padding: 0;
+.date::v-deep .col {
+  padding-left: 0;
 }
 
 .event-card > div:nth-child(1) {
