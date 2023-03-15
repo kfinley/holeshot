@@ -6,8 +6,8 @@ import { action } from '@storybook/addon-actions';
 
 import '!style-loader!css-loader!sass-loader!../node_modules/bootstrap/dist/css/bootstrap.css';
 import '!style-loader!css-loader!sass-loader!../node_modules/bootstrap-icons/font/bootstrap-icons.css';
-
-//TODO import '!style-loader!css-loader!sass-loader!xxxxx/src/styles/styles.scss';
+import '!style-loader!css-loader!sass-loader!../../vue2-components/src/styles/styles.scss';
+import '!style-loader!css-loader!sass-loader!../src/styles/styles.scss';
 
 
 Vue.use(Vuex);

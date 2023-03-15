@@ -18,7 +18,7 @@
           {{ track.location.address.city }}, {{ track.location.address.state }}
         </div>
         <div v-for="(detail, key, index) in event.details" :key="index">
-          {{ printIfDetailIncludes(key, detail, ["start", "end"]) }}
+          {{ printIfIncludes(key, ["start", "end"], detail) }}
         </div>
       </div>
     </div>
@@ -41,9 +41,9 @@ export default class EventCard extends BaseControl {
   @Prop()
   event!: Event;
 
-  printIfDetailIncludes(key: string, detail: string, includes: Array<string>) {
-    console.log(detail);
-    console.log(key);
+  printIfIncludes(key: string, includes: Array<string>, detail: string) {
+    // console.log(detail);
+    // console.log(key);
 
     let val = "";
 
@@ -62,22 +62,12 @@ export default class EventCard extends BaseControl {
 }
 </script>
 
-<style lang="scss">
-@media screen and (max-width: $bp--sm-min) {
-  .col {
-    padding: 2px;
-  }
-}
-</style>
-
 <style lang="scss" scoped>
-
-.card-body {
+.date::v-deep .card-body {
   padding: 10px;
 }
 
-.card-header {
-  background: $color--dark-red;
+.date::v-deep .card-header {
   color: $color--grey80;
   font-weight: bold;
   padding: 5px;
