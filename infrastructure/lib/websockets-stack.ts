@@ -120,9 +120,9 @@ export class WebSocketsStack extends BaseServiceConstruct {
 
     const hasConnectionId = new Choice(this, 'HasConnectionId?');
 
-    const c = Chain
-      .start(hasConnectionId
-        .when(Condition.stringEquals('$.connectionId', '')
+    // const c = Chain
+    //   .start(hasConnectionId
+    //     .when(Condition.stringEquals('$.connectionId', '')
     const chain = Chain
       .start(getConnectionInvocation)
       .next(
