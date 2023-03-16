@@ -1,10 +1,10 @@
 {
-  "name": "@holeshot/event-service",
+  "name": "@holeshot/scheduler-service",
   "version": "1.0.0",
-  "description": "Events service",
+  "description": "Scheduler service",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build --clean && tsc --build && cp -LRv node_modules dist > /dev/null 2>&1 && echo 'Event build complete!'",
+    "build": "tsc --build --clean && tsc --build && cp -LRv node_modules dist > /dev/null 2>&1 && echo 'Scheduler build complete!'",
     "test:unit": "jest"
   },
   "author": {

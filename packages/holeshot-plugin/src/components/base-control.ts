@@ -1,7 +1,11 @@
 import { Vue, Prop } from "vue-property-decorator";
 
 export default class BaseControl extends Vue {
-  getDay = (d: Date) => d.getDay();
+  // getDay = (d: Date) => {
+  //   const day = d.getDay();
+  //   return day;
+  // };
+  getDay = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format;
   monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
   weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
   toSentence = (s: string) =>

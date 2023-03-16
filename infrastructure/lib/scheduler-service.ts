@@ -6,19 +6,19 @@ import { ScopedAws } from 'aws-cdk-lib';
 import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { StateMachine } from 'aws-cdk-lib/aws-stepfunctions';
 
-export interface EventServiceProps {
+export interface SchedulerServiceProps {
   domainName: string;
   coreTable: Table;
   node_env: string;
   sendMessageStateMachine: StateMachine;
 }
 
-export class EventService extends BaseServiceConstruct {
+export class SchedulerService extends BaseServiceConstruct {
 
   readonly getNearbyEvents: Function;
 
-  constructor(scope: Construct, id: string, props?: EventServiceProps) {
-    super(scope, id, '../../services/Event/dist', props!.node_env);
+  constructor(scope: Construct, id: string, props?: SchedulerServiceProps) {
+    super(scope, id, '../../services/Scheduler/dist', props!.node_env);
 
     const {
       accountId,

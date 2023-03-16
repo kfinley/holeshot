@@ -18,7 +18,6 @@
 <script lang="ts">
 import { Component, Vue, Ref } from 'vue-property-decorator';
 import { getWSModule } from '../store/ws-module';
-import { getEventsModule } from '../store/events-module';
 
 @Component({})
 export default class Functions extends Vue {
@@ -35,10 +34,6 @@ export default class Functions extends Vue {
     "long": -80.9667001,
     "date": "2023-03-01T00:00:00"
   }`;
-
-  mounted() {
-    getEventsModule(this.$store);
-  }
 
   onSubmit() {
     getWSModule(this.$store).sendCommand({

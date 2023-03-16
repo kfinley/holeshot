@@ -1,5 +1,6 @@
 <template>
   <div class="row event-search">
+    <h3 align="center">Search For Events</h3>
     <div v-if="state.showCriteriaPanel">
       <div>
         <label for="type">What type of event? </label>
@@ -33,12 +34,13 @@
       <input
         id="location"
         name="location"
-        v-model="state.searchInput.name"
+        v-model="state.searchInput.location"
         placeholder="(Optional) if left black home track is used"
         class="form-control"
       />
       <input
         id="name"
+        v-model="state.searchInput.name"
         placeholder="(Optional) refine search by event name"
         class="form-control"
       />
@@ -58,7 +60,7 @@
       </div>
     </div>
     <div v-else class="event text-center" @click.prevent="openCriteriaPanel">
-      Type: {{ state.searchInput.type }} {{ state.searchInput.name }}
+      Type: {{ state.searchInput.type }} {{ state.searchInput.name }} (click to change search)
     </div>
     <div class="align-self-center action-controls" align="center">
       <div v-if="state.status == 'Loaded'">
@@ -94,7 +96,11 @@
         and found {{ state.searchResults.events.length }} results.
       </div>
       <div v-for="(event, index) in state.searchResults.events" :key="index">
-        <event-card :track="trackFor(event)" :event="event"  />
+        <event-card
+          :track="trackFor(event)"
+          :event="event"
+          show-add-to-schedule="true"
+        />
       </div>
     </div>
   </div>
@@ -120,8 +126,6 @@ import EventCard from "./event-card.vue";
 })
 export default class EventSearch extends BaseControl {
   @State("Search") state!: SearchState;
-
-  _item!: Event; // Backing prop. Test if we still actually need this...
 
   // setup any calls into our vuex store module
   search = searchModule.search;
@@ -159,7 +163,7 @@ export default class EventSearch extends BaseControl {
     //           line2: "",
     //           city: "Rock Hill",
     //           state: "SC",
-    //           zipCode: "29730",
+    //           postalCode: "29730",
     //         },
     //       },
     //     },
@@ -208,6 +212,7 @@ export default class EventSearch extends BaseControl {
 }
 
 .event-search {
+  padding-top: 10px;
   display: block;
   margin-left: auto;
   margin-right: auto;

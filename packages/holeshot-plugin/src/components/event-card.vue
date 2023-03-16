@@ -22,10 +22,12 @@
           {{ printIfIncludes(key, ["start", "end"], detail) }}
         </div>
         <Button
-          label="Add to Calendar"
+          v-if="showAddToSchedule"
+          label="Add to Schedule"
           :classes="['btn--grey-hover-fill']"
-          @clicked="addToCalendar"
-          >Add to Calendar</Button
+          :disabled="disconnected"
+          @clicked="addToSchedule"
+          >Add to Schedule</Button
         >
       </div>
     </div>
@@ -37,6 +39,7 @@ import { Component, Prop } from "vue-property-decorator";
 import Card from "@finley/vue2-components/src/components/card.vue";
 import { Track, Event } from "@holeshot/types/src";
 import BaseControl from "./base-control";
+import { schedulerModule } from "../store";
 
 @Component({
   components: { Card },
@@ -48,9 +51,10 @@ export default class EventCard extends BaseControl {
   @Prop()
   event!: Event;
 
+  @Prop({ required: false, default: false })
+  showAddToSchedule!: boolean;
+
   printIfIncludes(key: string, includes: Array<string>, detail: string) {
-    // console.log(detail);
-    // console.log(key);
 
     let val = "";
 
@@ -67,8 +71,11 @@ export default class EventCard extends BaseControl {
     return this.event !== undefined && this.track !== undefined;
   }
 
-  addToCalendar() {
-    console.log('add to calendar clicked');
+  addToSchedule() {
+    schedulerModule.addToSchedule({
+      track: this.track,
+      event: this.event,
+    });
   }
 }
 </script>

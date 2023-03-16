@@ -6,9 +6,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import Feed from './Feed.md'
-import { Hero } from '../components/'
+import { Component, Vue } from 'vue-property-decorator';
+import Feed from './Feed.md';
+import { Hero } from '../components/';
 
 @Component({
   components: {

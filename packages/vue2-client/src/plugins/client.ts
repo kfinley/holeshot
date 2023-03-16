@@ -2,7 +2,6 @@ import bootstrapper from './../bootstrapper';
 import Vue from 'vue';
 import { Store } from 'vuex';
 import { ArticlesModule, getArticlesModule } from '../store/articles-module';
-import { EventsModule, getEventsModule } from '../store/events-module';
 import { WebSocketsModule, getWSModule } from '../store/ws-module';
 import { extend } from 'vee-validate';
 import { ClientPlugin } from '@finley/vue2-components/src/types';
@@ -19,13 +18,13 @@ import HoleshotPlugin from '@holeshot/plugin/src/plugin';
 import { getModule } from 'vuex-module-decorators';
 import UserModule from '@holeshot/vue2-user/src/store/user-module';
 import { SearchModule } from '@holeshot/plugin/src/store/search-store';
+import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
 
 import '../styles/styles.scss';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
   store.registerModule('WebSockets', WebSocketsModule);
-  store.registerModule('Events', EventsModule);
 
   //HACK: Calls to Vuex.registerModule inside plugins will wipe out the store getters.
   //      so we must call getModule for any module that got wiped out.
@@ -34,7 +33,7 @@ export const setupModules = (store: Store<any>): void => {
   //
   // load up the modules so they are in the store root.
   // WebSockets is loaded below
-  getEventsModule(store);
+  getModule(SchedulerModule, store);
   getArticlesModule(store);
   getModule(UserModule, store);
   getModule(SearchModule, store);

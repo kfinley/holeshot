@@ -15,7 +15,7 @@ import { HttpOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { PublicHostedZone } from 'aws-cdk-lib/aws-route53';
 import { Certificate, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { CrawlerService } from './crawler-service';
-import { EventService } from './event-service';
+import { SchedulerService } from './scheduler-service';
 import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
@@ -275,7 +275,7 @@ export class InfrastructureStack extends Stack {
       certificate: this.certificate
     });
 
-    const eventService = new EventService(this, 'Holeshot-EventService', {
+    const schedulerService = new SchedulerService(this, 'Holeshot-SchedulerService', {
       domainName,
       coreTable: dataStores?.coreTable,
       node_env: props!.node_env,
@@ -290,7 +290,7 @@ export class InfrastructureStack extends Stack {
         ],
         effect: Effect.ALLOW,
         resources: [
-          eventService.getNearbyEvents.functionArn,
+          schedulerService.getNearbyEvents.functionArn,
           crawlerService.getTracksForRegion.functionArn
         ]
       })

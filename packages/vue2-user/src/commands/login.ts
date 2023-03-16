@@ -23,7 +23,7 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
     try {
       const result = await this.provider.initiateAuth(request);
 
-      console.log('initiateAuth', result);
+      // console.log('initiateAuth', result);
 
       if (result.AuthenticationResult) {
         return {
@@ -49,7 +49,8 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
       if (e.message === 'Resource not found') {
         console.log('Confirm Cognito UserPool ClientID is correct.', e);
       } else {
-        console.log(e);
+        // console.log(e);
+
       }
 
       throw new Error(message);

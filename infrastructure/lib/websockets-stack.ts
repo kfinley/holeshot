@@ -118,12 +118,15 @@ export class WebSocketsStack extends BaseServiceConstruct {
       interval: Duration.seconds(10)
     });
 
-    const isConnected = new Choice(this, 'HasConnectionId?');
+    const hasConnectionId = new Choice(this, 'HasConnectionId?');
 
+    const c = Chain
+      .start(hasConnectionId
+        .when(Condition.stringEquals('$.connectionId', '')
     const chain = Chain
       .start(getConnectionInvocation)
       .next(
-        isConnected
+        hasConnectionId
           .when(Condition.stringEquals('$.connectionId', ''), new Fail(this, "Fail", { error: "No ConnectionId Found" }))
           .otherwise(sendMessageInvocation));
 
