@@ -275,28 +275,35 @@ export class InfrastructureStack extends Stack {
       certificate: this.certificate
     });
 
-    const schedulerService = new SchedulerService(this, 'Holeshot-SchedulerService', {
-      domainName,
-      coreTable: dataStores?.coreTable,
-      node_env: props!.node_env,
-      sendMessageStateMachine: webSocketsApi.sendMessageStateMachine
-    });
 
-    const lambdaInvokePolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
-    lambdaInvokePolicy.addStatements(
-      new PolicyStatement({
-        actions: [
-          "lambda:InvokeFunction"
-        ],
-        effect: Effect.ALLOW,
-        resources: [
-          schedulerService.getNearbyEvents.functionArn,
-          crawlerService.getTracksForRegion.functionArn
-        ]
-      })
-    );
+    
+    // const schedulerService = new SchedulerService(this, 'Holeshot-SchedulerService', {
+    //   domainName,
+    //   coreTable: dataStores?.coreTable,
+    //   node_env: props!.node_env,
+    //   sendMessageStateMachine: webSocketsApi.sendMessageStateMachine
+    // });
 
-    webSocketsApi.messageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
+    // const lambdaInvokePolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
+    // lambdaInvokePolicy.addStatements(
+    //   new PolicyStatement({
+    //     actions: [
+    //       "lambda:InvokeFunction"
+    //     ],
+    //     effect: Effect.ALLOW,
+    //     resources: [
+    //       schedulerService.getNearbyEvents.functionArn,
+    //       crawlerService.getTracksForRegion.functionArn
+    //     ]
+    //   })
+    // );
+
+    // webSocketsApi.messageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
+
+
+
+
+
 
     // new CfnOutput(this, 'apiEndpoint', {
     //   value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,
