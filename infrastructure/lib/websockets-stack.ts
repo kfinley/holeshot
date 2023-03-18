@@ -90,15 +90,15 @@ export class WebSocketsStack extends BaseServiceConstruct {
 
     // SNS Topics & Subscriptions...
     this.connectedTopic = new Topic(this, 'sns-topic', {
-      topicName: 'Holeshot-ConnectedTopicTopic',
-      displayName: 'ConnectedTopicTopic',
+      topicName: 'Holeshot-connectedTopic',
+      displayName: 'connectedTopic',
     });
 
     this.connectedTopic.grantPublish(onConnectHandler.role as IRole);
     this.connectedTopic.addSubscription(new LambdaSubscription(this.startSendMessageNotification));
 
-    new CfnOutput(this, 'ConnectedTopicTopic', {
-      value: `ConnectedTopicTopic ARN: ${this.connectedTopic.topicArn}`
+    new CfnOutput(this, 'connectedTopic', {
+      value: `connectedTopic ARN: ${this.connectedTopic.topicArn}`
     });
 
     // SNS Topics & Subs end...
