@@ -17,6 +17,7 @@ import { Certificate, DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificat
 import { CrawlerService } from './crawler-service';
 import { SchedulerService } from './scheduler-service';
 import { Effect, Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { LambdaSubscription } from 'aws-cdk-lib/aws-sns-subscriptions';
 
 // TODO: break this out  to /services/FrontEnd/Infrastructure?
 
@@ -275,14 +276,13 @@ export class InfrastructureStack extends Stack {
       certificate: this.certificate
     });
 
-
-
     const schedulerService = new SchedulerService(this, 'Holeshot-SchedulerService', {
       domainName,
       coreTable: dataStores?.coreTable,
       node_env: props!.node_env,
       sendMessageStateMachine: webSocketsApi.sendMessageStateMachine
     });
+
 
     const lambdaInvokePolicy = new Policy(this, 'Holeshot-Inline-LambdaInvokePolicy');
     lambdaInvokePolicy.addStatements(
@@ -301,8 +301,7 @@ export class InfrastructureStack extends Stack {
 
     webSocketsApi.messageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
 
-
-
+    webSocketsApi.connectedTopic.addSubscription(new LambdaSubscription(schedulerService.sendSchedule));
 
     // new CfnOutput(this, 'apiEndpoint', {
     //   value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,

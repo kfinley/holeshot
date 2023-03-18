@@ -11,7 +11,7 @@ const addEntity = container.get<AddEntityCommand>("AddEntityCommand");
 const startStepFunction = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
 
 export interface AddEntityParams extends AddEntityRequest {
-  connectionId: string // websocket connection ID added by run-lambda command
+  connectionId: string; // websocket connection ID added by run-lambda command
   responseCommand?: string;
 }
 
@@ -21,7 +21,7 @@ export const handler = async (params: AddEntityParams, context: Context) => {
 
   if (params.responseCommand) {
     const { responseCommand } = params;
-    
+
     const startStepFunctionResponse = await startStepFunction.runAsync({
       input: JSON.stringify({
         subject: responseCommand, // This will be the store module action run when the client receives the message
@@ -38,7 +38,7 @@ export const handler = async (params: AddEntityParams, context: Context) => {
       status_code: startStepFunctionResponse.statusCode,
       executionArn: startStepFunctionResponse.executionArn
     };
-  } 
+  }
 
   return {
     status_code: response.success ? 200 : 500

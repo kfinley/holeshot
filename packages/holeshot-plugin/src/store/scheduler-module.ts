@@ -32,13 +32,18 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
     });
 
     super.addEntity(
-      "UserEvent",
+      "Track",
+      `USER#${userId}#Event`,
+      params.event.trackName,
+      params.event.trackName,
+      "Scheduler/addedToSchedule"
+    );
+
+    super.addEntity(
+      "Event",
       `USER#${userId}#Event`,
       params.event.date,
-      {
-        track: params.track,
-        event: params.event,
-      },
+      params.event,
       "Scheduler/addedToSchedule"
     );
 
@@ -52,7 +57,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         state.schedule.events = this.addOrUpdate(
           params.event,
           state.schedule.events,
-          (e) => e.name == params.event.name
+          (e) => e.name == params.event.name && e.date == params.event.date
         );
 
         state.schedule.tracks = this.addOrUpdate(
@@ -65,7 +70,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  addedToSchedule(params: { track: Track; event: Event }) {
+  addedToSchedule(params: any) {
     console.log(params);
 
     //TODO: notify

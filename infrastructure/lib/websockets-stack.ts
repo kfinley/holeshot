@@ -29,7 +29,9 @@ export class WebSocketsStack extends BaseServiceConstruct {
 
   public webSocketApi: WebSocketApi;
   public messageHandler: Function;
+  public startSendMessageNotification: Function;
   public sendMessageStateMachine: StateMachine;
+  public connectedTopic: Topic;
 
   constructor(scope: Construct, id: string, props?: WebSocketsStackProps) {
     super(scope, id, '../../services/WebSockets/dist', props!.node_env);
@@ -81,21 +83,22 @@ export class WebSocketsStack extends BaseServiceConstruct {
     new CfnOutput(this, 'apigateay-endpoint', {
       value: `${this.webSocketApi.apiId}.execute-api.${region}.amazonaws.com/v1`
     });
-    const startSendMessageNotification = super.newLambda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
+
+    this.startSendMessageNotification = super.newLambda('StartSendMessageNotification', 'functions/startSendMessageNotification.handler')
 
     // Lambda Functions end...
 
     // SNS Topics & Subscriptions...
-    const authProcessedTopic = new Topic(this, 'sns-topic', {
-      topicName: 'Holeshot-AuthProcessedTopic',
-      displayName: 'AuthProcessedTopic',
+    this.connectedTopic = new Topic(this, 'sns-topic', {
+      topicName: 'Holeshot-ConnectedTopicTopic',
+      displayName: 'ConnectedTopicTopic',
     });
 
-    authProcessedTopic.grantPublish(onConnectHandler.role as IRole);
-    authProcessedTopic.addSubscription(new LambdaSubscription(startSendMessageNotification));
+    this.connectedTopic.grantPublish(onConnectHandler.role as IRole);
+    this.connectedTopic.addSubscription(new LambdaSubscription(this.startSendMessageNotification));
 
-    new CfnOutput(this, 'AuthProcessedTopic', {
-      value: `AuthProcessedTopic ARN: ${authProcessedTopic.topicArn}`
+    new CfnOutput(this, 'ConnectedTopicTopic', {
+      value: `ConnectedTopicTopic ARN: ${this.connectedTopic.topicArn}`
     });
 
     // SNS Topics & Subs end...
@@ -158,7 +161,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
           "lambda:InvokeFunction"
         ],
         effect: Effect.ALLOW,
-        resources: [`${startSendMessageNotification.functionArn}:$LATEST`],
+        resources: [`${this.startSendMessageNotification.functionArn}:$LATEST`],
         sid: "sfnLambdaInvokePolicy"
       })
     )
@@ -179,7 +182,7 @@ export class WebSocketsStack extends BaseServiceConstruct {
         sid: "lambdaSfnStatusUpdatePolicy"
       })
     )
-    startSendMessageNotification.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy)
+    this.startSendMessageNotification.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy)
 
     // Step Functions end...
 

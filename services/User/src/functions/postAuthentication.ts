@@ -16,10 +16,9 @@ export const handler = async (event: any, context: Context) => {
 
     // const response = await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
     //   topic: 'Holeshot-AuthProcessedTopic',  // SNS Topic
-    //   subject: 'WebSocketsModule/connected',                      // {Store_Module}/{actionName} on client if message sent to client
+    //   subject: 'User/postAuthentication',
     //   message: JSON.stringify({     // params sent to store action
     //     userId: authorizer.principalId,
-    //     access_token: authorizer.access_token
     //   }),
     //   container
     // });

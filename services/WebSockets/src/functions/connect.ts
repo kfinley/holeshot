@@ -22,7 +22,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     // console.log('event', event),
     // console.log('context', context);
     // console.log('endpoint', `https://${event.requestContext.domainName}/${event.requestContext.stage}`);
-    
+
     if (authorizer === null || authorizer === undefined) { // || authorizer.policyDocument === undefined
       return createResponse(event, 401, 'Unauthorized');
     }
@@ -36,10 +36,11 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
       //TODO: Test to see if we can send this in authorizeConnection instead of here...
       await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
-        topic: 'Holeshot-AuthProcessedTopic',       // SNS Topic
+        topic: 'Holeshot-ConnectedTopic',       // SNS Topic
         subject: 'WebSockets/connected',        // {Store_Module}/{actionName} on client if message sent to client
         message: JSON.stringify({     // params sent to store action
-          userId: authorizer.principalId
+          connectionId: event.requestContext.connectionId as string,
+          userId: authorizer.principalId,
         }),
         container
       });

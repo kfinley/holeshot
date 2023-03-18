@@ -26,6 +26,7 @@ export class UserServiceStack extends BaseServiceConstruct {
   readonly client: UserPoolClient;
   readonly userPool: UserPool;
   readonly restApi: RestApi;
+  readonly authProcessedTopic: Topic;
 
   constructor(scope: Construct, id: string, props?: UserServiceStackProps) {
     super(scope, id, '../../services/User/dist', props!.node_env);
@@ -177,14 +178,15 @@ export class UserServiceStack extends BaseServiceConstruct {
     //   emailAddress: 'jeff.madlock@gmail.com'
     // });
 
-    // SNS Topics & Subs
+    // SNS Topics. Subscriptions added in infrastructure
     //
-    const authProcessedTopic = new Topic(this, 'sns-topic', {
+    this.authProcessedTopic = new Topic(this, 'sns-topic', {
       topicName: 'Holeshot-PostAuthenticationTopic',
       displayName: 'PostAuthenticationTopic',
     });
-    authProcessedTopic.grantPublish(postAuthentication.role as IRole);
+    this.authProcessedTopic.grantPublish(postAuthentication.role as IRole);
 
+    
     // Create API Gateway REST api and endpoint for /registration
     //
 
