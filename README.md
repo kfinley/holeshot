@@ -22,4 +22,3 @@ The following tech is used in the system
 * S3
 * SNS
 * SES
-

@@ -1,4 +1,3 @@
-
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { Inject, injectable } from 'inversify-props';
 import { Event, TrackInfo } from '@holeshot/types/src';
