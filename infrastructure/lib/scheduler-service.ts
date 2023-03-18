@@ -16,6 +16,7 @@ export interface SchedulerServiceProps {
 export class SchedulerService extends BaseServiceConstruct {
 
   readonly getNearbyEvents: Function;
+  readonly addEntity: Function;
 
   constructor(scope: Construct, id: string, props?: SchedulerServiceProps) {
     super(scope, id, '../../services/Scheduler/dist', props!.node_env);
@@ -27,28 +28,36 @@ export class SchedulerService extends BaseServiceConstruct {
 
     const geoTable = Table.fromTableArn(this, 'Holeshot-Geo', `arn:aws:dynamodb:${region}:${accountId}:table/Holeshot-Geo`);
 
+
     this.getNearbyEvents = super.newLambda('GetNearbyEvents', 'functions/get-nearby-events.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
       HOLESHOT_GEO_TABLE: geoTable.tableName.includes('/') ? geoTable.tableName.split('/')[1] : geoTable.tableName // stupid... for some reason ITable.tableName is returning {accountId}:table/{tableName}
+    }, 120, 512);
+    props?.coreTable.grantReadData(this.getNearbyEvents);
+
+    this.addEntity = super.newLambda('AddEntity', 'functions/add-entity.handler', {
+      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
 
     props?.coreTable.grantReadData(this.getNearbyEvents);
+    props?.coreTable.grantWriteData(this.addEntity);
+
     geoTable.grantReadData(this.getNearbyEvents);
 
-    const dynamodbQueryPolicy = new Policy(this, 'Holeshot-GetNearbyEvents-DynamoDBQueryPolicy');
-    dynamodbQueryPolicy.addStatements(
-      new PolicyStatement({
-        actions: [
-          "dynamodb:Query"
-        ],
-        effect: Effect.ALLOW,
-        resources: [
-          `${geoTable.tableArn}/*`
-        ]
-      })
-    );
-
-    this.getNearbyEvents.role?.attachInlinePolicy(dynamodbQueryPolicy);
+    //TODO: try removing this... shouldn't need it b/c of the line above.
+    this.getNearbyEvents.role?.attachInlinePolicy(new Policy(this, 'Holeshot-Core-DynamoDBQueryPolicy', {
+      statements: [
+        new PolicyStatement({
+          actions: [
+            "dynamodb:Query"
+          ],
+          effect: Effect.ALLOW,
+          resources: [
+            `${geoTable.tableArn}/*`
+          ]
+        }),
+      ]
+    }));
 
     const lambdaSfnStatusUpdatePolicy = new Policy(this, 'Holeshot-GetNearbyEvents-LambdaSfnPolicy');
     lambdaSfnStatusUpdatePolicy.addStatements(
@@ -67,5 +76,6 @@ export class SchedulerService extends BaseServiceConstruct {
     );
 
     this.getNearbyEvents.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
+    this.addEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
   }
 }

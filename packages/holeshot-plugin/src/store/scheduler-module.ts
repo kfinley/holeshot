@@ -24,13 +24,69 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  addToSchedule(params: { track: Track;  event: Event }) {
-    super.sendCommand({
-      name: "AddToSchedule",
-      payload: {
+  addToSchedule(params: { track: Track; event: Event }) {
+    const userId = ""; //TODO: get from user store in base class method
+
+    super.mutate((state: SchedulerState) => {
+      state.status = Status.Saving;
+    });
+
+    super.addEntity(
+      "UserEvent",
+      `USER#${userId}#Event`,
+      params.event.date,
+      {
         track: params.track,
         event: params.event,
       },
+      "Scheduler/addedToSchedule"
+    );
+
+    super.mutate((state: SchedulerState) => {
+      if (state.schedule == null) {
+        state.schedule = {
+          events: [],
+          tracks: [],
+        };
+
+        state.schedule.events = this.addOrUpdate(
+          params.event,
+          state.schedule.events,
+          (e) => e.name == params.event.name
+        );
+
+        state.schedule.tracks = this.addOrUpdate(
+          params.track,
+          state.schedule.tracks,
+          (t) => t.name == params.track.name
+        );
+      }
     });
   }
+
+  @Action
+  addedToSchedule(params: { track: Track; event: Event }) {
+    console.log(params);
+
+    //TODO: notify
+
+    super.mutate((s: SchedulerState) => s.status == Status.None);
+  }
+
+  addOrUpdate<T>(
+    item: T,
+    items: Array<T>,
+    predicate: (value: T, index: number, obj: T[]) => unknown
+  ): Array<T> {
+    const index = items.findIndex(predicate);
+    //Not found, add on end.
+    if (-1 === index) {
+      return [...items, item];
+    }
+    //found, so return:
+    //Clone of items before item being update.
+    //updated item
+    //Clone of items after item being updated.
+    return [...items.slice(0, index), item, ...items.slice(index + 1)];
+  };
 }

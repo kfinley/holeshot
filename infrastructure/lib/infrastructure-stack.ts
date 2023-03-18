@@ -292,6 +292,7 @@ export class InfrastructureStack extends Stack {
         ],
         effect: Effect.ALLOW,
         resources: [
+          schedulerService.addEntity.functionArn,
           schedulerService.getNearbyEvents.functionArn,
           crawlerService.getTracksForRegion.functionArn
         ]
@@ -299,8 +300,6 @@ export class InfrastructureStack extends Stack {
     );
 
     webSocketsApi.messageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
-
-
 
 
 

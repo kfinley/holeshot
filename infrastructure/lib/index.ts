@@ -10,7 +10,7 @@ import * as apigateway from "aws-cdk-lib/aws-apigateway";
 
 export const createLambda = (scope: Construct, name: string, functionsPath: string, handler: string, node_env: string, env?: {
   [key: string]: string;
-} | undefined, timeout = 20, memorySize = 512) => {
+} | undefined, timeout = 20, memorySize = 128) => {
 
   const path = join(__dirname, functionsPath);
 

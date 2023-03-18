@@ -1,3 +1,4 @@
+//TODO: move this to Core service and deploy an IaC Core Construct for resources
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { injectable, Inject } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
@@ -6,41 +7,40 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
-export type AddToScheduleRequest = {
+export type AddEntityRequest = {
   username: string;
-  track: Track;
-  event: Event;
+  pk: string;
+  sk: string;
+  type: string;
+  entity: any;
 }
 
-export type AddToScheduleResponse = {
+export type AddEntityResponse = {
   success: boolean;
 }
 
 @injectable()
-export class AddToScheduleCommand implements Command<AddToScheduleRequest, AddToScheduleResponse> {
+export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResponse> {
 
   @Inject("DynamoDBClient")
   private ddbClient!: DynamoDBClient;
 
-  async runAsync(params: AddToScheduleRequest): Promise<AddToScheduleResponse> {
+  async runAsync(params: AddEntityRequest): Promise<AddEntityResponse> {
     console.log(params);
 
     var response = await this.ddbClient.send(new PutItemCommand({
       TableName,
       Item: {
         PK: {
-          S: `USER#${params.username}#EVENT`
+          S: params.pk
         },
         SK: {
-          S: `${params.event.date}`
+          S: params.sk
         },
         type: {
-          S: 'UserEvent'
+          S: params.type
         },
-        ...marshall({
-          event: params.event,
-          track: params.track
-        })
+        ...marshall(params.entity)
       }
     }));
 

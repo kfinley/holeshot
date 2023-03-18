@@ -1,7 +1,7 @@
 import { container } from './../inversify.config';
 import { bootstrapper as awsCommandsBootstrapper } from '@holeshot/aws-commands/src';
 import { GetNearbyEventsCommand } from './../commands/get-nearby-events';
-import { AddToScheduleCommand } from '../commands/add-to-schedule';
+import { AddEntityCommand } from '../commands/add-entity';
 
 export default function bootstrapper() {
 
@@ -10,7 +10,7 @@ export default function bootstrapper() {
   awsCommandsBootstrapper(container);
 
   container.bind<GetNearbyEventsCommand>("GetNearbyEventsCommand").to(GetNearbyEventsCommand);
-  container.bind<AddToScheduleCommand>("AddToScheduleCommand").to(AddToScheduleCommand);
+  container.bind<AddEntityCommand>("AddEntityCommand").to(AddEntityCommand);
   
   console.log("Bootstrapper Done");
 

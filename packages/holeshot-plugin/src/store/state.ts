@@ -5,6 +5,7 @@ export enum Status {
   Loading = "Loading",
   Loaded = "Loaded",
   Failed = "Failed",
+  Saving = "Saving",
 }
 
 export enum SearchStatus {

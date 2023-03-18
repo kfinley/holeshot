@@ -6,6 +6,25 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
+  addEntity(
+    type: string,
+    pk: string,
+    sk: string | Date | null,
+    entity: any,
+    responseCommand: string
+  ) {
+    this.sendCommand({
+      name: "AddEntity",
+      payload: {
+        pk,
+        sk,
+        type,
+        entity,
+        responseCommand,
+      },
+    });
+  }
+
   sendCommand(params: { name: string; payload: any }) {
     this.context.dispatch(
       "WebSockets/sendCommand",
