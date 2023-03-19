@@ -18,7 +18,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
 
   console.log(event);
   
-  const { userId, connectionId } = JSON.parse(JSONevent.Records[0].Sns.Message);
+  const { userId, connectionId } = JSON.parse(event.Records[0].Sns.Message);
   
   const response = await getEntities.runAsync({
     keyConditionExpression: "PK = :PK AND SK >= :today",
