@@ -25,48 +25,52 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
   @Action
   addToSchedule(params: { track: Track; event: Event }) {
-    const userId = ""; //TODO: get from user store in base class method
+    try {
+      const userId = ""; //TODO: get from user store in base class method
 
-    super.mutate((state: SchedulerState) => {
-      state.status = Status.Saving;
-    });
+      super.mutate((state: SchedulerState) => {
+        state.status = Status.Saving;
+      });
 
-    super.addEntity(
-      "Track",
-      `USER#${userId}#Event`,
-      params.event.trackName,
-      params.event.trackName,
-      "Scheduler/addedToSchedule"
-    );
+      super.addEntity(
+        "Track",
+        `USER#${userId}#Event`,
+        params.event.trackName,
+        params.event.trackName,
+        "Scheduler/addedToSchedule"
+      );
 
-    super.addEntity(
-      "Event",
-      `USER#${userId}#Event`,
-      params.event.date,
-      params.event,
-      "Scheduler/addedToSchedule"
-    );
+      super.addEntity(
+        "Event",
+        `USER#${userId}#Event`,
+        params.event.date,
+        params.event,
+        "Scheduler/addedToSchedule"
+      );
 
-    super.mutate((state: SchedulerState) => {
-      if (state.schedule == null) {
-        state.schedule = {
-          events: [],
-          tracks: [],
-        };
+      super.mutate((state: SchedulerState) => {
+        if (state.schedule == null) {
+          state.schedule = {
+            events: [],
+            tracks: [],
+          };
 
-        state.schedule.events = super.addOrUpdate(
-          params.event,
-          state.schedule.events,
-          (e) => e.name == params.event.name && e.date == params.event.date
-        );
+          state.schedule.events = super.addOrUpdate(
+            params.event,
+            state.schedule.events,
+            (e) => e.name == params.event.name && e.date == params.event.date
+          );
 
-        state.schedule.tracks = super.addOrUpdate(
-          params.track,
-          state.schedule.tracks,
-          (t) => t.name == params.track.name
-        );
-      }
-    });
+          state.schedule.tracks = super.addOrUpdate(
+            params.track,
+            state.schedule.tracks,
+            (t) => t.name == params.track.name
+          );
+        }
+      });
+    } catch (e) {
+      console.log("Error in addToSchedule: ", e);
+    }
   }
 
   @Action

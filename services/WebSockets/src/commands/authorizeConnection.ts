@@ -15,7 +15,7 @@ export interface AuthorizeConnectionResponse {
 }
 
 
-const generatePolicy = (principalId: any, effect: any, resource: any) => {
+const generatePolicy = (principalId: any, effect: any, resource: any, attributes: Record<string, string>) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const authResponse: any = {};
   authResponse.principalId = principalId;
@@ -34,21 +34,21 @@ const generatePolicy = (principalId: any, effect: any, resource: any) => {
     statement.Resource = resource;
     policyDocument.Statement[0] = statement;
     authResponse.policyDocument = policyDocument;
-    authResponse.context = { effect } // blows up if context doesn't have any value
+    authResponse.context = { attributes } // blows up if context doesn't have any value
   }
   return authResponse;
 };
 
-const generateAllow = (principalId: string | undefined, resource: string) => generatePolicy(principalId, 'Allow', resource);
+const generateAllow = (principalId: string | undefined, resource: string, attributes: Record<string, string>) => generatePolicy(principalId, 'Allow', resource, attributes);
 
-const generateDeny = (principalId: string | undefined, resource: string) => generatePolicy(principalId, 'Deny', resource);
+const generateDeny = (principalId: string | undefined, resource: string, attributes: Record<string, string>) => generatePolicy(principalId, 'Deny', resource, attributes);
 
 const generateAuthResponse = (authResponse: AuthorizeResponse, resource: string | undefined) => {
 
   if (authResponse && authResponse.username && authResponse.authorized) {
-    return generateAllow(authResponse.username, resource == undefined ? '$connect' : resource);
+    return generateAllow(authResponse.username, resource == undefined ? '$connect' : resource, authResponse.attributes);
   }
-  return generateDeny(authResponse.username, resource == undefined ? '$connect' : resource);
+  return generateDeny(authResponse.username, resource == undefined ? '$connect' : resource, authResponse.attributes);
 
 };
 
@@ -70,7 +70,7 @@ export class AuthorizeConnectionCommand implements Command<AuthorizeConnectionRe
 
     if (authResult) {
 
-      const authResponse = generateAuthResponse(authResult, params.resource);
+      const authResponse = generateAuthResponse(authResult, params.resource, );
 
       return {
         authResponse,
