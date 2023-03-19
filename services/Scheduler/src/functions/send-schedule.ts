@@ -21,7 +21,8 @@ export const handler = async (params: GetEntitiesParams, context: Context) => {
     expressionAttributeValues: {
       ":PK": `USER#${params.userId}#EVENTS`,
       ":today": new Date(new Date().setHours(0, 0, 0, 0)).toString(),
-    }
+    },
+    container
   });
 
   console.log('getEntities.Items', response.items);

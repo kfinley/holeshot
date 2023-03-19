@@ -1,6 +1,6 @@
 //TODO: move this to Core service and deploy an IaC Core Construct for resources
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
-import { injectable, Inject } from "inversify-props";
+import { injectable, Container } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
 import { marshall } from '@aws-sdk/util-dynamodb';
 
@@ -12,6 +12,7 @@ export type AddEntityRequest = {
   sk: string;
   type: string;
   entity: any;
+  container: Container
 }
 
 export type AddEntityResponse = {
@@ -21,12 +22,14 @@ export type AddEntityResponse = {
 @injectable()
 export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResponse> {
 
-  @Inject("DynamoDBClient")
+  // @Inject("DynamoDBClient")DynamoDBClient
   private ddbClient!: DynamoDBClient;
 
   async runAsync(params: AddEntityRequest): Promise<AddEntityResponse> {
     console.log(params);
 
+    this.ddbClient = params.container.get<DynamoDBClient>("DynamoDBClient");
+    
     var response = await this.ddbClient.send(new PutItemCommand({
       TableName,
       Item: {

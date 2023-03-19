@@ -16,7 +16,10 @@ export interface AddEntityParams extends AddEntityRequest {
 
 export const handler = async (params: AddEntityParams, context: Context) => {
 
-  const response = await addEntity.runAsync(params);
+  const response = await addEntity.runAsync({
+    ...params, 
+    container
+  });
 
   if (params.responseCommand) {
     const { responseCommand } = params;
