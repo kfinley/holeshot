@@ -40,7 +40,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         subject: 'WebSockets/connected',        // {Store_Module}/{actionName} on client if message sent to client
         message: JSON.stringify({     // params sent to store action
           connectionId: event.requestContext.connectionId as string,
-          userId: authorizer,
+          userId: authorizer.principalId,
         }),
         container
       });
