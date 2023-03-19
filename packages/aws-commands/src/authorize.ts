@@ -41,10 +41,12 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
         });
 
         if (user.$metadata.httpStatusCode === 200) {
-          console.log(`Authorizer authorized: ${user.Username}`)
+          const attributes = this.attributesToRecord(user.UserAttributes);
+          
+          console.log(`Authorizer authorized: ${attributes.email}`)
           return {
-            username: user.Username,
-            attributes: this.attributesToRecord(user.UserAttributes),
+            username: attributes.email,
+            attributes,
             authorized: true
           }
         }
