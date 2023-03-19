@@ -1,7 +1,6 @@
 
 import { Context } from 'aws-lambda';
-import { AddEntityCommand, AddEntityRequest } from '../commands/add-entity';
-import { StartStepFunctionCommand } from '@holeshot/aws-commands/src';
+import { StartStepFunctionCommand, AddEntityCommand, AddEntityRequest } from '@holeshot/aws-commands/src';
 
 import bootstrapper from './bootstrapper';
 
