@@ -34,7 +34,7 @@ const generatePolicy = (principalId: any, effect: any, resource: any, attributes
     statement.Resource = resource;
     policyDocument.Statement[0] = statement;
     authResponse.policyDocument = policyDocument;
-    authResponse.context = { attributes } // blows up if context doesn't have any value
+    authResponse.context = { effect } // blows up if context doesn't have any value
   }
   return authResponse;
 };
