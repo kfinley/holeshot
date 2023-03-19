@@ -18,7 +18,9 @@ export class HoleshotModule extends BaseModule {
       payload: {
         pk,
         sk,
-        type,
+        type: {
+          S: type,
+        },
         entity,
         responseCommand,
       },
@@ -41,5 +43,22 @@ export class HoleshotModule extends BaseModule {
 
   mutate<T>(mutation: (state: T) => void) {
     this.context.commit("mutate", mutation);
+  }
+
+  addOrUpdate<T>(
+    item: T,
+    items: Array<T>,
+    predicate: (value: T, index: number, obj: T[]) => unknown
+  ): Array<T> {
+    const index = items.findIndex(predicate);
+    //Not found, add on end.
+    if (-1 === index) {
+      return [...items, item];
+    }
+    //found, so return:
+    //Clone of items before item being update.
+    //updated item
+    //Clone of items after item being updated.
+    return [...items.slice(0, index), item, ...items.slice(index + 1)];
   }
 }

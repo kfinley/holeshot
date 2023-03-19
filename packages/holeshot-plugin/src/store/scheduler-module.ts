@@ -54,13 +54,13 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           tracks: [],
         };
 
-        state.schedule.events = this.addOrUpdate(
+        state.schedule.events = super.addOrUpdate(
           params.event,
           state.schedule.events,
           (e) => e.name == params.event.name && e.date == params.event.date
         );
 
-        state.schedule.tracks = this.addOrUpdate(
+        state.schedule.tracks = super.addOrUpdate(
           params.track,
           state.schedule.tracks,
           (t) => t.name == params.track.name
@@ -77,21 +77,4 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
-
-  addOrUpdate<T>(
-    item: T,
-    items: Array<T>,
-    predicate: (value: T, index: number, obj: T[]) => unknown
-  ): Array<T> {
-    const index = items.findIndex(predicate);
-    //Not found, add on end.
-    if (-1 === index) {
-      return [...items, item];
-    }
-    //found, so return:
-    //Clone of items before item being update.
-    //updated item
-    //Clone of items after item being updated.
-    return [...items.slice(0, index), item, ...items.slice(index + 1)];
-  };
 }

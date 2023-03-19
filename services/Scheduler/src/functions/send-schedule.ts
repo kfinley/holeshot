@@ -7,7 +7,7 @@ import bootstrapper from './bootstrapper';
 
 const container = bootstrapper();
 
-const getEntities = container.get<GetEntitiesCommand>("GetEventsCommand");
+const getEntities = container.get<GetEntitiesCommand>("GetEntitiesCommand");
 const startStepFunction = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
 
 export interface GetEntitiesParams extends GetEntitiesRequest {
@@ -26,7 +26,7 @@ export const handler = async (params: GetEntitiesParams, context: Context) => {
   });
 
   console.log('getEntities.Items', response.items);
-  
+
   const startStepFunctionResponse = await startStepFunction.runAsync({
     input: JSON.stringify({
       subject: "Scheduler/setSchedule", // This will be the store module action run when the client receives the message
