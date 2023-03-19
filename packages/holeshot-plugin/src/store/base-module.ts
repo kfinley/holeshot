@@ -6,6 +6,13 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
+
+  getUserId() {
+    const user = this.context.getters["User/currentUser"];
+    console.log(user);
+    return user.email;
+  }
+  
   addEntity(
     type: string,
     pk: string,

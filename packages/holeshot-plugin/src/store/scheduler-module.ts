@@ -26,7 +26,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   addToSchedule(params: { track: Track; event: Event }) {
     try {
-      const userId = ""; //TODO: get from user store in base class method
+      const userId = super.getUserId();
 
       super.mutate((state: SchedulerState) => {
         state.status = Status.Saving;
