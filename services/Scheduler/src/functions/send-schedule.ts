@@ -1,5 +1,5 @@
 
-import { Context } from 'aws-lambda';
+import { SNSEvent, Context } from 'aws-lambda';
 import { StartStepFunctionCommand, GetEntitiesCommand, GetEntitiesRequest } from '@holeshot/aws-commands/src';
 
 import bootstrapper from './bootstrapper';
@@ -14,12 +14,16 @@ export interface GetEntitiesParams extends GetEntitiesRequest {
   userId: string;
 }
 
-export const handler = async (params: GetEntitiesParams, context: Context) => {
+export const handler = async (event: SNSEvent, context: Context) => {
 
+  console.log(event);
+  
+  const { userId, connectionId } = JSON.parse(JSONevent.Records[0].Sns.Message);
+  
   const response = await getEntities.runAsync({
     keyConditionExpression: "PK = :PK AND SK >= :today",
     expressionAttributeValues: {
-      ":PK": `USER#${params.userId}#EVENTS`,
+      ":PK": `USER#${userId}#EVENTS`,
       ":today": new Date(new Date().setHours(0, 0, 0, 0)).toString(),
     },
     container
@@ -31,8 +35,8 @@ export const handler = async (params: GetEntitiesParams, context: Context) => {
     input: JSON.stringify({
       subject: "Scheduler/setSchedule", // This will be the store module action run when the client receives the message
       message: JSON.stringify({
-        connectionId: params.connectionId,
-        userId: params.userId,
+        connectionId,
+        userId,
         ...response
       })
     }),
