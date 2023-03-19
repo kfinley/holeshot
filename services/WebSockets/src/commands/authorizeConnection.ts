@@ -70,7 +70,7 @@ export class AuthorizeConnectionCommand implements Command<AuthorizeConnectionRe
 
     if (authResult) {
 
-      const authResponse = generateAuthResponse(authResult, params.resource, );
+      const authResponse = generateAuthResponse(authResult, params.resource);
 
       return {
         authResponse,
