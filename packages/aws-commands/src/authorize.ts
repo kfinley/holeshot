@@ -45,7 +45,7 @@ export class AuthorizeCommand implements Command<AuthorizeRequest, AuthorizeResp
           
           console.log(`Authorizer authorized: ${attributes.email}`)
           return {
-            username: attributes.email,
+            username: user.Username,
             attributes,
             authorized: true
           }
