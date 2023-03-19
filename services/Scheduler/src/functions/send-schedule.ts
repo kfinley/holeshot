@@ -1,7 +1,6 @@
 
 import { Context } from 'aws-lambda';
-import { GetEntitiesCommand, GetEntitiesRequest } from '../commands/get-entities';
-import { StartStepFunctionCommand } from '@holeshot/aws-commands/src';
+import { StartStepFunctionCommand, GetEntitiesCommand, GetEntitiesRequest } from '@holeshot/aws-commands/src';
 
 import bootstrapper from './bootstrapper';
 
@@ -21,7 +20,7 @@ export const handler = async (params: GetEntitiesParams, context: Context) => {
     keyConditionExpression: "PK = :PK AND SK >= :today",
     expressionAttributeValues: {
       ":PK": `USER#${params.userId}#EVENTS`,
-      ":today": new Date(),
+      ":today": new Date(new Date().setHours(0, 0, 0, 0)).toString(),
     }
   });
 

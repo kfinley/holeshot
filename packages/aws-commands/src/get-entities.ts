@@ -2,7 +2,6 @@
 import { AttributeValue, DynamoDBClient, PutItemCommand, QueryCommand, QueryCommandInput } from '@aws-sdk/client-dynamodb';
 import { injectable, Inject } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
-import { Track, Event } from "@holeshot/types/src";
 import { marshall } from '@aws-sdk/util-dynamodb';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
@@ -14,7 +13,7 @@ export type GetEntitiesRequest = {
 }
 
 export type GetEntitiesResponse = {
-  items: Record<string, AttributeValue>[]
+  items?: Record<string, AttributeValue>[]
   success: boolean;
 }
 

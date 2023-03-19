@@ -15,6 +15,8 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { SES } from '@aws-sdk/client-ses';
 import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Lambda } from "@aws-sdk/client-lambda";
+import { AddEntityCommand } from './add-entity';
+import { GetEntitiesCommand } from './get-entities';
 
 export default function bootstrapper(container: Container) {
 
@@ -142,6 +144,8 @@ export default function bootstrapper(container: Container) {
   container.bind<StartStepFunctionCommand>("StartStepFunctionCommand").to(StartStepFunctionCommand);
   container.bind<PutPointCommand>("PutPointCommand").to(PutPointCommand);
   container.bind<QueryRadiusCommand>("QueryRadiusCommand").to(QueryRadiusCommand);
+  container.bind<AddEntityCommand>("AddEntityCommand").to(AddEntityCommand);
+  container.bind<GetEntitiesCommand>("GetEntitiesCommand").to(GetEntitiesCommand);
 
   // console.log('aws-commands bootstrapper done');
 
