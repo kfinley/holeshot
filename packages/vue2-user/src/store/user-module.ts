@@ -1,10 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { UserState, AuthStatus } from './state';
 import { User, SetPasswordRequest, LoginRequest, AuthenticationResult } from './../types';
-// import NotificationModule from "@finley/vue2-components/src/store/notification-module";
 import { notificationModule } from '@finley/vue2-components/src/store/';
 import { LoginCommand, SetPasswordCommand } from '../commands';
-// import { container } from 'inversify-props';
 import { authHelper } from '@holeshot/api-client/src/helpers';
 import { GetUserDetailsCommand } from '@/commands/getUserDetails';
 import { Inject } from 'inversify-props';
@@ -29,7 +27,6 @@ export default class UserModule extends VuexModule implements UserState {
   @Action
   async loadUser(params: AuthenticationResult) {
     try {
-
       const userDetails = await this.getUserDetailsCommand.runAsync({
         accessToken: params.accessToken as string,
       });

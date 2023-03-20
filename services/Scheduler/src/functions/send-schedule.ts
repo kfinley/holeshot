@@ -20,7 +20,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
   
   const { userId, connectionId } = JSON.parse(event.Records[0].Sns.Message);
   
-  const today = new Date(new Date().setHours(0, 0, 0, 0)).toString();
+  const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
   
   console.log(today);
 
@@ -28,7 +28,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
     keyConditionExpression: "PK = :PK AND SK >= :today",
     expressionAttributeValues: {
       ":PK": `USER#${userId}#EVENTS`,
-      ":today": new Date(new Date().setHours(0, 0, 0, 0)).toString(),
+      ":today": today,
     },
     container
   });
