@@ -27,7 +27,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
   const response = await getEntities.runAsync({
     keyConditionExpression: "PK = :PK AND SK >= :today",
     expressionAttributeValues: {
-      ":PK": `USER#${userId}#EVENTS`,
+      ":PK": `USER#${userId}#EVENT`,
       ":today": today,
     },
     container
