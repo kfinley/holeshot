@@ -48,7 +48,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         "Scheduler/addedToSchedule"
       );
 
-      super.mutate((state: SchedulerState) => {
+      super.muta  te((state: SchedulerState) => {
         if (state.schedule == null) {
           state.schedule = {
             events: [],

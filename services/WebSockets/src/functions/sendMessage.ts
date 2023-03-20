@@ -10,10 +10,14 @@ export const handler: Handler = async (event: any, context: Context) => {
 
   const { connectionId, subject, message } = event;
 
+  console.log(message);
+
   if (message['connectionId']) {
-    delete message.connectionId;  // This was added in to know where to send the message back to. Work this out better.... 
+    delete message['connectionId'];  // This was added in to know where to send the message back to. Work this out better.... 
   }
 
+  console.log(message);
+  
   const response = await sendMessageCmd.runAsync({
     connectionId,
     data: JSON.stringify({

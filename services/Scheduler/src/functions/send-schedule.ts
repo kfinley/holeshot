@@ -18,12 +18,12 @@ export const handler = async (event: SNSEvent, context: Context) => {
 
   console.log(event);
   
-  const { username, connectionId } = JSON.parse(event.Records[0].Sns.Message);
+  const { userId, connectionId } = JSON.parse(event.Records[0].Sns.Message);
   
   const response = await getEntities.runAsync({
     keyConditionExpression: "PK = :PK AND SK >= :today",
     expressionAttributeValues: {
-      ":PK": `USER#${username}#EVENTS`,
+      ":PK": `USER#${userId}#EVENTS`,
       ":today": new Date(new Date().setHours(0, 0, 0, 0)).toString(),
     },
     container
