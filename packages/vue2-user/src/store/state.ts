@@ -1,16 +1,16 @@
 import { User, AuthenticationResult } from './../types';
 
 export interface RegistrationState {
-  error: string | undefined;
-  email: string | undefined;
+  error?: string;
+  email?: string;
   status: RegistrationStatus;
 }
 export interface UserState {
   authStatus: AuthStatus;
-  authSession?: string | undefined;
-  currentUser: User | undefined;
+  authSession?: string;
+  currentUser?: User;
   authTokens?: AuthenticationResult;
-  postAuthFunction?: string | undefined;
+  postAuthFunction?: string;
 }
 
 export enum RegistrationStatus {
