@@ -47,7 +47,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
         subject: 'WebSockets/connected',        // SendMessage lambda subscribes and subject is sent to client. {Store_Module}/{actionName} is dispatched on client Vuex store
         message: JSON.stringify({               // params sent to store action
           connectionId: event.requestContext.connectionId as string,
-          username: authorizer.principalId,     // This is the Cognito username (sub attribute) which is a GUID
+          userId: authorizer.principalId,     // This is the Cognito username (sub attribute) which is a GUID
         }),
         container
       });
