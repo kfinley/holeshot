@@ -37,7 +37,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
 
   const schedule = [];
   response.items.map(i => {
-    const event = unmarshall(i) as Omit<Record<string, any>, "pk" | "sk" | "type"> as Event;
+    const event = unmarshall(i) as Omit<Record<string, any>, "PK" | "SK" | "type"> as Event;
     console.log(event);
     schedule.push(event);
   });

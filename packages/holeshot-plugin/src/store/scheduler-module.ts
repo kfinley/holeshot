@@ -5,20 +5,13 @@ import { SchedulerState, Status } from "./state";
 
 @Module({ namespaced: true, name: "Scheduler" })
 export class SchedulerModule extends HoleshotModule implements SchedulerState {
-  schedule: { tracks: Track[]; events: Event[] } | null = null;
+  schedule: Event[] | null = null;
   status: Status = Status.None;
 
   @Action
-  setSchedule(params: {
-    connectionId: string;
-    tracks: Track[];
-    events: Event[];
-  }) {
+  setSchedule(params: { connectionId: string; schedule: Event[] }) {
     super.mutate((state: SchedulerState) => {
-      state.schedule = {
-        tracks: params.tracks,
-        events: params.events,
-      };
+      state.schedule = params.schedule;
       state.status = Status.Loaded;
     });
   }
@@ -43,21 +36,12 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
       super.mutate((state: SchedulerState) => {
         if (state.schedule == null) {
-          state.schedule = {
-            events: [],
-            tracks: [],
-          };
+          state.schedule = [];
 
-          state.schedule.events = super.addOrUpdate(
+          state.schedule = super.addOrUpdate(
             params.event,
-            state.schedule.events,
+            state.schedule,
             (e) => e.name == params.event.name && e.date == params.event.date
-          );
-
-          state.schedule.tracks = super.addOrUpdate(
-            params.track,
-            state.schedule.tracks,
-            (t) => t.name == params.track.name
           );
         }
       });
