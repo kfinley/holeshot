@@ -13,7 +13,7 @@ import { Inject } from 'inversify-props';
 export default class UserModule extends VuexModule implements UserState {
   authStatus = AuthStatus.LoggedOut;
   authSession = '';
-  currentUser!: User;
+  currentUser: User | null = null;
   authTokens: AuthenticationResult = {}; // AuthenticationResult;
   postAuthFunction = ''; //: string | undefined = undefined; // !: string; // look into this... shouldn't have to do this but if we don't then the prop isn't on the obj in plugin
 

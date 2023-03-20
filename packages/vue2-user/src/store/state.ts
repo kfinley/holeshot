@@ -8,7 +8,7 @@ export interface RegistrationState {
 export interface UserState {
   authStatus: AuthStatus;
   authSession?: string;
-  currentUser?: User;
+  currentUser: User | null;
   authTokens?: AuthenticationResult;
   postAuthFunction?: string;
 }
