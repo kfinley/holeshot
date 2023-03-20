@@ -32,19 +32,20 @@ export const handler = async (event: SNSEvent, context: Context) => {
     container
   });
 
+//  console.log('getEntities.Items', response.items);
 
   const schedule = [];
 
   response.items.map(i => {
-    const foo = unmarshall(i) as Extract<keyof Record<string, any>, keyof Event>;
-    console.log('foo', foo);
-    const event = unmarshall(i) as Omit<Record<string, any>, "PK" | "SK" | "type"> as Event;
+    const event = unmarshall(i);
+    delete event["PK"];
+    delete event["SK"];
+    delete event["type"];
 
     console.log('event', event);
+    
     schedule.push(event);
   });
-
-  console.log('getEntities.Items', response.items);
 
   const startStepFunctionResponse = await startStepFunction.runAsync({
     input: JSON.stringify({
