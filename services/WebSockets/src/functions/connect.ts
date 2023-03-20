@@ -17,11 +17,18 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
     let { authorizer } = event.requestContext
 
+    /* 
     console.log(`Authorizer: ${JSON.stringify(authorizer)}`);
-
-    // console.log('event', event),
-    // console.log('context', context);
-    // console.log('endpoint', `https://${event.requestContext.domainName}/${event.requestContext.stage}`);
+    2023-03-20T16:04:26.725Z	62970e81-912b-4346-99a4-efd28e2a4177	INFO	Authorizer: 
+    {
+        "sub": "eb201755-c031-4f62-8225-29bdc6e1b8e7",
+        "principalId": "eb201755-c031-4f62-8225-29bdc6e1b8e7",
+        "integrationLatency": 3063,
+        "given_name": "Kye",
+        "family_name": "Finley",
+        "email": "kyle@kylefinley.net"
+    }
+    */
 
     if (authorizer === null || authorizer === undefined) { // || authorizer.policyDocument === undefined
       return createResponse(event, 401, 'Unauthorized');
@@ -37,10 +44,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       //TODO: Test to see if we can send this in authorizeConnection instead of here...
       await container.get<PublishMessageCommand>("PublishMessageCommand").runAsync({
         topic: 'Holeshot-ConnectedTopic',       // SNS Topic
-        subject: 'WebSockets/connected',        // {Store_Module}/{actionName} on client if message sent to client
-        message: JSON.stringify({     // params sent to store action
+        subject: 'WebSockets/connected',        // SendMessage lambda subscribes and subject is sent to client. {Store_Module}/{actionName} is dispatched on client Vuex store
+        message: JSON.stringify({               // params sent to store action
           connectionId: event.requestContext.connectionId as string,
-          userId: authorizer.principalId,
+          username: authorizer.principalId,     // This is the Cognito username (sub attribute) which is a GUID
         }),
         container
       });

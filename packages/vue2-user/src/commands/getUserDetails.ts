@@ -1,30 +1,27 @@
-import { GetUserDetailsRequest, GetUserDetailsResponse } from "@/types";
-import { CognitoIdentityProvider } from "@aws-sdk/client-cognito-identity-provider";
-import { Command } from "@holeshot/commands/src";
-import { Inject, injectable } from "inversify-props";
+import { GetUserDetailsRequest, GetUserDetailsResponse } from '@/types';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { Command } from '@holeshot/commands/src';
+import { Inject, injectable } from 'inversify-props';
 
 @injectable()
 export class GetUserDetailsCommand
   implements Command<GetUserDetailsRequest, GetUserDetailsResponse>
 {
-  @Inject("CognitoIdentityProvider")
+  @Inject('CognitoIdentityProvider')
   private provider!: CognitoIdentityProvider;
 
-  async runAsync(
-    params: GetUserDetailsRequest
-  ): Promise<GetUserDetailsResponse> {
+  async runAsync(params: GetUserDetailsRequest): Promise<GetUserDetailsResponse> {
     const user = await this.provider.getUser({
       AccessToken: params.accessToken,
     });
 
     return {
       username: user.Username as string,
-      firstName: user.UserAttributes?.find((a) => a.Name == "given_name")
+      firstName: user.UserAttributes?.find((a) => a.Name == 'given_name')
         ?.Value as string,
-      lastName: user.UserAttributes?.find((a) => a.Name == "family_name")
+      lastName: user.UserAttributes?.find((a) => a.Name == 'family_name')
         ?.Value as string,
-      email: user.UserAttributes?.find((a) => a.Name == "email")
-        ?.Value as string,
+      email: user.UserAttributes?.find((a) => a.Name == 'email')?.Value as string,
     };
   }
 }

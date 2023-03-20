@@ -7,13 +7,14 @@ const functionNamePrefix =
 
 export class HoleshotModule extends BaseModule {
 
-  getUserId() {
+  getUsername() {
     console.log("state", this.context.state);
     console.log("rootState", this.context.rootState);
 
-    const user = this.context.getters["User/currentUser"];
-    console.log(user);
-    return user.email;
+    const { currentUser } = this.context.rootState.User;
+
+    console.log(currentUser);
+    return currentUser.username;
   }
 
   addEntity(
