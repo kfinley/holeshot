@@ -25,7 +25,7 @@ export class GetEntitiesCommand implements Command<GetEntitiesRequest, GetEntiti
   private ddbClient!: DynamoDBClient;
 
   async runAsync(params: GetEntitiesRequest): Promise<GetEntitiesResponse> {
-    console.log(params);
+    // console.log(params);
 
     this.ddbClient = params.container.get<DynamoDBClient>("DynamoDBClient");
     

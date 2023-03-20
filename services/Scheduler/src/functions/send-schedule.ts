@@ -23,8 +23,6 @@ export const handler = async (event: SNSEvent, context: Context) => {
 
   const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
 
-  console.log(today);
-
   const response = await getEntities.runAsync({
     keyConditionExpression: "PK = :PK AND SK >= :today",
     expressionAttributeValues: {
@@ -36,9 +34,13 @@ export const handler = async (event: SNSEvent, context: Context) => {
 
 
   const schedule = [];
+
   response.items.map(i => {
+    const foo = unmarshall(i) as Extract<keyof Record<string, any>, keyof Event>;
+    console.log('foo', foo);
     const event = unmarshall(i) as Omit<Record<string, any>, "PK" | "SK" | "type"> as Event;
-    console.log(event);
+
+    console.log('event', event);
     schedule.push(event);
   });
 
