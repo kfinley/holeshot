@@ -27,7 +27,7 @@ export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResp
   private ddbClient!: DynamoDBClient;
 
   async runAsync(params: AddEntityRequest): Promise<AddEntityResponse> {
-    console.log(params);
+    console.log(JSON.stringify(params));
 
     this.ddbClient = params.container.get<DynamoDBClient>("DynamoDBClient");
     
