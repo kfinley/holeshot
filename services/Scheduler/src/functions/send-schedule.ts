@@ -35,8 +35,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
     input: JSON.stringify({
       subject: "Scheduler/setSchedule", // This will be the store module action run when the client receives the message
       message: JSON.stringify({
-        connectionId,
-        userId,
+        connectionId,        
         ...response
       })
     }),
