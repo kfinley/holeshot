@@ -48,7 +48,7 @@ export interface Event extends Entity {
   trackName: string;
   eventType: string;
   details: Record<string, string>;
-  // track?: Track; ??
+  track?: Track; 
 }
 
 //TODO: Refactor this out...

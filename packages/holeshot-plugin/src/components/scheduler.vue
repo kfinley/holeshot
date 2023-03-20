@@ -1,8 +1,8 @@
 <template>
   <div class="events">
     <div v-if="state.schedule">
-      <div v-for="(event, index) in state.schedule.events" :key="index">
-        <event-card :track="trackFor(event)" :event="event" />
+      <div v-for="(event, index) in state.schedule" :key="index">
+        <event-card :track="event.track" :event="event" />
       </div>
     </div>
     <event-search />
@@ -15,7 +15,7 @@ import BaseControl from "./base-control";
 import { State } from "vuex-class";
 import { SchedulerState } from "../store/state";
 import EventSearch from "./event-search.vue";
-import { Track, Event } from "packages/holeshot-types/src";
+// import { Track, Event } from "packages/holeshot-types/src";
 import EventCard from "./event-card.vue";
 
 @Component({
@@ -68,13 +68,6 @@ export default class Schedule extends BaseControl {
   //     ],
   //   };
   // }
-
-  trackFor(event: Event) {
-    const track = this.state.schedule.tracks.find(
-      (t: Track) => t.name == event.trackName
-    );
-    return track;
-  }
 }
 </script>
 

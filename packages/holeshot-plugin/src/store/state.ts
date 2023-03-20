@@ -34,8 +34,5 @@ export interface SearchEventsInput {
 
 export interface SchedulerState {
   status: Status;
-  schedule: {
-    tracks: Track[];
-    events: Event[];
-  } | null;
+  schedule: Event[] | null;
 }

@@ -27,20 +27,11 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   addToSchedule(params: { track: Track; event: Event }) {
     try {
       const username = super.getUsername();
+      params.event.track = params.event.track ?? params.track;
 
       super.mutate((state: SchedulerState) => {
         state.status = Status.Saving;
       });
-
-      // Do we want to add the track entity like this?
-      // Or maybe tack it onto the Event entity as nullable?
-      // super.addEntity(
-      //   "Track",
-      //   `USER#${username}#EVENT`,
-      //   params.event.date,
-      //   params.track,
-      //   "Scheduler/addedToSchedule"
-      // );
 
       super.addEntity(
         "Event",

@@ -1,6 +1,7 @@
 
 import { SNSEvent, Context } from 'aws-lambda';
 import { StartStepFunctionCommand, GetEntitiesCommand, GetEntitiesRequest } from '@holeshot/aws-commands/src';
+import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 import bootstrapper from './bootstrapper';
 
@@ -17,11 +18,11 @@ export interface GetEntitiesParams extends GetEntitiesRequest {
 export const handler = async (event: SNSEvent, context: Context) => {
 
   console.log(event);
-  
+
   const { userId, connectionId } = JSON.parse(event.Records[0].Sns.Message);
-  
+
   const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
-  
+
   console.log(today);
 
   const response = await getEntities.runAsync({
@@ -34,14 +35,21 @@ export const handler = async (event: SNSEvent, context: Context) => {
   });
 
 
+  const schedule = [];
+  response.items.map(i => {
+    const event = unmarshall(i) as Omit<Record<string, any>, "pk" | "sk" | "type"> as Event;
+    console.log(event);
+    schedule.push(event);
+  });
+
   console.log('getEntities.Items', response.items);
 
   const startStepFunctionResponse = await startStepFunction.runAsync({
     input: JSON.stringify({
       subject: "Scheduler/setSchedule", // This will be the store module action run when the client receives the message
       message: JSON.stringify({
-        connectionId,        
-        ...response
+        connectionId,
+        schedule
       })
     }),
     stateMachineName: 'Holeshot-WebSockets-SendMessage',
