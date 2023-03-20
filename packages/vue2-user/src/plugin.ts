@@ -70,20 +70,22 @@ const userPlugin: ClientPlugin = {
         await (options.store as any).restored;
 
         if (userState.authTokens?.accessToken) {
-          userModule.mutate((s) => {
-            s.authStatus = AuthStatus.LoggedIn;
-          });
 
-          //TODO: deal with this stuff....
-          authHelper.authToken = () => {
-            return userState.authTokens?.accessToken as string;
-          };
-          authHelper.refreshToken = () => {
-            return userState.authTokens?.refreshToken as string;
-          };
-          authHelper.username = () => {
-            return userState.currentUser?.username as string;
-          };
+          userModule.loadUser(userState.authTokens);
+          // userModule.mutate((s) => {
+          //   s.authStatus = AuthStatus.LoggedIn;
+          // });
+
+          // //TODO: deal with this stuff....
+          // authHelper.authToken = () => {
+          //   return userState.authTokens?.accessToken as string;
+          // };
+          // authHelper.refreshToken = () => {
+          //   return userState.authTokens?.refreshToken as string;
+          // };
+          // authHelper.username = () => {
+          //   return userState.currentUser?.username as string;
+          // };
         }
 
         const authStatus = userState.authStatus;

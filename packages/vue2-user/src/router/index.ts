@@ -1,34 +1,31 @@
-import { RouteConfig } from "vue-router";
+import { RouteConfig } from 'vue-router';
 
 export enum RouteNames {
-  Register = "Register",
-  Login = "Login",
-  SetPassword = "SetPassword",
-};
+  Register = 'Register',
+  Login = 'Login',
+  SetPassword = 'SetPassword',
+}
 
 export const routes: Array<RouteConfig> = [
   {
-    path: "/register",
+    path: '/register',
     name: RouteNames.Register,
     meta: { allowAnonymous: true },
-    component: () =>
-      import("../components/Register.vue"),
+    component: () => import('../components/Register.vue'),
   },
   {
-    path: "/login",
+    path: '/login',
     name: RouteNames.Login,
     meta: { allowAnonymous: true },
-    component: () =>
-      import("../components/Login.vue"),
+    component: () => import('../components/Login.vue'),
   },
   {
-    path: "/set-password",
+    path: '/set-password',
     name: RouteNames.SetPassword,
     meta: { allowAnonymous: true },
-    component: () =>
-      import("../components/SetPassword.vue"),
-      props(route) {
-        return route.query || { }
-      }
-  }
+    component: () => import('../components/SetPassword.vue'),
+    props(route) {
+      return route.query || {};
+    },
+  },
 ];

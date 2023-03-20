@@ -27,6 +27,31 @@ export default class UserModule extends VuexModule implements UserState {
   private setPasswordCommand!: SetPasswordCommand;
 
   @Action
+  async loadUser(params: AuthenticationResult) {
+    try {
+
+      const userDetails = await this.getUserDetailsCommand.runAsync({
+        accessToken: params.accessToken as string,
+      });
+
+      authHelper.setTokens(params);
+      authHelper.username = () => userDetails.username;
+
+      this.context.commit('mutate', (state: UserState) => {
+        state.authTokens = params;
+        state.currentUser = {
+          ...userDetails,
+          fullName: `${userDetails.firstName} ${userDetails.lastName}`,
+        };
+        state.authStatus = AuthStatus.LoggedIn;
+      });
+    } catch (error) {
+      console.log(error);
+      this.context.dispatch('logout');
+    }
+  }
+
+  @Action
   async login(params: LoginRequest) {
     notificationModule.dismissAll();
 
@@ -39,20 +64,7 @@ export default class UserModule extends VuexModule implements UserState {
       const login = await this.loginCommand.runAsync(params);
 
       if (login.status == AuthStatus.LoggedIn) {
-        authHelper.setTokens(login.authenticationResult as AuthenticationResult);
-
-        const userDetails = await this.getUserDetailsCommand.runAsync({
-          accessToken: login.authenticationResult?.accessToken as string,
-        });
-        authHelper.username = () => userDetails.username;
-
-        this.context.commit('mutate', (state: UserState) => {
-          state.authTokens = login.authenticationResult;
-          state.currentUser = {
-            ...userDetails,
-            fullName: `${userDetails.firstName} ${userDetails.lastName}`,
-          };
-        });
+        this.context.dispatch('loadUser', login.authenticationResult);
 
         if (this.postAuthFunction) {
           console.log('running postAuthFunction', this.postAuthFunction);
@@ -63,7 +75,7 @@ export default class UserModule extends VuexModule implements UserState {
       }
 
       this.context.commit('mutate', (state: UserState) => {
-        state.authStatus = login.status;
+        // state.authStatus = login.status; // don't need this anymore b/c it's being done in loadUser
         state.authSession = login.session;
       });
 
@@ -87,7 +99,7 @@ export default class UserModule extends VuexModule implements UserState {
     this.context.commit('mutate', (state: UserState) => {
       state.authStatus = AuthStatus.LoggedOut;
       state.authTokens = undefined;
-      state.currentUser = undefined;
+      state.currentUser = null;
       state.authSession = undefined;
     });
   }
