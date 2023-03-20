@@ -16,6 +16,7 @@ export type AddEntityRequest = {
 }
 
 export type AddEntityResponse = {
+  entity: any
   success: boolean;
 }
 
@@ -47,7 +48,8 @@ export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResp
     }));
 
     return {
-      success: response.$metadata.httpStatusCode == 200
+      success: response.$metadata.httpStatusCode == 200,
+      entity: params.entity,
     }
   }
 

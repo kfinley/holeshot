@@ -34,21 +34,21 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
       super.addEntity(
         "Track",
-        `USER#${username}#Event`,
+        `USER#${username}#EVENT`,
         params.event.trackName,
-        params.event.trackName,
+        params.track,
         "Scheduler/addedToSchedule"
       );
 
       super.addEntity(
         "Event",
-        `USER#${username}#Event`,
+        `USER#${username}#EVENT`,
         params.event.date,
         params.event,
         "Scheduler/addedToSchedule"
       );
 
-      super.muta  te((state: SchedulerState) => {
+      super.mutate((state: SchedulerState) => {
         if (state.schedule == null) {
           state.schedule = {
             events: [],

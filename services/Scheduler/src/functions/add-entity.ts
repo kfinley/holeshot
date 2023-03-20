@@ -1,3 +1,4 @@
+//TODO: move this to the Core Service
 
 import { Context } from 'aws-lambda';
 import { StartStepFunctionCommand, AddEntityCommand, AddEntityRequest } from '@holeshot/aws-commands/src';
