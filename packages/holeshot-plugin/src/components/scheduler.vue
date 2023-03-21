@@ -10,7 +10,8 @@ import { Component } from "vue-property-decorator";
 import BaseControl from "./base-control";
 import EventSearch from "./event-search.vue";
 import EventList from "./event-list.vue";
-import { schedulerModule } from "../store";
+import { schedulerModule, SchedulerState } from "../store";
+import { State } from "vuex-class";
 
 @Component({
   components: {
@@ -19,6 +20,8 @@ import { schedulerModule } from "../store";
   },
 })
 export default class Schedule extends BaseControl {
+  @State("Scheduler") state!: SchedulerState;
+
   get upcomingEvents() {
     return schedulerModule.upcomingEvents;
   }
@@ -47,7 +50,7 @@ export default class Schedule extends BaseControl {
   //             "http://maps.google.com/maps?q=35.990255,-80.418645&iwloc=A&iwd=1",
   //         },
   //       },
-  //       date: "2023-03-02T00:00:00",
+  //       date: "2023-03-25T00:00:00",
   //       url: "www.usabmx.com/tracks/1971/events/493331",
   //       eventType: "Practice",
   //       details: {

@@ -55,7 +55,6 @@ export default class EventCard extends BaseControl {
   showAddToSchedule!: boolean;
 
   printIfIncludes(key: string, includes: Array<string>, detail: string) {
-
     let val = "";
 
     includes.forEach((i) => {

@@ -1,10 +1,6 @@
 import { Vue, Prop } from "vue-property-decorator";
 
 export default class BaseControl extends Vue {
-  // getDay = (d: Date) => {
-  //   const day = d.getDay();
-  //   return day;
-  // };
   getDay = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format;
   monthName = new Intl.DateTimeFormat("en-US", { month: "short" }).format;
   weekdayName = new Intl.DateTimeFormat("en-US", { weekday: "short" }).format;
@@ -14,7 +10,6 @@ export default class BaseControl extends Vue {
       .slice(1)
       .replace(/([A-Z]+)/g, " $1")
       .replace(/([A-Z][a-z])/g, " $1");
-
 
   @Prop({ default: "85%" })
   maxWidth!: string;

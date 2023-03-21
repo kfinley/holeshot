@@ -6,15 +6,8 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
-
-  getUsername() {
-    console.log("state", this.context.state);
-    console.log("rootState", this.context.rootState);
-
-    const { currentUser } = this.context.rootState.User;
-
-    console.log(currentUser);
-    return currentUser.username;
+  get getUsername() {
+    return this.context.rootState.User.username;
   }
 
   addEntity(
