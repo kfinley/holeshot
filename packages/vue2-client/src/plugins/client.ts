@@ -2,7 +2,7 @@ import bootstrapper from './../bootstrapper';
 import Vue from 'vue';
 import { Store } from 'vuex';
 import { ArticlesModule, getArticlesModule } from '../store/articles-module';
-import { WebSocketsModule, getWSModule } from '../store/ws-module';
+import { WebSocketsModule } from '../store/ws-module';
 import { extend } from 'vee-validate';
 import { ClientPlugin } from '@finley/vue2-components/src/types';
 import ComponentLibraryPlugin, {
@@ -19,7 +19,7 @@ import { getModule } from 'vuex-module-decorators';
 import UserModule from '@holeshot/vue2-user/src/store/user-module';
 import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
-import { initializeModules } from '../store';
+import { WebSocketsStatus } from '../store';
 import '../styles/styles.scss';
 import { SchedulerState } from '@holeshot/plugin/src/store';
 
@@ -38,6 +38,7 @@ export const setupModules = (store: Store<any>): void => {
   getArticlesModule(store);
   getModule(UserModule, store);
   getModule(SearchModule, store);
+
   // initializeModules(store);
 };
 
@@ -86,7 +87,7 @@ const plugin: ClientPlugin = {
           userState.authStatus == AuthStatus.LoggedIn &&
           userState.authTokens?.accessToken
         ) {
-          if (webSocketsModule.status !== "Connected") {
+          if (webSocketsModule.status !== WebSocketsStatus.Connected) {
             webSocketsModule.connect(userState.authTokens?.accessToken);
           }
         }

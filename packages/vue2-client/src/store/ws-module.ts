@@ -43,8 +43,13 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
       console.log('closed normally', ev);
     } else {
       console.log('WebSocket close: ', ev);
-      this.context.dispatch('User/logout', null, { root: true });
     }
+  }
+
+  @Action
+  handleSocketMaximum(ev: CloseEvent) {
+    console.log('WebSocket maximum reconnects reached: ', ev);
+    this.context.dispatch('User/logout', null, { root: true });
   }
 
   @Action
@@ -60,13 +65,14 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
       const onmessage = this.handleSocketMessage;
       const onclose = this.handleSocketClose;
       const context = this.context;
+      const onmaximum = this.handleSocketMaximum;
 
       new Promise(function (resolve, reject) {
         const socket = new Sockette(wsUrl, {
           protocols: token,
           onmessage,
           // onreconnect?: (this: Sockette, ev: Event | CloseEvent) => any;
-          // onmaximum?: (this: Sockette, ev: CloseEvent) => any;
+          onmaximum,
           onclose,
           onerror: function (this: Sockette, ev: Event) {
             reject(ev);
