@@ -1,7 +1,9 @@
 <template>
-  <div v-if="events.length > 0">
-    <div v-for="(event, index) in events" :key="index">
-      <event-card :track="event.track" :event="event" />
+  <div class="row">
+    <div v-if="hasEvents">
+      <div v-for="(event, index) in events" :key="index">
+        <event-card :track="event.track" :event="event" />
+      </div>
     </div>
   </div>
 </template>
@@ -19,5 +21,9 @@ import EventCard from "./event-card.vue";
 export default class EventList extends Vue {
   @Prop()
   events: Array<Event>;
+
+  get hasEvents() {
+    return this.events.length > 0;
+  }
 }
 </script>
