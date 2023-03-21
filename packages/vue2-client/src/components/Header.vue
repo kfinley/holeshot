@@ -6,10 +6,12 @@
       <router-link to="/" class="logo d-flex align-items-center">
         <h1>{{ site }}</h1>
       </router-link>
-
       <burger-nav>
         <burger-nav-item :route="routes.Home">Home</burger-nav-item>
         <burger-nav-item :route="routes.Articles">Articles</burger-nav-item>
+        <burger-nav-item v-if="loggedIn" :route="routes.Dashboard"
+          >Dashboard</burger-nav-item
+        >
         <burger-nav-item><user-menu></user-menu></burger-nav-item>
       </burger-nav>
     </div>
@@ -18,10 +20,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { State } from 'vuex-class';
 import BurgerNav from './BurgerNav.vue';
 import BurgerNavItem from './BurgerNavItem.vue';
 import { RouteNames } from '../router/RouteNames';
 import UserMenu from '@holeshot/vue2-user/src/components/UserMenu.vue';
+import { AuthStatus, UserState } from '@holeshot/vue2-user/src/store';
 
 @Component({
   components: {
@@ -36,6 +40,11 @@ export default class Header extends Vue {
   routes = RouteNames;
   site = 'Holeshot-BMX';
 
+  @State('User') state!: UserState;
+
+  get loggedIn() {
+    return this.state.authStatus == AuthStatus.LoggedIn;
+  }
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
 

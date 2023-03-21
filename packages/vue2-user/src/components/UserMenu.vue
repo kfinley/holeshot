@@ -1,25 +1,31 @@
 <template>
-  <a href="#" v-if="display" @click.prevent="showUserMenuClick">
-    <i
-      v-if="connecting"
-      class="bi bi-person-fill"
-      style="color: yellow"
-      title="Connecting to WebSocket Server..."
-    ></i>
-    <i v-else class="bi bi-person-fill"></i>
-  </a>
+  <div>
+    <a href="#" v-if="loggedIn" @click.prevent="showUserMenuClick">
+      <i
+        v-if="connecting"
+        class="bi bi-person-fill"
+        style="color: yellow"
+        title="Connecting to WebSocket Server..."
+      ></i>
+      <i v-else class="bi bi-person-fill"></i>
+    </a>
+    <router-link v-else :to="{ name: routes.Login }"> Login </router-link>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { AuthStatus, UserState } from '../store';
 import { State } from 'vuex-class';
+import { RouteNames } from '../router';
 
 @Component
 export default class UserMenu extends Vue {
+  routes = RouteNames;
+
   @State('User') state!: UserState;
   @State('WebSockets') ws_state!: any;
 
-  get display() {
+  get loggedIn() {
     return this.state.authStatus == AuthStatus.LoggedIn;
   }
 
