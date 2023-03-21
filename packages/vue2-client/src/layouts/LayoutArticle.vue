@@ -6,9 +6,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { metaFiles } from '../articles'
+// import { metaFiles } from '../articles'
 
-@Component()
+@Component({})
 export default class ArticleLayout extends Vue {}
 </script>
 

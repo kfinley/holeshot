@@ -18,7 +18,7 @@ import Notification from '@finley/vue2-components/src/components/notification.vu
   components: {
     Header,
     Footer,
-    Notification
+    Notification,
   },
 })
 export default class LayoutDefault extends Vue {}
