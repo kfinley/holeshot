@@ -58,4 +58,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
+
+  get upcomingEvents() {
+    return this.schedule?.filter(
+      (e) => e.date >= new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
+    );
+  }
 }

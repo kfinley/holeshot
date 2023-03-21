@@ -21,6 +21,7 @@ import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
 
 import '../styles/styles.scss';
+import { SchedulerState } from '@holeshot/plugin/src/store';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
@@ -114,12 +115,15 @@ const plugin: ClientPlugin = {
           Notification: NotificationState;
           Registration: RegistrationState;
           User: UserState;
+          Scheduler: SchedulerState;
         }) => ({
           User: {
             authTokens: state.User.authTokens,
-            // currentUser: state.User.currentUser,
             authStatus: state.User.authStatus,
           },
+          Scheduler: {
+            schedule: state.Scheduler.schedule,
+          }
         }),
         // Function that passes a mutation and lets you decide if it should update the state in localStorage.
         // filter: (mutation) => true

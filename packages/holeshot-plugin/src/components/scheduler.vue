@@ -1,6 +1,6 @@
 <template>
   <div class="events">
-    <event-list :events="state.schedule" />
+    <event-list :events="upcomingEvents" />
     <event-search />
   </div>
 </template>
@@ -8,10 +8,9 @@
 <script lang="ts">
 import { Component } from "vue-property-decorator";
 import BaseControl from "./base-control";
-import { State } from "vuex-class";
-import { SchedulerState } from "../store/state";
 import EventSearch from "./event-search.vue";
 import EventList from "./event-list.vue";
+import { schedulerModule } from "../store";
 
 @Component({
   components: {
@@ -20,7 +19,9 @@ import EventList from "./event-list.vue";
   },
 })
 export default class Schedule extends BaseControl {
-  @State("Scheduler") state!: SchedulerState;
+  get upcomingEvents() {
+    return schedulerModule.upcomingEvents;
+  }
 
   // created() {
   //   // Example of lazy local testing... yes it's lame but quick and easy. :)
