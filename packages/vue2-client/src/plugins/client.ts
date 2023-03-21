@@ -19,7 +19,7 @@ import { getModule } from 'vuex-module-decorators';
 import UserModule from '@holeshot/vue2-user/src/store/user-module';
 import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
-
+import { initializeModules } from '../store';
 import '../styles/styles.scss';
 import { SchedulerState } from '@holeshot/plugin/src/store';
 
@@ -38,7 +38,7 @@ export const setupModules = (store: Store<any>): void => {
   getArticlesModule(store);
   getModule(UserModule, store);
   getModule(SearchModule, store);
-
+  // initializeModules(store);
 };
 
 const plugin: ClientPlugin = {
@@ -72,6 +72,7 @@ const plugin: ClientPlugin = {
       });
 
       setupModules(options.store);
+      const webSocketsModule = getModule(WebSocketsModule, options.store);
 
       // router provided to add any plugin routes.
       // i.e. options.router.addRoutes(routes);
@@ -85,7 +86,9 @@ const plugin: ClientPlugin = {
           userState.authStatus == AuthStatus.LoggedIn &&
           userState.authTokens?.accessToken
         ) {
-          getWSModule(options.store).connect(userState.authTokens?.accessToken);
+          if (webSocketsModule.status !== "Connected") {
+            webSocketsModule.connect(userState.authTokens?.accessToken);
+          }
         }
         next();
       });

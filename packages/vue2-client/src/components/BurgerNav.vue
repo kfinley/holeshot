@@ -11,55 +11,55 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator'
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component()
 export default class BurgerNav extends Vue {
-  mobileNavShow: element
-  mobileNavHide: element
+  mobileNavShow: element;
+  mobileNavHide: element;
 
   mobileNavToggle() {
-    document.querySelector('body').classList.toggle('mobile-nav-active')
-    this.mobileNavShow.classList.toggle('d-none')
-    this.mobileNavHide.classList.toggle('d-none')
+    document.querySelector('body').classList.toggle('mobile-nav-active');
+    this.mobileNavShow.classList.toggle('d-none');
+    this.mobileNavHide.classList.toggle('d-none');
   }
 
   mounted() {
     this.$on('nav-item-clicked', (d) => {
-      this.mobileNavToggle()
-    })
+      this.mobileNavToggle();
+    });
 
-    const mobileNavToggle = this.mobileNavToggle
+    const mobileNavToggle = this.mobileNavToggle;
 
-    this.mobileNavShow = document.querySelector('.mobile-nav-show')
-    this.mobileNavHide = document.querySelector('.mobile-nav-hide')
+    this.mobileNavShow = document.querySelector('.mobile-nav-show');
+    this.mobileNavHide = document.querySelector('.mobile-nav-hide');
 
     document.querySelectorAll('.mobile-nav-toggle').forEach((el) => {
       el.addEventListener('click', (e) => {
-        e.preventDefault()
-        mobileNavToggle()
-      })
-    })
+        e.preventDefault();
+        mobileNavToggle();
+      });
+    });
 
     /**
      * Hide mobile nav on same-page/hash links
      */
     document.querySelectorAll('#navbar a').forEach((link) => {
       if (!link.hash) {
-        return
+        return;
       }
 
-      let section = document.querySelector(link.hash)
+      let section = document.querySelector(link.hash);
       if (!section) {
-        return
+        return;
       }
 
       link.addEventListener('click', () => {
         if (document.querySelector('.mobile-nav-active')) {
-          mobileNavToggle()
+          mobileNavToggle();
         }
-      })
-    })
+      });
+    });
   }
 }
 </script>
@@ -116,7 +116,6 @@ export default class BurgerNav extends Vue {
     color: #fff;
   }
 }
-
 
 @media (min-width: 768px) {
   .mobile-nav-show,

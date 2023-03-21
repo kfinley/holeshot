@@ -8,4 +8,6 @@ const store = new Vuex.Store<any>({});
 
 export default store;
 export * from './state';
+export * from "./initialize-modules";
+
 export { getArticlesModule } from './articles-module';
