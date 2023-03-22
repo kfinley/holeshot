@@ -6,5 +6,6 @@ export * from './put-point';
 export * from './query-radius';
 export * from './get-entities';
 export * from './add-entity';
+export * from './update-entity';
 
 export { default as bootstrapper } from "./bootstrapper";

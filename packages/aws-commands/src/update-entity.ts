@@ -1,54 +1,49 @@
 //TODO: move this to Core service and deploy an IaC Core Construct for resources
-import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { injectable, Container } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
-import { marshall } from '@aws-sdk/util-dynamodb';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
-export type AddEntityRequest = {
+export type UpdateEntityRequest = {
   pk: string;
   sk: string;
-  type: string;
-  entity: any;
+  updateExpression: string;
+  returnValues: string | undefined;  
   container: Container
 }
 
-export type AddEntityResponse = {
-  entity: any
+export type UpdateEntityResponse = {
   success: boolean;
 }
 
 @injectable()
-export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResponse> {
+export class UpdateEntityCommand implements Command<UpdateEntityRequest, UpdateEntityResponse> {
 
   // @Inject("DynamoDBClient")DynamoDBClient
   private ddbClient!: DynamoDBClient;
 
-  async runAsync(params: AddEntityRequest): Promise<AddEntityResponse> {
+  async runAsync(params: UpdateEntityRequest): Promise<UpdateEntityResponse> {
     console.log(JSON.stringify(params));
 
     this.ddbClient = params.container.get<DynamoDBClient>("DynamoDBClient");
-    
-    var response = await this.ddbClient.send(new PutItemCommand({
+
+    var response = await this.ddbClient.send(new UpdateItemCommand({
       TableName,
-      Item: {
+      Key: {
         PK: {
           S: params.pk
         },
         SK: {
           S: params.sk
         },
-        type: {
-          S: params.type
-        },
-        ...marshall(params.entity)
-      }
+      },
+      UpdateExpression: params.updateExpression,
+      ReturnValues: params.returnValues
     }));
 
     return {
-      success: response.$metadata.httpStatusCode == 200,
-      entity: params.entity,
+      success: response.$metadata.httpStatusCode == 200
     }
   }
 

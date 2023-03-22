@@ -29,6 +29,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
       ":PK": `USER#${userId}#EVENT`,
       ":today": today,
     },
+    filterExpression: ":isActive = 1",
     container
   });
 
@@ -41,7 +42,8 @@ export const handler = async (event: SNSEvent, context: Context) => {
     delete event["PK"];
     delete event["SK"];
     delete event["type"];
-
+    delete event["isActive"]
+    
     console.log('event', event);
     
     schedule.push(event);

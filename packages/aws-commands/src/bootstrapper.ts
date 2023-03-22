@@ -8,7 +8,8 @@ import {
   GetStoredObjectCommand,
   AuthorizeCommand,
   PutPointCommand,
-  QueryRadiusCommand
+  QueryRadiusCommand,
+  UpdateEntityCommand
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
@@ -146,6 +147,7 @@ export default function bootstrapper(container: Container) {
   container.bind<QueryRadiusCommand>("QueryRadiusCommand").to(QueryRadiusCommand);
   container.bind<AddEntityCommand>("AddEntityCommand").to(AddEntityCommand);
   container.bind<GetEntitiesCommand>("GetEntitiesCommand").to(GetEntitiesCommand);
+  container.bind<UpdateEntityCommand>("UpdateEntityCommand").to(UpdateEntityCommand);
 
   // console.log('aws-commands bootstrapper done');
 

@@ -54,6 +54,9 @@ export default class EventCard extends BaseControl {
   @Prop({ required: false, default: false })
   showAddToSchedule!: boolean;
 
+  mounted() {
+    this.$el.addEventListener("click", this.click, false);
+  }
   printIfIncludes(key: string, includes: Array<string>, detail: string) {
     let val = "";
 
@@ -75,6 +78,11 @@ export default class EventCard extends BaseControl {
       track: this.track,
       event: this.event,
     });
+  }
+
+  click() {
+    console.log("click");
+    this.$emit("click");
   }
 }
 </script>

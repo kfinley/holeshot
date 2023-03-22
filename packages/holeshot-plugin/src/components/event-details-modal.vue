@@ -7,29 +7,42 @@
       <div class="body">
         <div>
           <span class="label">Date: </span
-          >{{ event.date.toLocaleDateString("en-US") }}
+          >{{ new Date(event.date).toLocaleDateString("en-US") }}
         </div>
-        <div v-for="(detail, index) in event.details" :key="index">
-          <span class="label">{{ detail[0] }}:</span>
-          <span v-html="detail[1]" />
+        <div v-for="(detail, key, index) in event.details" :key="index">
+          <span class="label">{{ toSentence(key) }}: </span>
+          <span v-html="detail" />
         </div>
       </div>
+    </div>
+    <div slot="footer">
+      <Button @click="removeFromSchedule"> Remove </Button>
+      <Button @click="$emit('close')"> Close </Button>
     </div>
   </modal>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import BaseControl from "./base-control";
+import { Component, Prop } from "vue-property-decorator";
 import { Event } from "@holeshot/types/src";
 import Modal from "@finley/vue2-components/src/components/modal.vue";
+import { schedulerModule } from "../store";
+
 @Component({
   components: {
     Modal,
   },
 })
-export default class EventDetailsModal extends Vue {
+export default class EventDetailsModal extends BaseControl {
   @Prop()
   event!: Event;
+
+  removeFromSchedule() {
+    schedulerModule.removeFromSchedule({ event: this.event });
+    this.$emit("close");
+  }
+
 }
 </script>
 

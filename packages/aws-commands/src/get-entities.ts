@@ -34,6 +34,11 @@ export class GetEntitiesCommand implements Command<GetEntitiesRequest, GetEntiti
       ExpressionAttributeValues: marshall(params.expressionAttributeValues),
       KeyConditionExpression: params.keyConditionExpression // "PK = :PK AND SK BETWEEN :startDate AND :endDate"
     };
+
+    if (params.filterExpression) {
+      query['FilterExpression'] = params.filterExpression;
+    }
+
     const queryOutput = await this.ddbClient.send(new QueryCommand(query));
 
     return {

@@ -38,6 +38,26 @@ export class HoleshotModule extends BaseModule {
     );
   }
 
+  updateEntity(
+    pk: string,
+    sk: string,
+    updateExpression: string,
+    responseCommand: string
+  ) {
+    this.context.dispatch("WebSockets/sendCommand", {
+      command: "RunLambda",
+      data: {
+        name: `${functionNamePrefix}-UpdateEntity`,
+        payload: JSON.stringify({
+          pk,
+          sk,
+          updateExpression,
+          responseCommand,
+        }),
+      },
+    });
+  }
+
   sendCommand(params: { name: string; payload: any }) {
     this.context.dispatch(
       "WebSockets/sendCommand",

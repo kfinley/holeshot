@@ -87,7 +87,7 @@ const plugin: ClientPlugin = {
           userState.authStatus == AuthStatus.LoggedIn &&
           userState.authTokens?.accessToken
         ) {
-          if (webSocketsModule.status !== WebSocketsStatus.Connected) {
+          if (webSocketsModule.status !== 'Connected') {
             webSocketsModule.connect(userState.authTokens?.accessToken);
           }
         }

@@ -50,6 +50,27 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
     }
   }
 
+  removeFromSchedule(params: { event: Event }) {
+    try {
+      const username = super.getUsername;
+      super.updateEntity(
+        `USER#${username}#EVENT`,
+        params.event.date as string,
+        "SET isActive = 0",
+        "Scheduler/removedFromSchedule"
+      );
+
+      super.mutate((s: SchedulerState) => {
+        s.schedule =
+          s.schedule?.filter(
+            (e) => e.name !== params.event.name && e.date !== params.event.date
+          ) ?? null;
+      });
+    } catch (e) {
+      console.log("Error in removeFromSchedule", e);
+    }
+  }
+
   @Action
   addedToSchedule(params: any) {
     console.log(params);

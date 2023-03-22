@@ -1,8 +1,14 @@
 <template>
   <div class="row">
     <div v-if="hasEvents">
+      <h3 align="center">Schedule</h3>
       <div v-for="(event, index) in events" :key="index">
-        <event-card :track="event.track" :event="event" />
+        <event-card
+          :track="event.track"
+          :event="event"
+          @click="click(event)"
+          class="clickable"
+        />
       </div>
     </div>
   </div>
@@ -24,6 +30,10 @@ export default class EventList extends Vue {
 
   get hasEvents() {
     return this.events.length > 0;
+  }
+
+  click(event: Event) {
+    this.$emit("event-click", event);
   }
 }
 </script>
