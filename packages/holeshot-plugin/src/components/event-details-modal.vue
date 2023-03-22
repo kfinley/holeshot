@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div slot="footer">
+    <div slot="footer" v-if="!disabled">
       <Button @click="removeFromSchedule"> Remove </Button>
       <Button @click="$emit('close')"> Close </Button>
     </div>
@@ -41,6 +41,10 @@ export default class EventDetailsModal extends BaseControl {
   async removeFromSchedule() {
     await schedulerModule.removeFromSchedule({ event: this.event });
     this.$emit("close");
+  }
+
+  get disabled() {
+    return super.disconnected;
   }
 
 }

@@ -19,7 +19,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
 
   @Action
   search() {
-    console.log("search", this.searchInput);
+    // console.log("search", this.searchInput);
 
     super.mutate((state: SearchState) => {
       state.showCriteriaPanel = false;

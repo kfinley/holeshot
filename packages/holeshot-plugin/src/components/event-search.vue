@@ -60,7 +60,8 @@
       </div>
     </div>
     <div v-else class="event text-center" @click.prevent="openCriteriaPanel">
-      Type: {{ state.searchInput.type }} {{ state.searchInput.name }} (click to change search)
+      Type: {{ state.searchInput.type }} {{ state.searchInput.name }} (click to
+      change search)
     </div>
     <div class="align-self-center action-controls" align="center">
       <div v-if="state.status == 'Loaded'">
@@ -88,12 +89,12 @@
         aria-hidden="true"
       ></span>
     </div>
-    <div class="search-results" v-if="state.searchResults !== null">
+    <div class="search-results text-center" v-if="state.searchResults !== null">
       <div>
-        Searched {{ state.searchResults.searched }} track{{
+        Found {{ state.searchResults.events.length }} at
+        {{ state.searchResults.searched }} track{{
           state.searchResults.searched > 1 ? "s" : ""
-        }}
-        and found {{ state.searchResults.events.length }} results.
+        }}.
       </div>
       <div v-for="(event, index) in state.searchResults.events" :key="index">
         <event-card
@@ -150,43 +151,45 @@ export default class EventSearch extends BaseControl {
     this.state.searchResults = null;
 
     // Example of lazy local testing... yes it's lame but quick and easy. :)
-    // this.state.searchResults = {
-    //   searched: 1,
-    //   tracks: [
-    //     {
-    //       id: "4680c24d-14e3-4440-83e0-662d07b5c4f9",
-    //       name: "Rock Hill BMX Supercross Track",
-    //       district: "SC01",
-    //       location: {
-    //         address: {
-    //           line1: "1307 Riverwalk Parkway",
-    //           line2: "",
-    //           city: "Rock Hill",
-    //           state: "SC",
-    //           postalCode: "29730",
-    //         },
-    //       },
-    //     },
-    //   ],
-    //   events: [
-    //     {
-    //       id: "e3e291cc-76ef-4b77-9238-7797936468af",
-    //       name: "Practice",
-    //       trackName: "Rock Hill BMX Supercross Track",
-    //       date: "2023-03-02T00:00:00",
-    //       url: "www.usabmx.com/tracks/1971/events/493331",
-    //       eventType: "Practice",
-    //       details: {
-    //         registrationStart: "4:00 PM",
-    //         registrationEnd: "8:00 PM",
-    //         raceTime: "4:00 PM",
-    //         type: "Practice",
-    //         description: "$5 USA BMX Practice 4-8PM",
-    //         fee: "$5.00 USD",
-    //       },
-    //     },
-    //   ],
-    // };
+    if (process.env.NODE_ENV !== "production") {
+      this.state.searchResults = {
+        searched: 1,
+        tracks: [
+          {
+            id: "4680c24d-14e3-4440-83e0-662d07b5c4f9",
+            name: "Rock Hill BMX Supercross Track",
+            district: "SC01",
+            location: {
+              address: {
+                line1: "1307 Riverwalk Parkway",
+                line2: "",
+                city: "Rock Hill",
+                state: "SC",
+                postalCode: "29730",
+              },
+            },
+          },
+        ],
+        events: [
+          {
+            id: "e3e291cc-76ef-4b77-9238-7797936468af",
+            name: "Practice",
+            trackName: "Rock Hill BMX Supercross Track",
+            date: "2023-03-02T00:00:00",
+            url: "www.usabmx.com/tracks/1971/events/493331",
+            eventType: "Practice",
+            details: {
+              registrationStart: "4:00 PM",
+              registrationEnd: "8:00 PM",
+              raceTime: "4:00 PM",
+              type: "Practice",
+              description: "$5 USA BMX Practice 4-8PM",
+              fee: "$5.00 USD",
+            },
+          },
+        ],
+      };
+    }
   }
 
   get searching() {

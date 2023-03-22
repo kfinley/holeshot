@@ -26,13 +26,23 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         state.status = Status.Saving;
       });
 
-      super.addEntity(
-        "Event",
-        `USER#${username}#EVENT`,
-        params.event.date,
-        params.event,
-        "Scheduler/addedToSchedule"
-      );
+      super.sendCommand({
+        name: "AddEntity",
+        payload: {
+          pk: `USER#${username}#EVENT`,
+          sk: params.event.date,
+          type: "Event",
+          entity: params.event,
+          responseCommand: "Scheduler/addedToSchedule",        },
+      });
+
+      // super.addEntity(
+      //   "Event",
+      //   `USER#${username}#EVENT`,
+      //   params.event.date,
+      //   params.event,
+      //   "Scheduler/addedToSchedule"
+      // );
 
       super.mutate((state: SchedulerState) => {
         state.schedule = super.addOrUpdate(
@@ -51,15 +61,19 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
     // console.log(params.event);
     try {
       const username = super.getUsername;
-      await super.updateEntity(
-        `USER#${username}#EVENT`,
-        params.event.date as string,
-        "set PK = :PK",
-        {
-          ":PK": `USER#${username}#EVENT#DELETED`, //update the primary key with DELETED to mark it as deleted.
+
+      super.sendCommand({
+        name: "UpdateEntity",
+        payload: {
+          pk: `USER#${username}#EVENT`,
+          sk: params.event.date,
+          updateExpression: "set PK = :PK",
+          expressionAttributeValues: {
+            ":PK": `USER#${username}#EVENT#DELETED`, //update the primary key with DELETED to mark it as deleted.
+          },
+          responseCommand: "Scheduler/addedToSchedule",
         },
-        "Scheduler/removedFromSchedule"
-      );
+      });
 
       super.mutate((s: SchedulerState) => {
         s.schedule =
