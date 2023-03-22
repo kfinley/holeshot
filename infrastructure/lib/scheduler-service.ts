@@ -18,6 +18,7 @@ export class SchedulerService extends BaseServiceConstruct {
   readonly getNearbyEvents: Function;
   readonly addEntity: Function;
   readonly sendSchedule: Function;
+  readonly updateEntity: Function;
 
   constructor(scope: Construct, id: string, props?: SchedulerServiceProps) {
     super(scope, id, '../../services/Scheduler/dist', props!.node_env);
@@ -40,6 +41,11 @@ export class SchedulerService extends BaseServiceConstruct {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
     props?.coreTable.grantWriteData(this.addEntity);
+
+    this.updateEntity = super.newLambda('UpdateEntity', 'functions/update-entity.handler', {
+      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
+    }, 120);
+    props?.coreTable.grantReadData(this.updateEntity);
 
     this.sendSchedule = super.newLambda('SendSchedule', 'functions/send-schedule.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
@@ -80,7 +86,7 @@ export class SchedulerService extends BaseServiceConstruct {
 
     this.getNearbyEvents.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.addEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
+    this.updateEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.sendSchedule.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
-
   }
 }

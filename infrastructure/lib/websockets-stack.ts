@@ -123,15 +123,19 @@ export class WebSocketsStack extends BaseServiceConstruct {
 
     const hasConnectionId = new Choice(this, 'HasConnectionId?');
 
-    // const c = Chain
-    //   .start(hasConnectionId
-    //     .when(Condition.stringEquals('$.connectionId', '')
     const chain = Chain
-      .start(getConnectionInvocation)
-      .next(
+      .start(
         hasConnectionId
-          .when(Condition.stringEquals('$.connectionId', ''), new Fail(this, "Fail", { error: "No ConnectionId Found" }))
-          .otherwise(sendMessageInvocation));
+          .when(Condition.isNotNull('$.connectionId'),
+            sendMessageInvocation)
+          .otherwise(
+            getConnectionInvocation
+              .next(
+                hasConnectionId
+                  .when(Condition.stringEquals('$.connectionId', ''),
+                    new Fail(this, "Fail", { error: "No ConnectionId Found" }))
+                  .otherwise(sendMessageInvocation)))
+      );
 
     const sfnLog = new LogGroup(this, "sfnLog", {
       logGroupName: "Holeshot-WebSockets-SendMessage-LogGroup",
