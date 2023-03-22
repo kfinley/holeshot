@@ -9,7 +9,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
   try {
 
     console.log(`Send client message via SNS Event. Count: ${event.Records.length}`);
-    const { userId } = JSON.parse(event.Records[0].Sns.Message);
+    const { userId, connectionId } = JSON.parse(event.Records[0].Sns.Message);
 
     if (!userId) {
       throw new Error('userId must be provided in Message in order to send to client.');
@@ -19,7 +19,9 @@ export const handler = async (event: SNSEvent, context: Context) => {
     const response = await cmd.runAsync({
       input: JSON.stringify({
         subject: event.Records[0].Sns.Subject,
-        message: event.Records[0].Sns.Message
+        message: event.Records[0].Sns.Message,
+        connectionId,
+        userId,
       }),
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
       container
