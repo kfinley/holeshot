@@ -42,9 +42,6 @@ export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResp
         type: {
           S: params.type
         },
-        isActive: {     // Soft delete field
-          BOOL: true    // all items default to active
-        },
         ...marshall(params.entity)
       }
     }));

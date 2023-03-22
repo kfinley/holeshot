@@ -1,5 +1,5 @@
 //TODO: move this to Core service and deploy an IaC Core Construct for resources
-import { DynamoDBClient, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
+import { AttributeValue, DynamoDBClient, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { injectable, Container } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
 
@@ -9,6 +9,7 @@ export type UpdateEntityRequest = {
   pk: string;
   sk: string;
   updateExpression: string;
+  expressionAttributeValues: Record<string, AttributeValue>;
   returnValues: string | undefined;  
   container: Container
 }
@@ -28,17 +29,20 @@ export class UpdateEntityCommand implements Command<UpdateEntityRequest, UpdateE
 
     this.ddbClient = params.container.get<DynamoDBClient>("DynamoDBClient");
 
+    const key = {
+      PK: {
+        S: params.pk
+      },
+      SK: {
+        S: params.sk
+      }
+    };
+
     var response = await this.ddbClient.send(new UpdateItemCommand({
       TableName,
-      Key: {
-        PK: {
-          S: params.pk
-        },
-        SK: {
-          S: params.sk
-        },
-      },
+      Key: key,
       UpdateExpression: params.updateExpression,
+      ExpressionAttributeValues: params.expressionAttributeValues,
       ReturnValues: params.returnValues
     }));
 

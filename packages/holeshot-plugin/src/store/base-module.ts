@@ -42,6 +42,7 @@ export class HoleshotModule extends BaseModule {
     pk: string,
     sk: string,
     updateExpression: string,
+    expressionAttributeValues: any,
     responseCommand: string
   ) {
     this.context.dispatch("WebSockets/sendCommand", {
@@ -52,7 +53,9 @@ export class HoleshotModule extends BaseModule {
           pk,
           sk,
           updateExpression,
+          expressionAttributeValues,
           responseCommand,
+
         }),
       },
     });

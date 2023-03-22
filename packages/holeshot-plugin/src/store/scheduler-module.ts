@@ -53,7 +53,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       super.updateEntity(
         `USER#${username}#EVENT`,
         params.event.date as string,
-        "isActive = { BOOL: false }",
+        "set PK = :PK",
+        {
+          ":PK": `USER#${username}#EVENT#DELETED`, //update the primary key with DELETED to mark it as deleted.
+        },
         "Scheduler/removedFromSchedule"
       );
 
@@ -74,6 +77,12 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
     //TODO: notify
 
+    super.mutate((s: SchedulerState) => s.status == Status.None);
+  }
+
+  @Action
+  removedFromSchedule(params: any) {
+    console.log(params);
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
 
