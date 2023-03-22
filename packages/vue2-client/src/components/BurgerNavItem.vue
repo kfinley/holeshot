@@ -22,12 +22,7 @@ export default class BurgerNavItem extends Vue {
   @Prop()
   route!: string;
 
-  doThis() {
-    console.log('doThis');
-  }
-
   emitClick() {
-    console.log('emitClick');
     this.$parent.$emit('nav-item-clicked', { route: this.route });
   }
 

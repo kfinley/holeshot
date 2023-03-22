@@ -49,7 +49,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
       distance: params.distance
     });
 
-    console.log('tracks', tracksInRange.items.length);
+    // console.log('tracks', tracksInRange.items.length);
 
     const events: Record<string, any>[] = [];
     const tracks: Record<string, any>[] = [];
@@ -121,7 +121,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     }));
 
     return {
-      searched: tracks.length,
+      searched: tracksInRange.items.length,
       tracks,
       events
     }

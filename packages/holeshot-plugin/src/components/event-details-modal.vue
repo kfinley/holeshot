@@ -38,8 +38,8 @@ export default class EventDetailsModal extends BaseControl {
   @Prop()
   event!: Event;
 
-  removeFromSchedule() {
-    schedulerModule.removeFromSchedule({ event: this.event });
+  async removeFromSchedule() {
+    await schedulerModule.removeFromSchedule({ event: this.event });
     this.$emit("close");
   }
 

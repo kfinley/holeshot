@@ -36,14 +36,16 @@ export class HoleshotModule extends BaseModule {
     );
   }
 
-  updateEntity(
+  async updateEntity(
     pk: string,
     sk: string,
     updateExpression: string,
     expressionAttributeValues: any,
     responseCommand: string
   ) {
-    this.context.dispatch("WebSockets/sendCommand", {
+    console.log("updateEntity");
+
+    await this.context.dispatch("WebSockets/sendCommand", {
       command: "RunLambda",
       data: {
         name: `${functionNamePrefix}-UpdateEntity`,
