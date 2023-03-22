@@ -52,7 +52,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       super.updateEntity(
         `USER#${username}#EVENT`,
         params.event.date as string,
-        "SET isActive = 0",
+        "REMOVE isActive",
         "Scheduler/removedFromSchedule"
       );
 
