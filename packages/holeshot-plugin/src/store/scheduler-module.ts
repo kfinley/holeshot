@@ -48,7 +48,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
 
   @Action
   removeFromSchedule(params: { event: Event }) {
-    console.log(event);
+    console.log(params.event);
     try {
       const username = super.getUsername;
       super.updateEntity(

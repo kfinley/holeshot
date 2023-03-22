@@ -81,7 +81,6 @@ export default class EventCard extends BaseControl {
   }
 
   click() {
-    console.log("click");
     this.$emit("click");
   }
 }
