@@ -10,56 +10,6 @@ export class HoleshotModule extends BaseModule {
     return this.context.rootState.User.username;
   }
 
-  addEntity(
-    type: string,
-    pk: string,
-    sk: string | Date | null,
-    entity: any,
-    responseCommand: string
-  ) {
-    this.context.dispatch(
-      "WebSockets/sendCommand",
-      {
-        command: "RunLambda",
-        data: {
-          name: `${functionNamePrefix}-AddEntity`,
-          payload: JSON.stringify({
-            pk,
-            sk,
-            type,
-            entity,
-            responseCommand,
-          }),
-        },
-      },
-      { root: true }
-    );
-  }
-
-  async updateEntity(
-    pk: string,
-    sk: string,
-    updateExpression: string,
-    expressionAttributeValues: any,
-    responseCommand: string
-  ) {
-    console.log("updateEntity");
-
-    await this.context.dispatch("WebSockets/sendCommand", {
-      command: "RunLambda",
-      data: {
-        name: `${functionNamePrefix}-UpdateEntity`,
-        payload: JSON.stringify({
-          pk,
-          sk,
-          updateExpression,
-          expressionAttributeValues,
-          responseCommand,
-        }),
-      },
-    });
-  }
-
   sendCommand(params: { name: string; payload: any }) {
     this.context.dispatch(
       "WebSockets/sendCommand",
