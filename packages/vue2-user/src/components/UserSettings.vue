@@ -1,16 +1,10 @@
 <template>
-  
+  <div>User Settings</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { Component, Vue } from 'vue-property-decorator';
 
-export default defineComponent({
-  setup() {
-    
-  },
-})
+@Component
+export default class UserMenu extends Vue {}
 </script>
-
-<style lang="scss" scoped>
-</style>

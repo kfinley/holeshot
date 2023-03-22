@@ -4,6 +4,7 @@ export enum RouteNames {
   Register = 'Register',
   Login = 'Login',
   SetPassword = 'SetPassword',
+  UserSettings = 'UserSettings',
 }
 
 export const routes: Array<RouteConfig> = [

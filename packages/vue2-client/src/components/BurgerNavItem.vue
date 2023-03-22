@@ -5,10 +5,12 @@
       :to="{ name: route }"
       :class="activeClass"
       exact
-      v-on:click.native="emitClick"
+      @click.native="emitClick"
       ><slot></slot
     ></router-link>
-    <slot v-else></slot>
+    <div v-else @click="emitClick">
+      <slot></slot>
+    </div>
   </li>
 </template>
 
@@ -20,7 +22,12 @@ export default class BurgerNavItem extends Vue {
   @Prop()
   route!: string;
 
+  doThis() {
+    console.log('doThis');
+  }
+
   emitClick() {
+    console.log('emitClick');
     this.$parent.$emit('nav-item-clicked', { route: this.route });
   }
 

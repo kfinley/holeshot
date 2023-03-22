@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a href="#" v-if="loggedIn" @click.prevent="showUserMenuClick">
+    <a href="#" v-if="loggedIn" @click="showUserMenuClick">
       <i
         v-if="connecting"
         class="bi bi-person-fill"
@@ -34,9 +34,9 @@ export default class UserMenu extends Vue {
   }
 
   showUserMenuClick() {
-    if (!this.connecting) {
-      console.log('showUserMenuClick');
-    }
+    // console.log('showUserMenuClick');
+    // this.$emit('click');
+    this.$router.push({ name: this.routes.UserSettings });
   }
 }
 </script>

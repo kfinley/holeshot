@@ -4,4 +4,6 @@ export enum RouteNames {
   Dashboard = 'Dashboard',
   Home = 'Home',
   Login = 'Login',
+  UserSettings = 'UserSettings',
+  Register = 'Register',
 }

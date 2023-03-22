@@ -42,6 +42,9 @@ export default class Header extends Vue {
 
   @State('User') state!: UserState;
 
+  click() {
+    console.log('click');
+  }
   get loggedIn() {
     return this.state.authStatus == AuthStatus.LoggedIn;
   }

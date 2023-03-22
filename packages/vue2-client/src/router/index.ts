@@ -53,7 +53,7 @@ export const createRouter = async () => {
       ],
     },
     {
-      path: '/dashboard',
+      path: '/dashboard',         //TODO: rename to Scheduler
       component: RouterLayout,
       children: [
         {
@@ -66,6 +66,21 @@ export const createRouter = async () => {
           },
         },
       ],
+    },
+    {
+      path: '',
+      component: RouterLayout,
+      children: [
+        {
+          path: '/settings/user',
+          name: RouteNames.UserSettings,
+          component: () =>
+            import(/* webpackChunkName: "settings" */ '../views/Settings.vue'),
+          meta: {
+            allowAnonymous: false,
+          },
+        }
+      ]
     },
   ];
 
