@@ -19,7 +19,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   addToSchedule(params: { track: Track; event: Event }) {
     try {
-      const username = super.getUsername;
+      const username = super.getUsername();
       params.event.track = params.event.track ?? params.track;
 
       super.mutate((state: SchedulerState) => {
@@ -35,14 +35,6 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           entity: params.event,
           responseCommand: "Scheduler/addedToSchedule",        },
       });
-
-      // super.addEntity(
-      //   "Event",
-      //   `USER#${username}#EVENT`,
-      //   params.event.date,
-      //   params.event,
-      //   "Scheduler/addedToSchedule"
-      // );
 
       super.mutate((state: SchedulerState) => {
         state.schedule = super.addOrUpdate(
@@ -60,7 +52,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   async removeFromSchedule(params: { event: Event }) {
     // console.log(params.event);
     try {
-      const username = super.getUsername;
+      const username = super.getUsername();
 
       super.sendCommand({
         name: "UpdateEntity",
