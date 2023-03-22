@@ -6,10 +6,6 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
-  getUsername() {
-    return this.context.rootState.User.username;
-  }
-
   sendCommand(params: { name: string; payload: any }) {
     this.context.dispatch(
       "WebSockets/sendCommand",
