@@ -78,9 +78,10 @@ export class HoleshotModule extends BaseModule {
 
   addOrUpdate<T>(
     item: T,
-    items: Array<T>,
+    items: Array<T> | null,
     predicate: (value: T, index: number, obj: T[]) => unknown
   ): Array<T> {
+    if (items == null) items = [];
     const index = items.findIndex(predicate);
     //Not found, add on end.
     if (-1 === index) {

@@ -35,15 +35,11 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       );
 
       super.mutate((state: SchedulerState) => {
-        if (state.schedule == null) {
-          state.schedule = [];
-
-          state.schedule = super.addOrUpdate(
-            params.event,
-            state.schedule,
-            (e) => e.name == params.event.name && e.date == params.event.date
-          );
-        }
+        state.schedule = super.addOrUpdate(
+          params.event,
+          state.schedule,
+          (e) => e.name == params.event.name && e.date == params.event.date
+        );
       });
     } catch (e) {
       console.log("Error in addToSchedule: ", e);
