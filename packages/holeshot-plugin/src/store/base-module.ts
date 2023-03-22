@@ -26,9 +26,7 @@ export class HoleshotModule extends BaseModule {
           payload: JSON.stringify({
             pk,
             sk,
-            type: {
-              S: type,
-            },
+            type,
             entity,
             responseCommand,
           }),
@@ -55,7 +53,6 @@ export class HoleshotModule extends BaseModule {
           updateExpression,
           expressionAttributeValues,
           responseCommand,
-
         }),
       },
     });
