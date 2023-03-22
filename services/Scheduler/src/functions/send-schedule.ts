@@ -50,8 +50,8 @@ export const handler = async (event: SNSEvent, context: Context) => {
   const startStepFunctionResponse = await startStepFunction.runAsync({
     input: JSON.stringify({
       subject: "Scheduler/setSchedule", // This will be the store module action run when the client receives the message
+      connectionId,
       message: JSON.stringify({
-        connectionId,
         schedule
       })
     }),

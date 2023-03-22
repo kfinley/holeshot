@@ -25,17 +25,11 @@ export const handler = async (params: AddEntityParams, context: Context) => {
   if (params.responseCommand) {
     const { responseCommand } = params;
 
-    const message = JSON.stringify({
-      connectionId: params.connectionId,
-      ...response
-    });
-    
-    console.log(message);
-
     const startStepFunctionResponse = await startStepFunction.runAsync({
       input: JSON.stringify({
+        connectionId: params.connectionId,
         subject: responseCommand, // This will be the store module action run when the client receives the message
-        message
+        message: JSON.stringify(response)
       }),
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
       container
