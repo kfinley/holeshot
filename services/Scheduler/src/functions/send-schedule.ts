@@ -29,7 +29,7 @@ export const handler = async (event: SNSEvent, context: Context) => {
       ":PK": `USER#${userId}#EVENT`,
       ":today": today,
     },
-    filterExpression: "isActive = 1",
+    filterExpression: "isActive = true",
     container
   });
 

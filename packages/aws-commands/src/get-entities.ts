@@ -32,7 +32,8 @@ export class GetEntitiesCommand implements Command<GetEntitiesRequest, GetEntiti
     const query: QueryCommandInput = {
       TableName,
       ExpressionAttributeValues: marshall(params.expressionAttributeValues),
-      KeyConditionExpression: params.keyConditionExpression // "PK = :PK AND SK BETWEEN :startDate AND :endDate"
+      KeyConditionExpression: params.keyConditionExpression,
+      
     };
 
     if (params.filterExpression) {

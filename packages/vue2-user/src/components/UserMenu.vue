@@ -34,8 +34,6 @@ export default class UserMenu extends Vue {
   }
 
   showUserMenuClick() {
-    // console.log('showUserMenuClick');
-    // this.$emit('click');
     this.$router.push({ name: this.routes.UserSettings });
   }
 }
