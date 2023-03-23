@@ -35,7 +35,7 @@
         id="location"
         name="location"
         v-model="state.searchInput.location"
-        placeholder="(Optional) if left black home track is used"
+        placeholder="(Optional) if left blank home track is used"
         class="form-control"
       />
       <input
