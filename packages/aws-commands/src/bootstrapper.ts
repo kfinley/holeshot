@@ -9,6 +9,10 @@ import {
   AuthorizeCommand,
   PutPointCommand,
   QueryRadiusCommand,
+  AddEntityCommand,
+  DeleteEntityCommand,
+  GetEntityCommand,
+  GetEntitiesCommand,
   UpdateEntityCommand
 } from "./index";
 import { CognitoIdentityClient } from "@aws-sdk/client-cognito-identity";
@@ -16,9 +20,6 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { SES } from '@aws-sdk/client-ses';
 import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Lambda } from "@aws-sdk/client-lambda";
-import { AddEntityCommand } from './add-entity';
-import { GetEntitiesCommand } from './get-entities';
-import { GetEntityCommand } from './get-entity';
 
 export default function bootstrapper(container: Container) {
 

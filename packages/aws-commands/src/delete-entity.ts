@@ -15,7 +15,6 @@ export type DeleteEntityRequest = {
 }
 
 export type DeleteEntityResponse = {
-  entity: any
   success: boolean;
 }
 
@@ -37,31 +36,37 @@ export class DeleteEntityCommand implements Command<DeleteEntityRequest, DeleteE
       container: params.container
     });
 
-    const item = getItem.Item;
+    if (getItem.item) {
+      const item = getItem.item;
 
-    console.log(item);
-    item.PK.S = `${item.PK}#DELETED`;
+      console.log(item);
 
-    const putItem = await this.ddbClient.send(new PutItemCommand({
-      TableName,
-      Item: item
-    }));
+      item.PK.S = `${item.PK.S}#DELETED`;
 
-    const deleteItem = await this.ddbClient.send(new DeleteItemCommand({
-      TableName,
-      Key: {
-        PK: {
-          S: params.pk
-        },
-        SK: {
-          S: params.sk
+      const putItem = await this.ddbClient.send(new PutItemCommand({
+        TableName,
+        Item: item
+      }));
+
+      const deleteItem = await this.ddbClient.send(new DeleteItemCommand({
+        TableName,
+        Key: {
+          PK: {
+            S: params.pk
+          },
+          SK: {
+            S: params.sk
+          }
         }
-      }
-    }));
+      }));
 
-    return {
-      success: deleteItem.$metadata.httpStatusCode == 200 && putItem.$metadata.httpStatusCode == 200
+      return {
+        success: deleteItem.$metadata.httpStatusCode == 200 && putItem.$metadata.httpStatusCode == 200
+      };
+    } else {
+      return {
+        success: false
+      };
     }
   }
-
 }

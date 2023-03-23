@@ -1,5 +1,6 @@
 //TODO: move this to Core service and deploy an IaC Core Construct for resources
 import { AttributeValue, DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { injectable, Container } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
 import { marshall } from '@aws-sdk/util-dynamodb';
@@ -13,7 +14,7 @@ export type GetEntityRequest = {
 }
 
 export type GetEntityResponse = {
-  items?: Record<string, AttributeValue>[]
+  item?: Record<string, AttributeValue>;
   success: boolean;
 }
 
@@ -41,7 +42,7 @@ export class GetEntityCommand implements Command<GetEntityRequest, GetEntityResp
     }));
 
     console.log(getResponse.Item);
-    
+
     return {
       success: getResponse.$metadata.httpStatusCode == 200,
       item: getResponse.Item
