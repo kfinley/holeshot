@@ -15,18 +15,18 @@ export const and = (p1, p2) => {
 
 export const not = (p) => {
   return function (x) {
-    console.log('not', !p(x));
+    // console.log('not', !p(x));
     return !p(x);
   };
 };
 
 export const equals = (prop, value) => {
   return function (x: any) {
-    console.log('equals', x[prop] === value);
+    // console.log('equals', x[prop] === value);
 
-    console.log('prop', prop);
-    console.log(value);
-    console.log(x[prop]);
+    // console.log('prop', prop);
+    // console.log(value);
+    // console.log(x[prop]);
     return x[prop] == value;
   };
 };
@@ -43,7 +43,7 @@ export const greater = (x) => {
   };
 };
 
-export const createEqualsPredicate = function createNotEqualsPredicate<T>(
+export const createEqualsPredicate = function createEqualsPredicate<T>(
   props: Record<string, any>
 ) {
   const equalsConditions: ((value: T, index: number, obj: T[]) => unknown)[] = [];
@@ -123,13 +123,19 @@ export class HoleshotModule extends BaseModule {
   addSorted<T>(
     item: T,
     items: Array<T> | null,
+    props: Record<string, any>,
     predicate: (value: T, index: number, obj: T[]) => unknown
   ): Array<T> {
     if (items == null) items = [];
 
-    // using the predicate sent in in decide where to put it
-    // find the index of the predicate and put the item 1 after it.
-    const index = items.findIndex(predicate);
+    // Check if we already have the item in the array
+    let index = items.findIndex(createEqualsPredicate(props));
+    if (index > -1) {
+      return items;
+    }
+
+    // using the predicate decide where to put the item in the array.
+    index = items.findIndex(predicate);
 
     //Not found, add on end.
     if (-1 === index) {

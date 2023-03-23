@@ -44,6 +44,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         state.schedule = super.addSorted<Event>(
           params.event,
           state.schedule,
+          {
+            name: params.event.name,
+            date:  params.event.date
+            },
           (e) => e.date > params.event.date
         );
       });
