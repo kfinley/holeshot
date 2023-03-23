@@ -19,6 +19,7 @@ export class SchedulerService extends BaseServiceConstruct {
   readonly addEntity: Function;
   readonly sendSchedule: Function;
   readonly updateEntity: Function;
+  readonly deleteEntity: Function;
 
   constructor(scope: Construct, id: string, props?: SchedulerServiceProps) {
     super(scope, id, '../../services/Scheduler/dist', props!.node_env);
@@ -42,11 +43,18 @@ export class SchedulerService extends BaseServiceConstruct {
     }, 120);
     props?.coreTable.grantWriteData(this.addEntity);
 
+    this.deleteEntity = super.newLambda('DeleteEntity', 'functions/delete-entity.handler', {
+      HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
+    }, 120);
+    props?.coreTable.grantReadData(this.deleteEntity);
+    props?.coreTable.grantWriteData(this.deleteEntity);
+
     this.updateEntity = super.newLambda('UpdateEntity', 'functions/update-entity.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
     props?.coreTable.grantReadData(this.updateEntity);
-
+    props?.coreTable.grantWriteData(this.updateEntity);
+    
     this.sendSchedule = super.newLambda('SendSchedule', 'functions/send-schedule.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
@@ -86,6 +94,7 @@ export class SchedulerService extends BaseServiceConstruct {
 
     this.getNearbyEvents.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.addEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
+    this.deleteEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.updateEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.sendSchedule.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
   }

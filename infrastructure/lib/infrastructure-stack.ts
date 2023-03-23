@@ -293,6 +293,7 @@ export class InfrastructureStack extends Stack {
         effect: Effect.ALLOW,
         resources: [
           schedulerService.addEntity.functionArn,
+          schedulerService.deleteEntity.functionArn,
           schedulerService.updateEntity.functionArn,
           schedulerService.getNearbyEvents.functionArn,
           crawlerService.getTracksForRegion.functionArn

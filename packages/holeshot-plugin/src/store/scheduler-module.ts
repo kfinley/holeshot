@@ -1,6 +1,6 @@
 import { Event, Track } from "@holeshot/types/src";
 import { Action, Module } from "vuex-module-decorators";
-import { HoleshotModule } from "./base-module";
+import { HoleshotModule, less } from "./base-module";
 import { SchedulerState, Status } from "./state";
 
 @Module({ namespaced: true, name: "Scheduler" })
@@ -41,10 +41,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       });
 
       super.mutate((state: SchedulerState) => {
-        state.schedule = super.addOrUpdate(
+        state.schedule = super.addSorted<Event>(
           params.event,
           state.schedule,
-          (e) => e.name == params.event.name && e.date == params.event.date
+          (e) => e.date > params.event.date
         );
       });
     } catch (e) {
@@ -60,15 +60,11 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       console.log(username);
 
       super.sendCommand({
-        name: "UpdateEntity",
+        name: "DeleteEntity",
         payload: {
           pk: `USER#${username}#EVENT`,
           sk: params.event.date,
-          updateExpression: "set PK = :PK",
-          expressionAttributeValues: {
-            ":PK": `USER#${username}#EVENT#DELETED`, //update the primary key with DELETED to mark it as deleted.
-          },
-          responseCommand: "Scheduler/addedToSchedule",
+          responseCommand: "Scheduler/removedFromSchedule",
         },
       });
 

@@ -175,7 +175,7 @@ export default class EventSearch extends BaseControl {
             id: "e3e291cc-76ef-4b77-9238-7797936468af",
             name: "Practice",
             trackName: "Rock Hill BMX Supercross Track",
-            date: "2023-03-02T00:00:00",
+            date: "2023-04-02T00:00:00",
             url: "www.usabmx.com/tracks/1971/events/493331",
             eventType: "Practice",
             details: {

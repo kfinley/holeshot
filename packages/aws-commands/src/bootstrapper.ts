@@ -18,6 +18,7 @@ import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Lambda } from "@aws-sdk/client-lambda";
 import { AddEntityCommand } from './add-entity';
 import { GetEntitiesCommand } from './get-entities';
+import { GetEntityCommand } from './get-entity';
 
 export default function bootstrapper(container: Container) {
 
@@ -146,9 +147,11 @@ export default function bootstrapper(container: Container) {
   container.bind<PutPointCommand>("PutPointCommand").to(PutPointCommand);
   container.bind<QueryRadiusCommand>("QueryRadiusCommand").to(QueryRadiusCommand);
   container.bind<AddEntityCommand>("AddEntityCommand").to(AddEntityCommand);
+  container.bind<GetEntityCommand>("GetEntityCommand").to(GetEntityCommand);
   container.bind<GetEntitiesCommand>("GetEntitiesCommand").to(GetEntitiesCommand);
   container.bind<UpdateEntityCommand>("UpdateEntityCommand").to(UpdateEntityCommand);
-
+  container.bind<DeleteEntityCommand>("DeleteEntityCommand").to(DeleteEntityCommand);
+  
   // console.log('aws-commands bootstrapper done');
 
 }
