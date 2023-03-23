@@ -30,7 +30,7 @@ export class GetEntityCommand implements Command<GetEntityRequest, GetEntityResp
     
     const getResponse = await this.ddbClient.send(new GetItemCommand({
       TableName,
-      Key {
+      Key: {
         PK: {
           S: params.pk
         },
@@ -41,8 +41,7 @@ export class GetEntityCommand implements Command<GetEntityRequest, GetEntityResp
     }));
 
     console.log(getResponse.Item);
-
-
+    
     return {
       success: getResponse.$metadata.httpStatusCode == 200,
       item: getResponse.Item
