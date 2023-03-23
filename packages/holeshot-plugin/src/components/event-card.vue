@@ -26,7 +26,7 @@
           label="Add to Schedule"
           :classes="['btn--grey-hover-fill']"
           :disabled="disconnected"
-          @clicked="addToSchedule"
+          @click="addToSchedule"
           >Add to Schedule</Button
         >
       </div>
