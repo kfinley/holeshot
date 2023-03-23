@@ -53,14 +53,14 @@ export const createRouter = async () => {
       ],
     },
     {
-      path: '/dashboard',         //TODO: rename to Scheduler
+      path: '/scheduler',
       component: RouterLayout,
       children: [
         {
           path: '',
-          name: RouteNames.Dashboard,
+          name: RouteNames.Scheduler,
           component: () =>
-            import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
+            import(/* webpackChunkName: "scheduler" */ '../views/Schedule.vue'),
           meta: {
             allowAnonymous: false,
           },
@@ -255,22 +255,23 @@ export const createRouter = async () => {
           i.src = i.src.replace('media', 'img/media');
         });
 
-        Array.from(
-          Array.from(document.getElementsByTagName('main'))[0].querySelectorAll(
-            'main a:not(a[href*="http"])'
-          )
-        ).map((link) => {
-          // console.log(link)
-          link.addEventListener(
-            'click',
-            function (e) {
-              e.preventDefault();
-              e.stopPropagation();
-              router.push({ path: (link as any).href.split(window.location.host)[1] });
-            },
-            false
-          );
-        });
+        //TODO: look back and see what this does...
+        // Array.from(
+        //   Array.from(document.getElementsByTagName('main'))[0].querySelectorAll(
+        //     'main a:not(a[href*="http"])'
+        //   )
+        // ).map((link) => {
+        //   // console.log(link)
+        //   link.addEventListener(
+        //     'click',
+        //     function (e) {
+        //       e.preventDefault();
+        //       e.stopPropagation();
+        //       router.push({ path: (link as any).href.split(window.location.host)[1] });
+        //     },
+        //     false
+        //   );
+        // });
       } catch (e) {
         console.log(e);
       }

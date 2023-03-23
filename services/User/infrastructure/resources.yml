@@ -66,6 +66,6 @@ PostAuthenticationTopic:
 PostAuthenticationSubscription:
   Type: "AWS::SNS::Subscription"
   Properties:
-    Endpoint: arn:aws:sns:us-east-1:146665891952:StartProcessTransactions
+    Endpoint: arn:aws:sns:us-east-1:146665891952:PostAuthentication
     Protocol: lambda
     TopicArn: arn:aws:sns:us-east-1:146665891952:${self:service}-PostAuthenticationTopic

@@ -9,8 +9,8 @@
       <burger-nav>
         <burger-nav-item :route="routes.Home">Home</burger-nav-item>
         <burger-nav-item :route="routes.Articles">Articles</burger-nav-item>
-        <burger-nav-item v-if="loggedIn" :route="routes.Dashboard"
-          >Dashboard</burger-nav-item
+        <burger-nav-item v-if="loggedIn" :route="routes.Scheduler"
+          >Scheduler</burger-nav-item
         >
         <burger-nav-item><user-menu></user-menu></burger-nav-item>
       </burger-nav>

@@ -46,7 +46,6 @@ export default class EventDetailsModal extends BaseControl {
   get disabled() {
     return super.disconnected;
   }
-
 }
 </script>
 
@@ -54,5 +53,4 @@ export default class EventDetailsModal extends BaseControl {
 .label {
   font-weight: bold;
 }
-
 </style>

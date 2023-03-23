@@ -14,5 +14,5 @@ import { EventSearch, Scheduler } from '../components/';
     EventSearch,
   },
 })
-export default class Dashboard extends Vue {}
+export default class Schedule extends Vue {}
 </script>

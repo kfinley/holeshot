@@ -25,6 +25,16 @@ export default class UserModule extends VuexModule implements UserState {
   private setPasswordCommand!: SetPasswordCommand;
 
   @Action
+  async enhanceUser(attributes: Record<string, any>) {
+    this.context.commit('mutate', (state: UserState) => {
+      (state.currentUser as any) = {
+        ...state.currentUser,
+        ...attributes,
+      };
+    });
+  }
+
+  @Action
   async loadUser(params: AuthenticationResult) {
     try {
       const userDetails = await this.getUserDetailsCommand.runAsync({

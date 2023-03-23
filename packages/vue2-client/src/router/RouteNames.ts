@@ -1,7 +1,7 @@
 export enum RouteNames {
   About = 'About',
   Articles = 'Articles',
-  Dashboard = 'Dashboard',
+  Scheduler = 'Scheduler',
   Home = 'Home',
   Login = 'Login',
   UserSettings = 'UserSettings',

@@ -8,11 +8,13 @@ import Scheduler from '@holeshot/plugin/src/components/scheduler.vue';
 import EventSearch from '@holeshot/plugin/src/components/event-search.vue';
 import UserMenu from '@holeshot/vue2-user/src/components/UserMenu.vue';
 import UserSettings from '@holeshot/vue2-user/src/components/UserSettings.vue';
+import EditUser from '@holeshot/plugin/src/components/edit-user.vue';
 
 export {
   BurgerNav,
   BurgerNavItem,
   Scheduler,
+  EditUser,
   EventSearch,
   Footer,
   Functions,

@@ -22,6 +22,7 @@ import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
 import { WebSocketsStatus } from '../store';
 import '../styles/styles.scss';
 import { SchedulerState } from '@holeshot/plugin/src/store';
+import RegistrationModule from '@holeshot/vue2-user/src/store/registration-module';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
@@ -37,6 +38,7 @@ export const setupModules = (store: Store<any>): void => {
   getModule(SchedulerModule, store);
   getArticlesModule(store);
   getModule(UserModule, store);
+  getModule(RegistrationModule, store);
   getModule(SearchModule, store);
 
   // initializeModules(store);
@@ -61,7 +63,7 @@ const plugin: ClientPlugin = {
       vue.use(UserPlugin, {
         router: options.router,
         store: options.store,
-        loginRedirectRouteName: RouteNames.Dashboard,
+        loginRedirectRouteName: RouteNames.Scheduler,
         defaultRoute: RouteNames.Home,
         container: options.container,
       });

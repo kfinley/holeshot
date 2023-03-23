@@ -30,7 +30,7 @@ StartSendMessageNotification:
   handler: startSendMessageNotification.handler
   events:
     - sns:
-        arn: arn:aws:sns:us-east-1:146665891952:Holeshot-AuthProcessedTopic #TODO: Deal with arn
+        arn: arn:aws:sns:us-east-1:146665891952:Holeshot-ConnectedTopic #TODO: Deal with arn
 
 GetConnection:
   handler: getConnection.handler
