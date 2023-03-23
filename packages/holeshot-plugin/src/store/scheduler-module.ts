@@ -19,7 +19,6 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   addToSchedule(params: { track: Track; event: Event }) {
     try {
-
       const { username } = this.context.rootState.User.currentUser;
 
       console.log(username);
@@ -37,7 +36,8 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           sk: params.event.date,
           type: "Event",
           entity: params.event,
-          responseCommand: "Scheduler/addedToSchedule",        },
+          responseCommand: "Scheduler/addedToSchedule",
+        },
       });
 
       super.mutate((state: SchedulerState) => {
