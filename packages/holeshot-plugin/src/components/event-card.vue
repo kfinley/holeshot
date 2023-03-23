@@ -39,8 +39,10 @@ import { Component, Prop } from "vue-property-decorator";
 import Card from "@finley/vue2-components/src/components/card.vue";
 import { Track, Event } from "@holeshot/types/src";
 import BaseControl from "./base-control";
-import { schedulerModule, SchedulerState } from "../store";
+import { SchedulerState } from "../store";
+import { SchedulerModule } from "../store/scheduler-module";
 import { State } from "vuex-class";
+import { getModule } from "vuex-module-decorators";
 
 @Component({
   components: { Card },
@@ -58,9 +60,11 @@ export default class EventCard extends BaseControl {
   showAddToSchedule!: boolean;
 
   mounted() {
-    this.$el.addEventListener("click", this.click, false);
+    if (!this.showAddToSchedule) {
+      this.$el.addEventListener("click", this.click, false);
+    }
   }
-  
+
   printIfIncludes(key: string, includes: Array<string>, detail: string) {
     let val = "";
 
@@ -78,7 +82,7 @@ export default class EventCard extends BaseControl {
   }
 
   addToSchedule() {
-    schedulerModule.addToSchedule({
+    getModule(SchedulerModule, this.$store).addToSchedule({
       track: this.track,
       event: this.event,
     });
