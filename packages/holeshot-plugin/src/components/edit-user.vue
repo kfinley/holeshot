@@ -4,6 +4,7 @@
       <div v-if="prop == 'GPS'">GPS Edit</div>
       <div>{{ toSentence(prop) }}: {{ user[prop] }}</div>
     </div>
+    <div>Lat: {{ lat }} Long: {{ long }}</div>
   </div>
 </template>
 
@@ -17,17 +18,17 @@ export default class EditUser extends BaseControl {
   @Prop({ default: null })
   user!: User;
 
+  lat!: number;
+  long!: number;
+
   mounted() {
     console.log("mounted");
     navigator.geolocation.getCurrentPosition(
       (loc) => {
-        console.log(
-          "Current Lat & Long: [",
-          loc.coords.latitude,
-          ",",
-          loc.coords.longitude,
-          "]"
-        );
+        this.lat = loc.coords.latitude;
+        this.long = loc.coords.longitude;
+
+        console.log("Current Lat & Long: [", this.lat, ",", this.long, "]");
       },
       (err) => {
         console.log("Error", err);
