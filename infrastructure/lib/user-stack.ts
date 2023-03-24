@@ -173,6 +173,10 @@ export class UserServiceStack extends BaseServiceConstruct {
       emailAddress: 'kyle@kylefinley.net'
     });
 
+    new VerifySesEmailAddress(this, 'SesEmailVerification-chris', {
+      emailAddress: 'chrisfinley77@icloud.com'
+    });
+
     // will add once there's more stuff working...
     // new VerifySesEmailAddress(this, 'SesEmailVerification-jeff', {
     //   emailAddress: 'jeff.madlock@gmail.com'
@@ -186,7 +190,7 @@ export class UserServiceStack extends BaseServiceConstruct {
     });
     this.authProcessedTopic.grantPublish(postAuthentication.role as IRole);
 
-    
+
     // Create API Gateway REST api and endpoint for /registration
     //
 
