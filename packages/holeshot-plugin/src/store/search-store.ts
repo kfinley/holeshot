@@ -18,6 +18,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
 
   @Action
   search() {
+
     notificationModule.dismissAll();
     super.mutate((state: SearchState) => {
       state.showCriteriaPanel = false;

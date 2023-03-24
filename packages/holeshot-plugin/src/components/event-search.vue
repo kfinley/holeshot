@@ -114,7 +114,7 @@ import TypeAhead from "@finley/vue2-components/src/components/type-ahead.vue";
 import { Event, Track } from "@holeshot/types/src";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
-import { searchModule, SearchState, SearchStatus, notificationModule } from "../store";
+import { searchModule, SearchState, SearchStatus } from "../store";
 import { State } from "vuex-class";
 import EventCard from "./event-card.vue";
 
@@ -147,7 +147,6 @@ export default class EventSearch extends BaseControl {
   }
 
   mounted() {
-    notificationModule.setError({ message: "test" });
 
     // Null out any previous search results
     this.state.searchResults = null;
