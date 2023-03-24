@@ -8,7 +8,7 @@ const functionNamePrefix =
 //ht: https://codepen.io/Universalist/post/predicates-in-javascript
 export const and = (p1, p2) => {
   return function (x) {
-    console.log('and', p1(x) && p2(x));
+    // console.log('and', p1(x) && p2(x));
     return p1(x) && p2(x);
   };
 };
@@ -64,7 +64,7 @@ export const createEqualsPredicate = function createEqualsPredicate<T>(
 };
 
 export class HoleshotModule extends BaseModule {
-  sendCommand(params: { name: string; payload: any }) {
+  sendCommand(params: { name: string; payload: any; onTimeout?: () => void }) {
     this.context.dispatch(
       "WebSockets/sendCommand",
       {
@@ -76,6 +76,10 @@ export class HoleshotModule extends BaseModule {
       },
       { root: true }
     );
+    setTimeout(function () {
+      params.onTimeout?.();
+      console.log("sendCommand timeout:", [params.name, ", ", params.payload]);
+    }, 30000);
   }
 
   mutate<T>(mutation: (state: T) => void) {

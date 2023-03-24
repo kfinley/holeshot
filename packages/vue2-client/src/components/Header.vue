@@ -42,9 +42,6 @@ export default class Header extends Vue {
 
   @State('User') state!: UserState;
 
-  click() {
-    console.log('click');
-  }
   get loggedIn() {
     return this.state.authStatus == AuthStatus.LoggedIn;
   }
@@ -58,13 +55,13 @@ export default class Header extends Vue {
     this.headerOffsetTop = this.header.offsetTop;
   }
 
-  // Add the stickey class to the header when you reach its scroll position.
+  // Add the sticky class to the header when you reach its scroll position.
   // Remove "sticky" when you leave the scroll position
   handleScroll(e) {
     if (window.pageYOffset > this.headerOffsetTop) {
-      this.header.classList.add('stickey');
+      this.header.classList.add('sticky');
     } else {
-      this.header.classList.remove('stickey');
+      this.header.classList.remove('sticky');
     }
   }
 }
@@ -83,7 +80,7 @@ export default class Header extends Vue {
   align-items: center;
 }
 
-.header.stickey {
+.header.sticky {
   position: fixed;
   top: 0;
   width: 100%;

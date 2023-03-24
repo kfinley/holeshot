@@ -1,8 +1,9 @@
 //TODO: move this to the Scheduler Store Module
 
-import { Action, Module,  } from "vuex-module-decorators";
+import { Action, Module, } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SearchEventsInput, SearchState, SearchStatus } from "./state";
+import { notificationModule } from "@finley/vue2-components/src/store";
 
 @Module({ namespaced: true, name: "Search" })
 export class SearchModule extends HoleshotModule implements SearchState {
@@ -19,8 +20,11 @@ export class SearchModule extends HoleshotModule implements SearchState {
 
   @Action
   search() {
-    // console.log("search", this.searchInput);
 
+    notificationModule.dismissAll();
+
+    notificationModule.setError({ message: "Search Failed" });
+    
     super.mutate((state: SearchState) => {
       state.showCriteriaPanel = false;
       state.status = SearchStatus.Searching;
@@ -37,6 +41,12 @@ export class SearchModule extends HoleshotModule implements SearchState {
         distance: this.searchInput?.distance,
         name: this.searchInput?.name,
         type: this.searchInput?.type,
+      },
+      onTimeout: () => {
+        notificationModule.setError({ message: "Search Failed" });
+        super.mutate(
+          (state: SearchState) => (state.status = SearchStatus.Loaded)
+        );
       },
     });
   }
