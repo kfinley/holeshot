@@ -63,6 +63,9 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       });
     } catch (e) {
       console.log("Error in addToSchedule: ", e);
+      notificationModule.setError({
+        message: "Error while adding event to schedule",
+      });
     }
   }
 
@@ -104,7 +107,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
     } catch (e) {
       console.log("Error in removeFromSchedule", e);
       notificationModule.setError({
-        message: `Error in removeFromSchedule", e",
+        message: "Error while removing event from schedule",
       });
     }
   }
