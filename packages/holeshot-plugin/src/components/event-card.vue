@@ -16,7 +16,8 @@
         <div>{{ event.name }}</div>
         <div>{{ track.name }}</div>
         <div>
-          {{ track.location.address.city }}, {{ track.location.address.state }}
+          {{ track.location.address.city }},
+          {{ track.location.address.state.toUpperCase() }}
         </div>
         <div v-for="(detail, key, index) in event.details" :key="index">
           {{ printIfIncludes(key, ["start", "end"], detail) }}
