@@ -48,7 +48,8 @@
         <label for="startDate">Start Date:</label>
         <date-picker
           id="startDate"
-          
+          editable="false"
+          clearable="false"
           v-model="state.searchInput.startDate"
         ></date-picker>
       </div>
@@ -56,6 +57,8 @@
         <label for="endDate">End Date:</label>
         <date-picker
           id="endDate"
+          editable="false"
+          clearable="false"
           v-model="state.searchInput.endDate"
         ></date-picker>
       </div>

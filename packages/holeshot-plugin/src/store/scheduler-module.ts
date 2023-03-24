@@ -20,6 +20,8 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   addToSchedule(params: { track: Track; event: Event }) {
     try {
+      notificationModule.dismissAll();
+
       params.event.track = params.event.track ?? params.track;
 
       super.mutate((state: SchedulerState) => {
@@ -29,7 +31,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       super.sendCommand({
         name: "AddEntity",
         payload: {
-          pk: `USER#${this.context.rootState.User.currentUser}#EVENT`,
+          pk: `USER#${this.context.rootState.User.currentUser.username}#EVENT`,
           sk: params.event.date,
           type: "Event",
           entity: params.event,
@@ -38,7 +40,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         onTimeout: () => {
           if (this.status == Status.Saving) {
             notificationModule.setError({
-              message: "Failed to save event to schedule",
+              message: "Failed to add event to schedule",
             });
             super.mutate(
               (state: SchedulerState) => (state.status = Status.None)
@@ -67,6 +69,8 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   async removeFromSchedule(params: { event: Event }) {
     try {
+      notificationModule.dismissAll();
+
       super.mutate((state: SchedulerState) => {
         state.status = Status.Saving;
       });
@@ -74,7 +78,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       super.sendCommand({
         name: "DeleteEntity",
         payload: {
-          pk: `USER#${this.context.rootState.User.currentUser}#EVENT`,
+          pk: `USER#${this.context.rootState.User.currentUser.username}#EVENT`,
           sk: params.event.date,
           responseCommand: "Scheduler/removedFromSchedule",
         },
@@ -99,6 +103,9 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       });
     } catch (e) {
       console.log("Error in removeFromSchedule", e);
+      notificationModule.setError({
+        message: `Error in removeFromSchedule", e",
+      });
     }
   }
 
