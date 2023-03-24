@@ -1,7 +1,8 @@
 import { Event, Track } from "@holeshot/types/src";
 import { Action, Module } from "vuex-module-decorators";
-import { HoleshotModule, less } from "./base-module";
+import { HoleshotModule } from "./base-module";
 import { SchedulerState, Status } from "./state";
+import { notificationModule } from "@finley/vue2-components/src/store";
 
 @Module({ namespaced: true, name: "Scheduler" })
 export class SchedulerModule extends HoleshotModule implements SchedulerState {
@@ -19,10 +20,6 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   addToSchedule(params: { track: Track; event: Event }) {
     try {
-      const { username } = this.context.rootState.User.currentUser;
-
-      console.log(username);
-
       params.event.track = params.event.track ?? params.track;
 
       super.mutate((state: SchedulerState) => {
@@ -32,11 +29,21 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       super.sendCommand({
         name: "AddEntity",
         payload: {
-          pk: `USER#${username}#EVENT`,
+          pk: `USER#${this.context.rootState.User.currentUser}#EVENT`,
           sk: params.event.date,
           type: "Event",
           entity: params.event,
           responseCommand: "Scheduler/addedToSchedule",
+        },
+        onTimeout: () => {
+          if (this.status == Status.Saving) {
+            notificationModule.setError({
+              message: "Failed to save event to schedule",
+            });
+            super.mutate(
+              (state: SchedulerState) => (state.status = Status.None)
+            );
+          }
         },
       });
 
@@ -52,7 +59,6 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           (e) => e.date > params.event.date
         );
       });
-
     } catch (e) {
       console.log("Error in addToSchedule: ", e);
     }
@@ -61,16 +67,26 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   async removeFromSchedule(params: { event: Event }) {
     try {
-      const { username } = this.context.rootState.User.currentUser;
-
-      console.log(username);
+      super.mutate((state: SchedulerState) => {
+        state.status = Status.Saving;
+      });
 
       super.sendCommand({
         name: "DeleteEntity",
         payload: {
-          pk: `USER#${username}#EVENT`,
+          pk: `USER#${this.context.rootState.User.currentUser}#EVENT`,
           sk: params.event.date,
           responseCommand: "Scheduler/removedFromSchedule",
+        },
+        onTimeout: () => {
+          if (this.status == Status.Saving) {
+            notificationModule.setError({
+              message: "Failed to remove event from schedule",
+            });
+            super.mutate(
+              (state: SchedulerState) => (state.status = Status.None)
+            );
+          }
         },
       });
 
@@ -89,9 +105,6 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   @Action
   addedToSchedule(params: any) {
     console.log(params);
-
-    //TODO: notify
-
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
 

@@ -38,10 +38,12 @@ export class SearchModule extends HoleshotModule implements SearchState {
         type: this.searchInput?.type,
       },
       onTimeout: () => {
-        notificationModule.setError({ message: "Search Failed" });
-        super.mutate(
-          (state: SearchState) => (state.status = SearchStatus.Loaded)
-        );
+        if (this.status == SearchStatus.Searching) {
+          notificationModule.setError({ message: "Search Failed" });
+          super.mutate(
+            (state: SearchState) => (state.status = SearchStatus.Loaded)
+          );
+        }
       },
     });
   }
@@ -53,14 +55,16 @@ export class SearchModule extends HoleshotModule implements SearchState {
     tracks: [];
   }) {
     console.log("getNearbyEventsResponse", params);
-    super.mutate((state: SearchState) => {
-      state.status = SearchStatus.Loaded;
-      state.searchResults = {
-        searched: params.searched,
-        events: params.events,
-        tracks: params.tracks,
-      };
-    });
+    if (this.status == SearchStatus.Searching) {
+      super.mutate((state: SearchState) => {
+        state.status = SearchStatus.Loaded;
+        state.searchResults = {
+          searched: params.searched,
+          events: params.events,
+          tracks: params.tracks,
+        };
+      });
+    }
   }
 
   @Action
