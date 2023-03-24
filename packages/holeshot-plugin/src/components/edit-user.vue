@@ -18,8 +18,8 @@ export default class EditUser extends BaseControl {
   @Prop({ default: null })
   user!: User;
 
-  lat!: number;
-  long!: number;
+  lat: number = null;
+  long: number = null;
 
   mounted() {
     console.log("mounted");
