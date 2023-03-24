@@ -81,14 +81,9 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           responseCommand: "Scheduler/removedFromSchedule",
         },
         onTimeout: () => {
-          if (this.status == Status.Saving) {
-            notificationModule.setError({
-              message: "Failed to remove event from schedule",
-            });
-            super.mutate(
-              (state: SchedulerState) => (state.status = Status.None)
-            );
-          }
+          //TODO: handle this better.
+          // for now just blowing by timeouts b/c nothing is looking at status.
+          super.mutate((state: SchedulerState) => (state.status = Status.None));
         },
       });
 
