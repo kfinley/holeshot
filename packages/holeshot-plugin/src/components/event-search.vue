@@ -31,7 +31,7 @@
           <option value="500">500 miles</option>
         </select>
       </div>
-      <input
+      <!-- <input
         id="location"
         name="location"
         v-model="state.searchInput.location"
@@ -43,11 +43,12 @@
         v-model="state.searchInput.name"
         placeholder="(Optional) refine search by event name"
         class="form-control"
-      />
+      /> -->
       <div>
         <label for="startDate">Start Date:</label>
         <date-picker
           id="startDate"
+          
           v-model="state.searchInput.startDate"
         ></date-picker>
       </div>
@@ -147,7 +148,6 @@ export default class EventSearch extends BaseControl {
   }
 
   mounted() {
-
     // Null out any previous search results
     this.state.searchResults = null;
 
