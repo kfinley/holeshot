@@ -52,6 +52,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           (e) => e.date > params.event.date
         );
       });
+      
     } catch (e) {
       console.log("Error in addToSchedule: ", e);
     }

@@ -63,12 +63,12 @@
       Type: {{ state.searchInput.type }} {{ state.searchInput.name }} (click to
       change search)
     </div>
-    <div class="align-self-center action-controls" align="center">
+    <div class="align-self-center action-controls my-3" align="center">
       <div v-if="state.status == 'Loaded'">
         <div class="text-center">
           <button
             type="submit"
-            class="btn primary-gradient w-100 my-4 mb-2"
+            class="btn primary-gradient w-100"
             :disabled="disabled"
             @click.prevent="search"
           >
