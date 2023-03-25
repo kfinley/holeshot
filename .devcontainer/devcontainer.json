@@ -54,6 +54,28 @@
           }
         }
       }
+    },
+    "codespaces": {
+      "repositories": {
+        "kfinley/vue2-components": {
+          "permissions": {
+            "contents": "write",
+            "pull_requests": "write"
+          }
+        },
+        "kfinley/aws-ses-v2-local": {
+          "permissions": {
+            "contents": "write",
+            "pull_requests": "write"
+          }
+        },
+        "kfinley/serverless-offline-ses-v2": {
+          "permissions": {
+            "contents": "write",
+            "pull_requests": "write"
+          }
+        }
+      }
     }
   },
 
