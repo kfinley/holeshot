@@ -16,9 +16,9 @@ if ! [ -f "./.devcontainer/vsdbg/vsdbg" ]; then
     # fi
 
     echo "Updating git submodules..."
-    echo ''
+    echo 'DISABLED FOR NOW. YOU NEED TO RUN git submodule update --init --recursive'
     # Pull down submodules (customized serverless-offline plugins)
-    git submodule update --init --recursive
+    # git submodule update --init --recursive
 
 else
     echo "Existing dev container... skipping installs."
