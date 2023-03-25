@@ -55,6 +55,9 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     const tracks: Record<string, any>[] = [];
 
     // const tracks: Record<string, any>[] = [];
+    if (tracksInRange.items.length > 10) {
+      console.log('Large list of tracks searched.', tracksInRange.items);
+    }
 
     await Promise.all(tracksInRange.items.map(async item => {
 
@@ -64,7 +67,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
         ":endDate": `${params.endDate}`
       };
 
-      // console.log('expressionAttributeValues', expressionAttributeValues); 
+      // console.log('expressionAttributeValues', expressionAttributeValues);
 
       if (params.type) {
         expressionAttributeValues[':type'] = params.type
@@ -100,20 +103,19 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
             delete event.PK;
             delete event.SK;
             delete event.type;
-            
+
             events.push(event);
 
             let track = tracks.find(t => t.name == event.trackName);
             if (track === undefined) {
               track = unmarshall(tracksInRange.items.find(t => unmarshall(t).name == event.trackName));
-              console.log('track', track);
               tracks.push({
                 name: track.name,
                 location: track.location
               });
             }
             break;
-          default:  
+          default:
             console.log('Unhandled type', unmarshall(i));
             break;
         }

@@ -1,12 +1,12 @@
 <template>
   <card
-    header-text="Join the Waitlist"
+    :headerText="headerText"
     :show-close="false"
     style="height: 90vh"
     max-width="600px"
     padding="2"
   >
-    <p v-if="registered">{{ messages.Registration.ThankYouText }}</p>
+    <p class="text-center" v-if="registered">{{ messages.Registration.Registered.message }}</p>
     <div v-if="notRegistered">
       <ValidationObserver ref="formObserver">
         <form @submit.prevent="onSubmit" autocomplete="off" role="form text-left">
@@ -130,6 +130,11 @@ export default class Register extends Vue {
     this.firstNameElement?.focus();
   }
 
+  get headerText() {
+    return this.registered
+      ? messages.Registration.Registered.header
+      : 'Join the Waitlist';
+  }
   async onSubmit() {
     const isValid = await this.formObserver.validate();
     if (isValid) {

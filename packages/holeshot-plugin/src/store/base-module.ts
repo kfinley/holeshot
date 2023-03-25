@@ -22,7 +22,7 @@ export class HoleshotModule extends BaseModule {
     setTimeout(function () {
       params.onTimeout?.();
       console.log("sendCommand timeout:", [params.name, ", ", params.payload]);
-    }, 30000);  //TODO: config this...
+    }, 45000); //TODO: config this...
   }
 
   mutate<T>(mutation: (state: T) => void) {
