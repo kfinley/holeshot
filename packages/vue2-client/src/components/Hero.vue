@@ -11,7 +11,7 @@ export default class Hero extends Vue {}
 
 <style lang="scss" scoped>
 .hero {
-  background: url('img/holeshot-hero-blackhole.jpg') no-repeat;
+  background: url('../../../../media/holeshot-hero-blackhole.jpg') no-repeat;
   width: 100%;
   background-size: contain;
   background-position: 50%;
