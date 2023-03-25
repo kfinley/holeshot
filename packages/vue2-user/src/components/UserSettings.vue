@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
-import Entity from '@finley/vue2-components/src/components/Entity.vue';
-import Card from '@finley/vue2-components/src/components/Card.vue';
+import Entity from '@finley/vue2-components/src/components/entity.vue';
+import Card from '@finley/vue2-components/src/components/card.vue';
 import { UserState } from '../store';
 import { State } from 'vuex-class';
 import BaseControl from '@finley/vue2-components/src/components/base-control';
@@ -31,7 +31,7 @@ import BaseControl from '@finley/vue2-components/src/components/base-control';
 export default class UserSettings extends BaseControl {
   @State('User') state!: UserState;
 
-  editing: boolean = false;
+  editing = false;
 
   edit() {
     this.editing = !this.editing;

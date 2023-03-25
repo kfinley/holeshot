@@ -6,6 +6,7 @@
       <router-view />
     </main>
     <Footer class="LayoutDefault__footer" />
+    <add-to-home-screen />
   </div>
 </template>
 
@@ -13,9 +14,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Header, Footer } from '../components/';
 import NotificationList from '@finley/vue2-components/src/components/notification-list.vue';
+import AddToHomeScreen from '@finley/vue2-components/src/components/add-to-home-screen.vue';
 
 @Component({
   components: {
+    AddToHomeScreen,
     Header,
     Footer,
     NotificationList,

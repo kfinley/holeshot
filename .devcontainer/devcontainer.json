@@ -30,6 +30,7 @@
         "jcbuisson.vue",
         "firsttris.vscode-jest-runner",
         "octref.vetur",
+        "Vue.vscode-typescript-vue-plugin",
         "hmnd.css-signature-help",
         "tht13.html-preview-vscode",
         "formulahendry.dotnet-test-explorer",
