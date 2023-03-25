@@ -40,8 +40,8 @@ body {
     sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
-p:not(:has(> img)) {
-
+// .pretty-print p:not(:has(> img)) {
+.pretty-print {
   text-indent: 15px;
   text-align: justify;
   -webkit-hyphens: auto;
