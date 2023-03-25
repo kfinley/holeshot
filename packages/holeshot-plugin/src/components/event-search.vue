@@ -154,6 +154,8 @@ export default class EventSearch extends BaseControl {
     // Null out any previous search results
     this.state.searchResults = null;
 
+    searchModule.setLocation();
+
     // Example of lazy local testing... yes it's lame but quick and easy. :)
     if (process.env.NODE_ENV !== "production") {
       this.state.searchResults = {

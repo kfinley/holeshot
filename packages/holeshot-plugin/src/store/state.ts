@@ -1,4 +1,4 @@
-import { Event, Track } from "@holeshot/types/src";
+import { Event, GPS } from "@holeshot/types/src";
 
 export enum Status {
   None = "None",
@@ -21,6 +21,7 @@ export interface SearchState {
   searchInput: SearchEventsInput | null;
   showCriteriaPanel: boolean;
   searchResults: Record<string, any> | null;
+  location: GPS | null;
 }
 
 export interface SearchEventsInput {

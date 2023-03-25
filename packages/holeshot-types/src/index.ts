@@ -13,7 +13,7 @@ export interface Address {
   postalCode: string;
 }
 
-export interface GPS { lat: string, long: string }
+export interface GPS { lat: string | number, long: string | number }
 
 export interface Location {
   address: Address;

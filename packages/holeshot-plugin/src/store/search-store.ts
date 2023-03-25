@@ -2,19 +2,45 @@ import { Action, Module, } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SearchEventsInput, SearchState, SearchStatus } from "./state";
 import { notificationModule } from "@finley/vue2-components/src/store";
-
+import { GPS } from "@holeshot/types/src";
 @Module({ namespaced: true, name: "Search" })
 export class SearchModule extends HoleshotModule implements SearchState {
   status: SearchStatus = SearchStatus.Loaded;
   searchInput: SearchEventsInput | null = null;
   searchResults: Record<string, any> | null = null;
   showCriteriaPanel: boolean = false;
+  location: GPS | null = null;
 
   //todo: pull from profile and allow input.
   defaultLocation = {
     lat: 34.9744394,
     long: -80.9667001,
   };
+
+  @Action
+  setLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (loc) => {
+        super.mutate((state: SearchState) => {
+          state.location = {
+            lat: loc.coords.latitude,
+            long: loc.coords.longitude,
+          };
+
+          console.log(
+            "Current Lat & Long: [",
+            state.location.lat,
+            ",",
+            state.location.long,
+            "]"
+          );
+        });
+      },
+      (err) => {
+        console.log("Error", err);
+      }
+    );
+  }
 
   @Action
   search() {
@@ -30,8 +56,8 @@ export class SearchModule extends HoleshotModule implements SearchState {
     super.sendCommand({
       name: "GetNearbyEvents",
       payload: {
-        lat: this.defaultLocation.lat,
-        long: this.defaultLocation.long,
+        lat: this.location ? this.location.lat : this.defaultLocation.lat,
+        long: this.location ? this.location.long : this.defaultLocation.long,
         startDate: this.searchInput?.startDate,
         endDate: this.searchInput?.endDate,
         distance: this.searchInput?.distance,
