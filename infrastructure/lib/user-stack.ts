@@ -100,18 +100,18 @@ export class UserServiceStack extends BaseServiceConstruct {
       USER_POOL_ID: this.userPool.userPoolId
     });
 
-    const lambdaCognitoAdmintCreateUserPolicy = new Policy(this, 'lambdaCognitoAdminCreateUserPolicy');
-    lambdaCognitoAdmintCreateUserPolicy.addStatements(
+    const lambdaCognitoAdminCreateUserPolicy = new Policy(this, 'lambdaCognitoAdminCreateUserPolicy');
+    lambdaCognitoAdminCreateUserPolicy.addStatements(
       new PolicyStatement({
         actions: [
           "cognito-idp:AdminCreateUser"
         ],
         effect: Effect.ALLOW,
         resources: ['*'],  //TODO: tighten this up...,
-        sid: "LambdaCognitoAdmintCreateUserPolicy"
+        sid: "lambdaCognitoAdminCreateUserPolicy"
       })
     )
-    createUser.role?.attachInlinePolicy(lambdaCognitoAdmintCreateUserPolicy);
+    createUser.role?.attachInlinePolicy(lambdaCognitoAdminCreateUserPolicy);
 
     const saveUser = super.newLambda('SaveUserHandler', 'functions/saveUser.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName!
@@ -171,6 +171,10 @@ export class UserServiceStack extends BaseServiceConstruct {
     //TODO: update this as soon as we have domain email working
     new VerifySesEmailAddress(this, 'SesEmailVerification-kyle', {
       emailAddress: 'kyle@kylefinley.net'
+    });
+
+    new VerifySesEmailAddress(this, 'SesEmailVerification-kyle2', {
+      emailAddress: 'rkfinley@gmail.com'
     });
 
     new VerifySesEmailAddress(this, 'SesEmailVerification-chris', {
