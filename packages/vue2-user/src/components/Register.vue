@@ -1,13 +1,15 @@
 <template>
-  <card header-text="Register" :show-close="false" style="height: 90vh" max-width="600px" padding="2">
+  <card
+    header-text="Join the Waitlist"
+    :show-close="false"
+    style="height: 90vh"
+    max-width="600px"
+    padding="2"
+  >
     <p v-if="registered">{{ messages.Registration.ThankYouText }}</p>
     <div v-if="notRegistered">
       <ValidationObserver ref="formObserver">
-        <form
-          @submit.prevent="onSubmit"
-          autocomplete="off"
-          role="form text-left"
-        >
+        <form @submit.prevent="onSubmit" autocomplete="off" role="form text-left">
           <div class="mb-3">
             <ValidationProvider
               name="firstName"
@@ -90,9 +92,7 @@
     </div>
     <p class="text-sm mt-3 mb-0">
       Already have an account?
-      <router-link
-        class="text-dark font-weight-bolder"
-        :to="{ name: loginRoute }"
+      <router-link class="text-dark font-weight-bolder" :to="{ name: loginRoute }"
         >Login</router-link
       >
     </p>
@@ -100,13 +100,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Ref } from "vue-property-decorator";
-import { ValidationProvider, ValidationObserver } from "vee-validate";
-import { registrationModule, RegistrationState, RegistrationStatus } from "../store";
-import Card from "@finley/vue2-components/src/components/card.vue";
-import { State } from "vuex-class";
-import { messages } from "../resources/messages";
-import { RouteNames } from "../router";
+import { Component, Vue, Ref } from 'vue-property-decorator';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
+import { registrationModule, RegistrationState, RegistrationStatus } from '../store';
+import Card from '@finley/vue2-components/src/components/card.vue';
+import { State } from 'vuex-class';
+import { messages } from '../resources/messages';
+import { RouteNames } from '../router';
 
 @Component({
   components: {
@@ -119,12 +119,12 @@ export default class Register extends Vue {
   @Ref() readonly formObserver!: InstanceType<typeof ValidationObserver>;
   @Ref() readonly firstNameElement!: HTMLInputElement;
 
-  firstName = "";
-  lastName = "";
-  email = "";
+  firstName = '';
+  lastName = '';
+  email = '';
   loginRoute = RouteNames.Login;
 
-  @State("Registration") state!: RegistrationState;
+  @State('Registration') state!: RegistrationState;
 
   mounted() {
     this.firstNameElement?.focus();
@@ -159,5 +159,4 @@ export default class Register extends Vue {
 }
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

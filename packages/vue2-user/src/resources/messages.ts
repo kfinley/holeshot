@@ -1,9 +1,9 @@
 export const messages = {
   Registration: {
     Registered: {
-      header: "Registration Processed!",
-      message: "We require email verification in order to complete registration. Please check your email to continue."
+      header: "You've been added to the waitlist!",
+      message: "You'll be contacted with login information soon!",
     },
-    ThankYouText: "Thank you!!"
+    ThankYouText: 'Thank you!!',
   }
 }
