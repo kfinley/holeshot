@@ -1,17 +1,26 @@
 <template>
   <div class="controls row">
-    <div class="col p-2 clickable" @click="click($event, 'EventsPrevious')">
+    <div
+      ref="eventsPrevious"
+      class="col p-2 clickable"
+      @click="click('EventsPrevious')"
+    >
       <div class="material-icons">directions_bike</div>
       <div>Previous</div>
     </div>
     <div
+      ref="eventsUpcoming"
       class="col p-2 clickable active"
-      @click="click($event, 'EventsUpcoming')"
+      @click="click('EventsUpcoming')"
     >
       <div class="material-icons">calendar_today</div>
       <div>Upcoming</div>
     </div>
-    <div class="col p-2 clickable" @click="click($event, 'EventsSearch')">
+    <div
+      ref="eventsSearch"
+      class="col p-2 clickable"
+      @click="click('EventsSearch')"
+    >
       <div class="material-icons">search</div>
       <div>Search</div>
     </div>
@@ -27,17 +36,24 @@ import { State } from "vuex-class";
 @Component({})
 export default class ScheduleControls extends BaseControl {
   @State("Scheduler") state!: SchedulerState;
-  click($event: Event, control: string) {
-    const parent = ($event.target as any).parentElement;
+  click(control: string) {
+    this.$refs.eventsPrevious.classList.remove("active");
+    this.$refs.eventsUpcoming.classList.remove("active");
+    this.$refs.eventsSearch.classList.remove("active");
 
-    const currentActive = parent.classList.contains("clickable")
-      ? parent.parentElement.getElementsByClassName("active")[0]
-      : parent;
-
-    currentActive.classList.remove("active");
-
-    const clickable = ($event.target as any).parentElement as Element;
-    clickable.classList.add("active");
+    switch (control) {
+      case "EventsPrevious":
+        this.$refs.eventsPrevious.classList.add("active");
+        break;
+      case "EventsUpcoming":
+        this.$refs.eventsUpcoming.classList.add("active");
+        break;
+      case "EventsSearch":
+        this.$refs.eventsSearch.classList.add("active");
+        break;
+      default:
+        break;
+    }
     this.$emit("click", control);
   }
 }
@@ -48,7 +64,7 @@ export default class ScheduleControls extends BaseControl {
   position: fixed;
   bottom: 1.7em;
   padding: 0;
-  width: 103%;
+  width: 105%;
   height: 70px;
   text-align: center;
   color: $color--grey80;
