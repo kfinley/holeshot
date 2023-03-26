@@ -7,7 +7,7 @@ import { SaveUserCommand } from './commands/save-user';
 
 export default function bootstrapper() {
 
-  console.log('Bootstrapper', process.env.NODE_ENV);
+  // console.log('Bootstrapper', process.env.NODE_ENV);
 
   awsCommandsBootstrapper(container);
 
@@ -16,7 +16,7 @@ export default function bootstrapper() {
   container.bind<SaveUserCommand>("SaveUserCommand").to(SaveUserCommand);
   container.bind<SendConfirmationCommand>("SendConfirmationCommand").to(SendConfirmationCommand);
 
-  console.log("Bootstrapper Done");
+  // console.log("Bootstrapper Done");
 
   return container;
 }

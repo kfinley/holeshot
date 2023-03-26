@@ -21,7 +21,7 @@ export class DeleteConnectionCommand implements Command<DeleteConnectionRequest,
 
     if (!userId || !connectionId) {
 
-      console.log('Looking up userId');
+      // console.log('Looking up userId');
 
       const response = await this.ddbClient.send(new ScanCommand({
         TableName: CONNECTION_TABLE,
@@ -35,8 +35,9 @@ export class DeleteConnectionCommand implements Command<DeleteConnectionRequest,
         throw new Error("Unexpected response in DeleteConnection");
       }
 
-      if (response.Items) {
-        const item = response.Items[0]
+      if (response.Items.length > 0) {
+        const item = response.Items[0];
+        // console.log(item);
         userId = item.userId.S;
         connectionId = item.connectionId.S;
       } else {
@@ -46,7 +47,7 @@ export class DeleteConnectionCommand implements Command<DeleteConnectionRequest,
       }
     }
 
-    console.log('Deleting user connection');
+    // console.log('Deleting user connection');
 
     var response = await this.ddbClient.send(new DeleteItemCommand({
       TableName: CONNECTION_TABLE,

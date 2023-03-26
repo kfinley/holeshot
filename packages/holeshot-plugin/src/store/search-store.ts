@@ -3,22 +3,24 @@ import { HoleshotModule } from "./base-module";
 import { SearchEventsInput, SearchState, SearchStatus } from "./state";
 import { notificationModule } from "@finley/vue2-components/src/store";
 import { GPS } from "@holeshot/types/src";
+
 @Module({ namespaced: true, name: "Search" })
 export class SearchModule extends HoleshotModule implements SearchState {
   status: SearchStatus = SearchStatus.Loaded;
   searchInput: SearchEventsInput | null = null;
-  searchResults: Record<string, any> | null = null;
-  showCriteriaPanel: boolean = false;
+  searchResults: Record<string, unknown> | null = null;
+  showCriteriaPanel = false;
   location: GPS | null = null;
 
-  //todo: pull from profile and allow input.
+  timeout?: number;
+
   defaultLocation = {
     lat: 34.9744394,
     long: -80.9667001,
   };
 
   @Action
-  setLocation() {
+  setLocation(): void {
     navigator.geolocation.getCurrentPosition(
       (loc) => {
         super.mutate((state: SearchState) => {
@@ -43,7 +45,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
   }
 
   @Action
-  search() {
+  search(): void {
 
     notificationModule.dismissAll();
 
@@ -53,7 +55,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
       state.searchResults = null;
     });
 
-    super.sendCommand({
+    this.timeout = super.sendCommand({
       name: "GetNearbyEvents",
       payload: {
         lat: this.location ? this.location.lat : this.defaultLocation.lat,
@@ -71,7 +73,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
             (state: SearchState) => (state.status = SearchStatus.Loaded)
           );
         }
-      },
+      }
     });
   }
 
@@ -80,8 +82,10 @@ export class SearchModule extends HoleshotModule implements SearchState {
     searched: number;
     events: [];
     tracks: [];
-  }) {
+  }): void {
     console.log("getNearbyEventsResponse", params);
+    clearTimeout(this.timeout);
+
     if (this.status == SearchStatus.Searching) {
       super.mutate((state: SearchState) => {
         state.status = SearchStatus.Loaded;
@@ -95,7 +99,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
   }
 
   @Action
-  openCriteriaPanel() {
+  openCriteriaPanel(): void {
     super.mutate((state: SearchState) => {
       state.showCriteriaPanel = true;
     });

@@ -12,16 +12,16 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
 
   try {
 
-    console.log('event', JSON.stringify(event));
+    // console.log('event', JSON.stringify(event));
 
     const { command, data } = JSON.parse(event.body);
 
     const payload = JSON.parse(data['payload']);
     payload['connectionId'] = event['requestContext']['connectionId'];
-    
+
     data['payload'] = JSON.stringify(payload);
 
-    console.log('data', JSON.stringify(data));
+    // console.log('data', JSON.stringify(data));
 
     await container
       .get<IMessageCommand>(`${command}Command`)

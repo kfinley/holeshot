@@ -6,7 +6,7 @@ import { SaveTrackEventsCommand } from './save-track-events';
 
 export default function bootstrapper() {
 
-  console.log('Bootstrapper', process.env.NODE_ENV);
+  // console.log('Bootstrapper', process.env.NODE_ENV);
 
   awsCommandsBootstrapper(container);
 

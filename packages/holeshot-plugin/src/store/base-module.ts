@@ -7,7 +7,11 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
-  sendCommand(params: { name: string; payload: any; onTimeout?: () => void }) {
+  sendCommand(params: {
+    name: string;
+    payload: unknown;
+    onTimeout?: () => void;
+  }) {
     this.context.dispatch(
       "WebSockets/sendCommand",
       {
@@ -19,7 +23,7 @@ export class HoleshotModule extends BaseModule {
       },
       { root: true }
     );
-    setTimeout(function () {
+    return setTimeout(function () {
       params.onTimeout?.();
       console.log("sendCommand timeout:", [params.name, ", ", params.payload]);
     }, 45000); //TODO: config this...

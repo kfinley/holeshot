@@ -17,8 +17,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     token
   });
 
-  console.log('auth', response.authResponse);
-  
+  // console.log('auth', response.authResponse);
+
   if (response) {
     return response.authResponse;
   } else {

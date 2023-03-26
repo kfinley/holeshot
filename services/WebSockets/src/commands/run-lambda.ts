@@ -32,7 +32,7 @@ export class RunLambdaCommand implements Command<RunLambdaRequest, RunLambdaResp
       const response = await this.client.invoke(command);
 
       return {
-        statusCode: 200
+        statusCode: response.$metadata.httpStatusCode
       };
     } catch (e) {
       console.log('Error in sendMessageCommand', e);

@@ -4,11 +4,11 @@ import { bootstrapper as awsCommandsBootstrapper } from '@holeshot/aws-commands/
 
 export default function bootstrapper() {
 
-    console.log('Bootstrapper', process.env.NODE_ENV);
+    // console.log('Bootstrapper', process.env.NODE_ENV);
 
     awsCommandsBootstrapper(container);
 
-    console.log("Bootstrapper Done");
+    // console.log("Bootstrapper Done");
 
     return container;
 }

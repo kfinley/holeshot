@@ -9,8 +9,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   schedule: Event[] | null = null;
   status: Status = Status.None;
 
+  timeout?: number;
+
   @Action
-  setSchedule(params: { connectionId: string; schedule: Event[] }) {
+  setSchedule(params: { connectionId: string; schedule: Event[] }): void {
     super.mutate((state: SchedulerState) => {
       state.schedule = params.schedule;
       state.status = Status.Loaded;
@@ -18,7 +20,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  addToSchedule(params: { track: Track; event: Event }) {
+  addToSchedule(params: { track: Track; event: Event }): void {
     try {
       notificationModule.dismissAll();
 
@@ -28,7 +30,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         state.status = Status.Saving;
       });
 
-      super.sendCommand({
+      this.timeout = super.sendCommand({
         name: "AddEntity",
         payload: {
           pk: `USER#${this.context.rootState.User.currentUser.username}#EVENT`,
@@ -38,9 +40,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           responseCommand: "Scheduler/addedToSchedule",
         },
         onTimeout: () => {
-          //TODO: handle this better.
-          // for now just blowing by timeouts b/c nothing is looking at status.
           super.mutate((state: SchedulerState) => (state.status = Status.None));
+          notificationModule.setError({
+            message: "Error while adding event to schedule",
+          });
         },
       });
 
@@ -65,7 +68,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  async removeFromSchedule(params: { event: Event }) {
+  async removeFromSchedule(params: { event: Event }): Promise<void> {
     try {
       notificationModule.dismissAll();
 
@@ -73,7 +76,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         state.status = Status.Saving;
       });
 
-      super.sendCommand({
+      this.timeout = super.sendCommand({
         name: "DeleteEntity",
         payload: {
           pk: `USER#${this.context.rootState.User.currentUser.username}#EVENT`,
@@ -84,6 +87,9 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           //TODO: handle this better.
           // for now just blowing by timeouts b/c nothing is looking at status.
           super.mutate((state: SchedulerState) => (state.status = Status.None));
+          notificationModule.setError({
+            message: "Error while removing event from schedule",
+          });
         },
       });
 
@@ -103,18 +109,21 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  addedToSchedule(params: any) {
+  addedToSchedule(params: unknown): void {
     console.log(params);
+    clearTimeout(this.timeout);
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
 
   @Action
-  removedFromSchedule(params: any) {
+  removedFromSchedule(params: unknown): void {
     console.log(params);
+    clearTimeout(this.timeout);
+
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
 
-  get upcomingEvents() {
+  get upcomingEvents(): Event[] | undefined {
     return this.schedule?.filter(
       (e) => e.date >= new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
     );
