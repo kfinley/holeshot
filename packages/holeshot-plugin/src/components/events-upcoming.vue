@@ -24,7 +24,7 @@ import EventCard from "./event-card.vue";
     EventCard,
   },
 })
-export default class EventList extends Vue {
+export default class EventsUpcoming extends Vue {
   @Prop()
   events: Array<Event>;
 

@@ -2,7 +2,7 @@
   <div>
     <h3 align="center">User Settings</h3>
     <card>
-      <entity v-if="!editing" :entity="state.currentUser">
+      <entity v-if="!editing" :entity="state.currentUser" :exclude="exclude">
         <template v-slot:expand />
       </entity>
       <slot v-else></slot>
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { Component } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import Entity from '@finley/vue2-components/src/components/entity.vue';
 import Card from '@finley/vue2-components/src/components/card.vue';
 import { UserState } from '../store';
@@ -32,6 +32,7 @@ export default class UserSettings extends BaseControl {
   @State('User') state!: UserState;
 
   editing = false;
+  @Prop() exclude?: string[];
 
   edit() {
     this.editing = !this.editing;

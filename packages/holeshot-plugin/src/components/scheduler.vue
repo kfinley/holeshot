@@ -1,12 +1,19 @@
 <template>
-  <div class="events">
-    <event-list :events="upcomingEvents" @event-click="eventClick" />
+  <div class="events pb-3">
+    <events-previous v-if="activeControl == 'EventsSearch'" />
+    <events-upcoming
+      v-if="activeControl == 'EventsUpcoming'"
+      :events="upcomingEvents"
+      @event-click="eventClick"
+    />
     <event-details-modal
       v-if="showEventDetails"
       :event="currentEvent"
       @close="eventDetailsClosed"
     />
-    <event-search />
+    <event-search v-if="activeControl == 'EventsSearch'" />
+
+    <scheduler-controls @click="controlsClicked" />
   </div>
 </template>
 
@@ -14,17 +21,21 @@
 import { Component } from "vue-property-decorator";
 import BaseControl from "./base-control";
 import EventSearch from "./event-search.vue";
-import EventList from "./event-list.vue";
+import EventsUpcoming from "./events-upcoming.vue";
+import EventsPrevious from "./events-previous.vue";
 import { schedulerModule, SchedulerState } from "../store";
 import EventDetailsModal from "./event-details-modal.vue";
+import SchedulerControls from "./scheduler-controls.vue";
 import { State } from "vuex-class";
 import { Event } from "@holeshot/types/src";
 
 @Component({
   components: {
     EventDetailsModal,
-    EventList,
+    EventsUpcoming,
+    EventsPrevious,
     EventSearch,
+    SchedulerControls,
   },
 })
 export default class Schedule extends BaseControl {
@@ -32,10 +43,15 @@ export default class Schedule extends BaseControl {
 
   showEventDetails = false;
 
-  currentEvent!: Event;
-
+  activeControl = "EventsUpcoming";
+  currentEvent!: Event | null;
+  
   get upcomingEvents() {
     return schedulerModule.upcomingEvents;
+  }
+
+  controlsClicked(control: string) {
+    this.activeControl = control;
   }
 
   eventDetailsClosed() {
@@ -226,7 +242,7 @@ export default class Schedule extends BaseControl {
 }
 </script>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
 .events {
 }
 
@@ -234,4 +250,4 @@ export default class Schedule extends BaseControl {
   .events {
   }
 }
-</style>
+</style> -->

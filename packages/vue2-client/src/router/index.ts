@@ -60,7 +60,7 @@ export const createRouter = async () => {
           path: '',
           name: RouteNames.Scheduler,
           component: () =>
-            import(/* webpackChunkName: "scheduler" */ '../views/Schedule.vue'),
+            import(/* webpackChunkName: "scheduler" */ '../views/Scheduler.vue'),
           meta: {
             allowAnonymous: false,
           },
@@ -79,8 +79,8 @@ export const createRouter = async () => {
           meta: {
             allowAnonymous: false,
           },
-        }
-      ]
+        },
+      ],
     },
   ];
 

@@ -12,8 +12,9 @@ export class SearchModule extends HoleshotModule implements SearchState {
   showCriteriaPanel = false;
   location: GPS | null = null;
 
-  timeout?: number;
+  timeoutId?: number;
 
+  // Rock Hill, NC Track GPS
   defaultLocation = {
     lat: 34.9744394,
     long: -80.9667001,
@@ -55,7 +56,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
       state.searchResults = null;
     });
 
-    this.timeout = super.sendCommand({
+    this.timeoutId = super.sendCommand({
       name: "GetNearbyEvents",
       payload: {
         lat: this.location ? this.location.lat : this.defaultLocation.lat,
@@ -68,7 +69,9 @@ export class SearchModule extends HoleshotModule implements SearchState {
       },
       onTimeout: () => {
         if (this.status == SearchStatus.Searching) {
-          notificationModule.setError({ message: "Search Failed" });
+          notificationModule.setError({
+            message: `Sorry, the search took too long.<br/>Refine your search and try again.`,
+          });
           super.mutate(
             (state: SearchState) => (state.status = SearchStatus.Loaded)
           );
@@ -84,7 +87,7 @@ export class SearchModule extends HoleshotModule implements SearchState {
     tracks: [];
   }): void {
     console.log("getNearbyEventsResponse", params);
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeoutId);
 
     if (this.status == SearchStatus.Searching) {
       super.mutate((state: SearchState) => {

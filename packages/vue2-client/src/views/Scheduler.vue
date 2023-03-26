@@ -6,12 +6,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { EventSearch, Scheduler } from '../components/';
+import { Scheduler } from '../components/';
 
 @Component({
   components: {
     Scheduler,
-    EventSearch,
   },
 })
 export default class Schedule extends Vue {}

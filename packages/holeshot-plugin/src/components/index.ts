@@ -4,12 +4,14 @@ import TrackList from "./track-list.vue";
 import TrackSearch from "./track-search.vue";
 import EventSearch from "./event-search.vue";
 import Schedule from "./scheduler.vue";
-import EventList from "./event-list.vue";
+import EventsUpcoming from "./events-upcoming.vue";
+import EventCard from "./event-card.vue";
 
 export default {
+  EventCard,
   EventDetailsModal,
   EventsFeed,
-  EventList,
+  EventsUpcoming,
   EventSearch,
   TrackList,
   TrackSearch,

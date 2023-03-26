@@ -1,1 +1,5 @@
-export const FindEvents = "FindEvents";
+export enum RouteNames {
+  PreviousEvents = "PreviousEvents",
+  UpcomingEvents = "UpcomingEvents",
+  Search = "Search",
+}
