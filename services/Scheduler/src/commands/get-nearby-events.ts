@@ -37,7 +37,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
   async runAsync(params: GetNearbyEventsRequest): Promise<GetNearbyEventsResponse> {
 
-    console.log('parms', JSON.stringify(params));
+    console.log('params', JSON.stringify(params));
 
     const tracksInRange = await this.queryRadius.runAsync({
       container,
@@ -56,7 +56,7 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
 
     // const tracks: Record<string, any>[] = [];
     if (tracksInRange.items.length > 10) {
-      console.log('Large list of tracks searched.', tracksInRange.items);
+      console.log('Large list of tracks searched.', tracksInRange.items.length);
     }
 
     await Promise.all(tracksInRange.items.map(async item => {

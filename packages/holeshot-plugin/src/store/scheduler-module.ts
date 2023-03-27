@@ -1,5 +1,5 @@
-import { Event, Track } from "@holeshot/types/src";
-import { Action, Module } from "vuex-module-decorators";
+import { Event, ServiceActions, Track } from "@holeshot/types/src";
+import { Action, Module, Mutation } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SchedulerState, Status } from "./state";
 import { notificationModule } from "@finley/vue2-components/src/store";
@@ -12,9 +12,29 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   timeout?: number;
 
   @Action
-  setSchedule(params: { connectionId: string; schedule: Event[] }): void {
+  [ServiceActions.SchedulerSetPrevious](params: { schedule: Event[] }): void {
     super.mutate((state: SchedulerState) => {
-      state.schedule = params.schedule;
+      if (state.schedule == null) {
+        state.schedule = params.schedule;
+      } else {
+        params.schedule.map((event) =>
+          this.context.commit("updateSchedule", { event })
+        );
+      }
+      state.status = Status.Loaded;
+    });
+  }
+
+  @Action
+  [ServiceActions.SchedulerSetUpcoming](params: { schedule: Event[] }): void {
+    super.mutate((state: SchedulerState) => {
+      if (state.schedule == null) {
+        state.schedule = params.schedule;
+      } else {
+        params.schedule.map((event) =>
+          this.context.commit("updateSchedule", { event })
+        );
+      }
       state.status = Status.Loaded;
     });
   }
@@ -46,19 +66,8 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
           });
         },
       });
+      this.context.commit("updateSchedule", { event: params.event });
 
-      super.mutate((state: SchedulerState) => {
-        state.schedule = super.addSorted<Event>(
-          params.event,
-          state.schedule,
-          {
-            name: params.event.name,
-            trackName: params.event.trackName,
-            date: params.event.date,
-          },
-          (e) => e.date > params.event.date
-        );
-      });
     } catch (e) {
       console.log("Error in addToSchedule: ", e);
       notificationModule.setError({
@@ -123,9 +132,29 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
     super.mutate((s: SchedulerState) => s.status == Status.None);
   }
 
+  @Mutation
+  updateSchedule(params: { event: Event }) {
+    this.schedule = super.addSorted<Event>(
+      params.event,
+      this.schedule,
+      {
+        name: params.event.name,
+        trackName: params.event.trackName,
+        date: params.event.date,
+      },
+      (e) => e.date > params.event.date
+    );
+  }
+
   get upcomingEvents(): Event[] | undefined {
     return this.schedule?.filter(
       (e) => e.date >= new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
+    );
+  }
+
+  get previousEvents(): Event[] | undefined {
+    return this.schedule?.filter(
+      (e) => e.date < new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
     );
   }
 }

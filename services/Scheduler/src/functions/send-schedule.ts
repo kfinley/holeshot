@@ -1,19 +1,14 @@
 
 import { SNSEvent, Context } from 'aws-lambda';
-import { StartStepFunctionCommand, GetEntitiesCommand, GetEntitiesRequest } from '@holeshot/aws-commands/src';
-import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
 import bootstrapper from './bootstrapper';
+import { SendPreviousEventsCommand } from '../commands/send-previous-events';
+import { SendUpcomingEventsCommand } from '../commands/send-upcoming-events';
 
 const container = bootstrapper();
 
-const getEntities = container.get<GetEntitiesCommand>("GetEntitiesCommand");
-const startStepFunction = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
-
-export interface GetEntitiesParams extends GetEntitiesRequest {
-  connectionId: string; // websocket connection ID added by run-lambda command
-  username: string;
-}
+const sendPrevious = container.get<SendPreviousEventsCommand>("GetPreviousEventsCommand");
+const sendUpcoming = container.get<SendUpcomingEventsCommand>("GetUpcomingEventsCommand");
 
 export const handler = async (event: SNSEvent, context: Context) => {
 
@@ -21,46 +16,22 @@ export const handler = async (event: SNSEvent, context: Context) => {
 
   const { userId, connectionId } = JSON.parse(event.Records[0].Sns.Message);
 
-  const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
-
-  const response = await getEntities.runAsync({
-    keyConditionExpression: "PK = :PK AND SK >= :today",
-    expressionAttributeValues: {
-      ":PK": `USER#${userId}#EVENT`,
-      ":today": today,
-    },
-    container
+  const previous = sendPrevious.runAsync({
+    userId,
+    connectionId
   });
 
-//  console.log('getEntities.Items', response.items);
-
-  const schedule = [];
-
-  response.items.map(i => {
-    const event = unmarshall(i);
-    delete event["PK"];
-    delete event["SK"];
-    delete event["type"];
-
-    console.log('event', event);
-    
-    schedule.push(event);
+  const upcoming = sendUpcoming.runAsync({
+    userId,
+    connectionId
   });
 
-  const startStepFunctionResponse = await startStepFunction.runAsync({
-    input: JSON.stringify({
-      subject: "Scheduler/setSchedule", // This will be the store module action run when the client receives the message
-      connectionId,
-      message: JSON.stringify({
-        schedule
-      })
-    }),
-    stateMachineName: 'Holeshot-WebSockets-SendMessage',
-    container
-  });
+  Promise.all([
+    previous,
+    upcoming
+  ]);
 
   return {
-    status_code: startStepFunctionResponse.statusCode,
-    executionArn: startStepFunctionResponse.executionArn
+    status_code: (await previous).success && (await previous).success ? 200 : 500
   };
 }

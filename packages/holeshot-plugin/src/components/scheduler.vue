@@ -1,6 +1,9 @@
 <template>
   <div class="events pb-3">
-    <events-previous v-if="activeControl == 'EventsSearch'" />
+    <events-previous
+      v-if="activeControl == 'EventsPrevious'"
+      :events="previousEvents"
+    />
     <events-upcoming
       v-if="activeControl == 'EventsUpcoming'"
       :events="upcomingEvents"
@@ -28,6 +31,7 @@ import EventDetailsModal from "./event-details-modal.vue";
 import SchedulerControls from "./scheduler-controls.vue";
 import { State } from "vuex-class";
 import { Event } from "@holeshot/types/src";
+import { mapGetters } from "vuex";
 
 @Component({
   components: {
@@ -37,6 +41,10 @@ import { Event } from "@holeshot/types/src";
     EventSearch,
     SchedulerControls,
   },
+  computed: mapGetters("Scheduler", {
+    upcomingEvents: "upcomingEvents", // <- for runtime
+    previousEvents: "previousEvents",
+  }),
 })
 export default class Schedule extends BaseControl {
   @State("Scheduler") state!: SchedulerState;
@@ -45,10 +53,6 @@ export default class Schedule extends BaseControl {
 
   activeControl = "EventsUpcoming";
   currentEvent!: Event | null;
-  
-  get upcomingEvents() {
-    return schedulerModule.upcomingEvents;
-  }
 
   controlsClicked(control: string) {
     this.activeControl = control;
@@ -67,7 +71,9 @@ export default class Schedule extends BaseControl {
   created() {
     // lazy local testing... yes it's lame but quick and easy. :)
     if (process.env.NODE_ENV !== "production") {
-      this.state.schedule = [
+      schedulerModule.mutate((s: SchedulerState) => (s.schedule = []));
+
+      const schedule = [
         {
           date: "2023-03-25T00:00:00",
           trackName: "Hornet`s Nest BMX",
@@ -237,6 +243,22 @@ export default class Schedule extends BaseControl {
           name: "Practice",
         },
       ];
+
+      const previous = schedule.filter(
+        (e) => e.date < new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
+      );
+
+      schedulerModule["Scheduler/setPrevious"]({
+        schedule: previous,
+      });
+
+      const upcoming = schedule.filter(
+        (e) => e.date >= new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
+      );
+
+      schedulerModule["Scheduler/setUpcoming"]({
+        schedule: upcoming,
+      });
     }
   }
 }

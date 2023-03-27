@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div v-if="hasEvents">
-      <h3 align="center">Schedule</h3>
+      <h3 align="center">Upcoming Events</h3>
       <div v-for="(event, index) in events" :key="index">
         <event-card
           :track="event.track"

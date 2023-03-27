@@ -1,7 +1,7 @@
 <template>
   <modal @close="$emit('close')" width="85%">
     <div slot="header">
-      <h3>{{ event.name }} <br />@ {{ event.track.name }}</h3>
+      <h3>{{ event.name }}<br />@ {{ event.track.name }}</h3>
     </div>
     <div slot="body">
       <div class="body">
