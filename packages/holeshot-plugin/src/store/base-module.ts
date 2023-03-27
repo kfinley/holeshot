@@ -1,5 +1,6 @@
 import BaseModule from "@finley/vue2-components/src/store/base-module";
 import { createEqualsPredicate } from "@finley/vue2-components/src/filter-combinators";
+import { notificationModule } from "@finley/vue2-components/src/store";
 
 const functionNamePrefix =
   process.env.NODE_ENV === "production"
@@ -7,11 +8,17 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
+
+  private timeoutFailureCount = 0;
+
   sendCommand(params: {
     name: string;
     payload: unknown;
     onTimeout?: () => void;
   }) {
+
+    let count = this.timeoutFailureCount;
+
     this.context.dispatch(
       "WebSockets/sendCommand",
       {
@@ -23,9 +30,26 @@ export class HoleshotModule extends BaseModule {
       },
       { root: true }
     );
+
+    const context = this.context;
+
     return setTimeout(function () {
       params.onTimeout?.();
       console.log("sendCommand timeout:", [params.name, ", ", params.payload]);
+      count = count++;
+      setTimeout(function () {
+        count = 0;
+      }, 60000);
+      if (count >= 2) {
+        context.dispatch(
+          "WebSockets/reconnect",
+          context.rootState.User.authTokens?.accessToken
+        );
+        notificationModule.setError({
+          message: "Resetting connection...",
+        });
+        count = 0;
+      }
     }, 45000); //TODO: config this...
   }
 
