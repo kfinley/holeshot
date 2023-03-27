@@ -23,7 +23,7 @@ export const handler = async (params: GetNearbyEventsParams, context: Context) =
       input: JSON.stringify({
         subject: 'Search/getNearbyEventsResponse',
         connectionId: params.connectionId,
-        message: JSON.stringify({          
+        message: JSON.stringify({
           ...response
         })
       }),
