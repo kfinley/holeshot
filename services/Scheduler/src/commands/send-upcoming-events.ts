@@ -1,9 +1,9 @@
 import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
 import { container } from '../inversify.config';
-import { GetEntitiesCommand, StartStepFunctionCommand } from 'packages/aws-commands/src';
+import { GetEntitiesCommand, StartStepFunctionCommand } from '@holeshot/aws-commands/src';
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { ServiceActions } from "@holeshot/types/src";
+import { ServiceActions } from "@holeshot/types/src/service-actions";
 
 export type SendUpcomingEventsRequest = {
   userId: string;

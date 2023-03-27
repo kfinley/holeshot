@@ -1,4 +1,4 @@
-import { Event, ServiceActions, Track } from "@holeshot/types/src";
+import { Event, Track, ServiceActions } from "@holeshot/types/src";
 import { Action, Module, Mutation } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SchedulerState, Status } from "./state";
@@ -67,7 +67,6 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
         },
       });
       this.context.commit("updateSchedule", { event: params.event });
-
     } catch (e) {
       console.log("Error in addToSchedule: ", e);
       notificationModule.setError({
