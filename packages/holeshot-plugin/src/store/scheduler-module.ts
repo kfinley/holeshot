@@ -12,7 +12,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   timeout?: number;
 
   @Action
-  [ServiceActions.SchedulerSetPrevious](params: { schedule: Event[] }): void {
+  [ServiceActions.Scheduler.setPrevious](params: { schedule: Event[] }): void {
     console.log('setPrevious', params);
     super.mutate((state: SchedulerState) => {
       if (state.schedule == null) {
@@ -27,7 +27,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  [ServiceActions.SchedulerSetUpcoming](params: { schedule: Event[] }): void {
+  [ServiceActions.Scheduler.setUpcoming](params: { schedule: Event[] }): void {
     console.log('setUpcoming', params);
     super.mutate((state: SchedulerState) => {
       if (state.schedule == null) {

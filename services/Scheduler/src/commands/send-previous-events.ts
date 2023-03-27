@@ -52,7 +52,7 @@ export class SendPreviousEventsCommand implements Command<SendPreviousEventsRequ
 
     const startStepFunctionResponse = await this.startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: ServiceActions.SchedulerSetPrevious, // Store module/action
+        subject: `Scheduler/${ServiceActions.Scheduler.setPrevious}`, // Store module/action
         connectionId: params.connectionId,
         message: JSON.stringify({
           schedule

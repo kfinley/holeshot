@@ -30,7 +30,7 @@ import { schedulerModule, SchedulerState } from "../store";
 import EventDetailsModal from "./event-details-modal.vue";
 import SchedulerControls from "./scheduler-controls.vue";
 import { State } from "vuex-class";
-import { Event } from "@holeshot/types/src";
+import { Event, ServiceActions } from "@holeshot/types/src";
 import { mapGetters } from "vuex";
 
 @Component({
@@ -41,12 +41,12 @@ import { mapGetters } from "vuex";
     EventSearch,
     SchedulerControls,
   },
-  computed: {
-    ...mapGetters("Scheduler", {
-      upcomingEvents: "upcomingEvents", // <- for runtime
-      previousEvents: "previousEvents",
-    }),
-  },
+  // computed: {
+  //   ...mapGetters("Scheduler", {
+  //     upcomingEvents: "upcomingEvents", // <- for runtime
+  //     previousEvents: "previousEvents",
+  //   }),
+  // },
 })
 export default class Schedule extends BaseControl {
   @State("Scheduler") state!: SchedulerState;
@@ -56,6 +56,13 @@ export default class Schedule extends BaseControl {
   activeControl = "EventsUpcoming";
   currentEvent!: Event | null;
 
+  get upcomingEvents() {
+    return schedulerModule.upcomingEvents;
+  }
+
+  get previousEvents() {
+    return schedulerModule.previousEvents;
+  }
   controlsClicked(control: string) {
     this.activeControl = control;
   }
@@ -250,7 +257,7 @@ export default class Schedule extends BaseControl {
         (e) => e.date < new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
       );
 
-      schedulerModule["Scheduler/setPrevious"]({
+      schedulerModule[ServiceActions.Scheduler.setPrevious]({
         schedule: previous,
       });
 
@@ -258,7 +265,7 @@ export default class Schedule extends BaseControl {
         (e) => e.date >= new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
       );
 
-      schedulerModule["Scheduler/setUpcoming"]({
+      schedulerModule[ServiceActions.Scheduler.setUpcoming]({
         schedule: upcoming,
       });
     }

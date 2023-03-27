@@ -45,14 +45,14 @@ export class SendUpcomingEventsCommand implements Command<SendUpcomingEventsRequ
       delete event["SK"];
       delete event["type"];
 
-      // console.log('event', event);
+      //console.log('event', event);
 
       schedule.push(event);
     });
 
     const startStepFunctionResponse = await this.startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: ServiceActions.SchedulerSetUpcoming, // Store module/action
+        subject: `Scheduler/${ServiceActions.Scheduler.setUpcoming}`, // Store module/action
         connectionId: params.connectionId,
         message: JSON.stringify({
           schedule
