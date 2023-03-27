@@ -7,8 +7,8 @@ import { SendUpcomingEventsCommand } from '../commands/send-upcoming-events';
 
 const container = bootstrapper();
 
-const sendPrevious = container.get<SendPreviousEventsCommand>("GetPreviousEventsCommand");
-const sendUpcoming = container.get<SendUpcomingEventsCommand>("GetUpcomingEventsCommand");
+const sendPrevious = container.get<SendPreviousEventsCommand>("SendPreviousEventsCommand");
+const sendUpcoming = container.get<SendUpcomingEventsCommand>("SendUpcomingEventsCommand");
 
 export const handler = async (event: SNSEvent, context: Context) => {
 

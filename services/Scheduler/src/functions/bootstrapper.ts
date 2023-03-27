@@ -10,7 +10,7 @@ export default function bootstrapper() {
 
   awsCommandsBootstrapper(container);
 
-  container.bind<GetNearbyEventsCommand>("SendNearbyEventsCommand").to(GetNearbyEventsCommand);
+  container.bind<GetNearbyEventsCommand>("GetNearbyEventsCommand").to(GetNearbyEventsCommand);
   container.bind<SendPreviousEventsCommand>("SendPreviousEventsCommand").to(SendPreviousEventsCommand);
   container.bind<SendUpcomingEventsCommand>("SendUpcomingEventsCommand").to(SendUpcomingEventsCommand);
 

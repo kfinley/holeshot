@@ -29,9 +29,8 @@ export default class EventsUpcoming extends Vue {
   events: Array<Event>;
 
   get hasEvents() {
-    return this.events.length > 0;
+    return this.events?.length > 0;
   }
-
   click(event: Event) {
     this.$emit("event-click", event);
   }
