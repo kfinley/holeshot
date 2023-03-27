@@ -85,6 +85,8 @@ export default class EventCard extends BaseControl {
       track: this.track,
       event: this.event,
     });
+
+    this.$emit("added-to-schedule", this.event);
   }
 
   click() {

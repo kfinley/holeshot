@@ -105,6 +105,7 @@
           :track="trackFor(event)"
           :event="event"
           show-add-to-schedule="true"
+          @added-to-schedule="addedToSchedule"
         />
       </div>
     </div>
@@ -121,6 +122,7 @@ import "vue2-datepicker/index.css";
 import { searchModule, SearchState, SearchStatus } from "../store";
 import { State } from "vuex-class";
 import EventCard from "./event-card.vue";
+import { notificationModule } from "@finley/vue2-components/src/store";
 
 @Component({
   components: {
@@ -211,6 +213,24 @@ export default class EventSearch extends BaseControl {
       (t: Track) => t.name == event.trackName
     );
     return track;
+  }
+
+  addedToSchedule(event: Event) {
+    searchModule.mutate((s: SearchState) => {
+      s.searchResults.events = s.searchResults.events.filter(
+        (e) =>
+          !(
+            e.name === event.name &&
+            e.date === event.date &&
+            e.trackName === event.trackName
+          )
+      );
+    });
+    notificationModule.add({
+      message: `${event.name} was added to your schedule`,
+      type: "success",
+      timed: true,
+    });
   }
 }
 </script>
