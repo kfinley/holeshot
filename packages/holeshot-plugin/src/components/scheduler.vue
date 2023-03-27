@@ -41,10 +41,12 @@ import { mapGetters } from "vuex";
     EventSearch,
     SchedulerControls,
   },
-  computed: mapGetters("Scheduler", {
-    upcomingEvents: "upcomingEvents", // <- for runtime
-    previousEvents: "previousEvents",
-  }),
+  computed: {
+    ...mapGetters("Scheduler", {
+      upcomingEvents: "upcomingEvents", // <- for runtime
+      previousEvents: "previousEvents",
+    }),
+  },
 })
 export default class Schedule extends BaseControl {
   @State("Scheduler") state!: SchedulerState;
