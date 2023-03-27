@@ -3,7 +3,7 @@ import { Inject, injectable } from 'inversify-props';
 import { container } from '../inversify.config';
 import { GetEntitiesCommand, StartStepFunctionCommand } from '@holeshot/aws-commands/src';
 import { unmarshall } from "@aws-sdk/util-dynamodb";
-import { ServiceActions } from "@holeshot/types/src/service-actions";
+import { Actions } from "@holeshot/types/src";
 
 export type SendUpcomingEventsRequest = {
   userId: string;
@@ -52,7 +52,7 @@ export class SendUpcomingEventsCommand implements Command<SendUpcomingEventsRequ
 
     const startStepFunctionResponse = await this.startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: `Scheduler/${ServiceActions.Scheduler.setUpcoming}`, // Store module/action
+        subject: `Scheduler/${Actions.Scheduler.setUpcoming}`, // Store module/action
         connectionId: params.connectionId,
         message: JSON.stringify({
           schedule

@@ -40,10 +40,8 @@ import { Component, Prop } from "vue-property-decorator";
 import Card from "@finley/vue2-components/src/components/card.vue";
 import { Track, Event } from "@holeshot/types/src";
 import BaseControl from "./base-control";
-import { SchedulerState } from "../store";
-import { SchedulerModule } from "../store/scheduler-module";
+import { schedulerModule, SchedulerState } from "../store";
 import { State } from "vuex-class";
-import { getModule } from "vuex-module-decorators";
 
 @Component({
   components: { Card },
@@ -83,7 +81,7 @@ export default class EventCard extends BaseControl {
   }
 
   addToSchedule() {
-    getModule(SchedulerModule, this.$store).addToSchedule({
+    schedulerModule.addToSchedule({
       track: this.track,
       event: this.event,
     });

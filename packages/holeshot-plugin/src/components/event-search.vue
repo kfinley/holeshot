@@ -37,13 +37,13 @@
         v-model="state.searchInput.location"
         placeholder="(Optional) if left blank home track is used"
         class="form-control"
-      />
+      /> -->
       <input
         id="name"
         v-model="state.searchInput.name"
         placeholder="(Optional) refine search by event name"
         class="form-control"
-      /> -->
+      />
       <div>
         <label for="startDate">Start Date:</label>
         <date-picker
