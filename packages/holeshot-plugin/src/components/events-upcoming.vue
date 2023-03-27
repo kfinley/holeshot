@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-if="hasEvents">
+    <div>
       <h3 align="center">Upcoming Events</h3>
       <div v-for="(event, index) in events" :key="index">
         <event-card
@@ -28,9 +28,6 @@ export default class EventsUpcoming extends Vue {
   @Prop()
   events: Array<Event>;
 
-  get hasEvents() {
-    return this.events.length > 0;
-  }
   click(event: Event) {
     this.$emit("event-click", event);
   }

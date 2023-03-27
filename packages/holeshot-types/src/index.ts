@@ -1,4 +1,4 @@
-export * from './service-actions';
+export * from './actions';
 
 //TODO: Refactor this up...
 export interface Entity {

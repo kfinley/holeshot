@@ -26,6 +26,8 @@ export class SendPreviousEventsCommand implements Command<SendPreviousEventsRequ
   async runAsync(params: SendPreviousEventsRequest): Promise<SendPreviousEventsResponse> {
     const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
 
+    console.log(today);
+
     const response = await this.getEntities.runAsync({
       keyConditionExpression: "PK = :PK AND SK < :today",
       expressionAttributeValues: {

@@ -1,4 +1,4 @@
-import { Event, Track, ServiceActions } from "@holeshot/types/src";
+import { Event, Track, Actions } from "@holeshot/types/src";
 import { Action, Module, Mutation } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SchedulerState, Status } from "./state";
@@ -12,8 +12,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   timeout?: number;
 
   @Action
-  [ServiceActions.Scheduler.setPrevious](params: { schedule: Event[] }): void {
-    console.log('setPrevious', params);
+  [Actions.Scheduler.setPrevious](params: { schedule: Event[] }): void {
     super.mutate((state: SchedulerState) => {
       if (state.schedule == null) {
         state.schedule = params.schedule;
@@ -27,8 +26,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   @Action
-  [ServiceActions.Scheduler.setUpcoming](params: { schedule: Event[] }): void {
-    console.log('setUpcoming', params);
+  [Actions.Scheduler.setUpcoming](params: { schedule: Event[] }): void {
     super.mutate((state: SchedulerState) => {
       if (state.schedule == null) {
         state.schedule = params.schedule;
