@@ -8,7 +8,6 @@ const functionNamePrefix =
     : "holeshot-Dev-Event";
 
 export class HoleshotModule extends BaseModule {
-
   private timeoutFailureCount = 0;
 
   sendCommand(params: {

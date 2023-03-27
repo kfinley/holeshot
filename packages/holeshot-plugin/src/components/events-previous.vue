@@ -1,7 +1,7 @@
 <template>
   <div class="row">
-    <div>
-      <h3 align="center">Previous Events</h3>
+    <h3 align="center">Previous Events</h3>
+    <div class="reversed">
       <div v-for="(event, index) in events" :key="index">
         <event-card :track="event.track" :event="event" />
       </div>
@@ -25,3 +25,10 @@ export default class EventsPrevious extends BaseControl {
   events: Array<Event>;
 }
 </script>
+
+<style lang="scss" scoped>
+.reversed {
+  display: flex;
+  flex-direction: column-reverse;
+}
+</style>
