@@ -44,12 +44,12 @@
     "reflect-metadata": "^0.1.13",
     "aws-crt": "1.15.5",
     "aws-sdk": "^2.1291.0",
-    "@aws-sdk/signature-v4-crt": "3.272.0",
-    "tslib": "^2.4.1"
+    "@aws-sdk/signature-v4-crt": "3.272.0"
   },
   "devDependencies": {
     "@storybook/storybook-deployer": "^2.8.16",
     "@types/jest": "^27.0.2",
+    "@types/node": "^18.11.17",
     "aws-ses-v2-local": "2.1.0",
     "dotenv": "^16.0.3",
     "http-server": "^14.1.1",
@@ -61,6 +61,7 @@
     "serverless-s3-local": "^0.7.1",
     "serverless-step-functions": "^3.10.0",
     "serverless-webpack": "^5.10.0",
+    "tslib": "^2.4.1",
     "ts-loader": "^9.4.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",

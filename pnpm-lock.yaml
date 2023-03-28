@@ -8,6 +8,7 @@ importers:
       '@finley/vue2-components': workspace:1.0.0
       '@storybook/storybook-deployer': ^2.8.16
       '@types/jest': ^27.0.2
+      '@types/node': ^18.11.17
       aws-crt: 1.15.5
       aws-sdk: ^2.1291.0
       aws-ses-v2-local: 2.1.0
@@ -39,10 +40,10 @@ importers:
       aws-sdk: 2.1291.0
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
-      tslib: 2.4.1
     devDependencies:
       '@storybook/storybook-deployer': 2.8.16
       '@types/jest': 27.5.2
+      '@types/node': 18.13.0
       aws-ses-v2-local: link:packages/aws-ses-v2-local
       dotenv: 16.0.3
       http-server: 14.1.1
@@ -53,11 +54,12 @@ importers:
       serverless-offline-sns: 0.76.0
       serverless-s3-local: 0.7.1_uw5g4tkup737fkhwes4zhn3fkq
       serverless-step-functions: 3.11.1_serverless@2.72.3
-      serverless-webpack: 5.11.0_37iqz4byo7zsh3yg5cta6mygte
+      serverless-webpack: 5.11.0_lnvkewe4dda6gyszo7jkeiqi7e
       ts-loader: 9.4.2_3fkjkrd3audxnith3e7fo4fnxi
-      ts-node: 10.9.1_typescript@4.9.4
+      ts-node: 10.9.1_j7ujjvgaenksbuonlzvryephbi
       tsconfig-paths: 4.1.2
       tsconfig-paths-webpack-plugin: 4.0.0
+      tslib: 2.4.1
       typescript: 4.9.4
       webpack: 5.75.0
       webpack-node-externals: 3.0.0
@@ -70,9 +72,10 @@ importers:
       inversify-props: ^2.2.6
       tslib: ^2.4.0
     dependencies:
-      '@types/node': 18.11.18
       axios: 1.2.1
       inversify-props: 2.2.6
+    devDependencies:
+      '@types/node': 18.11.18
       tslib: 2.4.1
 
   packages/aws-commands:
@@ -748,7 +751,6 @@ importers:
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
       strnum: 1.0.5
-      tslib: 2.4.1
       utils-is-little-endian: 1.0.0
       uuid: 8.3.2
     devDependencies:
@@ -758,6 +760,7 @@ importers:
       jest: 27.5.1_ts-node@10.9.1
       ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
       ts-node: 10.9.1_typescript@4.9.4
+      tslib: 2.4.1
       typescript: 4.9.4
 
   services/Scheduler:
@@ -881,7 +884,6 @@ importers:
       reflect-metadata: 0.1.13
       source-map-support: 0.5.21
       strnum: 1.0.5
-      tslib: 2.4.1
       uuid: 8.3.2
     devDependencies:
       '@tsconfig/node18': 1.0.1
@@ -890,6 +892,7 @@ importers:
       jest: 27.5.1_ts-node@10.9.1
       ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
       ts-node: 10.9.1_typescript@4.9.4
+      tslib: 2.4.1
       typescript: 4.9.4
 
   services/WebSockets:
@@ -941,7 +944,6 @@ importers:
       inversify-props: 2.2.6
       reflect-metadata: 0.1.13
       strnum: 1.0.5
-      tslib: 2.4.1
       uuid: 8.3.2
     devDependencies:
       '@tsconfig/node18': 1.0.1
@@ -949,6 +951,7 @@ importers:
       jest: 27.5.1_ts-node@10.9.1
       ts-jest: 27.1.5_llt55oiqarpqk3a6ko7ts5f3gi
       ts-node: 10.9.1_j7ujjvgaenksbuonlzvryephbi
+      tslib: 2.4.1
       typescript: 4.9.4
 
 packages:
@@ -12599,7 +12602,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.13
@@ -24883,6 +24886,15 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
+  /promise-inflight/1.0.1:
+    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
+    peerDependencies:
+      bluebird: '*'
+    peerDependenciesMeta:
+      bluebird:
+        optional: true
+    dev: true
+
   /promise-inflight/1.0.1_bluebird@3.7.2:
     resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
     peerDependencies:
@@ -26736,7 +26748,7 @@ packages:
       - encoding
     dev: true
 
-  /serverless-webpack/5.11.0_37iqz4byo7zsh3yg5cta6mygte:
+  /serverless-webpack/5.11.0_lnvkewe4dda6gyszo7jkeiqi7e:
     resolution: {integrity: sha512-0OjwSAMrf1OZZfbFwWUGuqz9eiMJIinTRWz2XNkKD3TY5EifvwU7oAF7mEXKPZTgtVhusSzz408C3FWgcIHizg==}
     engines: {node: '>= 10.12.0'}
     peerDependencies:
@@ -26750,6 +26762,7 @@ packages:
       typescript:
         optional: true
     dependencies:
+      '@types/node': 18.13.0
       archiver: 5.3.1
       bluebird: 3.7.2
       find-yarn-workspace-root: 2.0.0
@@ -26762,7 +26775,7 @@ packages:
       typescript: 4.9.4
       webpack: 5.75.0
     optionalDependencies:
-      ts-node: 10.9.1_typescript@4.9.4
+      ts-node: 10.9.1_j7ujjvgaenksbuonlzvryephbi
     transitivePeerDependencies:
       - '@swc/core'
       - '@swc/wasm'

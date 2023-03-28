@@ -1,11 +1,19 @@
 <template>
-  <div>© 2023 Holeshot-BMX.com</div>
+  <div>
+    <div>© 2023 Holeshot-BMX.com</div>
+    <system-status></system-status>
+  </div>
 </template>
 
 <script lang="ts">
+import SystemStatus from './system-status.vue';
 import { Component, Vue } from 'vue-property-decorator';
 
-@Component({})
+@Component({
+  components: {
+    SystemStatus,
+  },
+})
 export default class Footer extends Vue {}
 </script>
 
