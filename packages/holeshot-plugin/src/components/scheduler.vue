@@ -1,5 +1,5 @@
 <template>
-  <div class="events pb-3">
+  <div class="pb-3">
     <events-previous
       v-if="activeControl == 'EventsPrevious'"
       :events="previousEvents"
@@ -65,6 +65,7 @@ export default class Schedule extends BaseControl {
   get previousEvents() {
     return schedulerModule.previousEvents;
   }
+
   controlsClicked(control: string) {
     this.activeControl = control;
   }
@@ -285,13 +286,3 @@ export default class Schedule extends BaseControl {
   }
 }
 </script>
-
-<!-- <style lang="scss" scoped>
-.events {
-}
-
-@media (max-width: 768px) {
-  .events {
-  }
-}
-</style> -->

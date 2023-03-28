@@ -23,7 +23,7 @@ import { Lambda } from "@aws-sdk/client-lambda";
 
 export default function bootstrapper(container: Container) {
 
-  console.log('aws-commands bootstrapper');
+  // console.log('aws-commands bootstrapper');
 
   if (!container.isBound("CognitoIdentityClient")) {
     container.bind<CognitoIdentityClient>("CognitoIdentityClient")
@@ -152,7 +152,7 @@ export default function bootstrapper(container: Container) {
   container.bind<GetEntitiesCommand>("GetEntitiesCommand").to(GetEntitiesCommand);
   container.bind<UpdateEntityCommand>("UpdateEntityCommand").to(UpdateEntityCommand);
   container.bind<DeleteEntityCommand>("DeleteEntityCommand").to(DeleteEntityCommand);
-  
+
   // console.log('aws-commands bootstrapper done');
 
 }

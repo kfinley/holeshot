@@ -38,7 +38,7 @@ export class HoleshotModule extends BaseModule {
       count = count++;
       setTimeout(function () {
         count = 0;
-      }, 60000);
+      }, 150000);
       if (count >= 2) {
         context.dispatch(
           "WebSockets/reconnect",

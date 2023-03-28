@@ -66,7 +66,7 @@ export default function bootstrapper() {
   container.bind<IMessageCommand>("PingMessageCommand").to(PingMessageCommand);
   container.bind<IMessageCommand>("RunLambdaCommand").to(RunLambdaCommand);
 
-  console.log("Bootstrapper Done");
+  // console.log("Bootstrapper Done");
 
   return container;
 }

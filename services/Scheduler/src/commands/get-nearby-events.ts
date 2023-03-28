@@ -54,7 +54,6 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     const events: Record<string, any>[] = [];
     const tracks: Record<string, any>[] = [];
 
-    // const tracks: Record<string, any>[] = [];
     if (tracksInRange.items.length > 10) {
       console.log('Large list of tracks searched.', tracksInRange.items.length);
     }
@@ -125,7 +124,17 @@ export class GetNearbyEventsCommand implements Command<GetNearbyEventsRequest, G
     return {
       searched: tracksInRange.items.length,
       tracks,
-      events
+      events: events.sort(this.eventComparer)
     }
+  }
+
+  eventComparer(a: Event, b: Event) {
+    if (a.date < b.date) {
+      return -1;
+    }
+    if (a.date > b.date) {
+      return 1;
+    }
+    return 0;
   }
 }

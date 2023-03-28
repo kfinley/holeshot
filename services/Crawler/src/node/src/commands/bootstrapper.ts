@@ -13,7 +13,7 @@ export default function bootstrapper() {
   container.bind<SaveTrackInfoCommand>("SaveTrackInfoCommand").to(SaveTrackInfoCommand);
   container.bind<SaveTrackEventsCommand>('SaveTrackEventsCommand').to(SaveTrackEventsCommand);
 
-  console.log("Bootstrapper Done");
+  // console.log("Bootstrapper Done");
 
   return container;
 }
