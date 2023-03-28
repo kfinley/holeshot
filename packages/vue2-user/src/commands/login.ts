@@ -45,15 +45,12 @@ export class LoginCommand implements Command<LoginRequest, LoginResponse> {
         };
       }
     } catch (e) {
-      const message = `Login failed. Error: ${e.message}`;
       if (e.message === 'Resource not found') {
         console.log('Confirm Cognito UserPool ClientID is correct.', e);
       } else {
         // console.log(e);
-
       }
-
-      throw new Error(message);
+      throw new Error(e.message);
     }
 
     return {

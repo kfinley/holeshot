@@ -1,3 +1,5 @@
+//TODO: Rework this so we store all the events in the GEO table instead of just tracks.
+//      Fan out searching like this runs too slow and makes paging tougher.
 import { Command } from '@holeshot/commands/src';
 import { Inject, injectable } from 'inversify-props';
 import { DynamoDBClient, QueryCommand, QueryCommandInput } from '@aws-sdk/client-dynamodb';
