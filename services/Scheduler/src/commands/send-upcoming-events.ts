@@ -24,7 +24,9 @@ export class SendUpcomingEventsCommand implements Command<SendUpcomingEventsRequ
   private startStepFunction!: StartStepFunctionCommand;
 
   async runAsync(params: SendUpcomingEventsRequest): Promise<SendUpcomingEventsResponse> {
-    const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
+    const today = new Date(new Date().setHours(-7, 0, 0, 0))
+      .toJSON()
+      .replace(".000Z", "")
 
     const response = await this.getEntities.runAsync({
       keyConditionExpression: "PK = :PK AND SK >= :today",

@@ -3,7 +3,12 @@
     <h3 align="center">Previous Events</h3>
     <div class="reversed">
       <div v-for="(event, index) in events" :key="index">
-        <event-card :track="event.track" :event="event" />
+        <event-card
+          :track="event.track"
+          :event="event"
+          @click="click(event)"
+          class="clickable"
+        />
       </div>
     </div>
   </div>
@@ -23,6 +28,10 @@ import EventCard from "./event-card.vue";
 export default class EventsPrevious extends BaseControl {
   @Prop()
   events: Array<Event>;
+
+  click(event: Event) {
+    this.$emit("event-click", event);
+  }
 }
 </script>
 

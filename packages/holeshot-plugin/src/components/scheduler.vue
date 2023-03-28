@@ -3,20 +3,26 @@
     <events-previous
       v-if="activeControl == 'EventsPrevious'"
       :events="previousEvents"
+      @event-click="eventClicked"
     />
     <events-upcoming
       v-if="activeControl == 'EventsUpcoming'"
       :events="upcomingEvents"
-      @event-click="eventClick"
+      @event-click="eventClicked"
     />
     <event-details-modal
       v-if="showEventDetails"
       :event="currentEvent"
       @close="eventDetailsClosed"
+      @open-race-log="openRaceLog"
     />
     <event-search v-if="activeControl == 'EventsSearch'" />
-
     <scheduler-controls @click="controlsClicked" />
+    <race-log-modal
+      v-if="showRaceLog"
+      :event="currentEvent"
+      @close="raceLogClosed"
+    />
   </div>
 </template>
 
@@ -31,6 +37,7 @@ import EventDetailsModal from "./event-details-modal.vue";
 import SchedulerControls from "./scheduler-controls.vue";
 import { State } from "vuex-class";
 import { Event, Actions } from "@holeshot/types/src";
+import RaceLogModal from "./race-log-modal.vue";
 
 @Component({
   components: {
@@ -38,6 +45,7 @@ import { Event, Actions } from "@holeshot/types/src";
     EventsUpcoming,
     EventsPrevious,
     EventSearch,
+    RaceLogModal,
     SchedulerControls,
   },
 })
@@ -45,6 +53,7 @@ export default class Schedule extends BaseControl {
   @State("Scheduler") state!: SchedulerState;
 
   showEventDetails = false;
+  showRaceLog = false;
 
   activeControl = "EventsUpcoming";
   currentEvent!: Event | null;
@@ -65,9 +74,20 @@ export default class Schedule extends BaseControl {
     this.showEventDetails = false;
   }
 
-  eventClick(event: Event) {
+  raceLogClosed() {
+    this.showRaceLog = false;
+    this.showEventDetails = true;
+  }
+
+  eventClicked(event: Event) {
     this.currentEvent = event;
     this.showEventDetails = true;
+    this.showRaceLog = false;
+  }
+
+  openRaceLog() {
+    this.showEventDetails = false;
+    this.showRaceLog = true;
   }
 
   created() {
@@ -77,7 +97,7 @@ export default class Schedule extends BaseControl {
 
       const schedule = [
         {
-          date: "2023-03-25T00:00:00",
+          date: "2023-03-27T00:00:00",
           trackName: "Hornet`s Nest BMX",
           track: {
             name: "Hornet`s Nest BMX",

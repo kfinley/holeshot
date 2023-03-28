@@ -24,7 +24,9 @@ export class SendPreviousEventsCommand implements Command<SendPreviousEventsRequ
   private startStepFunction!: StartStepFunctionCommand;
 
   async runAsync(params: SendPreviousEventsRequest): Promise<SendPreviousEventsResponse> {
-    const today = new Date(new Date().setHours(0, 0, 0, 0)).toJSON();
+    const today = new Date(new Date().setHours(-7, 0, 0, 0))
+      .toJSON()
+      .replace(".000Z", "")
 
     console.log(today);
 

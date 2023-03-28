@@ -10,6 +10,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   status: Status = Status.None;
 
   timeout?: number;
+  //TODO: currently hardcoded to adjust to pacific time
+  today = new Date(new Date().setHours(-7, 0, 0, 0))
+    .toJSON()
+    .replace(".000Z", "");
 
   @Action
   [Actions.Scheduler.setPrevious](params: { schedule: Event[] }): void {
@@ -146,14 +150,10 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
   }
 
   get upcomingEvents(): Event[] | undefined {
-    return this.schedule?.filter(
-      (e) => e.date >= new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
-    );
+    return this.schedule?.filter((e) => e.date >= this.today);
   }
 
   get previousEvents(): Event[] | undefined {
-    return this.schedule?.filter(
-      (e) => e.date < new Date(new Date().setHours(0, 0, 0, 0)).toJSON()
-    );
+    return this.schedule?.filter((e) => e.date < this.today);
   }
 }

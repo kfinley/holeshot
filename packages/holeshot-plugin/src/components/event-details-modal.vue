@@ -1,5 +1,5 @@
 <template>
-  <modal @close="$emit('close')" width="85%">
+  <modal @close="$emit('close')" width="90%">
     <div slot="header">
       <h3>{{ event.name }}<br />@ {{ event.track.name }}</h3>
     </div>
@@ -16,7 +16,8 @@
       </div>
     </div>
     <div slot="footer" v-if="!disabled">
-      <Button @click="removeFromSchedule"> Remove </Button>
+      <Button v-if="showRaceLog" @click="openRaceLog">Race Log</Button>
+      <Button v-if="showRemove" @click="removeFromSchedule"> Remove </Button>
       <Button @click="$emit('close')"> Close </Button>
     </div>
   </modal>
@@ -38,6 +39,11 @@ export default class EventDetailsModal extends BaseControl {
   @Prop()
   event!: Event;
 
+  //TODO: currently hardcoded to adjust to pacific time
+  today = new Date(new Date().setHours(-7, 0, 0, 0))
+    .toJSON()
+    .replace(".000Z", "");
+
   async removeFromSchedule() {
     await schedulerModule.removeFromSchedule({ event: this.event });
     this.$emit("close");
@@ -45,6 +51,18 @@ export default class EventDetailsModal extends BaseControl {
 
   get disabled() {
     return super.disconnected;
+  }
+
+  get showRaceLog() {
+    return this.event.date <= this.today;
+  }
+
+  get showRemove() {
+    return this.event.date >= this.today;
+  }
+
+  openRaceLog() {
+    this.$emit("open-race-log");
   }
 }
 </script>
