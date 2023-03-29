@@ -9,3 +9,10 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class SystemStatus extends Vue {}
 
 </script>
+
+<style scoped>
+div {
+  height: 1.75em;
+  background-color: black;
+}
+</style>

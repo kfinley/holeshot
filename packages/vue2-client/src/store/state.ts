@@ -18,4 +18,6 @@ export enum WebSocketsStatus {
 export interface WebSocketsState {
   status: WebSocketsStatus;
   socket?: Socket;
+  token: string;
+  commandQueue: { command: string; data: any; }[];
 }

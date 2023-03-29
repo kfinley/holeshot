@@ -1,20 +1,27 @@
 <template>
   <div>
-    <div>© 2023 Holeshot-BMX.com</div>
-    <system-status></system-status>
+    <system-status v-if="loggedIn" />
+    <div class="pt-2 pb-2" style="border-top: 1px solid grey" v-else>
+      © 2023 Holeshot-BMX.com
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import SystemStatus from './system-status.vue';
 import { Component, Vue } from 'vue-property-decorator';
+import { userModule, AuthStatus } from '@holeshot/vue2-user/src/store';
 
 @Component({
   components: {
     SystemStatus,
   },
 })
-export default class Footer extends Vue {}
+export default class Footer extends Vue {
+  get loggedIn() {
+    return userModule.authStatus == AuthStatus.LoggedIn;
+  }
+}
 </script>
 
 <style lang="scss">

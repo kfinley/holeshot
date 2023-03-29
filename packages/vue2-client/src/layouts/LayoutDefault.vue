@@ -92,9 +92,6 @@ export default class LayoutDefault extends Vue {
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding-top: 0.25em;
-    padding-bottom: 0.25em;
-    border-top: 1px solid grey;
     text-align: center;
   }
 }

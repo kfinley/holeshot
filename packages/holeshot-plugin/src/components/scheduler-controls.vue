@@ -2,7 +2,7 @@
   <div class="controls row">
     <div
       ref="eventsPrevious"
-      class="col p-2 clickable"
+      class="col p-3 clickable"
       @click="click('EventsPrevious')"
     >
       <div class="material-icons">directions_bike</div>
@@ -10,7 +10,7 @@
     </div>
     <div
       ref="eventsUpcoming"
-      class="col p-2 clickable active"
+      class="col p-3 clickable active"
       @click="click('EventsUpcoming')"
     >
       <div class="material-icons">calendar_today</div>
@@ -18,7 +18,7 @@
     </div>
     <div
       ref="eventsSearch"
-      class="col p-2 clickable"
+      class="col p-3 clickable"
       @click="click('EventsSearch')"
     >
       <div class="material-icons">search</div>
