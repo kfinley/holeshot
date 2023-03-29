@@ -78,13 +78,14 @@ export class UserServiceStack extends BaseServiceConstruct {
     this.client = this.userPool.addClient('Holeshot-client', {
       userPoolClientName: 'Holeshot-client',
       idTokenValidity: Duration.days(1),
-      accessTokenValidity: Duration.days(90),
+      accessTokenValidity: Duration.days(1),
       authFlows: {
         adminUserPassword: true,
         userPassword: true,
       },
       preventUserExistenceErrors: true,
       generateSecret: false,
+      
     });
 
     // Create the rest of the Lambdas
