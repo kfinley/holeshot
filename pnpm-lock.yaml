@@ -268,10 +268,7 @@ importers:
       webpack: 5.75.0
 
   packages/holeshot-types:
-    specifiers:
-      '@types/node': ^18.11.17
-    dependencies:
-      '@types/node': 18.11.18
+    specifiers: {}
 
   packages/serverless-offline-ses-v2:
     specifiers:

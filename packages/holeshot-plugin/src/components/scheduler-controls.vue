@@ -62,14 +62,15 @@ export default class ScheduleControls extends BaseControl {
 <style lang="scss" scoped>
 .controls {
   position: fixed;
-  bottom: 1.7em;
+  bottom: 1em;
   padding: 0;
-  width: 105%;
+  width: 103%;
   height: 70px;
   text-align: center;
   color: $color--grey80;
   background: $dark;
   left: 0%;
+  z-index: 100;
 }
 
 .active {

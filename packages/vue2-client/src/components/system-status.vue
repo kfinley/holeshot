@@ -1,5 +1,5 @@
 <template>
-  <div v-html="socketStatus"></div>
+  <div><div class="socket-status" v-html="socketStatus"></div></div>
 </template>
 
 <script lang="ts">
@@ -22,7 +22,11 @@ export default class SystemStatus extends Vue {
 
 <style scoped>
 div {
-  height: 1.75em;
+  height: 1em;
   background-color: black;
+}
+
+.socket-status {
+  font-size: small;
 }
 </style>
