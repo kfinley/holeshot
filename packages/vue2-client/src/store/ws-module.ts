@@ -104,8 +104,8 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   @Action
   reconnect(token?: string) {
     console.log('reconnecting');
-    this.context.commit('mutate', (state: WebSocketsState) => (state.socket = undefined));
-    this.context.dispatch('connect', token ?? this.token);
+    this.context.commit('mutate', (state: WebSocketsState) => state.socket?.open());
+    // this.context.dispatch('connect', token ?? this.token);
   }
 
   @Action
