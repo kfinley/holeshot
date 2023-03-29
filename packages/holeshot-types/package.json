@@ -10,7 +10,7 @@
     "name": "Kyle Finley",
     "email": "kyle@kylefinley.net"
   },
-  "dependencies": {
+  "dev-dependencies": {
     "@types/node": "^18.11.17"
   }
 }

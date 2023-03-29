@@ -50,17 +50,11 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
 
   @Action
   handleSocketClose(ev: CloseEvent) {
-    if (ev.code == 1000) {
-      console.log('closed normally', ev);
-    } else if (ev.code == 1001) {
-      this.context.commit(
-        'mutate',
-        (state: WebSocketsState) => (state.status = WebSocketsStatus.Disconnected)
-      );
-      console.log('WebSocket Disconnected: ', ev);
-    } else {
-      console.log('WebSocket close: ', ev);
-    }
+    this.context.commit(
+      'mutate',
+      (state: WebSocketsState) => (state.status = WebSocketsStatus.Disconnected)
+    );
+    console.log('closed normally', ev);
   }
 
   @Action
@@ -109,6 +103,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
 
   @Action
   reconnect(token?: string) {
+    console.log('reconnecting');
     this.context.commit('mutate', (state: WebSocketsState) => (state.socket = undefined));
     this.context.dispatch('connect', token ?? this.token);
   }

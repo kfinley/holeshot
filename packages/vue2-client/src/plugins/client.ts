@@ -19,7 +19,7 @@ import { getModule } from 'vuex-module-decorators';
 import UserModule from '@holeshot/vue2-user/src/store/user-module';
 import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
-import { WebSocketsStatus } from '../store';
+// import { initializeModules } from '../store';
 import '../styles/styles.scss';
 import { SchedulerState } from '@holeshot/plugin/src/store';
 import RegistrationModule from '@holeshot/vue2-user/src/store/registration-module';
