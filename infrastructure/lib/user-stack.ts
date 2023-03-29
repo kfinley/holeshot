@@ -77,8 +77,8 @@ export class UserServiceStack extends BaseServiceConstruct {
 
     this.client = this.userPool.addClient('Holeshot-client', {
       userPoolClientName: 'Holeshot-client',
-      idTokenValidity: Duration.days(1),
-      accessTokenValidity: Duration.days(1),
+      idTokenValidity: Duration.days(90),
+      accessTokenValidity: Duration.days(90),
       authFlows: {
         adminUserPassword: true,
         userPassword: true,
