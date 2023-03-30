@@ -1,4 +1,5 @@
-import { Event, Track, Actions } from "@holeshot/types/src";
+import { Event, Track } from "@holeshot/types/src";
+import { Actions } from "@holeshot/types/src/actions";
 import { Action, Module, Mutation } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
 import { SchedulerState, Status } from "./state";

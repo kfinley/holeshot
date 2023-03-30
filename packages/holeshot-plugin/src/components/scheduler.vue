@@ -10,14 +10,14 @@
       :events="upcomingEvents"
       @event-click="eventClicked"
     />
+    <event-search v-if="activeControl == 'EventsSearch'" />
+    <scheduler-controls @click="controlsClicked" />
     <event-details-modal
       v-if="showEventDetails"
       :event="currentEvent"
       @close="eventDetailsClosed"
       @open-race-log="openRaceLog"
     />
-    <event-search v-if="activeControl == 'EventsSearch'" />
-    <scheduler-controls @click="controlsClicked" />
     <race-log-modal
       v-if="showRaceLog"
       :event="currentEvent"
@@ -36,7 +36,8 @@ import { schedulerModule, SchedulerState } from "../store";
 import EventDetailsModal from "./event-details-modal.vue";
 import SchedulerControls from "./scheduler-controls.vue";
 import { State } from "vuex-class";
-import { Event, Actions } from "@holeshot/types/src";
+import { Event } from "@holeshot/types/src";
+import { Actions } from "@holeshot/types/src/actions";
 import RaceLogModal from "./race-log-modal.vue";
 
 @Component({

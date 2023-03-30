@@ -1,5 +1,3 @@
 import HoleshotPluginPlugin from "./plugin";
 
-export {
-  HoleshotPluginPlugin
-};
+export { HoleshotPluginPlugin };

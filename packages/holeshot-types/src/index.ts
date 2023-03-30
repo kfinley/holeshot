@@ -51,6 +51,7 @@ export interface Event extends Entity {
   eventType: string;
   details: Record<string, string>;
   track?: Track;
+  hasRaceLog: boolean | null;
 }
 
 //TODO: Refactor this out...
@@ -61,4 +62,9 @@ export interface SwipeableEvent extends Event {
 export interface Track extends Entity {
   district: string;
   location: Location,
+}
+
+export interface RaceLog extends Entity {
+  event: Event;
+  attributes: Record<string, any>;
 }

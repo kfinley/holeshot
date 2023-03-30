@@ -23,6 +23,7 @@ import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
 import '../styles/styles.scss';
 import { SchedulerState } from '@holeshot/plugin/src/store';
 import RegistrationModule from '@holeshot/vue2-user/src/store/registration-module';
+import { RaceLogModule } from '@holeshot/plugin/src/store/race-log-module';
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
@@ -40,6 +41,7 @@ export const setupModules = (store: Store<any>): void => {
   getModule(UserModule, store);
   getModule(RegistrationModule, store);
   getModule(SearchModule, store);
+  getModule(RaceLogModule, store);
 
   // initializeModules(store);
 };

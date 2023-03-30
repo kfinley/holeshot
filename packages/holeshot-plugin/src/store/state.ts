@@ -1,4 +1,4 @@
-import { Event, GPS } from "@holeshot/types/src";
+import { Event, GPS, RaceLog } from "@holeshot/types/src";
 
 export enum Status {
   None = "None",
@@ -36,4 +36,11 @@ export interface SearchEventsInput {
 export interface SchedulerState {
   status: Status;
   schedule: Event[] | null;
+}
+
+export interface RaceLogState {
+  viewState: "View" | "Edit";
+  status: Status;
+  active: RaceLog | null;
+  logs: Array<RaceLog>;
 }

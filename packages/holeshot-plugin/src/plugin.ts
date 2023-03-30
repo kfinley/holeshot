@@ -6,6 +6,7 @@ import { SearchModule } from "./store/search-store";
 import { initializeModules } from "./store";
 import { Store } from "vuex";
 import { SchedulerModule } from "./store/scheduler-module";
+import { RaceLogModule } from "./store/race-log-module";
 
 export interface HoleshotPlugin extends PluginObject<HoleshotPluginOptions> {
   install: PluginFunction<HoleshotPluginOptions>;
@@ -16,6 +17,7 @@ export type HoleshotPluginOptions = ClientPluginOptions;
 export const setupModules = (store: Store<any>, container: Container): void => {
   store.registerModule("Search", SearchModule);
   store.registerModule("Scheduler", SchedulerModule);
+  store.registerModule("RaceLog", RaceLogModule);
 
   initializeModules(store);
 
