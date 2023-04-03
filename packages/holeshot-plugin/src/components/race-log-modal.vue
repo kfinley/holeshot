@@ -12,7 +12,11 @@
     </div>
     <div slot="footer" v-if="!disabled">
       <Button v-if="state.viewState == 'View'" @click="edit"> Edit </Button>
-      <Button @click="$emit('close')"> Close </Button>
+      <Button @click="$emit('close')">
+        <span v-if="state.viewState == 'View'">Close</span>
+        <span v-if="state.viewState == 'Edit'">Cancel</span>
+      </Button>
+      <Button v-if="state.viewState == 'Edit'" @click="save">Save</Button>
     </div>
   </modal>
 </template>
@@ -40,9 +44,18 @@ export default class RaceLogModal extends BaseControl {
   @Prop()
   event!: Event;
 
+  // setup any calls into our vuex store module
+  edit = raceLogModule.edit;
+  save = raceLogModule.save;
+
+  mounted() {
+    raceLogModule.init({ event: this.event });
+  }
+
   get disabled() {
     return super.disconnected;
   }
+
 }
 </script>
 
