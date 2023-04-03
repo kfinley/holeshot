@@ -11,6 +11,7 @@
       </div>
     </div>
     <div slot="footer" v-if="!disabled">
+      <Button v-if="state.viewState == 'View'" @click="edit"> Edit </Button>
       <Button @click="$emit('close')"> Close </Button>
     </div>
   </modal>
@@ -22,7 +23,7 @@ import { Component, Prop } from "vue-property-decorator";
 import { Event } from "@holeshot/types/src";
 import Modal from "@finley/vue2-components/src/components/modal.vue";
 import { State } from "vuex-class";
-import { RaceLogState } from "../store";
+import { raceLogModule, RaceLogState } from "../store";
 import RaceLogEdit from "./race-log-edit.vue";
 import RaceLogView from "./race-log-view.vue";
 
@@ -38,11 +39,6 @@ export default class RaceLogModal extends BaseControl {
 
   @Prop()
   event!: Event;
-
-  //TODO: currently hardcoded to adjust to pacific time
-  today = new Date(new Date().setHours(-7, 0, 0, 0))
-    .toJSON()
-    .replace(".000Z", "");
 
   get disabled() {
     return super.disconnected;

@@ -39,6 +39,9 @@ export default class EventDetailsModal extends BaseControl {
   @Prop()
   event!: Event;
 
+  // Any events with these words in the name will get an add RaceLog button. 
+  logEventTypes = ["Race", "Nationals", "Cup"];
+
   //TODO: currently hardcoded to adjust to pacific time
   today = new Date(new Date().setHours(-7, 0, 0, 0))
     .toJSON()
@@ -54,7 +57,12 @@ export default class EventDetailsModal extends BaseControl {
   }
 
   get showRaceLog() {
-    return this.event.date <= this.today;
+    return (
+      this.event.date <= this.today &&
+      this.event.eventType
+        .split(" ")
+        .some((s) => this.logEventTypes.indexOf(s) >= 0)
+    );
   }
 
   get showRemove() {
