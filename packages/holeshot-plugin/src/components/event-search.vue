@@ -157,6 +157,9 @@ export default class EventSearch extends BaseControl {
     this.state.searchResults = null;
 
     searchModule.setLocation();
+    if (this.state.status != "Searching") {
+      this.state.showCriteriaPanel = true;
+    }
 
     // Example of lazy local testing... yes it's lame but quick and easy. :)
     if (process.env.NODE_ENV !== "production") {
