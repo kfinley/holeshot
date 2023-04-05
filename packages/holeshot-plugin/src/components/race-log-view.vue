@@ -1,5 +1,9 @@
 <template>
-  <div v-if="loaded">{{ log.event.name }}</div>
+  <div v-if="loaded">
+    <div v-for="(attribute, key, index) in log.attributes" :key="index">
+      {{ key }}: {{ attribute }}
+    </div>
+  </div>
 </template>
 <script lang="ts">
 import { Component, Prop } from "vue-property-decorator";

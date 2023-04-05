@@ -1,5 +1,5 @@
 <template>
-  <modal @close="$emit('close')" width="95%" height="95%">
+  <modal @close="close" width="95%" height="95%">
     <div slot="header">
       <h2>Race Log</h2>
       <h3>{{ event.name }} @ {{ event.track.name }}</h3>
@@ -12,7 +12,7 @@
     </div>
     <div slot="footer" v-if="!disabled">
       <Button v-if="state.viewState == 'View'" @click="edit"> Edit </Button>
-      <Button @click="$emit('close')">
+      <Button @click="close">
         <span v-if="state.viewState == 'View'">Close</span>
         <span v-if="state.viewState == 'Edit'">Cancel</span>
       </Button>
@@ -56,6 +56,10 @@ export default class RaceLogModal extends BaseControl {
     return super.disconnected;
   }
 
+  close() {
+    this.state.active = null;
+    this.$emit("close");
+  }
 }
 </script>
 
