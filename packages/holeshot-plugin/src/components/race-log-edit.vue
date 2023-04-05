@@ -25,6 +25,7 @@ export default class RaceLogEdit extends BaseControl {
   addAttribute() {
     console.log(this.$refs.fieldName["value"]);
     this.log.attributes[this.$refs.fieldName["value"]] = "";
+    this.$refs.fieldName["value"] = "";
     this.$forceUpdate();
   }
 }

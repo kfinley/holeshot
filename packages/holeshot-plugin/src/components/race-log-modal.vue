@@ -67,4 +67,5 @@ export default class RaceLogModal extends BaseControl {
 .label {
   font-weight: bold;
 }
+
 </style>

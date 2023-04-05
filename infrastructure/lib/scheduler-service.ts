@@ -55,7 +55,7 @@ export class SchedulerService extends BaseServiceConstruct {
     props?.coreTable.grantReadData(this.updateEntity);
     props?.coreTable.grantWriteData(this.updateEntity);
     
-    this.sendSchedulerData = super.newLambda('SendSchedule', 'functions/send-scheduler-data.handler', {
+    this.sendSchedulerData = super.newLambda('SendSchedulerData', 'functions/send-scheduler-data.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
     props?.coreTable.grantReadData(this.sendSchedulerData);
