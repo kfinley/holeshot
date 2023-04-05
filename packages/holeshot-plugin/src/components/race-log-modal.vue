@@ -27,7 +27,7 @@ import { Component, Prop } from "vue-property-decorator";
 import { Event } from "@holeshot/types/src";
 import Modal from "@finley/vue2-components/src/components/modal.vue";
 import { State } from "vuex-class";
-import { raceLogModule, RaceLogState } from "../store";
+import { raceLogsModule, RaceLogsState } from "../store";
 import RaceLogEdit from "./race-log-edit.vue";
 import RaceLogView from "./race-log-view.vue";
 
@@ -39,17 +39,17 @@ import RaceLogView from "./race-log-view.vue";
   },
 })
 export default class RaceLogModal extends BaseControl {
-  @State("RaceLog") state!: RaceLogState;
+  @State("RaceLogs") state!: RaceLogsState;
 
   @Prop()
   event!: Event;
 
   // setup any calls into our vuex store module
-  edit = raceLogModule.edit;
-  save = raceLogModule.save;
+  edit = raceLogsModule.edit;
+  save = raceLogsModule.save;
 
   mounted() {
-    raceLogModule.init({ event: this.event });
+    raceLogsModule.init({ event: this.event });
   }
 
   get disabled() {

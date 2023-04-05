@@ -5,17 +5,17 @@ import { GetEntitiesCommand, StartStepFunctionCommand } from '@holeshot/aws-comm
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 import { Actions } from '@holeshot/types/src/actions';
 
-export type SendPreviousEventsRequest = {
+export type SendRaceLogsRequest = {
   userId: string;
   connectionId: string;
 }
 
-export type SendPreviousEventsResponse = {
+export type SendRaceLogsResponse = {
   success: boolean;
 }
 
 @injectable()
-export class SendPreviousEventsCommand implements Command<SendPreviousEventsRequest, SendPreviousEventsResponse> {
+export class SendRaceLogsCommand implements Command<SendRaceLogsRequest, SendRaceLogsResponse> {
 
   @Inject("GetEntitiesCommand")
   private getEntities!: GetEntitiesCommand;
@@ -23,43 +23,36 @@ export class SendPreviousEventsCommand implements Command<SendPreviousEventsRequ
   @Inject("StartStepFunctionCommand")
   private startStepFunction!: StartStepFunctionCommand;
 
-  async runAsync(params: SendPreviousEventsRequest): Promise<SendPreviousEventsResponse> {
+  async runAsync(params: SendRaceLogsRequest): Promise<SendRaceLogsResponse> {
     const today = new Date(new Date().setHours(-7, 0, 0, 0))
       .toJSON()
       .replace(".000Z", "");
 
-    console.log(today);
+    const logs = [];
 
     const response = await this.getEntities.runAsync({
-      keyConditionExpression: "PK = :PK AND SK < :today",
+      keyConditionExpression: "PK = :PK AND SK <= :today",
       expressionAttributeValues: {
-        ":PK": `USER#${params.userId}#EVENT`,
+        ":PK": `USER#${params.userId}#RACELOG`,
         ":today": today,
       },
       container
     });
 
-    //  console.log('getEntities.Items', response.items);
-
-    const schedule = [];
-
-    response.items.map(i => {
-      const event = unmarshall(i);
-      delete event["PK"];
-      delete event["SK"];
-      delete event["type"];
-
-      //console.log('event', event);
-
-      schedule.push(event);
+    response.items.map( i => {
+      const log = unmarshall(i);
+      delete log["PK"];
+      delete log["SK"];
+      delete log["type"];
+      logs.push(log);
     });
 
     const startStepFunctionResponse = await this.startStepFunction.runAsync({
       input: JSON.stringify({
-        subject: `Scheduler/${Actions.Scheduler.setPrevious}`, // Store module/action
+        subject: `RaceLogs/${Actions.RaceLogs.setLogs}`, // Store module/action
         connectionId: params.connectionId,
         message: JSON.stringify({
-          schedule
+          logs
         })
       }),
       stateMachineName: 'Holeshot-WebSockets-SendMessage',
@@ -70,4 +63,4 @@ export class SendPreviousEventsCommand implements Command<SendPreviousEventsRequ
       success: startStepFunctionResponse.statusCode == 200
     };
   }
-}
+} 

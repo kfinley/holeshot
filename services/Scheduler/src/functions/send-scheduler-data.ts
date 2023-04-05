@@ -1,14 +1,15 @@
-
 import { SNSEvent, Context } from 'aws-lambda';
 
 import bootstrapper from './bootstrapper';
 import { SendPreviousEventsCommand } from '../commands/send-previous-events';
 import { SendUpcomingEventsCommand } from '../commands/send-upcoming-events';
+import { SendRaceLogsCommand } from '../commands/send-race-logs';
 
 const container = bootstrapper();
 
 const sendPrevious = container.get<SendPreviousEventsCommand>("SendPreviousEventsCommand");
 const sendUpcoming = container.get<SendUpcomingEventsCommand>("SendUpcomingEventsCommand");
+const sendRaceLogs = container.get<SendRaceLogsCommand>("SendRaceLogsCommand");
 
 export const handler = async (event: SNSEvent, context: Context) => {
 
@@ -26,9 +27,15 @@ export const handler = async (event: SNSEvent, context: Context) => {
     connectionId
   });
 
+  const logs = sendRaceLogs.runAsync({
+    userId,
+    connectionId
+  });
+
   Promise.all([
     previous,
-    upcoming
+    upcoming,
+    logs
   ]);
 
   return {

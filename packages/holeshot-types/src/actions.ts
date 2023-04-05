@@ -3,4 +3,7 @@ export const Actions = {
     setPrevious: "setPrevious",
     setUpcoming: "setUpcoming",
   },
+  RaceLogs: {
+    setLogs: "setLogs",
+  }
 };

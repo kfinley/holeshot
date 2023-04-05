@@ -59,10 +59,11 @@ export class HoleshotModule extends BaseModule {
   addOrUpdate<T>(
     item: T,
     items: Array<T> | null,
-    predicate: (value: T, index: number, obj: T[]) => unknown
+    props: Record<string, any>,
+    // predicate: (value: T, index: number, obj: T[]) => unknown
   ): Array<T> {
     if (items == null) items = [];
-    const index = items.findIndex(predicate);
+    const index = items.findIndex(createEqualsPredicate(props));
     //Not found, add on end.
     if (-1 === index) {
       return [...items, item];

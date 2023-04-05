@@ -38,7 +38,7 @@ export interface SchedulerState {
   schedule: Event[] | null;
 }
 
-export interface RaceLogState {
+export interface RaceLogsState {
   viewState: "View" | "Edit";
   status: Status;
   active: RaceLog | null;

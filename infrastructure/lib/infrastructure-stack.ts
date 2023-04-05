@@ -303,7 +303,7 @@ export class InfrastructureStack extends Stack {
 
     webSocketsApi.messageHandler.role?.attachInlinePolicy(lambdaInvokePolicy);
 
-    webSocketsApi.connectedTopic.addSubscription(new LambdaSubscription(schedulerService.sendSchedule));
+    webSocketsApi.connectedTopic.addSubscription(new LambdaSubscription(schedulerService.sendScheduleData));
 
     // new CfnOutput(this, 'apiEndpoint', {
     //   value: `${webSocketsApi.webSocketApi.apiId}.execute-api.${region}.amazonaws.com`,

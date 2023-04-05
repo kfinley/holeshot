@@ -17,7 +17,7 @@ export class SchedulerService extends BaseServiceConstruct {
 
   readonly getNearbyEvents: Function;
   readonly addEntity: Function;
-  readonly sendSchedule: Function;
+  readonly sendSchedulerData: Function;
   readonly updateEntity: Function;
   readonly deleteEntity: Function;
 
@@ -55,10 +55,10 @@ export class SchedulerService extends BaseServiceConstruct {
     props?.coreTable.grantReadData(this.updateEntity);
     props?.coreTable.grantWriteData(this.updateEntity);
     
-    this.sendSchedule = super.newLambda('SendSchedule', 'functions/send-schedule.handler', {
+    this.sendSchedulerData = super.newLambda('SendSchedule', 'functions/send-scheduler-data.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
-    props?.coreTable.grantReadData(this.sendSchedule);
+    props?.coreTable.grantReadData(this.sendSchedulerData);
 
 
     //TODO: try removing this... shouldn't need it b/c of the line above.
@@ -96,6 +96,6 @@ export class SchedulerService extends BaseServiceConstruct {
     this.addEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.deleteEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.updateEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
-    this.sendSchedule.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
+    this.sendSchedulerData.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
   }
 }
