@@ -41,8 +41,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: Install root dependencies 
         run: pnpm install
+
+      - name: Install CDK dependencies 
+        working-directory: ./infrastructure
+        run: npm i --omit=dev
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
@@ -84,7 +88,6 @@ jobs:
           NODE_ENV: production
           SES_SENDER_EMAIL: ${{ secrets.SES_SENDER_EMAIL }}
         run: |
-          npm i --omit=dev
           npm run cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_ID }}/${{ secrets.AWS_REGION }}
           npm run deploy
           cd ../media && aws s3 sync . s3://images.holeshot-bmx.com
