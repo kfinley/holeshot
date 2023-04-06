@@ -2,13 +2,13 @@
   <div class="row event-search">
     <h3 align="center">Search For Events</h3>
     <div v-if="state.showCriteriaPanel">
-      <div>
-        <label for="type">What type of event? </label>
+      <div class="row">
+        <label class="col-6" for="type">What type of event? </label>
         <select
           name="type"
           id="type"
           v-model="state.searchInput.type"
-          class="form-control"
+          class="col-6"
         >
           <option value="Practice">Practice</option>
           <option value="Race">Race</option>
@@ -17,13 +17,13 @@
           <option value="Clinic">Clinic</option>
         </select>
       </div>
-      <div>
-        <label for="distance">Distance?</label>
+      <div class="row">
+        <label class="col-4" for="distance">Distance?</label>
         <select
           name="distance"
           id="distance"
           v-model="state.searchInput.distance"
-          class="form-control"
+          class="col-8"
         >
           <option value="50">50 miles</option>
           <option value="100">100 miles</option>
@@ -44,19 +44,23 @@
         placeholder="(Optional) refine search by event name"
         class="form-control"
       /> -->
-      <div>
-        <label for="startDate">Start Date:</label>
+      <!-- <div class="container p-0"> -->
+      <div class="row">
+        <label class="col-4" for="startDate">Start Date:</label>
         <date-picker
           id="startDate"
+          class="col-8 datepicker"
           :editable="false"
           :clearable="false"
           v-model="state.searchInput.startDate"
         ></date-picker>
       </div>
-      <div>
-        <label for="endDate">End Date:</label>
+      <!-- </div> -->
+      <div class="row">
+        <label class="col-4" for="endDate">End Date:</label>
         <date-picker
           id="endDate"
+          class="col-8 datepicker"
           :editable="false"
           :clearable="false"
           v-model="state.searchInput.endDate"
@@ -288,5 +292,30 @@ export default class EventSearch extends BaseControl {
   border-bottom: 1px;
   border-bottom-style: solid;
   min-width: 90%;
+}
+
+.datepicker {
+  width: 66.6%;
+  padding: 0px;
+}
+
+.row {
+  padding: 5px 0px;
+}
+</style>
+
+<style lang="scss">
+.mx-input {
+  color: black;
+  border-color: #aaa;
+  font-size: 12px;
+  font-family: sans-serif;
+  font-weight: 700;
+  color: #444;
+  line-height: 1.3;
+}
+
+.mx-icon-calendar {
+  color: #1A3761;
 }
 </style>
