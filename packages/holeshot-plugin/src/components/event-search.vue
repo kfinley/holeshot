@@ -316,6 +316,6 @@ export default class EventSearch extends BaseControl {
 }
 
 .mx-icon-calendar {
-  color: #1A3761;
+  color: #1A3761; //TODO: deal with all these hardcoded styles...
 }
 </style>

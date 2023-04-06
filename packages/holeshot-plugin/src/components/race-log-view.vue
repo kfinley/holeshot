@@ -1,7 +1,8 @@
 <template>
   <div v-if="loaded">
     <div v-for="(attribute, key, index) in log.attributes" :key="index">
-      {{ key }}: {{ attribute }}
+      <h3>{{ key }}</h3>
+      <p v-html="display(attribute)"></p>
     </div>
   </div>
 </template>
@@ -17,6 +18,11 @@ export default class RaceLogView extends BaseControl {
 
   get loaded() {
     return this.log != null;
+  }
+
+  display(attribute: string): string {
+    console.log(attribute);
+    return attribute.replaceAll("\n\n", "</br></br>").replaceAll("\n", "</br>");
   }
 }
 </script>

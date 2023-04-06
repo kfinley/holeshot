@@ -3,8 +3,10 @@
     <input ref="fieldName" placeholder="Field Name" class="form-control" />
     <Button class="m-0 mt-2" @click="addAttribute">Add Field</Button>
     <div v-for="(attribute, key, index) in log.attributes" :key="index">
-      <div>{{ key }}</div>
-      <textarea class="attribute-field" v-model="log.attributes[key]" />
+      <div>
+        <h3>{{ key }}</h3>
+        <textarea class="attribute-field" v-model="log.attributes[key]" />
+      </div>
     </div>
   </div>
 </template>
