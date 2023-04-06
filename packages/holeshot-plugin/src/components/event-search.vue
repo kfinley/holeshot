@@ -303,19 +303,3 @@ export default class EventSearch extends BaseControl {
   padding: 5px 0px;
 }
 </style>
-
-<style lang="scss">
-.mx-input {
-  color: black;
-  border-color: #aaa;
-  font-size: 12px;
-  font-family: sans-serif;
-  font-weight: 700;
-  color: #444;
-  line-height: 1.3;
-}
-
-.mx-icon-calendar {
-  color: #1A3761; //TODO: deal with all these hardcoded styles...
-}
-</style>
