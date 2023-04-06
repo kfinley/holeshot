@@ -57,6 +57,7 @@ export default class RaceLogModal extends BaseControl {
   }
 
   close() {
+    window.document.getElementsByTagName("main")[0].removeAttribute("style");
     this.state.active = null;
     this.$emit("close");
   }

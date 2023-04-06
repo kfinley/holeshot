@@ -18,7 +18,7 @@
     <div slot="footer" v-if="!disabled">
       <Button v-if="showRaceLog" @click="openRaceLog">Race Log</Button>
       <Button v-if="showRemove" @click="removeFromSchedule"> Remove </Button>
-      <Button @click="$emit('close')"> Close </Button>
+      <Button @click="close"> Close </Button>
     </div>
   </modal>
 </template>
@@ -39,7 +39,7 @@ export default class EventDetailsModal extends BaseControl {
   @Prop()
   event!: Event;
 
-  // Any events with these words in the name will get an add RaceLog button. 
+  // Any events with these words in the name will get an add RaceLog button.
   logEventTypes = ["Race", "Nationals", "Cup"];
 
   //TODO: currently hardcoded to adjust to pacific time
@@ -71,6 +71,11 @@ export default class EventDetailsModal extends BaseControl {
 
   openRaceLog() {
     this.$emit("open-race-log");
+  }
+
+  close() {
+    window.document.getElementsByTagName("main")[0].removeAttribute("style");
+    this.$emit("close");
   }
 }
 </script>
