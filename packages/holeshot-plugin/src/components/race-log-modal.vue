@@ -57,7 +57,6 @@ export default class RaceLogModal extends BaseControl {
   }
 
   close() {
-    window.document.getElementsByTagName("main")[0].removeAttribute("style");
     this.state.active = null;
     this.$emit("close");
   }
@@ -68,5 +67,4 @@ export default class RaceLogModal extends BaseControl {
 .label {
   font-weight: bold;
 }
-
 </style>

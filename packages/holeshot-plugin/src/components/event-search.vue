@@ -18,12 +18,12 @@
         </select>
       </div>
       <div class="row">
-        <label class="col-4" for="distance">Distance?</label>
+        <label class="col-6" for="distance">Distance?</label>
         <select
           name="distance"
           id="distance"
           v-model="state.searchInput.distance"
-          class="col-8"
+          class="col-6"
         >
           <option value="50">50 miles</option>
           <option value="100">100 miles</option>
@@ -46,10 +46,10 @@
       /> -->
       <!-- <div class="container p-0"> -->
       <div class="row">
-        <label class="col-4" for="startDate">Start Date:</label>
+        <label class="col-6" for="startDate">Start Date:</label>
         <date-picker
           id="startDate"
-          class="col-8 datepicker"
+          class="col-6 datepicker"
           :editable="false"
           :clearable="false"
           v-model="state.searchInput.startDate"
@@ -57,10 +57,10 @@
       </div>
       <!-- </div> -->
       <div class="row">
-        <label class="col-4" for="endDate">End Date:</label>
+        <label class="col-6" for="endDate">End Date:</label>
         <date-picker
           id="endDate"
-          class="col-8 datepicker"
+          class="col-6 datepicker"
           :editable="false"
           :clearable="false"
           v-model="state.searchInput.endDate"
@@ -295,7 +295,7 @@ export default class EventSearch extends BaseControl {
 }
 
 .datepicker {
-  width: 66.6%;
+  width: 50%;
   padding: 0px;
 }
 

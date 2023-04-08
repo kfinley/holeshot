@@ -15,13 +15,13 @@
     <event-details-modal
       v-if="showEventDetails"
       :event="currentEvent"
-      @close="eventDetailsClosed"
+      @close="close('EventDetails')"
       @open-race-log="openRaceLog"
     />
     <race-log-modal
       v-if="showRaceLog"
       :event="currentEvent"
-      @close="raceLogClosed"
+      @close="close('RaceLog')"
     />
   </div>
 </template>
@@ -71,14 +71,21 @@ export default class Schedule extends BaseControl {
     this.activeControl = control;
   }
 
-  eventDetailsClosed() {
-    this.currentEvent = null;
-    this.showEventDetails = false;
-  }
-
-  raceLogClosed() {
-    this.showRaceLog = false;
-    this.showEventDetails = true;
+  close(source: string) {
+    //TODO: do this smarter...
+    switch (source) {
+      case "EventDetails":
+        this.currentEvent = null;
+        this.showEventDetails = false;
+        break;
+      case "RaceLog":
+        this.showRaceLog = false;
+        this.showEventDetails = true;
+        break;
+      default:
+        break;
+    }
+    window.document.getElementsByTagName("main")[0].removeAttribute("style");
   }
 
   eventClicked(event: Event) {

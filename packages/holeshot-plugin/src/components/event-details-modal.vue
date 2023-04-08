@@ -18,7 +18,7 @@
     <div slot="footer" v-if="!disabled">
       <Button v-if="showRaceLog" @click="openRaceLog">Race Log</Button>
       <Button v-if="showRemove" @click="removeFromSchedule"> Remove </Button>
-      <Button @click="close"> Close </Button>
+      <Button @click="$emit('close')"> Close </Button>
     </div>
   </modal>
 </template>
@@ -73,10 +73,6 @@ export default class EventDetailsModal extends BaseControl {
     this.$emit("open-race-log");
   }
 
-  close() {
-    window.document.getElementsByTagName("main")[0].removeAttribute("style");
-    this.$emit("close");
-  }
 }
 </script>
 
