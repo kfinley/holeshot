@@ -5,7 +5,11 @@
     <div v-for="(attribute, key, index) in log.attributes" :key="index">
       <div>
         <h3>{{ key }}</h3>
-        <textarea class="attribute-field" v-model="log.attributes[key]" />
+        <textarea
+          :id="key"
+          class="attribute-field"
+          v-model="log.attributes[key]"
+        />
       </div>
     </div>
   </div>
@@ -25,10 +29,23 @@ export default class RaceLogEdit extends BaseControl {
   }
 
   addAttribute() {
-    console.log(this.$refs.fieldName["value"]);
-    this.log.attributes[this.$refs.fieldName["value"]] = "";
+    const field = this.$refs.fieldName["value"].replace(
+      /\w\S*/g,
+      function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      }
+    );
+
+    this.log.attributes[field] = "";
     this.$refs.fieldName["value"] = "";
+
     this.$forceUpdate();
+
+    setTimeout(() => {
+      const i = window.document.getElementById(field);
+      console.log(field, i);
+      i?.focus();
+    }, 1);
   }
 }
 </script>
