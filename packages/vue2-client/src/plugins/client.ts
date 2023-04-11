@@ -1,6 +1,7 @@
 import bootstrapper from './../bootstrapper';
 import Vue from 'vue';
 import { Store } from 'vuex';
+import { WebSocketsState } from '../store';
 import { ArticlesModule, getArticlesModule } from '../store/articles-module';
 import { WebSocketsModule } from '../store/ws-module';
 import { extend } from 'vee-validate';
@@ -19,11 +20,13 @@ import { getModule } from 'vuex-module-decorators';
 import UserModule from '@holeshot/vue2-user/src/store/user-module';
 import { SearchModule } from '@holeshot/plugin/src/store/search-store';
 import { SchedulerModule } from '@holeshot/plugin/src/store/scheduler-module';
-// import { initializeModules } from '../store';
-import '../styles/styles.scss';
-import { SchedulerState } from '@holeshot/plugin/src/store';
+import { RaceLogsState, SchedulerState } from '@holeshot/plugin/src/store';
 import RegistrationModule from '@holeshot/vue2-user/src/store/registration-module';
 import { RaceLogsModule } from '@holeshot/plugin/src/store/race-logs-module';
+
+
+import '../styles/styles.scss'; //TODO: ???
+
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);
@@ -124,14 +127,22 @@ const plugin: ClientPlugin = {
           Registration: RegistrationState;
           User: UserState;
           Scheduler: SchedulerState;
+          RaceLogs: RaceLogsState;
+          WebSockets: WebSocketsState;
         }) => ({
           User: {
             authTokens: state.User.authTokens,
             authStatus: state.User.authStatus,
           },
+          RaceLogs: {
+            logs: state.RaceLogs.logs,
+          },
           Scheduler: {
             schedule: state.Scheduler.schedule,
-          }
+          },
+          WebSockets: {
+            status: state.WebSockets.status,
+          },
         }),
         // Function that passes a mutation and lets you decide if it should update the state in localStorage.
         // filter: (mutation) => true

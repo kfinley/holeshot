@@ -36,6 +36,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
       );
 
       if (log == undefined) {
+        console.log('no log found');
         viewState = "Edit";
         log = {
           event: params.event,
@@ -120,9 +121,9 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
   @Mutation
   updateLogs(params: { log: RaceLog }) {
     this.logs = super.addOrUpdate<RaceLog>(params.log, this.logs, {
-      name: params.log.event.name,
-      trackName: params.log.event.trackName,
-      date: params.log.event.date,
+      'event.name': params.log.event.name,
+      'event.trackName': params.log.event.trackName,
+      'event.date': params.log.event.date,
     });
   }
 }
