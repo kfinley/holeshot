@@ -206,6 +206,7 @@ export const createRouter = async () => {
     next();
   });
 
+
   const getMetaData = async (route: Route) => {
     //console.log('route', route);
     // This is a shitty hack to make nested paths for dynamic imports work b/c of an issue in Vite

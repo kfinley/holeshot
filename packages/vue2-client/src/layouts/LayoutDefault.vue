@@ -15,6 +15,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Header, Footer } from '../components/';
 import NotificationList from '@finley/vue2-components/src/components/notification-list.vue';
 import AddToHomeScreen from '@finley/vue2-components/src/components/add-to-home-screen.vue';
+import useRegisterSW from '../mixins/use-register-sw';
 
 @Component({
   components: {
@@ -23,6 +24,7 @@ import AddToHomeScreen from '@finley/vue2-components/src/components/add-to-home-
     Footer,
     NotificationList,
   },
+  mixins: [useRegisterSW],
 })
 export default class LayoutDefault extends Vue {
   headerOffsetTop: number = 0;
@@ -95,7 +97,6 @@ export default class LayoutDefault extends Vue {
     text-align: center;
   }
 }
-
 
 .article-wrapper > div > div > p > img {
   max-width: 99%;

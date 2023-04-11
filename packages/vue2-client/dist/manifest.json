@@ -1,9 +1,0 @@
-{
-  "name": "Holeshot-BMX",
-  "short_name": "Holeshot-BMX",
-  "theme_color": "#000",
-  "background_color": "#000",
-  "display": "standalone",
-  "start_url": "/scheduler?utm_source=standalone&utm_medium=1.0.0",
-  "scope": "/"
-}

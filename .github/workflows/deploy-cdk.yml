@@ -71,7 +71,6 @@ jobs:
           echo -e 'window.HoleshotConfig = {' > config.js
           echo -e 'ClientId: "2u61k6gggc4acjhj9tda7ale9m",' >> config.js
           echo -e 'PoolId: "us-east-1_nmrmokUDK",' >> config.js
-          echo -e 'ServiceWorkerPath: "service-worker.js",' >> config.js
           echo -e 'Host: "holeshot-bmx.com",' >> config.js
           echo -e 'Api: "4dlp5ls3hl.execute-api.us-east-1.amazonaws.com/v1",' >> config.js
           echo -e 'WebSocket: "ag49r7wqy7.execute-api.us-east-1.amazonaws.com/v1",' >> config.js

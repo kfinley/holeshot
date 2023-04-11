@@ -10,7 +10,6 @@ const jsConfig = (window as any).HoleshotConfig as Configuration;
 config.ClientId = jsConfig.ClientId ?? import.meta.env.VITE_APP_CLIENT_ID!;
 config.PoolId = jsConfig.PoolId ?? import.meta.env.VITE_APP_POOL_ID!;
 config.Api = jsConfig.Api ?? import.meta.env.VITE_APP_API!;
-config.ServiceWorkerPath = jsConfig.ServiceWorkerPath ?? import.meta.env.VITE_APP_SERVICE_WORKER_PATH!;
 config.Host = jsConfig.Host ?? import.meta.env.VITE_APP_HOST!;
 config.WebSocket = jsConfig.WebSocket ?? import.meta.env.VITE_APP_WEBSOCKET!;
 
