@@ -1,6 +1,11 @@
 <template>
   <div class="row">
-    <input ref="fieldName" placeholder="Field Name" class="form-control" />
+    <input
+      ref="fieldName"
+      placeholder="Field Name"
+      class="form-control"
+      @keyup.enter="addAttribute"
+    />
     <Button class="m-0 mt-2" @click="addAttribute">Add Field</Button>
     <div v-for="(attribute, key, index) in log.attributes" :key="index">
       <div>
@@ -41,11 +46,7 @@ export default class RaceLogEdit extends BaseControl {
 
     this.$forceUpdate();
 
-    setTimeout(() => {
-      const i = window.document.getElementById(field);
-      console.log(field, i);
-      i?.focus();
-    }, 1);
+    super.setFocus(field);
   }
 }
 </script>

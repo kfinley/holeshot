@@ -42,5 +42,6 @@ export interface RaceLogsState {
   viewState: "View" | "Edit";
   status: Status;
   active: RaceLog | null;
+  original: RaceLog | null;
   logs: Array<RaceLog>;
 }

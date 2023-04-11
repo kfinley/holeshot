@@ -1,5 +1,5 @@
 <template>
-  <modal @close="close" width="95%" height="95%">
+  <modal @close="$emit('close')" width="95%" height="95%">
     <div slot="header">
       <h2>Race Log</h2>
       <h3>{{ event.name }} @ {{ event.track.name }}</h3>
@@ -12,10 +12,10 @@
     </div>
     <div slot="footer" v-if="!disabled">
       <Button v-if="state.viewState == 'View'" @click="edit"> Edit </Button>
-      <Button @click="close">
-        <span v-if="state.viewState == 'View'">Close</span>
-        <span v-if="state.viewState == 'Edit'">Cancel</span>
-      </Button>
+      <Button v-if="state.viewState == 'View'" @click="$emit('close')"
+        >Close</Button
+      >
+      <Button v-if="state.viewState == 'Edit'" @click="cancel">Cancel</Button>
       <Button v-if="state.viewState == 'Edit'" @click="save">Save</Button>
     </div>
   </modal>
@@ -47,6 +47,7 @@ export default class RaceLogModal extends BaseControl {
   // setup any calls into our vuex store module
   edit = raceLogsModule.edit;
   save = raceLogsModule.save;
+  cancel = raceLogsModule.cancel;
 
   mounted() {
     raceLogsModule.init({ event: this.event });
@@ -54,11 +55,6 @@ export default class RaceLogModal extends BaseControl {
 
   get disabled() {
     return super.disconnected;
-  }
-
-  close() {
-    this.state.active = null;
-    this.$emit("close");
   }
 }
 </script>

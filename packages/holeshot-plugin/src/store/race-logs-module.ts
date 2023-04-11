@@ -1,4 +1,4 @@
-
+/* eslint-disable prettier/prettier */
 import { Event, Actions, RaceLog } from "@holeshot/types/src";
 import { Action, Module, Mutation } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
@@ -9,6 +9,7 @@ import { notificationModule } from "@finley/vue2-components/src/store";
 export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
   viewState: "View" | "Edit" = "View";
   status: Status = Status.None;
+  original: RaceLog | null = null;
   active: RaceLog | null = null;
   logs: RaceLog[] = [];
 
@@ -17,11 +18,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
   @Action
   [Actions.RaceLogs.setLogs](params: { logs: RaceLog[] }) {
     super.mutate((state: RaceLogsState) => {
-
-      params.logs.map((log) =>
-        this.context.commit("updateLogs", { log })
-      );
-
+      params.logs.map((log) => this.context.commit("updateLogs", { log }));
       state.status = Status.Loaded;
     });
   }
@@ -37,22 +34,40 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
           log.event.trackName == params.event.trackName &&
           log.event.date == params.event.date
       );
+
       if (log == undefined) {
         viewState = "Edit";
         log = {
           event: params.event,
           attributes: {},
         };
+        super.mutate((s: RaceLogsState) => s.logs.push(log as RaceLog));
       }
 
       super.mutate((s: RaceLogsState) => {
-        s.logs.push(log as RaceLog);
-        s.active = log as RaceLog;
+        s.original = log as RaceLog;
+        s.active = structuredClone(s.original);
         s.viewState = viewState;
       });
     }
   }
 
+  @Action
+  cancel() {
+    super.mutate((s: RaceLogsState) => {
+      s.viewState = "View";
+      s.active = structuredClone(s.original);
+    });
+  }
+
+  @Action
+  close() {
+    super.mutate((s: RaceLogsState) => {
+      s.viewState = "View";
+      s.active = null;
+      s.original = null;
+    });
+  }
   @Action
   edit() {
     super.mutate((s: RaceLogsState) => {
@@ -67,7 +82,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
         message: "Error saving log. Active race log is null",
       });
     } else {
-      console.log("saved log", this.active);
+      // console.log("saved log", this.active);
 
       this.timeout = super.sendCommand({
         name: "AddEntity",
@@ -86,8 +101,12 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
         },
       });
 
+      this.context.commit("updateLogs", { log: structuredClone(this.active) });
+
       super.mutate((s: RaceLogsState) => {
         s.viewState = "View";
+        s.original = s.active;  //TODO: ....
+        s.active = structuredClone(s.original);
       });
     }
   }
@@ -100,15 +119,10 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
 
   @Mutation
   updateLogs(params: { log: RaceLog }) {
-    this.logs = super.addOrUpdate<RaceLog>(
-      params.log,
-      this.logs,
-      {
-        name: params.log.event.name,
-        trackName: params.log.event.trackName,
-        date: params.log.event.date,
-      },
-
-    );
+    this.logs = super.addOrUpdate<RaceLog>(params.log, this.logs, {
+      name: params.log.event.name,
+      trackName: params.log.event.trackName,
+      date: params.log.event.date,
+    });
   }
 }

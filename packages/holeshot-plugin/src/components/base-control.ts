@@ -8,4 +8,8 @@ export default class HoleshotBaseControl extends BaseControl {
       (this.$store as any).state.WebSockets?.status == "Connecting"
     );
   }
+
+  setFocus(id) {
+    setTimeout(() => window.document.getElementById(id)?.focus(), 1);
+  }
 }

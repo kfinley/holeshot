@@ -32,7 +32,7 @@ import BaseControl from "./base-control";
 import EventSearch from "./event-search.vue";
 import EventsUpcoming from "./events-upcoming.vue";
 import EventsPrevious from "./events-previous.vue";
-import { schedulerModule, SchedulerState } from "../store";
+import { raceLogsModule, schedulerModule, SchedulerState } from "../store";
 import EventDetailsModal from "./event-details-modal.vue";
 import SchedulerControls from "./scheduler-controls.vue";
 import { State } from "vuex-class";
@@ -77,6 +77,7 @@ export default class Schedule extends BaseControl {
       case "EventDetails":
         this.currentEvent = null;
         this.showEventDetails = false;
+        raceLogsModule.close();
         break;
       case "RaceLog":
         this.showRaceLog = false;
