@@ -81,6 +81,7 @@ const plugin: ClientPlugin = {
 
       setupModules(options.store);
       const webSocketsModule = getModule(WebSocketsModule, options.store);
+      webSocketsModule.init();
 
       // router provided to add any plugin routes.
       // i.e. options.router.addRoutes(routes);

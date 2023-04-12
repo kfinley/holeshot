@@ -34,10 +34,10 @@ export default {
       this.needRefresh = false;
     },
     onOfflineReadyFn() {
-      console.log('onOfflineReady');
+      console.log('onOfflineReady', new Date());
     },
     onNeedRefreshFn() {
-      console.log('onNeedRefresh');
+      console.log('onNeedRefresh', new Date());
     },
     updateServiceWorker() {
       this.updateSW && this.updateSW(true);

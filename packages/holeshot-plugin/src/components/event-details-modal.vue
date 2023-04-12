@@ -53,7 +53,7 @@ export default class EventDetailsModal extends BaseControl {
   }
 
   get disabled() {
-    return super.disconnected;
+    return super.connecting;
   }
 
   get showRaceLog() {

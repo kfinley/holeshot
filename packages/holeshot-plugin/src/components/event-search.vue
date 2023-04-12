@@ -244,7 +244,7 @@ export default class EventSearch extends BaseControl {
   }
 
   get disabled() {
-    return super.disconnected || this.searching;
+    return super.connecting || this.searching;
   }
 
   trackFor(event: Event) {

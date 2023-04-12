@@ -54,7 +54,7 @@ export default class RaceLogModal extends BaseControl {
   }
 
   get disabled() {
-    return super.disconnected;
+    return super.connecting;
   }
 }
 </script>

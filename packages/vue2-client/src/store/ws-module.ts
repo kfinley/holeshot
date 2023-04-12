@@ -10,10 +10,24 @@ import { config } from '@holeshot/web-core/src/config';
 export class WebSocketsModule extends BaseModule implements WebSocketsState {
   status: WebSocketsStatus = WebSocketsStatus.None;
   socket!: Socket;
-  commandQueue: { command: string; data: any; }[] = [];
+  commandQueue: { command: string; data: any }[] = [];
   token!: string;
 
   wsUrl = `${process.env.NODE_ENV === 'production' ? 'wss' : 'ws'}://${config.WebSocket}`;
+
+  @Action
+  init() {
+    window.document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        console.log('active', new Date());
+        if (this.status == WebSocketsStatus.Disconnected) {
+          this.context.dispatch('reconnect');
+        }
+      } else {
+        console.log('not active', new Date());
+      }
+    });
+  }
 
   @Action
   handleSocketMessage(ev: MessageEvent) {
@@ -34,6 +48,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
     };
 
     if (this.status == WebSocketsStatus.Disconnected) {
+      console.log('socket disconnected. reconnecting');
       this.context.dispatch('reconnect');
       this.context.commit('queueCommand', cmd);
     } else {
@@ -60,12 +75,16 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   @Action
   handleSocketMaximum(ev: CloseEvent) {
     console.log('WebSocket maximum reconnects reached: ', ev);
-    this.context.dispatch('User/logout', null, { root: true });
+    // this.context.dispatch('User/logout', null, { root: true });
+    this.context.commit('mutate', (state: WebSocketsState) => {
+      state.status = WebSocketsStatus.Disconnected;
+      state.commandQueue = [];
+    });
   }
 
   @Action
   connect(token: string) {
-    if (this.socket == undefined) {
+    if (this.socket == undefined || this.status == WebSocketsStatus.Disconnected) {
       this.context.commit(
         'mutate',
         (state: WebSocketsState) => (state.status = WebSocketsStatus.Connecting)
@@ -102,10 +121,9 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   }
 
   @Action
-  reconnect(token?: string) {
+  reconnect() {
     console.log('reconnecting');
     this.context.commit('mutate', (state: WebSocketsState) => state.socket?.open());
-    // this.context.dispatch('connect', token ?? this.token);
   }
 
   @Action
@@ -118,6 +136,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
     );
 
     for (const cmd in this.commandQueue) {
+      console.log('sending command', cmd);
       this.context.commit('mutate', (state: WebSocketsState) => {
         state.socket?.send(JSON.stringify(cmd));
       });
@@ -128,7 +147,7 @@ export class WebSocketsModule extends BaseModule implements WebSocketsState {
   }
 
   @Mutation
-  queueCommand(cmd: { command: string, data: any }) {
+  queueCommand(cmd: { command: string; data: any }) {
     this.commandQueue.push(cmd);
   }
 }
