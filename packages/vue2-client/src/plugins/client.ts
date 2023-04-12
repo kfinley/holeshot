@@ -124,12 +124,12 @@ const plugin: ClientPlugin = {
         storage: window.localStorage, // or window.sessionStorage or localForage
         // Function that passes the state and returns the state with only the objects you want to store.
         reducer: (state: {
-          Notification: NotificationState;
-          Registration: RegistrationState;
+          // Notification: NotificationState;
+          // Registration: RegistrationState;
           User: UserState;
           Scheduler: SchedulerState;
           RaceLogs: RaceLogsState;
-          WebSockets: WebSocketsState;
+          // WebSockets: WebSocketsState;
         }) => ({
           User: {
             authTokens: state.User.authTokens,
@@ -141,9 +141,9 @@ const plugin: ClientPlugin = {
           Scheduler: {
             schedule: state.Scheduler.schedule,
           },
-          WebSockets: {
-            status: state.WebSockets.status,
-          },
+          // WebSockets: {
+          //   status: state.WebSockets.status,
+          // },
         }),
         // Function that passes a mutation and lets you decide if it should update the state in localStorage.
         // filter: (mutation) => true
