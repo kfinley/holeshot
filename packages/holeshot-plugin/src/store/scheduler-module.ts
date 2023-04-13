@@ -134,6 +134,11 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
     clearTimeout(this.timeout);
 
     super.mutate((s: SchedulerState) => s.status == Status.None);
+    notificationModule.add({
+      message: `Event was removed from your schedule`,
+      type: "success",
+      timed: true,
+    });
   }
 
   @Mutation
