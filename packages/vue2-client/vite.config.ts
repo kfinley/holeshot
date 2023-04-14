@@ -30,26 +30,44 @@ export default defineConfig({
       // base: '/',
       // includeAssets: [/]
       registerType: 'autoUpdate',
-      // devOptions: {
-      //   enabled: true,
-      // },
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
         name: 'Holeshot-BMX',
         short_name: 'Holeshot-BMX',
         description: 'Holeshot-BMX - Racing Scheduler & Coach in your pocket',
-        theme_color: '#ffffff',
+        // theme_color: '#FFF',
+        background_color: '#000',
         start_url: '/scheduler?utm_source=standalone&utm_medium=1.0.0',
         icons: [
           {
-            src: '/icons/apple-icon.png',
+            src: 'public/icons/manifest-icon-192.maskable.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: 'public/icons/manifest-icon-192.maskable.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+          {
+            src: 'public/icons/manifest-icon-512.maskable.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable',
+            purpose: 'any',
+          },
+          {
+            src: 'public/icons/manifest-icon-512.maskable.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
       },
     }),
-    // VitePWA(),
     createVuePlugin(),
   ],
   server: {
