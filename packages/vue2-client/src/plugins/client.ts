@@ -1,7 +1,6 @@
 import bootstrapper from './../bootstrapper';
 import Vue from 'vue';
 import { Store } from 'vuex';
-import { WebSocketsState } from '../store';
 import { ArticlesModule, getArticlesModule } from '../store/articles-module';
 import { WebSocketsModule } from '../store/ws-module';
 import { extend } from 'vee-validate';
@@ -12,8 +11,7 @@ import ComponentLibraryPlugin, {
 import UserPlugin from '@holeshot/vue2-user/src/plugin';
 import VuexPersist from 'vuex-persist';
 import { RouteNames } from './../router/RouteNames';
-import { NotificationState } from '@finley/vue2-components/src/store/state';
-import { AuthStatus, RegistrationState, UserState } from '@holeshot/vue2-user/src/store';
+import { AuthStatus, UserState } from '@holeshot/vue2-user/src/store';
 import { setupValidation } from '@finley/vue2-components/src/components/validation';
 import HoleshotPlugin from '@holeshot/plugin/src/plugin';
 import { getModule } from 'vuex-module-decorators';
@@ -24,9 +22,7 @@ import { RaceLogsState, SchedulerState } from '@holeshot/plugin/src/store';
 import RegistrationModule from '@holeshot/vue2-user/src/store/registration-module';
 import { RaceLogsModule } from '@holeshot/plugin/src/store/race-logs-module';
 
-
 import '../styles/styles.scss'; //TODO: ???
-
 
 export const setupModules = (store: Store<any>): void => {
   store.registerModule('Articles', ArticlesModule);

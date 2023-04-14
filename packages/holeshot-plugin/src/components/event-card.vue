@@ -26,7 +26,7 @@
           v-if="showAddToSchedule"
           label="Add to Schedule"
           :classes="['btn--grey-hover-fill']"
-          :disabled="disconnected"
+          :disabled="connecting"
           @click="addToSchedule"
           >Add to Schedule</Button
         >
