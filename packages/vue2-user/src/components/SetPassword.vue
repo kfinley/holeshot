@@ -117,7 +117,7 @@ export default class SetPassword extends Vue {
   async onSubmit() {
     const isValid = await this.formObserver.validate();
     if (isValid) {
-      console.log('state', this.state);
+      // console.log('state', this.state);
 
       userModule.changePassword({
         username: this.username,
