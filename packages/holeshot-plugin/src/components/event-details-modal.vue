@@ -1,5 +1,5 @@
 <template>
-  <modal @close="$emit('close')" width="90%">
+  <modal @close="close" width="90%">
     <div slot="header">
       <h3>{{ event.name }}<br />@ {{ event.track.name }}</h3>
     </div>
@@ -18,7 +18,7 @@
     <div slot="footer" v-if="!disabled">
       <Button v-if="showRaceLog" @click="openRaceLog">Race Log</Button>
       <Button v-if="showRemove" @click="removeFromSchedule"> Remove </Button>
-      <Button @click="$emit('close')"> Close </Button>
+      <Button @click="close"> Close </Button>
     </div>
   </modal>
 </template>
@@ -73,6 +73,24 @@ export default class EventDetailsModal extends BaseControl {
     this.$emit("open-race-log");
   }
 
+  close() {
+    const scrollY = window.document.body.style.top;
+
+    window.document.getElementsByTagName("main")[0].removeAttribute("style");
+    document.body.style.position = "";
+    document.body.style.top = ``;
+    // setTimeout(() => {
+    //   console.log(scrollY);
+    //   document.body.style.top = scrollY;
+    // }, 10);
+    window.scrollTo(0, parseInt(scrollY || "0") * -1);
+    // window.scrollTo({
+    //   top: parseInt(`-${scrollY}`),
+    //   left: 0,
+    //   behavior: "auto",
+    // });
+    this.$emit("close");
+  }
 }
 </script>
 

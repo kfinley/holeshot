@@ -63,6 +63,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
 
   @Action
   close() {
+    
     super.mutate((s: RaceLogsState) => {
       s.viewState = "Closed";
       s.active = null;
@@ -78,7 +79,6 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
 
   @Action
   save() {
-    console.log('save', this.active.attributes);
     if (this.active == null) {
       notificationModule.setError({
         message: "Error saving log. Active race log is null",

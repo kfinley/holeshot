@@ -2,7 +2,7 @@
   <div class="LayoutDefault">
     <Header class="LayoutDefault__header" />
     <NotificationList id="notifications" class="LayoutDefault__notifications" />
-    <main class="LayoutDefault__main">
+    <main class="LayoutDefault__main" ref="main">
       <router-view />
     </main>
     <Footer class="LayoutDefault__footer" />
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Ref } from 'vue-property-decorator';
 import { Header, Footer } from '../components/';
 import NotificationList from '@finley/vue2-components/src/components/notification-list.vue';
 import AddToHomeScreen from '@finley/vue2-components/src/components/add-to-home-screen.vue';
@@ -30,6 +30,8 @@ export default class LayoutDefault extends Vue {
   headerOffsetTop: number = 0;
   header: element;
   notifications: element;
+  @Ref()
+  readonly main!: HTMLElement;
 
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -45,6 +47,8 @@ export default class LayoutDefault extends Vue {
   // Add the sticky class to the header when you reach its scroll position.
   // Remove "sticky" when you leave the scroll position
   handleScroll(e) {
+    document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
+
     if (window.pageYOffset > this.headerOffsetTop) {
       this.notifications.classList.add('sticky');
     } else {
