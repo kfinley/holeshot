@@ -75,8 +75,6 @@ export default class EventDetailsModal extends BaseControl {
 
   close() {
     const scrollY = window.document.body.style.top;
-
-    // window.document.getElementsByTagName("main")[0].removeAttribute("style");
     document.body.style.position = "";
     document.body.style.top = ``;
     // setTimeout(() => {

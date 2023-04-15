@@ -64,15 +64,7 @@ export default class RaceLogModal extends BaseControl {
   }
 
   close() {
-    console.log("race-log-modal.close");
-    const scrollY = window.document.body.style.top;
-
-    window.document.getElementsByTagName("main")[0].removeAttribute("style");
-    document.body.style.position = "";
-    document.body.style.top = ``;
-    window.scrollTo(0, parseInt(scrollY || "0") * -1);
     raceLogsModule.close();
-
     this.$emit("close");
   }
 }
