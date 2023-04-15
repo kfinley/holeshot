@@ -39,7 +39,7 @@ export interface SchedulerState {
 }
 
 export interface RaceLogsState {
-  viewState: "View" | "Edit";
+  viewState: "View" | "Edit" | "Closed";
   status: Status;
   active: RaceLog | null;
   original: RaceLog | null;

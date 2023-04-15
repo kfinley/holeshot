@@ -209,6 +209,7 @@ importers:
       ts-loader: ^9.2.6
       tsconfig-paths-webpack-plugin: ^3.5.1
       typescript: ~4.1.5
+      vee-validate: ^3.4.14
       vue: ^2.6.14
       vue-loader: ^15.9.8
       vue-property-decorator: ^9.1.2
@@ -223,6 +224,7 @@ importers:
       '@finley/vue2-components': link:../vue2-components
       '@holeshot/types': link:../holeshot-types
       interactjs: 1.10.17
+      vee-validate: 3.4.14_vue@2.7.14
       vue2-datepicker: 3.11.1_vue@2.7.14
     devDependencies:
       '@babel/core': 7.20.12

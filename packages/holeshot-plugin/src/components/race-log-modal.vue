@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import BaseControl from "./base-control";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import { Event } from "@holeshot/types/src";
 import Modal from "@finley/vue2-components/src/components/modal.vue";
 import { State } from "vuex-class";
@@ -48,6 +48,15 @@ export default class RaceLogModal extends BaseControl {
   edit = raceLogsModule.edit;
   save = raceLogsModule.save;
   cancel = raceLogsModule.cancel;
+  close = raceLogsModule.close;
+
+  @Watch("state")
+  onViewStateChanged(value) {
+    console.log('onViewStateChanged', value);
+    if (value == "Closed") {
+      this.close();
+    }
+  }
 
   mounted() {
     raceLogsModule.init({ event: this.event });

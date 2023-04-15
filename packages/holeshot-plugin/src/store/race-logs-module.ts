@@ -7,7 +7,7 @@ import { notificationModule } from "@finley/vue2-components/src/store";
 
 @Module({ namespaced: true, name: "RaceLogs" })
 export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
-  viewState: "View" | "Edit" = "View";
+  viewState: "View" | "Edit" | "Closed" = "View";
   status: Status = Status.None;
   original: RaceLog | null = null;
   active: RaceLog | null = null;
@@ -64,7 +64,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
   @Action
   close() {
     super.mutate((s: RaceLogsState) => {
-      s.viewState = "View";
+      s.viewState = "Closed";
       s.active = null;
       s.original = null;
     });
@@ -78,13 +78,17 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
 
   @Action
   save() {
+    console.log('save', this.active.attributes);
     if (this.active == null) {
       notificationModule.setError({
         message: "Error saving log. Active race log is null",
       });
     } else {
-      // console.log("saved log", this.active);
 
+      // if (Object.keys(this.active.attributes).length == 0) {
+      //   console.log('no attributes');
+      //   this.context.dispatch("close");
+      // } else {
       this.timeout = super.sendCommand({
         name: "PutEntity",
         payload: {
@@ -110,6 +114,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
         s.active = structuredClone(s.original);
       });
     }
+    // }
   }
 
   @Action

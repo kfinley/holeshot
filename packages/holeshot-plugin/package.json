@@ -17,6 +17,7 @@
     "@finley/vue2-components": "workspace:1.0.0",
     "@holeshot/types": "workspace:1.0.0",
     "interactjs": "^1.10.11",
+    "vee-validate": "^3.4.14",
     "vue2-datepicker": "^3.11.1"
   },
   "devDependencies": {
