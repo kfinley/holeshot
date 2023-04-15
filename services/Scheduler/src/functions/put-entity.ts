@@ -1,23 +1,23 @@
 //TODO: move this to the Core Service
 
 import { Context } from 'aws-lambda';
-import { StartStepFunctionCommand, AddEntityCommand, AddEntityRequest } from '@holeshot/aws-commands/src';
+import { StartStepFunctionCommand, PutEntityCommand, PutEntityRequest } from '@holeshot/aws-commands/src';
 
 import bootstrapper from './bootstrapper';
 
 const container = bootstrapper();
 
-const addEntity = container.get<AddEntityCommand>("AddEntityCommand");
+const putEntity = container.get<PutEntityCommand>("PutEntityCommand");
 const startStepFunction = container.get<StartStepFunctionCommand>("StartStepFunctionCommand");
 
-export interface AddEntityParams extends AddEntityRequest {
+export interface PutEntityParams extends PutEntityRequest {
   connectionId: string; // websocket connection ID added by run-lambda command
   responseCommand?: string;
 }
 
-export const handler = async (params: AddEntityParams, context: Context) => {
+export const handler = async (params: PutEntityParams, context: Context) => {
 
-  const response = await addEntity.runAsync({
+  const response = await putEntity.runAsync({
     ...params, 
     container
   });

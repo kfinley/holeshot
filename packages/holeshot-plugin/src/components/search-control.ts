@@ -24,8 +24,8 @@ export default class SearchControl<T extends Entity> extends BaseControl {
   }
 
   onSelect(item: T) {
-    console.log("onSelect");
-    console.log(item);
+    // console.log("onSelect");
+    // console.log(item);
     this.query = item.name;
     this.previousQuery = "";
 

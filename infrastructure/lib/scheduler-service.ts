@@ -16,7 +16,7 @@ export interface SchedulerServiceProps {
 export class SchedulerService extends BaseServiceConstruct {
 
   readonly getNearbyEvents: Function;
-  readonly addEntity: Function;
+  readonly putEntity: Function;
   readonly sendSchedulerData: Function;
   readonly updateEntity: Function;
   readonly deleteEntity: Function;
@@ -38,10 +38,10 @@ export class SchedulerService extends BaseServiceConstruct {
     props?.coreTable.grantReadData(this.getNearbyEvents);
     geoTable.grantReadData(this.getNearbyEvents);
 
-    this.addEntity = super.newLambda('AddEntity', 'functions/add-entity.handler', {
+    this.putEntity = super.newLambda('PutEntity', 'functions/put-entity.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
     }, 120);
-    props?.coreTable.grantWriteData(this.addEntity);
+    props?.coreTable.grantWriteData(this.putEntity);
 
     this.deleteEntity = super.newLambda('DeleteEntity', 'functions/delete-entity.handler', {
       HOLESHOT_CORE_TABLE: props?.coreTable.tableName as string,
@@ -93,7 +93,7 @@ export class SchedulerService extends BaseServiceConstruct {
     );
 
     this.getNearbyEvents.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
-    this.addEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
+    this.putEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.deleteEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.updateEntity.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);
     this.sendSchedulerData.role?.attachInlinePolicy(lambdaSfnStatusUpdatePolicy);

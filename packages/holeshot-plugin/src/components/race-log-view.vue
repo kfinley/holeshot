@@ -21,7 +21,7 @@ export default class RaceLogView extends BaseControl {
   }
 
   display(attribute: string): string {
-    console.log(attribute);
+    // console.log(attribute);
     return attribute.replaceAll("\n\n", "</br></br>").replaceAll("\n", "</br>");
   }
 }

@@ -86,7 +86,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
       // console.log("saved log", this.active);
 
       this.timeout = super.sendCommand({
-        name: "AddEntity",
+        name: "PutEntity",
         payload: {
           pk: `USER#${this.context.rootState.User.currentUser.username}#RACELOG`,
           sk: this.active.event.date,

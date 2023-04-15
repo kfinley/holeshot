@@ -9,7 +9,7 @@ import {
   AuthorizeCommand,
   PutPointCommand,
   QueryRadiusCommand,
-  AddEntityCommand,
+  PutEntityCommand,
   DeleteEntityCommand,
   GetEntityCommand,
   GetEntitiesCommand,
@@ -147,7 +147,7 @@ export default function bootstrapper(container: Container) {
   container.bind<StartStepFunctionCommand>("StartStepFunctionCommand").to(StartStepFunctionCommand);
   container.bind<PutPointCommand>("PutPointCommand").to(PutPointCommand);
   container.bind<QueryRadiusCommand>("QueryRadiusCommand").to(QueryRadiusCommand);
-  container.bind<AddEntityCommand>("AddEntityCommand").to(AddEntityCommand);
+  container.bind<PutEntityCommand>("PutEntityCommand").to(PutEntityCommand);
   container.bind<GetEntityCommand>("GetEntityCommand").to(GetEntityCommand);
   container.bind<GetEntitiesCommand>("GetEntitiesCommand").to(GetEntitiesCommand);
   container.bind<UpdateEntityCommand>("UpdateEntityCommand").to(UpdateEntityCommand);

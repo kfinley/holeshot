@@ -6,7 +6,7 @@ import { marshall } from '@aws-sdk/util-dynamodb';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;
 
-export type AddEntityRequest = {
+export type PutEntityRequest = {
   pk: string;
   sk: string;
   type: string;
@@ -14,18 +14,18 @@ export type AddEntityRequest = {
   container: Container
 }
 
-export type AddEntityResponse = {
+export type PutEntityResponse = {
   entity: any
   success: boolean;
 }
 
 @injectable()
-export class AddEntityCommand implements Command<AddEntityRequest, AddEntityResponse> {
+export class PutEntityCommand implements Command<PutEntityRequest, PutEntityResponse> {
 
   // @Inject("DynamoDBClient")DynamoDBClient
   private ddbClient!: DynamoDBClient;
 
-  async runAsync(params: AddEntityRequest): Promise<AddEntityResponse> {
+  async runAsync(params: PutEntityRequest): Promise<PutEntityResponse> {
     console.log(JSON.stringify(params));
 
     this.ddbClient = params.container.get<DynamoDBClient>("DynamoDBClient");

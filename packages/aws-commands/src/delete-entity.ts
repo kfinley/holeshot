@@ -3,7 +3,7 @@ import { DynamoDBClient, DeleteItemCommand, PutItemCommand } from '@aws-sdk/clie
 import { injectable, Container } from "inversify-props";
 import { Command } from "@holeshot/commands/src";
 import { marshall } from '@aws-sdk/util-dynamodb';
-import { AddEntityCommand } from './add-entity';
+import { PutEntityCommand } from './put-entity';
 import { GetEntityCommand } from './get-entity';
 
 const TableName = process.env.HOLESHOT_CORE_TABLE as string;

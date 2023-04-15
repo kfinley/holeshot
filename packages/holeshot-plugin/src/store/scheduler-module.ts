@@ -56,7 +56,7 @@ export class SchedulerModule extends HoleshotModule implements SchedulerState {
       });
 
       this.timeout = super.sendCommand({
-        name: "AddEntity",
+        name: "PutEntity",
         payload: {
           pk: `USER#${this.context.rootState.User.currentUser.username}#EVENT`,
           sk: params.event.date,

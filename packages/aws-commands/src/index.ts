@@ -5,7 +5,7 @@ export * from "./startStepFunction";
 export * from './put-point';
 export * from './query-radius';
 export * from './get-entities';
-export * from './add-entity';
+export * from './put-entity';
 export * from './update-entity';
 export * from './delete-entity';
 export * from './get-entities';
