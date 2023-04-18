@@ -67,4 +67,9 @@ export interface Track extends Entity {
 export interface RaceLog extends Entity {
   event: Event;
   attributes: Record<string, any>;
+  media: Record<string, Media>
+}
+
+export interface Media extends Entity {
+  
 }

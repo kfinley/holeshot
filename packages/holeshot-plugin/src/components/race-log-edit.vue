@@ -5,6 +5,7 @@
         @submit.prevent="addAttribute"
         autocomplete="off"
         role="form text-left"
+        enctype="multipart/form-data"
       >
         <ValidationProvider
           name="name"
@@ -23,7 +24,18 @@
             {{ errors[0] }}
           </div>
         </ValidationProvider>
-        <Button class="m-0 mt-2" @click="addAttribute">Add Field</Button>
+        <Button class="mx-0 mt-2" @click="addAttribute">Add Field</Button>
+        <Button class="mt-2 float-right">
+          <input
+            id="fileInput"
+            type="file"
+            multiple
+            accept="image/*"
+            class="file-input"
+            @change="filesChange($event)"
+          />
+          Upload Photos
+        </Button>
       </form>
     </ValidationObserver>
 
@@ -79,11 +91,22 @@ export default class RaceLogEdit extends BaseControl {
       super.setFocus(field);
     }
   }
+
+  filesChange($event) {
+    console.log("filesChange", $event);
+  }
 }
 </script>
-<style>
+<style scoped>
 .attribute-field {
   width: 100%;
   height: 10em;
+}
+
+.file-input {
+  opacity: 0;
+  width: 100%;
+  position: absolute;
+  cursor: pointer;
 }
 </style>

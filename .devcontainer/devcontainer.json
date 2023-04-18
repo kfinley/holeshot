@@ -78,7 +78,7 @@
 
   "postCreateCommand": "pip install flake8 pytest boto3",
 
-  "postStartCommand": "npm run dev:init",
+  "postStartCommand": "pnpm run dev:init",
 
   // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode",

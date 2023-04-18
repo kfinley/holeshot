@@ -45,3 +45,8 @@ export interface RaceLogsState {
   original: RaceLog | null;
   logs: Array<RaceLog>;
 }
+
+export interface MediaState {
+  status: Status;
+  media: [];
+}

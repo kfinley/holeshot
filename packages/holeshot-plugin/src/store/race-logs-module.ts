@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { Event, Actions, RaceLog } from "@holeshot/types/src";
 import { Action, Module, Mutation } from "vuex-module-decorators";
 import { HoleshotModule } from "./base-module";
@@ -63,7 +62,7 @@ export class RaceLogsModule extends HoleshotModule implements RaceLogsState {
 
   @Action
   close() {
-    
+
     super.mutate((s: RaceLogsState) => {
       s.viewState = "Closed";
       s.active = null;
