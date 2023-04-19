@@ -1,8 +1,8 @@
 import { CfnOutput, Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
 import { RestApi, LambdaRestApi, ApiKeySourceType } from "aws-cdk-lib/aws-apigateway";
-import { AccountRecovery, StringAttribute, UserPool, UserPoolClient, CfnIdentityPoolRoleAttachment } from "aws-cdk-lib/aws-cognito";
+import { AccountRecovery, CfnIdentityPool, CfnIdentityPoolRoleAttachment, StringAttribute, UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
-import { Effect, IRole, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { Effect, FederatedPrincipal, IRole, Policy, PolicyStatement, Role } from "aws-cdk-lib/aws-iam";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Topic } from "aws-cdk-lib/aws-sns";
 import { Chain, Choice, Condition, Fail, LogLevel, Pass, Result, StateMachine, Succeed } from "aws-cdk-lib/aws-stepfunctions";
@@ -31,7 +31,6 @@ export class UserServiceStack extends BaseServiceConstruct {
   readonly userPool: UserPool;
   readonly restApi: RestApi;
   readonly authProcessedTopic: Topic;
-  readonly cognitoAuthorizerPolicy: CfnIdentityPoolRoleAttachment;
 
   constructor(scope: Construct, id: string, props?: UserServiceStackProps) {
     super(scope, id, '../../services/User/dist', props!.node_env);
@@ -80,8 +79,8 @@ export class UserServiceStack extends BaseServiceConstruct {
       removalPolicy: RemovalPolicy.DESTROY,           // TODO.....
     });
 
-    const ssmParam = new StringParameter(this, 'Holeshot-UserPoolId', {
-      parameterName: '/holeshot/userPoolId',
+    const userPoolIdParam = new StringParameter(this, 'Holeshot-UserPoolId', {
+      parameterName: '/holeshot/user-pool-id',
       stringValue: this.userPool.userPoolId
     });
 
@@ -96,6 +95,60 @@ export class UserServiceStack extends BaseServiceConstruct {
       },
       preventUserExistenceErrors: true,
       generateSecret: false,
+    });
+
+
+    const identityPool = new CfnIdentityPool(scope, 'MyIdentityPool', {
+      allowUnauthenticatedIdentities: false,
+      cognitoIdentityProviders: [{
+        clientId: this.client.userPoolClientId,
+        providerName: this.userPool.userPoolProviderName
+      }]
+    });
+
+    const identityPoolIdParam = new StringParameter(scope, 'IdentityPoolIdParam', {
+      parameterName: '/holeshot/identity-pool-id',
+      stringValue: identityPool.ref
+    });
+    const unauthenticatedRole = new Role(scope, 'DefaultUnauthenticatedRole', {
+      assumedBy: new FederatedPrincipal('cognito-identity.amazonaws.com', {
+        StringEquals: { 'cognito-identity.amazonaws.com:aud': identityPool.ref },
+        'ForAnyValue:StringLike': { 'cognito-identity.amazonaws.com:amr': 'unauthenticated' }
+      }, 'sts:AssumeRoleWithWebIdentity')
+    });
+
+    unauthenticatedRole.addToPolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: [
+        'mobileanalytics:PutEvents',
+        'cognito-sync:*'
+      ],
+      resources: ['*'] // ???
+    }));
+
+    const authenticatedRole = new Role(scope, 'DefaultAuthenticatedRole', {
+      assumedBy: new FederatedPrincipal('cognito-identity.amazonaws.com', {
+        StringEquals: { 'cognito-identity.amazonaws.com:aud': identityPool.ref },
+        'ForAnyValue:StringLike': { 'cognito-identity.amazonaws.com:amr': 'authenticated' }
+      }, 'sts:AssumeRoleWithWebIdentity')
+    });
+
+    authenticatedRole.addToPolicy(new PolicyStatement({
+      effect: Effect.ALLOW,
+      actions: [
+        'mobileanalytics:PutEvents',
+        'cognito-sync:*',
+        'cognito-identity:*'
+      ],
+      resources: ['*']
+    }));
+
+    new CfnIdentityPoolRoleAttachment(scope, 'MyIdentityPoolRoleAttachment', {
+      identityPoolId: identityPool.ref,
+      roles: {
+        unauthenticated: unauthenticatedRole.roleArn,
+        authenticated: authenticatedRole.roleArn
+      }
     });
 
     // Create the rest of the Lambdas
