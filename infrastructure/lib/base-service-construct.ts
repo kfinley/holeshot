@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { createLambda } from '.';
+import { createLambda, createEdgeFunction } from '.';
 
 export class BaseServiceConstruct extends Construct {
 
@@ -18,4 +18,9 @@ export class BaseServiceConstruct extends Construct {
     return createLambda(this, name, this.nodeCodePath, handler, this.node_env, env, timeout, memorySize);
   }
 
+  protected newEdgeFunction(name: string, handler: string, env?: {
+    [key: string]: string;
+  } | undefined, timeout: number = 20, memorySize = 128) {
+    return createEdgeFunction(this, name, this.nodeCodePath, handler, timeout, memorySize);
+  }
 }

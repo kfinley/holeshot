@@ -1,6 +1,6 @@
-import { CfnOutput, Duration, RemovalPolicy } from "aws-cdk-lib";
+import { CfnOutput, Duration, RemovalPolicy, Stack } from "aws-cdk-lib";
 import { RestApi, LambdaRestApi, ApiKeySourceType } from "aws-cdk-lib/aws-apigateway";
-import { AccountRecovery, StringAttribute, UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
+import { AccountRecovery, StringAttribute, UserPool, UserPoolClient, CfnIdentityPoolRoleAttachment } from "aws-cdk-lib/aws-cognito";
 import { Table } from "aws-cdk-lib/aws-dynamodb";
 import { Effect, IRole, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
@@ -12,9 +12,13 @@ import { CfnTemplate } from "aws-cdk-lib/aws-ses";
 import { VerifySesEmailAddress } from "@seeebiii/ses-verify-identities";
 import { BaseServiceConstruct } from "./base-service-construct";
 import { addCorsOptions } from ".";
+import { Bucket } from "aws-cdk-lib/aws-s3";
+import { StringParameter } from "aws-cdk-lib/aws-ssm";
 
 export interface UserServiceStackProps {
   coreTable: Table;
+  mediaBucket: Bucket; // Not used atm
+  userMediaBucket: Bucket;
   siteUrl: string;
   senderEmail: string;
   node_env: string;
@@ -27,6 +31,7 @@ export class UserServiceStack extends BaseServiceConstruct {
   readonly userPool: UserPool;
   readonly restApi: RestApi;
   readonly authProcessedTopic: Topic;
+  readonly cognitoAuthorizerPolicy: CfnIdentityPoolRoleAttachment;
 
   constructor(scope: Construct, id: string, props?: UserServiceStackProps) {
     super(scope, id, '../../services/User/dist', props!.node_env);
@@ -75,9 +80,15 @@ export class UserServiceStack extends BaseServiceConstruct {
       removalPolicy: RemovalPolicy.DESTROY,           // TODO.....
     });
 
+    const ssmParam = new StringParameter(this, 'Holeshot-UserPoolId', {
+      parameterName: '/holeshot/userPoolId',
+      stringValue: this.userPool.userPoolId
+    });
+
     this.client = this.userPool.addClient('Holeshot-client', {
       userPoolClientName: 'Holeshot-client',
       idTokenValidity: Duration.days(1),
+      refreshTokenValidity: Duration.days(90),
       accessTokenValidity: Duration.days(1),
       authFlows: {
         adminUserPassword: true,
@@ -85,7 +96,6 @@ export class UserServiceStack extends BaseServiceConstruct {
       },
       preventUserExistenceErrors: true,
       generateSecret: false,
-      
     });
 
     // Create the rest of the Lambdas
@@ -210,24 +220,6 @@ export class UserServiceStack extends BaseServiceConstruct {
       },
       proxy: false
     });
-
-    // this.restApi = new RestApi(this, 'HoleshotApi', {
-    //   description: 'Holeshot BMX api gateway',
-    //   deployOptions: {
-    //     stageName: props!.node_env === 'production' ? 'v1' : 'dev',
-    //   },
-    //   // defaultCorsPreflightOptions: {
-    //   //   allowHeaders: [
-    //   //     'Content-Type',
-    //   //     'X-Amz-Date',
-    //   //     'Authorization',
-    //   //     'X-Api-Key',
-    //   //   ],
-    //   //   allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-    //   //   allowCredentials: true,
-    //   //   allowOrigins: ['https://holeshot-bmx.com'], // [props!.node_env === 'production' ? 'https://holeshot-bmx.com' : 'http://dev.holeshot-bmx.com'],
-    //   // }
-    // });
 
     const registration = this.restApi.root
       .addResource('user')

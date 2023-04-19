@@ -1,5 +1,5 @@
 import { RemovalPolicy, ScopedAws } from 'aws-cdk-lib'
-import { AttributeType, BillingMode, ITable, ProjectionType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, ProjectionType, Table, TableEncryption } from 'aws-cdk-lib/aws-dynamodb';
 import { BlockPublicAccess, Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 import { DynamoDB } from "@aws-sdk/client-dynamodb";
@@ -14,6 +14,7 @@ export class DataStores extends Construct {
   readonly connectionsTable: Table;
   readonly frontEndBucket: Bucket;
   readonly mediaBucket: Bucket;
+  readonly userMediaBucket: Bucket;
   readonly coreTable: Table;
   readonly crawlerBucket: Bucket;
 
@@ -82,6 +83,14 @@ export class DataStores extends Construct {
     // Media S3 Bucket
     this.mediaBucket = new Bucket(this, 'mediaBucket', {
       bucketName: `images.${props?.domainName}`,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    });
+
+    // User Media S3 Bucket
+    this.userMediaBucket = new Bucket(this, 'userMediaBucket', {
+      bucketName: `user-media.${props?.domainName}`,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,

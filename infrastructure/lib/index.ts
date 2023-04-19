@@ -7,6 +7,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { join } from 'path';
 import * as apigateway from "aws-cdk-lib/aws-apigateway";
+import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 
 export const createLambda = (scope: Construct, name: string, functionsPath: string, handler: string, node_env: string, env?: {
   [key: string]: string;
@@ -30,6 +31,20 @@ export const createLambda = (scope: Construct, name: string, functionsPath: stri
     },
   });
 };
+
+export const createEdgeFunction = (scope: Construct, name: string, functionsPath: string, handler: string, timeout = 20, memorySize = 128) => {
+
+  const path = join(__dirname, functionsPath);
+
+  return new cloudfront.experimental.EdgeFunction(scope, name, {
+    runtime: lambda.Runtime.NODEJS_18_X,
+    memorySize,
+    timeout: Duration.seconds(timeout),
+    functionName: `Holeshot-Infrastructure-${name}`,
+    handler,
+    code: new lambda.AssetCode(path),
+  });
+}
 
 //https://github.com/aws/aws-cdk/issues/906
 export function addCorsOptions(apiResource: apigateway.IResource) {

@@ -93,7 +93,9 @@ export default class RaceLogEdit extends BaseControl {
   }
 
   filesChange($event) {
-    console.log("filesChange", $event);
+    for (var file of $event.target.files) {
+      console.log("filesChange file", file);
+    }
   }
 }
 </script>

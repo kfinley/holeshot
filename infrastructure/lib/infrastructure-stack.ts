@@ -40,7 +40,7 @@ export class InfrastructureStack extends Stack {
     const domainName = this.node.tryGetContext('domainName');
 
     // Setup Data Stores
-    const dataStores = new DataStores(this, 'Holeshot-DataStoreseStack', {
+    const dataStores = new DataStores(this, 'Holeshot-DataStoreseStack', { //TODO: fix spelling....
       domainName,
     });
 
@@ -54,6 +54,8 @@ export class InfrastructureStack extends Stack {
     // // Setup User Service
     const userService = new UserServiceStack(this, 'Holeshot-UserServiceStack', {
       coreTable: dataStores?.coreTable!,
+      mediaBucket: dataStores?.mediaBucket!,
+      userMediaBucket: dataStores?.userMediaBucket!,
       siteUrl: `https://${domainName}`,
       senderEmail: props?.senderEmail!,
       logLevel: props?.logLevel!,
@@ -162,6 +164,22 @@ export class InfrastructureStack extends Stack {
           cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD,
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+        },
+        additionalBehaviors: {
+          '/user-media/*': {
+            origin: new HttpOrigin(dataStores.userMediaBucket.s3UrlForObject(), { // the key is set inside the User-Media-Auth EdgeFunction based on the request
+              protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
+              // readTimeout: 20
+            }),
+            allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+            cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+            edgeLambdas: [
+              {
+                functionVersion: schedulerService.userMediaAuth.currentVersion,
+                eventType: cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST
+              }
+            ],
+          }
         },
         errorResponses: [
           {
@@ -280,7 +298,8 @@ export class InfrastructureStack extends Stack {
       domainName,
       coreTable: dataStores?.coreTable,
       node_env: props!.node_env,
-      sendMessageStateMachine: webSocketsApi.sendMessageStateMachine
+      sendMessageStateMachine: webSocketsApi.sendMessageStateMachine,
+      userPoolId: userService.userPool.userPoolId
     });
 
 
