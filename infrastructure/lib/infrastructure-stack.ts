@@ -172,6 +172,7 @@ export class InfrastructureStack extends Stack {
             }),
             allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
             cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
+            viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
             edgeLambdas: [
               {
                 functionVersion: schedulerService.userMediaAuth.currentVersion,
