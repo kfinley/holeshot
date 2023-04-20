@@ -19,7 +19,7 @@ const cognito = new CognitoIdentityClient({ region: 'us-east-1' });
 export const handler = async (event: any) => {
   console.log('event:', event);
 
-  const USER_POOL_ID = await getSSMValue('/holeshot/user-poo-id');
+  const USER_POOL_ID = await getSSMValue('/holeshot/user-pool-id');
   const IDENTITY_POOL_ID = await getSSMValue('/holeshot/identity-pool-id');
 
   const request = event.Records[0].cf.request;
