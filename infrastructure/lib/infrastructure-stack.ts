@@ -167,7 +167,7 @@ export class InfrastructureStack extends Stack {
         },
         additionalBehaviors: {
           '/user-media/*': {
-            origin: new HttpOrigin(dataStores.userMediaBucket.s3UrlForObject(), { // the key is set inside the User-Media-Auth EdgeFunction based on the request
+            origin: new HttpOrigin(dataStores.userMediaBucket.s3UrlForObject(''), { // the key is set inside the User-Media-Auth EdgeFunction based on the request
               protocolPolicy: cloudfront.OriginProtocolPolicy.HTTPS_ONLY,
               // readTimeout: 20
             }),
